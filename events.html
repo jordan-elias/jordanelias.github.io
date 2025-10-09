@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events | Jordan Elias</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .events-container { max-width: 800px; margin: 2em auto; padding: 0 1em; }
+    .event { border: 2px solid #34659B; border-radius: 10px; padding: 1em; margin-bottom: 1.5em; background-color: #fff8e1; }
+    .event h3 { margin-top: 0; margin-bottom: 0.3em; }
+    .event-date { font-weight: 700; font-size: 1.1em; margin-bottom: 0.3em; }
+    .event a { color: #34659B; text-decoration: underline; font-weight: 700; }
+    .toggle-past { text-align: center; margin: 2em 0; }
+    .toggle-past button { background-color: #34659B; color: #EDD286; border: none; padding: 0.7em 1.2em; border-radius: 6px; cursor: pointer; font-weight: 700; transition: all 0.3s ease; }
+    .toggle-past button:hover { background-color: #2b507e; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Events</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="music-therapy.html">Music Therapy</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+  <main class="events-container">
+    <h2>Upcoming Events</h2>
+    <div id="upcoming-events"></div>
+    <div class="toggle-past">
+      <button onclick="togglePastEvents()">See Past Events</button>
+    </div>
+    <div id="past-events" class="hidden">
+      <h2>Past Events</h2>
+    </div>
+  </main>
+  <footer><p>© 2025 Jordan Elias</p></footer>
+  <script>
+    async function loadEvents() {
+      try {
+        const response = await fetch('events.json');
+        const data = await response.json();
+        const upcomingContainer = document.getElementById('upcoming-events');
+        const pastContainer = document.getElementById('past-events');
+        const today = new Date();
+        const sorted = data.events.sort((a, b) => new Date(a.date) - new Date(b.date));
+        sorted.forEach(event => {
+          const eventDate = new Date(event.date);
+          const eventHTML = `
+            <div class="event">
+              <div class="event-date">${eventDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+              <h3>${event.title}</h3>
+              <p><strong>Time:</strong> ${event.time}</p>
+              <p><strong>Location:</strong> ${event.location}</p>
+              <p>${event.description}</p>
+              ${event.link ? `<p><a href="${event.link}" target="_blank">Register Here →</a></p>` : ''}
+            </div>
+          `;
+          if (eventDate >= today) upcomingContainer.innerHTML += eventHTML;
+          else pastContainer.innerHTML += eventHTML;
+        });
+        if (!upcomingContainer.innerHTML.trim()) upcomingContainer.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
+      } catch (error) { console.error("Error loading events:", error); }
+    }
+    function togglePastEvents() { document.getElementById('past-events').classList.toggle('hidden'); }
+    loadEvents();
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #EDD286;
+  color: #34659B;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+header, footer {
+  text-align: center;
+  padding: 1em 0;
+}
+
+nav a {
+  color: #34659B;
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  max-width: 800px;
+  margin: 2em auto;
+  padding: 0 1em;
+}
