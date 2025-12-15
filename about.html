@@ -29,7 +29,31 @@
     h1, h2 { margin-top: 0; margin-bottom: 0.5em; }
     h2 { text-align: center; margin-top: 2em; }
     p { margin-bottom: 1em; }
-    .hero img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; }
+
+    /* Hero image beside text */
+    .hero {
+      display: flex;
+      align-items: flex-start;
+      gap: 2em;
+      margin-bottom: 1.5em;
+    }
+    .hero img {
+      max-width: 300px;
+      height: auto;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+    .hero-text { flex: 1; }
+
+    /* Mobile responsiveness */
+    @media (max-width: 800px) {
+      .hero {
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero img { max-width: 100%; margin-bottom: 1em; }
+    }
+
     .faq-section ul { list-style-type: disc; margin-left: 1.5em; }
   </style>
 </head>
@@ -48,15 +72,12 @@
 
 <main>
 
-  <!-- Hero Image -->
-  <figure class="hero">
+  <!-- Hero Image + Intro Text -->
+  <section class="hero">
     <img src="images/headshot.jpg" alt="Jordan Elias leading a music therapy session">
-    <figcaption>Board-certified music therapist providing creative support and community programs.</figcaption>
-  </figure>
-
-  <!-- Introduction -->
-  <section aria-label="About Jordan Elias Overview">
-    <p>Jordan Elias is a board-certified music therapist and counselor integrating talk therapy with creative projects to explore emotions, build resilience, and foster meaningful change. Services include individualized therapy sessions, community arts programming for youth centers — including bands, lessons, and performances — and creative arts therapy programs for outpatient cancer treatment at a hospital.</p>
+    <div class="hero-text">
+      <p>Jordan Elias is a board-certified music therapist and counselor integrating talk therapy with creative projects to explore emotions, build resilience, and foster meaningful change. Services include individualized therapy sessions, community arts programming for youth centers — including bands, lessons, and performances — and creative arts therapy programs for outpatient cancer treatment at a hospital.</p>
+    </div>
   </section>
 
   <!-- Approach -->
@@ -69,15 +90,15 @@
   <!-- Education -->
   <section aria-label="Education & Credentials">
     <h2>Education & Credentials</h2>
-    <p>Jordan holds a master’s degree in cognitive behavioral science from Freie Universität Berlin and an undergraduate degree in psychology and music therapy from the Berklee College of Music in Boston.</p>
+    <p>Jordan holds a master’s degree in cognitive neuroscience from Freie Universität Berlin and an undergraduate degree in psychology and music therapy from the Berklee College of Music in Boston. He is board certified by the Certification Board for Music Therapy and has completed over 1000 of clinical supervision as part of his training. </p>
   </section>
 
   <!-- FAQ for AI & SEO -->
   <section class="faq-section" aria-label="Frequently Asked Questions">
     <h2>Frequently Asked Questions</h2>
     <ul>
-      <li><strong>Who does Jordan work with?</strong> Adults, neurodivergent individuals (autism, ADHD), musicians, and youth in community programs or hospitals.</li>
-      <li><strong>What types of therapy are offered?</strong> Individual sessions, community music programs, creative arts therapy for cancer patients, and music-based lessons for youth.</li>
+      <li><strong>Who does Jordan work with?</strong> Adults, neurodivergent individuals (autism, ADHD), musicians, and people experiencing burnout, depression, or anxiety.</li>
+      <li><strong>What types of therapy are offered?</strong> Individual sessions, community music programs, creative arts therapy for cancer patients, and adapted music lessons.</li>
       <li><strong>Is prior musical experience required?</strong> No. Sessions are tailored to each individual's interests and abilities.</li>
       <li><strong>Can I participate online?</strong> Yes, individual therapy sessions are available online for remote clients.</li>
     </ul>
