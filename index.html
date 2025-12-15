@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Phase 2: SEO & AI Optimization -->
   <title>Music Therapy in Berlin & Online | Jordan Elias</title>
   <meta name="description" content="Jordan Elias offers board-certified music therapy for adults and neurodivergent individuals in Berlin and online, including individual sessions, community groups, and creative music-based support.">
   <link rel="canonical" href="https://www.jordanelias.de/index.html">
@@ -15,29 +14,101 @@
   <style>
     body {
       font-family: 'Lato', sans-serif;
-      background-color: #EDD286;
-      color: #34659B;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      color: #ffffff;
       margin: 0;
       padding: 0;
       line-height: 1.6;
+      text-shadow: 1px 1px #ff00ff, -1px -1px #00ffff;
     }
-    header, footer { text-align: center; padding: 1.5em 1em; }
-    nav a { color: #34659B; text-decoration: none; margin: 0 10px; font-weight: bold; }
+
+    header, footer {
+      text-align: center;
+      padding: 1.5em 1em;
+      background-color: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+      text-shadow: 1px 1px #ff00ff;
+    }
+
     nav a:hover { text-decoration: underline; }
+
     main { max-width: 1000px; margin: 2em auto 4em; padding: 0 1em; }
-    h1, h2, h3 { margin-top: 0; margin-bottom: 0.5em; }
+
+    h1, h2, h3 { margin-top: 0; margin-bottom: 0.5em; 
+      text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+    }
+
     h2 { text-align: center; margin: 3em 0 2em; }
+
     p { margin-bottom: 1em; }
-    a.contact-link { color: #34659B; font-weight: 700; text-decoration: underline; }
+
+    a.contact-link {
+      color: #ff00ff;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
     /* Hero */
-    .hero img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 12px; }
+    .hero img {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      border: 3px solid #00ffff;
+      filter: saturate(1.5) contrast(1.2);
+      transform: skewY(-1deg);
+    }
+
+    .hero figcaption {
+      text-align: center;
+      color: #ff00ff;
+      font-weight: bold;
+      text-shadow: 1px 1px #00ffff;
+    }
+
     /* Vertical service sections */
-    .service-section { display: flex; gap: 2em; margin-bottom: 4em; align-items: flex-start; padding: 0; }
-    .service-section img { width: 260px; height: auto; border-radius: 12px; flex-shrink: 0; object-fit: cover; }
-    .service-text { max-width: 600px; }
+    .service-section {
+      display: flex;
+      gap: 2em;
+      margin-bottom: 4em;
+      align-items: flex-start;
+      padding: 0;
+      background-color: rgba(0,0,0,0.4);
+      border: 2px dashed #ff00ff;
+      transform: skewX(-2deg);
+    }
+
+    .service-section img {
+      width: 260px;
+      height: auto;
+      border: 2px solid #00ffff;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .service-text { max-width: 600px; padding: 0.5em; }
+
+    /* FAQ Section */
+    section[aria-label="Frequently Asked Questions"] {
+      background-color: rgba(0,0,0,0.3);
+      padding: 1em;
+      border: 2px solid #ff00ff;
+      transform: skewX(1deg);
+    }
+
+    section[aria-label="Frequently Asked Questions"] ul li {
+      margin-bottom: 0.8em;
+    }
+
     /* Mobile */
     @media (max-width: 800px) {
-      .service-section { flex-direction: column; padding: 1.5em; }
+      .service-section { flex-direction: column; padding: 1.5em; transform: skewX(0deg); }
       .service-section img { width: 100%; height: auto; }
       .service-text { max-width: 100%; }
     }
@@ -98,12 +169,12 @@
     <img src="images/guitar.JPG" alt="Therapeutic music lessons for teens">
     <div class="service-text">
       <h3>Lessons</h3>
-      <p>Creative lessons for neurodivergent youth focused on emotional development, communication, and self-expression. Options include 1:1 lessons and small group ensembles.</p>
+      <p>Guitar lessons tailored for neurodivergent people. Options include 1:1 lessons and small group ensembles.</p>
       <p><a href="contact.html" class="contact-link">Contact me</a> to learn more.</p>
     </div>
   </section>
 
-  <!-- FAQ Section for AI Snippets -->
+  <!-- FAQ Section -->
   <section aria-label="Frequently Asked Questions">
     <h2>Frequently Asked Questions</h2>
     <ul>
