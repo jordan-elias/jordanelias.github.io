@@ -9,8 +9,10 @@
   <link rel="canonical" href="https://www.jordanelias.de/index.html">
   <link rel="icon" type="image/png" href="images/favicon-32x32.png">
 
-  <!-- Fonts & Styles -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: 'Lato', sans-serif;
@@ -30,10 +32,12 @@
     }
 
     nav a {
+      font-family: 'VT323', monospace;
       color: #00ffff;
       text-decoration: none;
       margin: 0 10px;
-      font-weight: bold;
+      font-weight: normal;
+      letter-spacing: 0.12em;
       text-shadow: 1px 1px #ff00ff;
     }
 
@@ -41,7 +45,11 @@
 
     main { max-width: 1000px; margin: 2em auto 4em; padding: 0 1em; }
 
-    h1, h2, h3 { margin-top: 0; margin-bottom: 0.5em; 
+    h1, h2, h3 {
+      font-family: 'VT323', monospace;
+      letter-spacing: 0.15em;
+      margin-top: 0;
+      margin-bottom: 0.5em;
       text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
     }
 
@@ -70,6 +78,8 @@
       color: #ff00ff;
       font-weight: bold;
       text-shadow: 1px 1px #00ffff;
+      font-family: 'VT323', monospace;
+      letter-spacing: 0.1em;
     }
 
     /* Vertical service sections */
@@ -108,12 +118,22 @@
 
     /* Mobile */
     @media (max-width: 800px) {
-      .service-section { flex-direction: column; padding: 1.5em; transform: skewX(0deg); }
-      .service-section img { width: 100%; height: auto; }
+      .service-section {
+        flex-direction: column;
+        padding: 1.5em;
+        transform: skewX(0deg);
+      }
+
+      .service-section img {
+        width: 100%;
+        height: auto;
+      }
+
       .service-text { max-width: 100%; }
     }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -129,20 +149,17 @@
 
 <main>
 
-  <!-- Hero Image -->
   <figure class="hero">
     <img src="images/hero.jpg" alt="Jordan Elias Music Therapy session in Berlin and online" />
     <figcaption>Board-certified music therapy for adults and neurodivergent individuals.</figcaption>
   </figure>
 
-  <!-- AI-Friendly Summary -->
   <section aria-label="Music Therapy Overview">
     <p>Jordan Elias offers music therapy services in Berlin and online for adults and neurodivergent individuals. Services include <a href="music-therapy.html">individual therapy sessions</a>, <a href="events.html">community groups and events</a>, and <a href="contact.html">creative lessons</a> to support mental health, emotional wellbeing, and self-expression.</p>
   </section>
 
   <h2>Services</h2>
 
-  <!-- Individual Sessions -->
   <section class="service-section" aria-label="Individual Music Therapy Sessions">
     <img src="images/headshot.jpg" alt="Individual music therapy session with Jordan Elias">
     <div class="service-text">
@@ -153,7 +170,6 @@
     </div>
   </section>
 
-  <!-- Community Partnerships -->
   <section class="service-section" aria-label="Community Music Therapy Groups">
     <img src="images/group.JPG" alt="Community music therapy group session">
     <div class="service-text">
@@ -164,7 +180,6 @@
     </div>
   </section>
 
-  <!-- Lessons -->
   <section class="service-section" aria-label="Creative Music Lessons">
     <img src="images/guitar.JPG" alt="Therapeutic music lessons for teens">
     <div class="service-text">
@@ -174,7 +189,6 @@
     </div>
   </section>
 
-  <!-- FAQ Section -->
   <section aria-label="Frequently Asked Questions">
     <h2>Frequently Asked Questions</h2>
     <ul>
