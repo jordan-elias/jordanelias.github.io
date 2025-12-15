@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Phase 1: Meta & Canonical -->
+
+  <!-- Phase 2: SEO & AI Optimization -->
   <title>Music Therapy in Berlin & Online | Jordan Elias</title>
-  <meta name="description" content="Jordan Elias is a board-certified music therapist offering individual sessions, community groups, and creative music-based support for adults and neurodivergent individuals in Berlin and online.">
+  <meta name="description" content="Jordan Elias offers board-certified music therapy for adults and neurodivergent individuals in Berlin and online, including individual sessions, community groups, and creative music-based support.">
   <link rel="canonical" href="https://www.jordanelias.de/index.html">
   <link rel="icon" type="image/png" href="images/favicon-32x32.png">
-  
+
   <!-- Fonts & Styles -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -21,70 +21,20 @@
       padding: 0;
       line-height: 1.6;
     }
-
-    header, footer {
-      text-align: center;
-      padding: 1.5em 1em;
-    }
-
-    nav a {
-      color: #34659B;
-      text-decoration: none;
-      margin: 0 10px;
-      font-weight: bold;
-    }
-
+    header, footer { text-align: center; padding: 1.5em 1em; }
+    nav a { color: #34659B; text-decoration: none; margin: 0 10px; font-weight: bold; }
     nav a:hover { text-decoration: underline; }
-
-    main {
-      max-width: 1000px;
-      margin: 2em auto 4em;
-      padding: 0 1em;
-    }
-
-    h1, h2, h3 {
-      margin-top: 0;
-      margin-bottom: 0.5em;
-    }
-
+    main { max-width: 1000px; margin: 2em auto 4em; padding: 0 1em; }
+    h1, h2, h3 { margin-top: 0; margin-bottom: 0.5em; }
     h2 { text-align: center; margin: 3em 0 2em; }
-
     p { margin-bottom: 1em; }
-
-    a.contact-link {
-      color: #34659B;
-      font-weight: 700;
-      text-decoration: underline;
-    }
-
+    a.contact-link { color: #34659B; font-weight: 700; text-decoration: underline; }
     /* Hero */
-    .hero img {
-      width: 100%;
-      max-height: 420px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
-
+    .hero img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 12px; }
     /* Vertical service sections */
-    .service-section {
-      display: flex;
-      gap: 2em;
-      margin-bottom: 4em;
-      align-items: flex-start;
-      padding: 0;
-    }
-
-    .service-section img {
-      width: 260px;
-      max-width: 100%;
-      height: auto;
-      border-radius: 12px;
-      flex-shrink: 0;
-      object-fit: cover;
-    }
-
+    .service-section { display: flex; gap: 2em; margin-bottom: 4em; align-items: flex-start; padding: 0; }
+    .service-section img { width: 260px; height: auto; border-radius: 12px; flex-shrink: 0; object-fit: cover; }
     .service-text { max-width: 600px; }
-
     /* Mobile */
     @media (max-width: 800px) {
       .service-section { flex-direction: column; padding: 1.5em; }
@@ -109,46 +59,59 @@
 <main>
 
   <!-- Hero Image -->
-  <div class="hero">
-    <img src="images/hero.jpg" alt="Jordan Elias Music Therapy">
-  </div>
+  <figure class="hero">
+    <img src="images/hero.jpg" alt="Jordan Elias Music Therapy session in Berlin and online" />
+    <figcaption>Board-certified music therapy for adults and neurodivergent individuals.</figcaption>
+  </figure>
 
-  <h2>Services</h2>
+  <!-- AI-Friendly Summary -->
+  <section aria-label="Music Therapy Overview">
+    <p>Jordan Elias offers music therapy services in Berlin and online for adults and neurodivergent individuals. Services include <a href="music-therapy.html">individual therapy sessions</a>, <a href="events.html">community groups and events</a>, and <a href="contact.html">creative lessons</a> to support mental health, emotional wellbeing, and self-expression.</p>
+  </section>
+
+  <h2>Our Services</h2>
 
   <!-- Individual Sessions -->
-  <section class="service-section">
-    <img src="images/headshot.jpg" alt="Individual music therapy session">
+  <section class="service-section" aria-label="Individual Music Therapy Sessions">
+    <img src="images/headshot.jpg" alt="Individual music therapy session with Jordan Elias">
     <div class="service-text">
       <h3>Individual Sessions</h3>
-      <p>I offer weekly or bi-weekly therapy sessions online or in-person for adults looking for long-term support and counseling.</p>
-      <p>Sessions are 50 minutes and tailored to your needs — whether that’s talking, making music, or moving through structured tools together.</p>
-      <p>I specialize in working with adults living with anxiety and depression, neurodivergent adults (ADHD, autism), people recovering from burnout, highly sensitive people, creative professionals & musicians, and adults recovering from a traumatic brain injury.</p>
-      <p><strong>Rates:</strong> €85 individual session, €110 couple session. Sliding scale available.</p>
+      <p>Weekly or bi-weekly therapy sessions tailored to your needs — talking, music-making, or structured tools. Designed for adults experiencing anxiety, depression, burnout, or those navigating neurodivergence.</p>
+      <p><strong>Rates:</strong> €85 individual, €110 couple. Sliding scale available.</p>
       <p><a href="contact.html" class="contact-link">Contact me</a> to book a free 30-minute consultation.</p>
     </div>
   </section>
 
   <!-- Community Partnerships -->
-  <section class="service-section">
-    <img src="images/group.JPG" alt="Community music therapy group">
+  <section class="service-section" aria-label="Community Music Therapy Groups">
+    <img src="images/group.JPG" alt="Community music therapy group session">
     <div class="service-text">
       <h3>Community Partnerships</h3>
-      <p>I host ongoing groups centered on song sharing, deep listening, and open discussion, focusing on community building, group therapy, and exploring how music supports mental health.</p>
-      <p>These gatherings focus on how music can help with depression, anxiety, and emotional overwhelm — creating space to feel less alone, heard, and supported.</p>
-      <p>Held in various spaces across Berlin. Some groups are open to drop-ins, others require registration in advance.</p>
-      <p><a href="contact.html" class="contact-link">Contact me</a> to learn about upcoming events or to host a music therapy group.</p>
+      <p>Ongoing groups focused on song sharing, deep listening, and mental health support. Build connection, explore emotions, and feel supported in a safe, creative environment.</p>
+      <p>Events held across Berlin. Some are open to drop-ins, others require advance registration.</p>
+      <p><a href="contact.html" class="contact-link">Contact me</a> to learn about upcoming events or hosting a group.</p>
     </div>
   </section>
 
   <!-- Lessons -->
-  <section class="service-section">
-    <img src="images/guitar.JPG" alt="Therapeutic music lessons for youth">
+  <section class="service-section" aria-label="Creative Music Lessons">
+    <img src="images/guitar.JPG" alt="Therapeutic music lessons for teens">
     <div class="service-text">
       <h3>Lessons</h3>
-      <p>I offer creative, supportive music lessons for neurodivergent teens and young people, with a focus on emotional development, communication, and self-expression.</p>
-      <p>Available options include small group ensembles for teens (ages 14–17) focused on collaboration and social connection, as well as 1:1 guitar lessons approached as a therapeutic learning experience.</p>
+      <p>Creative lessons for neurodivergent youth focused on emotional development, communication, and self-expression. Options include 1:1 lessons and small group ensembles.</p>
       <p><a href="contact.html" class="contact-link">Contact me</a> to learn more.</p>
     </div>
+  </section>
+
+  <!-- FAQ Section for AI Snippets -->
+  <section aria-label="Frequently Asked Questions">
+    <h2>Frequently Asked Questions</h2>
+    <ul>
+      <li><strong>Who can benefit from music therapy?</strong> Adults experiencing anxiety, depression, burnout, neurodivergent individuals, musicians, or anyone seeking creative support and emotional wellbeing.</li>
+      <li><strong>Do I need musical experience?</strong> No prior experience is required; sessions are tailored to your abilities and interests.</li>
+      <li><strong>How can I book a session?</strong> Reach out via <a href="contact.html">contact page</a> or <a href="https://calendly.com/jordanphilipelias/30min" target="_blank" rel="noopener noreferrer">book directly on Calendly</a>.</li>
+      <li><strong>Are sessions available online?</strong> Yes, all individual sessions can be conducted online securely.</li>
+    </ul>
   </section>
 
 </main>
