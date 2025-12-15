@@ -10,8 +10,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
+    body { background-color: #EDD286; color: #34659B; font-family: 'Lato', sans-serif; margin: 0; padding: 0; line-height: 1.6; }
+    header, footer { text-align: center; padding: 1em 0; }
+    nav a { color: #34659B; text-decoration: none; margin: 0 10px; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+
     .events-container { max-width: 800px; margin: 2em auto; padding: 0 1em; }
-    .event { border: 2px solid #34659B; border-radius: 10px; padding: 1em; margin-bottom: 1.5em; background-color: #fff8e1; }
+    .event { border: 2px solid #34659B; border-radius: 10px; padding: 1em; margin-bottom: 1.5em; background-color: #EDD286; color: #34659B; }
     .event h3 { margin-top: 0; margin-bottom: 0.3em; }
     .event-date { font-weight: 700; font-size: 1.1em; margin-bottom: 0.3em; }
     .event a { color: #34659B; text-decoration: underline; font-weight: 700; }
@@ -42,7 +47,18 @@
       <h2>Past Events</h2>
     </div>
   </main>
-  <footer><p>© 2025 Jordan Elias</p></footer>
+
+  <footer>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="music-therapy.html">Music Therapy</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <p style="margin-top:1em;">© 2025 Jordan Elias</p>
+  </footer>
+
   <script>
     async function loadEvents() {
       try {
@@ -73,17 +89,5 @@
     function togglePastEvents() { document.getElementById('past-events').classList.toggle('hidden'); }
     loadEvents();
   </script>
-
-  <footer>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="music-therapy.html">Music Therapy</a>
-    <a href="events.html">Events</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-  <p style="margin-top:1em;">© 2025 Jordan Elias</p>
-</footer>
-
 </body>
 </html>
