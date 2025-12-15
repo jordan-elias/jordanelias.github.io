@@ -32,9 +32,9 @@
     content: "";
     position: fixed;
     top: 0;
-    width: 80px; /* Width of the border */
+    width: 80px; /* Default desktop width */
     height: 100%;
-    background-image: url('images/Neon glitchy synth with geometric patterns.png'); /* Placeholder for pattern */
+    background-image: url('images/your-pattern-image.png'); /* Placeholder for pattern */
     background-repeat: repeat-y;
     z-index: 9999;
   }
@@ -145,8 +145,18 @@
     margin-bottom: 0.8em;
   }
 
-  /* Mobile */
+  /* Mobile adjustments */
   @media (max-width: 800px) {
+    /* Narrow the borders */
+    body::before, body::after {
+      width: 30px; /* Smaller border width for mobile */
+    }
+
+    /* Allow main content to fill more space */
+    main {
+      padding: 0 0.5em; /* Reduce horizontal padding */
+    }
+
     .service-section {
       flex-direction: column;
       padding: 1.5em;
@@ -156,6 +166,7 @@
     .service-section img { width: 100%; height: auto; }
     .service-text { max-width: 100%; }
 
+    /* Responsive heading sizes */
     h1 { font-size: 2.2rem; }
     h2 { font-size: 1.8rem; }
     h3 { font-size: 1.5rem; }
