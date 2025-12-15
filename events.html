@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Community Music Therapy Groups & Events in Berlin</title>
-  <link rel="icon" type="image/png" href="images/favicon-32x32.png">
-  <meta name="description" content="Community music therapy groups and events in Berlin focused on song sharing, deep listening, and connection. Explore how music can support mental health and emotional wellbeing.">
 
+  <!-- Phase 1: Meta & Canonical -->
+  <title>Community Music Therapy Groups & Events in Berlin | Jordan Elias</title>
+  <meta name="description" content="Explore upcoming and past community music therapy events in Berlin hosted by Jordan Elias. Join groups for song sharing, deep listening, and creative connection supporting mental health and wellbeing for adults and neurodivergent individuals.">
+  <link rel="canonical" href="https://www.jordanelias.de/events.html">
+  <link rel="icon" type="image/png" href="images/favicon-32x32.png">
+
+  <!-- Fonts & Styles -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -28,7 +32,7 @@
 </head>
 <body>
   <header>
-    <h1>Events</h1>
+    <h1>Music Therapy Events in Berlin</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
@@ -100,7 +104,7 @@
                 <p><strong>Time:</strong> ${event.time}</p>
                 <p><strong>Location:</strong> ${event.location}</p>
                 <p>${event.description}</p>
-                ${event.link ? `<p><a href="${event.link}" target="_blank">Register Here</a></p>` : ''}
+                ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
               </div>
             `;
             container.innerHTML += eventHTML;
@@ -125,6 +129,5 @@
 
     loadEvents();
   </script>
-
 </body>
 </html>
