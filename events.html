@@ -37,12 +37,15 @@
       <a href="contact.html">Contact</a>
     </nav>
   </header>
+
   <main class="events-container">
     <h2>Upcoming Events</h2>
     <div id="upcoming-events"></div>
+
     <div class="toggle-past">
       <button onclick="togglePastEvents()">See Past Events</button>
     </div>
+
     <div id="past-events" class="hidden">
       <h2>Past Events</h2>
     </div>
@@ -64,30 +67,64 @@
       try {
         const response = await fetch('events.json');
         const data = await response.json();
+
         const upcomingContainer = document.getElementById('upcoming-events');
         const pastContainer = document.getElementById('past-events');
         const today = new Date();
-        const sorted = data.events.sort((a, b) => new Date(a.date) - new Date(b.date));
-        sorted.forEach(event => {
+
+        const upcomingEvents = [];
+        const pastEvents = [];
+
+        data.events.forEach(event => {
           const eventDate = new Date(event.date);
-          const eventHTML = `
-            <div class="event">
-              <div class="event-date">${eventDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
-              <h3>${event.title}</h3>
-              <p><strong>Time:</strong> ${event.time}</p>
-              <p><strong>Location:</strong> ${event.location}</p>
-              <p>${event.description}</p>
-              ${event.link ? `<p><a href="${event.link}" target="_blank">Register Here →</a></p>` : ''}
-            </div>
-          `;
-          if (eventDate >= today) upcomingContainer.innerHTML += eventHTML;
-          else pastContainer.innerHTML += eventHTML;
+          if (eventDate >= today) {
+            upcomingEvents.push(event);
+          } else {
+            pastEvents.push(event);
+          }
         });
-        if (!upcomingContainer.innerHTML.trim()) upcomingContainer.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
-      } catch (error) { console.error("Error loading events:", error); }
+
+        // Sort upcoming chronologically (soonest first)
+        upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+        // Sort past reverse-chronologically (most recent first)
+        pastEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        function renderEvents(container, eventsArray) {
+          container.innerHTML = '';
+          eventsArray.forEach(event => {
+            const eventDate = new Date(event.date);
+            const eventHTML = `
+              <div class="event">
+                <div class="event-date">${eventDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                <h3>${event.title}</h3>
+                <p><strong>Time:</strong> ${event.time}</p>
+                <p><strong>Location:</strong> ${event.location}</p>
+                <p>${event.description}</p>
+                ${event.link ? `<p><a href="${event.link}" target="_blank">Register Here →</a></p>` : ''}
+              </div>
+            `;
+            container.innerHTML += eventHTML;
+          });
+        }
+
+        renderEvents(upcomingContainer, upcomingEvents);
+        renderEvents(pastContainer, pastEvents);
+
+        if (!upcomingEvents.length) {
+          upcomingContainer.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
+        }
+
+      } catch (error) {
+        console.error("Error loading events:", error);
+      }
     }
-    function togglePastEvents() { document.getElementById('past-events').classList.toggle('hidden'); }
+
+    function togglePastEvents() {
+      document.getElementById('past-events').classList.toggle('hidden');
+    }
+
     loadEvents();
   </script>
+
 </body>
 </html>
