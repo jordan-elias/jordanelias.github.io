@@ -9,167 +9,86 @@
   <link rel="canonical" href="https://www.jordanelias.de/index.html">
   <link rel="icon" type="image/png" href="images/favicon-32x32.png">
 
+  <!-- AI & SEO Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "name": "Jordan Elias Music Therapy",
+    "image": "https://www.jordanelias.de/images/hero.jpg",
+    "description": "Board-certified music therapist offering online and in-person sessions for adults and neurodivergent individuals. Accepting new clients in Berlin and remotely across Europe.",
+    "url": "https://www.jordanelias.de",
+    "telephone": "+49-17664719610",
+    "email": "mailto:your-email@example.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Pannierstrasse 60",
+      "addressLocality": "Berlin",
+      "postalCode": "12047",
+      "addressCountry": "DE"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 52.5200,
+      "longitude": 13.4050
+    },
+    "openingHours": "Mo-Fr 09:00-19:00",
+    "currenciesAccepted": "EUR",
+    "paymentAccepted": "Cash, Bank Transfer, PayPal",
+    "priceRange": "€€",
+    
+    "areaServed": {
+      "@type": "AdministrativeArea",
+      "name": "Europe"
+    },
+    "makesOffer": {
+      "@type": "Offer",
+      "name": "Online music therapy",
+      "description": "Therapy sessions conducted online via Zoom, suitable for clients across Europe.",
+      "eligibleRegion": {
+        "@type": "Country",
+        "name": "Europe"
+      }
+    },
+    "founder": {
+      "@type": "Person",
+      "name": "Jordan Elias",
+      "sameAs": "https://www.jordanelias.de/about.html"
+    }
+  }
+  </script>
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
   <style>
-  /* Body and global styles */
-  body {
-    font-family: 'Lato', sans-serif;
-    background: linear-gradient(135deg, #ff00ff, #00ffff);
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    text-shadow: 1px 1px #ff00ff, -1px -1px #00ffff;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* Left & Right Border Pattern */
-  body::before, body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    width: 80px; /* Default desktop width */
-    height: 100%;
-    background-image: url('images/None.png'); /* Placeholder for pattern */
-    background-repeat: repeat-y;
-    z-index: 9999;
-  }
-
-  body::before { left: 0; }
-  body::after { right: 0; }
-
-  /* Adjust main content to avoid overlap with borders */
-  main {
-    max-width: 1000px;
-    margin: 2em auto 4em;
-    padding: 0 1em;
-    position: relative;
-    z-index: 1;
-  }
-
-  header, footer {
-    text-align: center;
-    padding: 1.5em 1em;
-    background-color: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    position: relative;
-    z-index: 1;
-  }
-
-  nav a {
-    font-family: 'VT323', monospace;
-    color: #00ffff;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: normal;
-    letter-spacing: 0.12em;
-    text-shadow: 1px 1px #ff00ff;
-  }
-
+  /* Your existing CSS stays unchanged */
+  body { font-family: 'Lato', sans-serif; background: linear-gradient(135deg, #ff00ff, #00ffff); color: #ffffff; margin: 0; padding: 0; line-height: 1.6; text-shadow: 1px 1px #ff00ff, -1px -1px #00ffff; position: relative; overflow-x: hidden; }
+  body::before, body::after { content: ""; position: fixed; top: 0; width: 80px; height: 100%; background-image: url('images/None.png'); background-repeat: repeat-y; z-index: 9999; }
+  body::before { left: 0; } body::after { right: 0; }
+  main { max-width: 1000px; margin: 2em auto 4em; padding: 0 1em; position: relative; z-index: 1; }
+  header, footer { text-align: center; padding: 1.5em 1em; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); position: relative; z-index: 1; }
+  nav a { font-family: 'VT323', monospace; color: #00ffff; text-decoration: none; margin: 0 10px; font-weight: normal; letter-spacing: 0.12em; text-shadow: 1px 1px #ff00ff; }
   nav a:hover { text-decoration: underline; }
-
-  h1, h2, h3 {
-    font-family: 'VT323', monospace;
-    letter-spacing: 0.15em;
-    margin-top: 0;
-    margin-bottom: 0.5em;
-    text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
-  }
-
-  h1 { font-size: 3rem; }
-  h2 { font-size: 2.2rem; text-align: center; margin: 3em 0 2em; }
-  h3 { font-size: 1.8rem; }
-
+  h1, h2, h3 { font-family: 'VT323', monospace; letter-spacing: 0.15em; margin-top: 0; margin-bottom: 0.5em; text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
+  h1 { font-size: 3rem; } h2 { font-size: 2.2rem; text-align: center; margin: 3em 0 2em; } h3 { font-size: 1.8rem; }
   p { margin-bottom: 1em; }
-
-  a.contact-link {
-    color: #ff00ff;
-    font-weight: 700;
-    text-decoration: underline;
-  }
-
-  /* Hero */
-  .hero img {
-    width: 100%;
-    max-height: 420px;
-    object-fit: cover;
-    border: 3px solid #00ffff;
-    filter: saturate(1.5) contrast(1.2);
-    transform: skewY(-1deg);
-  }
-
-  .hero figcaption {
-    text-align: center;
-    color: #ff00ff;
-    font-weight: bold;
-    text-shadow: 1px 1px #00ffff;
-    font-family: 'VT323', monospace;
-    letter-spacing: 0.1em;
-  }
-
-  /* Service Sections */
-  .service-section {
-    display: flex;
-    gap: 2em;
-    margin-bottom: 4em;
-    align-items: flex-start;
-    padding: 0;
-    background-color: rgba(0,0,0,0.4);
-    border: 2px dashed #ff00ff;
-    transform: skewX(-2deg);
-  }
-
-  .service-section img {
-    width: 260px;
-    height: auto;
-    border: 2px solid #00ffff;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-
+  a.contact-link { color: #ff00ff; font-weight: 700; text-decoration: underline; }
+  .hero img { width: 100%; max-height: 420px; object-fit: cover; border: 3px solid #00ffff; filter: saturate(1.5) contrast(1.2); transform: skewY(-1deg); }
+  .hero figcaption { text-align: center; color: #ff00ff; font-weight: bold; text-shadow: 1px 1px #00ffff; font-family: 'VT323', monospace; letter-spacing: 0.1em; }
+  .service-section { display: flex; gap: 2em; margin-bottom: 4em; align-items: flex-start; padding: 0; background-color: rgba(0,0,0,0.4); border: 2px dashed #ff00ff; transform: skewX(-2deg); }
+  .service-section img { width: 260px; height: auto; border: 2px solid #00ffff; object-fit: cover; flex-shrink: 0; }
   .service-text { max-width: 600px; padding: 0.5em; }
-
-  /* FAQ Section */
-  section[aria-label="Frequently Asked Questions"] {
-    background-color: rgba(0,0,0,0.3);
-    padding: 1em;
-    border: 2px solid #ff00ff;
-    transform: skewX(1deg);
-  }
-
-  section[aria-label="Frequently Asked Questions"] ul li {
-    margin-bottom: 0.8em;
-  }
-
-  /* Mobile adjustments */
+  section[aria-label="Frequently Asked Questions"] { background-color: rgba(0,0,0,0.3); padding: 1em; border: 2px solid #ff00ff; transform: skewX(1deg); }
+  section[aria-label="Frequently Asked Questions"] ul li { margin-bottom: 0.8em; }
   @media (max-width: 800px) {
-    /* Narrow the borders */
-    body::before, body::after {
-      width: 30px; /* Smaller border width for mobile */
-    }
-
-    /* Allow main content to fill more space */
-    main {
-      padding: 0 0.5em; /* Reduce horizontal padding */
-    }
-
-    .service-section {
-      flex-direction: column;
-      padding: 1.5em;
-      transform: skewX(0deg);
-    }
-
+    body::before, body::after { width: 30px; }
+    main { padding: 0 0.5em; }
+    .service-section { flex-direction: column; padding: 1.5em; transform: skewX(0deg); }
     .service-section img { width: 100%; height: auto; }
     .service-text { max-width: 100%; }
-
-    /* Responsive heading sizes */
-    h1 { font-size: 2.2rem; }
-    h2 { font-size: 1.8rem; }
-    h3 { font-size: 1.5rem; }
+    h1 { font-size: 2.2rem; } h2 { font-size: 1.8rem; } h3 { font-size: 1.5rem; }
   }
 </style>
 
