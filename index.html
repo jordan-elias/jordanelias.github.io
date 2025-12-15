@@ -76,9 +76,11 @@
 
     .service-section img {
       width: 260px;
+      max-width: 100%;
       height: auto;
       border-radius: 12px;
       flex-shrink: 0;
+      object-fit: cover;
     }
 
     .service-text { max-width: 600px; }
@@ -86,7 +88,7 @@
     /* Mobile */
     @media (max-width: 800px) {
       .service-section { flex-direction: column; padding: 1.5em; }
-      .service-section img { width: 100%; }
+      .service-section img { width: 100%; height: auto; }
       .service-text { max-width: 100%; }
     }
   </style>
