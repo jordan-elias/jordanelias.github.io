@@ -9,11 +9,11 @@
   <link rel="canonical" href="https://www.jordanelias.de/about/">
   <link rel="icon" type="image/png" href="../images/favicon-32x32.png">
 
-  <!-- Fonts (match main page) -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
-  <!-- Structured Data: Authority-Focused -->
+  <!-- Structured Data: Person + Service + WebPage + FAQ -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -23,9 +23,21 @@
         "@id": "https://www.jordanelias.de/#person",
         "name": "Jordan Elias",
         "honorificSuffix": "MT-BC",
-        "jobTitle": "Music Therapist",
+        "jobTitle": "Board-Certified Music Therapist",
         "url": "https://www.jordanelias.de/about/",
         "image": "https://www.jordanelias.de/images/headshot.jpg",
+        "alumniOf": [
+    {
+      "@type": "EducationalOrganization",
+      "name": "Freie Universität Berlin",
+      "sameAs": "https://www.fu-berlin.de/"
+    },
+    {
+      "@type": "EducationalOrganization",
+      "name": "Berklee College of Music",
+      "sameAs": "https://www.berklee.edu/"
+    }
+  ],
         "knowsAbout": [
           "Music Therapy",
           "Neurodiversity",
@@ -44,21 +56,10 @@
         "@type": "ProfessionalService",
         "@id": "https://www.jordanelias.de/#service",
         "name": "Music Therapy & Creative Support",
-        "provider": {
-          "@id": "https://www.jordanelias.de/#person"
-        },
-        "areaServed": {
-          "@type": "Place",
-          "name": "Berlin, Germany"
-        },
+        "provider": { "@id": "https://www.jordanelias.de/#person" },
+        "areaServed": { "@type": "Place", "name": "Berlin, Germany" },
         "availableChannel": [
-          {
-            "@type": "ServiceChannel",
-            "serviceLocation": {
-              "@type": "Place",
-              "name": "Online"
-            }
-          }
+          { "@type": "ServiceChannel", "serviceLocation": { "@type": "Place", "name": "Online" } }
         ]
       },
       {
@@ -66,13 +67,33 @@
         "@id": "https://www.jordanelias.de/about/#webpage",
         "url": "https://www.jordanelias.de/about/",
         "name": "About Jordan Elias",
-        "about": {
-          "@id": "https://www.jordanelias.de/#person"
-        },
-        "isPartOf": {
-          "@type": "WebSite",
-          "@id": "https://www.jordanelias.de/#website"
-        }
+        "about": { "@id": "https://www.jordanelias.de/#person" },
+        "isPartOf": { "@type": "WebSite", "@id": "https://www.jordanelias.de/#website" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Who does Jordan work with?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Neurodivergent individuals, musicians, and adults experiencing burnout, anxiety, or depression." }
+          },
+          {
+            "@type": "Question",
+            "name": "What types of therapy are offered?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Individual sessions, community music programs, creative arts therapy for patients, and adapted music lessons." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is prior musical experience required?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No, sessions are tailored to each individual's abilities and interests." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I participate online?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, individual therapy sessions are available online for remote clients." }
+          }
+        ]
       }
     ]
   }
@@ -101,16 +122,16 @@
       background-repeat: repeat-y;
       z-index: 9999;
     }
-
     body::before { left: 0; }
     body::after { right: 0; }
 
     main {
       max-width: 1000px;
       margin: 2em auto 4em;
-      padding: 0 1em;
+      padding: 0 2em; /* increase padding for mobile */
       position: relative;
       z-index: 1;
+      box-sizing: border-box;
     }
 
     header, footer {
@@ -130,7 +151,6 @@
       letter-spacing: 0.12em;
       text-shadow: 1px 1px #ff00ff;
     }
-
     nav a:hover { text-decoration: underline; }
 
     h1, h2, h3 {
@@ -145,13 +165,13 @@
     h2 { font-size: 1.8rem; text-align: center; margin: 3em 0 2em; }
     h3 { font-size: 1.5rem; }
 
-    p { margin-bottom: 1em; }
-    ul li { margin-bottom: 0.6em; }
-
+    p { margin-bottom: 1em; word-wrap: break-word; }
+    ul li { margin-bottom: 0.6em; word-wrap: break-word; }
     a { color: #ff00ff; font-weight: 700; text-decoration: underline; }
 
     .hero {
       display: flex;
+      flex-wrap: wrap;
       gap: 2em;
       align-items: flex-start;
       margin-bottom: 3em;
@@ -163,6 +183,7 @@
 
     .hero img {
       width: 260px;
+      max-width: 100%;
       height: auto;
       border: 2px solid #00ffff;
       object-fit: cover;
@@ -170,7 +191,7 @@
       flex-shrink: 0;
     }
 
-    .hero-text { max-width: 600px; }
+    .hero-text { flex: 1; min-width: 200px; }
 
     .content-block {
       background-color: rgba(0,0,0,0.4);
@@ -178,6 +199,7 @@
       padding: 1.5em;
       margin-bottom: 3em;
       transform: skewX(-1.5deg);
+      word-wrap: break-word;
     }
 
     .faq-section {
@@ -185,21 +207,20 @@
       border: 2px solid #00ffff;
       padding: 1.5em;
       transform: skewX(1deg);
+      word-wrap: break-word;
     }
 
     @media (max-width: 800px) {
       h1 { font-size: 1.6rem; }
       h2 { font-size: 1.4rem; }
-
       .hero { flex-direction: column; transform: skewX(0deg); }
-      .hero img { width: 100%; }
       .content-block, .faq-section { transform: skewX(0deg); }
+      main { padding: 0 1em; }
     }
   </style>
 </head>
 
 <body>
-
 <header>
   <h1>About Jordan Elias</h1>
   <nav>
@@ -217,30 +238,31 @@
   <section class="hero">
     <img src="../images/headshot.jpg" alt="Jordan Elias leading a music therapy session">
     <div class="hero-text">
-      <p>Jordan Elias is a board-certified music therapist and counselor integrating talk therapy with creative projects to explore emotions, build resilience, and foster meaningful change. Services include individualized therapy sessions, community arts programming for youth centers — including bands, lessons, and performances — and creative arts therapy programs for outpatient cancer treatment in hospitals.</p>
+      <p>Jordan Elias is a board-certified music therapist integrating talk therapy with creative projects to explore emotions, build resilience, and foster meaningful change. Services include individual therapy, community programs, and creative arts therapy for clinical settings.</p>
+      <p>Learn more about detailed therapy options on the <a href="/musictherapy/">Music Therapy page</a> or <a href="/contact/">contact me</a> for a consultation.</p>
     </div>
   </section>
 
   <!-- Approach -->
   <section class="content-block" aria-label="Therapy Approach">
     <h2>Therapeutic Approach</h2>
-    <p>Jordan’s approach is collaborative and creative, rooted in understanding how past experiences shape present behaviors and beliefs. Therapy creates a safe environment to explore thoughts and emotions while incorporating creative outlets — music-making, art, and lyric analysis — to express feelings that may be difficult to articulate.</p>
-    <p>The goal is to empower clients to rewrite narratives that no longer serve them and build a sense of self they can be proud of.</p>
+    <p>Jordan’s approach is collaborative and creative, focusing on how past experiences shape present behaviors and emotions. Sessions use music, art, and lyric analysis to help clients express feelings, process experiences, and build emotional resilience.</p>
+    <p>The goal is to empower clients to rewrite unhelpful narratives and strengthen self-awareness and confidence.</p>
   </section>
 
   <!-- Education & Credentials -->
   <section class="content-block" aria-label="Education & Credentials">
     <h2>Education & Credentials</h2>
-    <p>Jordan holds a master’s degree in cognitive neuroscience from Freie Universität Berlin and an undergraduate degree in psychology and music therapy from the Berklee College of Music in Boston. He is board certified by the Certification Board for Music Therapy and has completed over 1000 hours of clinical supervision as part of his training.</p>
+    <p>Jordan holds a master’s degree in cognitive neuroscience from Freie Universität Berlin and a bachelor’s in psychology and music therapy from Berklee College of Music. He is board-certified by the Certification Board for Music Therapy and has completed over 1000 hours of supervised clinical practice.</p>
   </section>
 
   <!-- FAQ -->
   <section class="faq-section" aria-label="Frequently Asked Questions">
     <h2>Frequently Asked Questions</h2>
     <ul>
-      <li><strong>Who does Jordan work with?</strong> Neurodivergent individuals (autism, ADHD), musicians, and people experiencing burnout, depression, or anxiety.</li>
-      <li><strong>What types of therapy are offered?</strong> Individual sessions, community music programs, creative arts therapy for cancer patients, and adapted music lessons.</li>
-      <li><strong>Is prior musical experience required?</strong> No. Sessions are tailored to each individual's interests and abilities.</li>
+      <li><strong>Who does Jordan work with?</strong> Neurodivergent individuals, musicians, and adults experiencing burnout, anxiety, or depression.</li>
+      <li><strong>What types of therapy are offered?</strong> Individual sessions, community music programs, creative arts therapy in clinical settings, and adapted music lessons.</li>
+      <li><strong>Is prior musical experience required?</strong> No. Sessions are tailored to each individual's abilities and interests.</li>
       <li><strong>Can I participate online?</strong> Yes, individual therapy sessions are available online for remote clients.</li>
     </ul>
   </section>
@@ -257,6 +279,5 @@
   </nav>
   <p style="margin-top:1em;">© 2025 Jordan Elias</p>
 </footer>
-
 </body>
 </html>
