@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +8,67 @@
   <meta name="description" content="Community music therapy groups and events in Berlin for adults, including neurodivergent participants. Song sharing, deep listening, and creative connection.">
   <link rel="canonical" href="https://www.jordanelias.de/events/">
   <link rel="icon" type="image/png" href="../images/favicon-32x32.png">
+
+  <!-- Structured Data: Professional and Event Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "name": "Jordan Elias Music Therapy",
+        "image": "https://www.jordanelias.de/images/headshot.jpg",
+        "description": "Board-certified music therapist offering community and individual music therapy events in Berlin and online.",
+        "url": "https://www.jordanelias.de",
+        "telephone": "+4917664719610",
+        "email": "mailto:jordanelias@proton.me",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Pannierstrasse 60",
+          "addressLocality": "Berlin",
+          "postalCode": "12047",
+          "addressCountry": "DE"
+        },
+        "areaServed": "Europe",
+        "founder": {
+          "@type": "Person",
+          "name": "Jordan Elias",
+          "sameAs": "https://www.jordanelias.de/about/"
+        },
+        "knowsAbout": [
+          "Music Therapy",
+          "Community Music Events",
+          "Neurodivergent Support",
+          "Creative Arts Therapy"
+        ]
+      },
+      {
+        "@type": "Event",
+        "name": "Sample Event",
+        "startDate": "2025-12-20T18:00",
+        "endDate": "2025-12-20T20:00",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+          "@type": "Place",
+          "name": "Berlin Music Studio",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Pannierstrasse 60",
+            "addressLocality": "Berlin",
+            "postalCode": "12047",
+            "addressCountry": "DE"
+          }
+        },
+        "organizer": {
+          "@type": "Person",
+          "name": "Jordan Elias",
+          "url": "https://www.jordanelias.de/about/"
+        }
+      }
+    ]
+  }
+  </script>
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -31,9 +91,9 @@
       content: "";
       position: fixed;
       top: 0;
-      width: 80px; /* Desktop width */
+      width: 80px;
       height: 100%;
-      background-image: url('images/none.png'); /* Replace with your pattern image */
+      background-image: url('../images/Neon glitchy synth with geometric patterns.png');
       background-repeat: repeat-y;
       z-index: 9999;
     }
@@ -41,7 +101,6 @@
     body::before { left: 0; }
     body::after { right: 0; }
 
-    /* Ensure main content stays above borders */
     main, header, footer {
       position: relative;
       z-index: 1;
@@ -67,6 +126,7 @@
     h1, h2, h3 {
       font-family: 'Press Start 2P', monospace;
       text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+      margin-top: 0;
     }
 
     h1 { font-size: 1.6rem; margin-bottom: 1em; }
@@ -95,19 +155,9 @@
     }
 
     .event p { margin-bottom: 0.8em; }
+    .event a { color: #ff00ff; font-weight: 700; text-decoration: underline; }
 
-    .event a {
-      color: #ff00ff;
-      font-weight: 700;
-      text-decoration: underline;
-    }
-
-    /* Toggle button */
-    .toggle-past {
-      text-align: center;
-      margin: 3em 0;
-    }
-
+    .toggle-past { text-align: center; margin: 3em 0; }
     .toggle-past button {
       font-family: 'Press Start 2P', monospace;
       background-color: rgba(0,0,0,0.6);
@@ -118,22 +168,13 @@
       text-shadow: 1px 1px #ff00ff;
     }
 
-    .toggle-past button:hover {
-      background-color: rgba(0,0,0,0.8);
-    }
-
+    .toggle-past button:hover { background-color: rgba(0,0,0,0.8); }
     .hidden { display: none; }
 
     /* Mobile adjustments */
     @media (max-width: 800px) {
-      body::before, body::after {
-        width: 30px; /* narrower on mobile */
-      }
-
-      main {
-        padding: 0 0.5em;
-      }
-
+      body::before, body::after { width: 30px; }
+      main { padding: 0 0.5em; }
       h1 { font-size: 1.2rem; }
       h2 { font-size: 1rem; }
       .event { transform: skewX(0deg); }
@@ -142,7 +183,6 @@
 </head>
 
 <body>
-
 <header>
   <h1>Music Therapy Events in Berlin</h1>
   <nav>
@@ -193,11 +233,8 @@
 
       data.events.forEach(event => {
         const eventDate = new Date(event.date);
-        if (eventDate >= today) {
-          upcomingEvents.push(event);
-        } else {
-          pastEvents.push(event);
-        }
+        if (eventDate >= today) upcomingEvents.push(event);
+        else pastEvents.push(event);
       });
 
       upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -210,7 +247,7 @@
           container.innerHTML += `
             <div class="event">
               <div class="event-date">
-                ${eventDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}
+                ${eventDate.toLocaleDateString('en-GB', { year:'numeric', month:'long', day:'numeric' })}
               </div>
               <h3>${event.title}</h3>
               <p><strong>Time:</strong> ${event.time}</p>
