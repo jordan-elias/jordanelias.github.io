@@ -210,13 +210,29 @@
       word-wrap: break-word;
     }
 
-    @media (max-width: 800px) {
-      h1 { font-size: 1.6rem; }
-      h2 { font-size: 1.4rem; }
-      .hero { flex-direction: column; transform: skewX(0deg); }
-      .content-block, .faq-section { transform: skewX(0deg); }
-      main { padding: 0 1em; }
-    }
+    /* Mobile-specific content adjustment */
+@media (max-width: 800px) {
+  main {
+    max-width: 100%;       /* Take full width */
+    margin: 2em 1em 4em;   /* Add some horizontal padding */
+    padding: 0 1em;        /* Ensure text doesn't touch screen edges */
+  }
+
+  .content-block, .contact-block, .event, .testimonials {
+    transform: skewX(0deg); /* Remove skew on mobile so text doesn't cut off */
+    padding: 1em;           /* Slightly reduce padding for smaller screens */
+  }
+
+  h1, h2, h3 {
+    font-size: 1.4rem;      /* Adjust headings for mobile readability */
+  }
+
+  /* Optional: ensure left/right borders don't cover content */
+  body::before, body::after {
+    width: 30px;
+  }
+}
+
   </style>
 </head>
 
