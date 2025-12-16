@@ -9,8 +9,74 @@
   <link rel="canonical" href="https://www.jordanelias.de/about/">
   <link rel="icon" type="image/png" href="../images/favicon-32x32.png">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Fonts (match main page) -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: Authority-Focused -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://www.jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Music Therapist",
+        "url": "https://www.jordanelias.de/about/",
+        "image": "https://www.jordanelias.de/images/headshot.jpg",
+        "knowsAbout": [
+          "Music Therapy",
+          "Neurodiversity",
+          "Autism",
+          "ADHD",
+          "Anxiety",
+          "Burnout",
+          "Emotional Regulation",
+          "Neuroscience of Music",
+          "Creative Therapy",
+          "Trauma-Informed Practice",
+          "Music and Neuroplasticity"
+        ]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://www.jordanelias.de/#service",
+        "name": "Music Therapy & Creative Support",
+        "provider": {
+          "@id": "https://www.jordanelias.de/#person"
+        },
+        "areaServed": {
+          "@type": "Place",
+          "name": "Berlin, Germany"
+        },
+        "availableChannel": [
+          {
+            "@type": "ServiceChannel",
+            "serviceLocation": {
+              "@type": "Place",
+              "name": "Online"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.jordanelias.de/about/#webpage",
+        "url": "https://www.jordanelias.de/about/",
+        "name": "About Jordan Elias",
+        "about": {
+          "@id": "https://www.jordanelias.de/#person"
+        },
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://www.jordanelias.de/#website"
+        }
+      }
+    ]
+  }
+  </script>
 
   <style>
     body {
@@ -21,6 +87,30 @@
       padding: 0;
       line-height: 1.6;
       text-shadow: 1px 1px #ff00ff, -1px -1px #00ffff;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      width: 80px;
+      height: 100%;
+      background-image: url('../images/Neon glitchy synth with geometric patterns.png');
+      background-repeat: repeat-y;
+      z-index: 9999;
+    }
+
+    body::before { left: 0; }
+    body::after { right: 0; }
+
+    main {
+      max-width: 1000px;
+      margin: 2em auto 4em;
+      padding: 0 1em;
+      position: relative;
+      z-index: 1;
     }
 
     header, footer {
@@ -28,39 +118,38 @@
       padding: 1.5em 1em;
       background-color: rgba(0,0,0,0.6);
       backdrop-filter: blur(4px);
+      position: relative;
+      z-index: 1;
     }
 
     nav a {
+      font-family: 'VT323', monospace;
       color: #00ffff;
       text-decoration: none;
       margin: 0 10px;
-      font-weight: bold;
+      letter-spacing: 0.12em;
       text-shadow: 1px 1px #ff00ff;
     }
 
     nav a:hover { text-decoration: underline; }
 
-    main {
-      max-width: 1000px;
-      margin: 2em auto 4em;
-      padding: 0 1em;
-    }
-
     h1, h2, h3 {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'VT323', monospace;
+      letter-spacing: 0.15em;
       margin-top: 0;
       margin-bottom: 0.8em;
       text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
     }
 
-    h1 { font-size: 1.6rem; }
-    h2 { font-size: 1.2rem; text-align: center; margin: 3em 0 2em; }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; text-align: center; margin: 3em 0 2em; }
+    h3 { font-size: 1.5rem; }
 
     p { margin-bottom: 1em; }
-
     ul li { margin-bottom: 0.6em; }
 
-    /* Hero section */
+    a { color: #ff00ff; font-weight: 700; text-decoration: underline; }
+
     .hero {
       display: flex;
       gap: 2em;
@@ -83,7 +172,6 @@
 
     .hero-text { max-width: 600px; }
 
-    /* Content blocks */
     .content-block {
       background-color: rgba(0,0,0,0.4);
       border: 2px dashed #ff00ff;
@@ -92,7 +180,6 @@
       transform: skewX(-1.5deg);
     }
 
-    /* FAQ */
     .faq-section {
       background-color: rgba(0,0,0,0.3);
       border: 2px solid #00ffff;
@@ -100,24 +187,13 @@
       transform: skewX(1deg);
     }
 
-    /* Mobile */
     @media (max-width: 800px) {
-      h1 { font-size: 1.2rem; }
-      h2 { font-size: 1rem; }
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.4rem; }
 
-      .hero {
-        flex-direction: column;
-        transform: skewX(0deg);
-      }
-
-      .hero img {
-        width: 100%;
-      }
-
-      .content-block,
-      .faq-section {
-        transform: skewX(0deg);
-      }
+      .hero { flex-direction: column; transform: skewX(0deg); }
+      .hero img { width: 100%; }
+      .content-block, .faq-section { transform: skewX(0deg); }
     }
   </style>
 </head>
@@ -152,7 +228,7 @@
     <p>The goal is to empower clients to rewrite narratives that no longer serve them and build a sense of self they can be proud of.</p>
   </section>
 
-  <!-- Education -->
+  <!-- Education & Credentials -->
   <section class="content-block" aria-label="Education & Credentials">
     <h2>Education & Credentials</h2>
     <p>Jordan holds a master’s degree in cognitive neuroscience from Freie Universität Berlin and an undergraduate degree in psychology and music therapy from the Berklee College of Music in Boston. He is board certified by the Certification Board for Music Therapy and has completed over 1000 hours of clinical supervision as part of his training.</p>
