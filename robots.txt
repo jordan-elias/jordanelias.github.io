@@ -1,0 +1,6 @@
+# Allow all search engines to crawl the site
+User-agent: *
+Disallow:
+
+# Link to your sitemap
+Sitemap: https://www.jordanelias.de/sitemap.xml
