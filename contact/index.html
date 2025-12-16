@@ -9,6 +9,46 @@
   <link rel="canonical" href="https://www.jordanelias.de/contact/">
   <link rel="icon" type="image/png" href="../images/favicon-32x32.png">
 
+  <!-- Structured Data for Professional Contact -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Jordan Elias Music Therapy",
+    "image": "https://www.jordanelias.de/images/headshot.jpg",
+    "description": "Board-certified music therapist offering online and in-person sessions for adults, including neurodivergent clients.",
+    "url": "https://www.jordanelias.de",
+    "telephone": "+4917664719610",
+    "email": "mailto:jordanelias@proton.me",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Pannierstrasse 60",
+      "addressLocality": "Berlin",
+      "postalCode": "12047",
+      "addressCountry": "DE"
+    },
+    "areaServed": "Europe",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "email": "mailto:jordanelias@proton.me",
+      "url": "https://www.jordanelias.de/contact/"
+    },
+    "founder": {
+      "@type": "Person",
+      "name": "Jordan Elias",
+      "sameAs": "https://www.jordanelias.de/about/"
+    },
+    "knowsAbout": [
+      "Music Therapy",
+      "Neurodiversity-affirming therapy",
+      "Mental Health Support",
+      "Community Arts Programming",
+      "Creative Arts Therapy"
+    ]
+  }
+  </script>
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 
@@ -31,9 +71,9 @@
       content: "";
       position: fixed;
       top: 0;
-      width: 80px; /* Default desktop width */
+      width: 80px;
       height: 100%;
-      background-image: url('images/Neon glitchy synth with geometric patterns.png'); /* Replace with your pattern image */
+      background-image: url('../images/Neon glitchy synth with geometric patterns.png');
       background-repeat: repeat-y;
       z-index: 9999;
     }
@@ -41,7 +81,6 @@
     body::before { left: 0; }
     body::after { right: 0; }
 
-    /* Ensure main content stays above borders */
     main {
       max-width: 900px;
       margin: 2em auto 4em;
@@ -87,7 +126,7 @@
       text-decoration: underline;
     }
 
-    /* Content container */
+    /* Contact Block */
     .contact-block {
       background-color: rgba(0,0,0,0.4);
       border: 2px dashed #00ffff;
@@ -97,15 +136,8 @@
 
     /* Mobile adjustments */
     @media (max-width: 800px) {
-      /* Narrow borders on mobile */
-      body::before, body::after {
-        width: 30px;
-      }
-
-      main {
-        padding: 0 0.5em;
-      }
-
+      body::before, body::after { width: 30px; }
+      main { padding: 0 0.5em; }
       h1 { font-size: 1.2rem; }
       .contact-block { transform: skewX(0deg); }
     }
@@ -126,18 +158,17 @@
 </header>
 
 <main>
-
   <section class="contact-block" aria-label="Contact Information">
     <p>
-      I am currently accepting new clients and I'd love to hear from you! Reach out at
+      I am currently accepting new clients and would love to hear from you! Reach out at
       <a href="mailto:jordanelias@proton.me" target="_blank" rel="noopener noreferrer">
         jordanelias@proton.me
       </a>
-      to ask questions, explore whether music therapy could be a helpful space for you, or simply to start a conversation.
+      to ask questions, explore whether music therapy could be helpful for you, or simply to start a conversation.
     </p>
 
     <p>
-      If you're interested in starting a new music therapy group at your organization, collaborating on community projects, or discussing ways we could work together, please get in touch. I enjoy connecting with individuals, groups, and organizations to create supportive and creative experiences through music.
+      Interested in starting a new music therapy group, collaborating on community projects, or exploring creative partnerships? Get in touch to discuss how we can work together.
     </p>
 
     <p>
@@ -148,22 +179,19 @@
     </p>
 
     <p>
-      To easily check my availability and book a free 30-minute introductory call, visit my
+      To check availability and book a free 30-minute consultation, visit my
       <a href="https://calendly.com/jordanphilipelias/30min" target="_blank" rel="noopener noreferrer">
         Calendly
-      </a>
-      page.
+      </a> page.
     </p>
 
     <p>
-      You can also find me on
+      Follow me on
       <a href="https://www.instagram.com/music_therapy_berlin/" target="_blank" rel="noopener noreferrer">
         Instagram
-      </a>
-      to see updates on upcoming events and community offerings.
+      </a> for updates on events and offerings.
     </p>
   </section>
-
 </main>
 
 <footer>
