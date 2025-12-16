@@ -4,16 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Neurodivergent Affirming Music Therapy for Anxiety, Depression & Burnout | Jordan Elias</title>
-  <meta name="description" content="Individual music therapy sessions for adults in Berlin and online, including neurodivergent clients. Evidence-based, creative support with Jordan Elias, MT-BC.">
+  <title>Neurodivergent-Affirming Music Therapy for Anxiety, Depression & Burnout | Jordan Elias</title>
+  <meta name="description" content="Neurodivergent-affirming music therapy for adults in Berlin and online. Evidence-informed, creative support with board-certified music therapist Jordan Elias.">
   <link rel="canonical" href="https://www.jordanelias.de/musictherapy/">
   <link rel="icon" type="image/png" href="../images/favicon-32x32.png">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Fonts (match main page) -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: Authority-Focused, Non-Medical -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://www.jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Music Therapist",
+        "url": "https://www.jordanelias.de/",
+        "image": "https://www.jordanelias.de/images/PANO_20200326_183449.vr.jpg",
+        "knowsAbout": [
+          "Music Therapy",
+          "Neurodiversity",
+          "Autism",
+          "ADHD",
+          "Anxiety",
+          "Burnout",
+          "Emotional Regulation",
+          "Neuroscience of Music",
+          "Creative Therapy",
+          "Trauma-Informed Practice",
+          "Music and Neuroplasticity"
+        ]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://www.jordanelias.de/#service",
+        "name": "Music Therapy & Creative Support",
+        "provider": {
+          "@id": "https://www.jordanelias.de/#person"
+        },
+        "areaServed": {
+          "@type": "Place",
+          "name": "Berlin, Germany"
+        },
+        "availableChannel": [
+          {
+            "@type": "ServiceChannel",
+            "serviceLocation": {
+              "@type": "Place",
+              "name": "Online"
+            }
+          }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.jordanelias.de/musictherapy/#webpage",
+        "url": "https://www.jordanelias.de/musictherapy/",
+        "name": "Music Therapy",
+        "about": {
+          "@id": "https://www.jordanelias.de/#person"
+        },
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://www.jordanelias.de/#website"
+        }
+      }
+    ]
+  }
+  </script>
 
   <style>
-    /* Body and global styles */
     body {
       font-family: 'Lato', sans-serif;
       background: linear-gradient(135deg, #ff00ff, #00ffff);
@@ -26,14 +91,13 @@
       overflow-x: hidden;
     }
 
-    /* Left & Right Border Pattern */
     body::before, body::after {
       content: "";
       position: fixed;
       top: 0;
-      width: 80px; /* Desktop width */
+      width: 80px;
       height: 100%;
-      background-image: url('../images/Neon glitchy synth with geometric patterns.png'); /* Replace with your pattern image */
+      background-image: url('../images/Neon glitchy synth with geometric patterns.png');
       background-repeat: repeat-y;
       z-index: 9999;
     }
@@ -41,7 +105,6 @@
     body::before { left: 0; }
     body::after { right: 0; }
 
-    /* Ensure main content stays above borders */
     main {
       max-width: 1000px;
       margin: 2em auto 4em;
@@ -60,36 +123,30 @@
     }
 
     nav a {
+      font-family: 'VT323', monospace;
       color: #00ffff;
       text-decoration: none;
       margin: 0 10px;
-      font-weight: bold;
+      letter-spacing: 0.12em;
       text-shadow: 1px 1px #ff00ff;
     }
 
     nav a:hover { text-decoration: underline; }
 
     h1, h2, h3 {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'VT323', monospace;
+      letter-spacing: 0.15em;
       margin-top: 0;
       margin-bottom: 0.8em;
       text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
     }
 
-    h1 { font-size: 1.6rem; }
-    h2 { font-size: 1.2rem; text-align: center; margin: 3em 0 2em; }
-    h3 { font-size: 1rem; }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; text-align: center; margin: 3em 0 2em; }
+    h3 { font-size: 1.5rem; }
 
-    p { margin-bottom: 1em; }
-    ul li { margin-bottom: 0.6em; }
+    a { color: #ff00ff; font-weight: 700; text-decoration: underline; }
 
-    a {
-      color: #ff00ff;
-      font-weight: 700;
-      text-decoration: underline;
-    }
-
-    /* Hero */
     .hero img {
       width: 100%;
       max-height: 420px;
@@ -100,7 +157,6 @@
       margin-bottom: 2em;
     }
 
-    /* Content blocks */
     .content-block {
       background-color: rgba(0,0,0,0.4);
       border: 2px dashed #ff00ff;
@@ -109,7 +165,6 @@
       transform: skewX(-1.5deg);
     }
 
-    /* Testimonials */
     .testimonials {
       background-color: rgba(0,0,0,0.3);
       border: 2px solid #00ffff;
@@ -124,22 +179,13 @@
       font-style: italic;
     }
 
-    /* Mobile adjustments */
     @media (max-width: 800px) {
-      /* Narrow borders on mobile */
-      body::before, body::after {
-        width: 30px;
-      }
-
-      main {
-        padding: 0 0.5em;
-      }
-
-      h1 { font-size: 1.2rem; }
-      h2 { font-size: 1rem; }
-      h3 { font-size: 0.9rem; }
-
+      body::before, body::after { width: 30px; }
+      main { padding: 0 0.5em; }
       .content-block, .testimonials { transform: skewX(0deg); }
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.4rem; }
+      h3 { font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -147,7 +193,7 @@
 <body>
 
 <header>
-  <h1>Neurodivergent Affirming Music Therapy</h1>
+  <h1>Music Therapy</h1>
   <nav>
     <a href="/">Home</a>
     <a href="/about/">About</a>
@@ -157,11 +203,10 @@
   </nav>
 </header>
 
-<!-- Hero -->
 <figure class="hero">
   <img src="../images/PANO_20200326_183449.vr.jpg" alt="Jordan Elias facilitating a music therapy session with adults">
 </figure>
-
+  
 <main>
 
   <section class="content-block">
