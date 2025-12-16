@@ -1,1 +1,246 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Community Music Therapy Groups & Events in Berlin | Jordan Elias</title>
+  <meta name="description" content="Community music therapy groups and events in Berlin for adults, including neurodivergent participants. Song sharing, deep listening, and creative connection.">
+  <link rel="canonical" href="https://www.jordanelias.de/events.html">
+  <link rel="icon" type="image/png" href="images/favicon-32x32.png">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      text-shadow: 1px 1px #ff00ff, -1px -1px #00ffff;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Left & Right Border Pattern */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      width: 80px; /* Desktop width */
+      height: 100%;
+      background-image: url('images/none.png'); /* Replace with your pattern image */
+      background-repeat: repeat-y;
+      z-index: 9999;
+    }
+
+    body::before { left: 0; }
+    body::after { right: 0; }
+
+    /* Ensure main content stays above borders */
+    main, header, footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    header, footer {
+      text-align: center;
+      padding: 1.5em 1em;
+      background-color: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+      text-shadow: 1px 1px #ff00ff;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    h1, h2, h3 {
+      font-family: 'Press Start 2P', monospace;
+      text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+    }
+
+    h1 { font-size: 1.6rem; margin-bottom: 1em; }
+    h2 { font-size: 1.2rem; margin: 2.5em 0 1.5em; }
+    h3 { font-size: 1rem; margin-bottom: 0.6em; }
+
+    .events-container {
+      max-width: 900px;
+      margin: 2em auto 4em;
+      padding: 0 1em;
+    }
+
+    /* Event cards */
+    .event {
+      background-color: rgba(0,0,0,0.4);
+      border: 2px dashed #00ffff;
+      padding: 1.5em;
+      margin-bottom: 2em;
+      transform: skewX(-2deg);
+    }
+
+    .event-date {
+      font-weight: 700;
+      color: #ff00ff;
+      margin-bottom: 0.5em;
+    }
+
+    .event p { margin-bottom: 0.8em; }
+
+    .event a {
+      color: #ff00ff;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    /* Toggle button */
+    .toggle-past {
+      text-align: center;
+      margin: 3em 0;
+    }
+
+    .toggle-past button {
+      font-family: 'Press Start 2P', monospace;
+      background-color: rgba(0,0,0,0.6);
+      color: #00ffff;
+      border: 2px solid #ff00ff;
+      padding: 0.9em 1.3em;
+      cursor: pointer;
+      text-shadow: 1px 1px #ff00ff;
+    }
+
+    .toggle-past button:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+
+    .hidden { display: none; }
+
+    /* Mobile adjustments */
+    @media (max-width: 800px) {
+      body::before, body::after {
+        width: 30px; /* narrower on mobile */
+      }
+
+      main {
+        padding: 0 0.5em;
+      }
+
+      h1 { font-size: 1.2rem; }
+      h2 { font-size: 1rem; }
+      .event { transform: skewX(0deg); }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Music Therapy Events in Berlin</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="about.html">About</a>
+    <a href="music-therapy.html">Music Therapy</a>
+    <a href="events.html">Events</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main class="events-container">
+  <h2>Upcoming Events</h2>
+  <div id="upcoming-events"></div>
+
+  <div class="toggle-past">
+    <button onclick="togglePastEvents()">See Past Events</button>
+  </div>
+
+  <div id="past-events" class="hidden">
+    <h2>Past Events</h2>
+  </div>
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="about.html">About</a>
+    <a href="music-therapy.html">Music Therapy</a>
+    <a href="events.html">Events</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <p style="margin-top:1em;">© 2025 Jordan Elias</p>
+</footer>
+
+<script>
+  async function loadEvents() {
+    try {
+      const response = await fetch('events.json');
+      const data = await response.json();
+
+      const upcomingContainer = document.getElementById('upcoming-events');
+      const pastContainer = document.getElementById('past-events');
+      const today = new Date();
+
+      const upcomingEvents = [];
+      const pastEvents = [];
+
+      data.events.forEach(event => {
+        const eventDate = new Date(event.date);
+        if (eventDate >= today) {
+          upcomingEvents.push(event);
+        } else {
+          pastEvents.push(event);
+        }
+      });
+
+      upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+      pastEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      function renderEvents(container, eventsArray) {
+        container.innerHTML = '';
+        eventsArray.forEach(event => {
+          const eventDate = new Date(event.date);
+          container.innerHTML += `
+            <div class="event">
+              <div class="event-date">
+                ${eventDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </div>
+              <h3>${event.title}</h3>
+              <p><strong>Time:</strong> ${event.time}</p>
+              <p><strong>Location:</strong> ${event.location}</p>
+              <p>${event.description}</p>
+              ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
+            </div>
+          `;
+        });
+      }
+
+      renderEvents(upcomingContainer, upcomingEvents);
+      renderEvents(pastContainer, pastEvents);
+
+      if (!upcomingEvents.length) {
+        upcomingContainer.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
+      }
+
+    } catch (error) {
+      console.error("Error loading events:", error);
+    }
+  }
+
+  function togglePastEvents() {
+    document.getElementById('past-events').classList.toggle('hidden');
+  }
+
+  loadEvents();
+</script>
+
+</body>
+</html>
+
