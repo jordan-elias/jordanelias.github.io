@@ -5,57 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Contact | Jordan Elias Music Therapy</title>
-  <meta name="description" content="Contact Jordan Elias to book a free consultation or explore music therapy, groups, and collaborations for adults in Berlin and online.">
+  <meta name="description" content="Contact Jordan Elias, board-certified music therapist, to book a free consultation or explore music therapy sessions, community groups, and collaborations for adults in Berlin and online.">
   <link rel="canonical" href="https://www.jordanelias.de/contact/">
   <link rel="icon" type="image/png" href="../images/favicon-32x32.png">
 
-  <!-- Structured Data for Professional Contact -->
+  <!-- Structured Data: Person & Professional Service with Contact -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Jordan Elias Music Therapy",
-    "image": "https://www.jordanelias.de/images/headshot.jpg",
-    "description": "Board-certified music therapist offering online and in-person sessions for adults, including neurodivergent clients.",
-    "url": "https://www.jordanelias.de",
-    "telephone": "+4917664719610",
-    "email": "mailto:jordanelias@proton.me",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Pannierstrasse 60",
-      "addressLocality": "Berlin",
-      "postalCode": "12047",
-      "addressCountry": "DE"
-    },
-    "areaServed": "Europe",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "contactType": "customer support",
-      "email": "mailto:jordanelias@proton.me",
-      "url": "https://www.jordanelias.de/contact/"
-    },
-    "founder": {
-      "@type": "Person",
-      "name": "Jordan Elias",
-      "sameAs": "https://www.jordanelias.de/about/"
-    },
-    "knowsAbout": [
-      "Music Therapy",
-      "Neurodiversity-affirming therapy",
-      "Mental Health Support",
-      "Community Arts Programming",
-      "Creative Arts Therapy",
-      "Queer Affirming Therapy",
-      
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://www.jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "jobTitle": "Board-Certified Music Therapist",
+        "url": "https://www.jordanelias.de/about/",
+        "image": "https://www.jordanelias.de/images/headshot.jpg",
+        "email": "mailto:jordanelias@proton.me",
+        "alumniOf": [
+          {
+            "@type": "EducationalOrganization",
+            "name": "Freie Universität Berlin",
+            "sameAs": "https://www.fu-berlin.de/"
+          },
+          {
+            "@type": "EducationalOrganization",
+            "name": "Berklee College of Music",
+            "sameAs": "https://www.berklee.edu/"
+          }
+        ],
+        "knowsAbout": [
+          "Music Therapy",
+          "Neurodiversity",
+          "Autism",
+          "ADHD",
+          "Anxiety",
+          "Burnout",
+          "Emotional Regulation",
+          "Neuroscience of Music",
+          "Creative Therapy",
+          "Trauma-Informed Practice",
+          "Music and Neuroplasticity",
+          "Queer Affirming Therapy"
+        ]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://www.jordanelias.de/#service",
+        "name": "Jordan Elias Music Therapy",
+        "provider": { "@id": "https://www.jordanelias.de/#person" },
+        "description": "Online and in-person music therapy sessions for adults, including neurodivergent clients, as well as community programs and creative collaborations.",
+        "url": "https://www.jordanelias.de/contact/",
+        "image": "https://www.jordanelias.de/images/headshot.jpg",
+        "areaServed": { "@type": "Place", "name": "Berlin, Germany" },
+        "availableChannel": [
+          {
+            "@type": "ServiceChannel",
+            "serviceLocation": { "@type": "Place", "name": "Online" }
+          }
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Client inquiries",
+          "email": "mailto:jordanelias@proton.me",
+          "url": "https://www.jordanelias.de/contact/"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.jordanelias.de/contact/#webpage",
+        "url": "https://www.jordanelias.de/contact/",
+        "name": "Contact Jordan Elias",
+        "about": { "@id": "https://www.jordanelias.de/#person" },
+        "isPartOf": { "@type": "WebSite", "@id": "https://www.jordanelias.de/#website" }
+      }
     ]
   }
   </script>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=VT323&display=swap" rel="stylesheet">
 
   <style>
-    /* Body and global styles */
     body {
       font-family: 'Lato', sans-serif;
       background: linear-gradient(135deg, #ff00ff, #00ffff);
@@ -64,11 +95,9 @@
       padding: 0;
       line-height: 1.6;
       text-shadow: 1px 1px #ff00ff, -1px -1px #00ffff;
-      position: relative;
       overflow-x: hidden;
     }
 
-    /* Left & Right Border Pattern */
     body::before, body::after {
       content: "";
       position: fixed;
@@ -79,12 +108,11 @@
       background-repeat: repeat-y;
       z-index: 9999;
     }
-
     body::before { left: 0; }
     body::after { right: 0; }
 
     main {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 2em auto 4em;
       padding: 0 1em;
       position: relative;
@@ -101,21 +129,28 @@
     }
 
     nav a {
+      font-family: 'VT323', monospace;
       color: #00ffff;
       text-decoration: none;
       margin: 0 10px;
-      font-weight: bold;
+      letter-spacing: 0.12em;
       text-shadow: 1px 1px #ff00ff;
     }
-
     nav a:hover { text-decoration: underline; }
 
     h1 {
-      font-family: 'Press Start 2P', monospace;
+      font-family: 'VT323', monospace;
       margin-top: 0;
       margin-bottom: 1.5em;
       text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
-      font-size: 1.6rem;
+      font-size: 2rem;
+    }
+
+    .contact-block {
+      background-color: rgba(0,0,0,0.4);
+      border: 2px dashed #00ffff;
+      padding: 2em;
+      transform: skewX(-1.5deg);
     }
 
     p {
@@ -128,19 +163,10 @@
       text-decoration: underline;
     }
 
-    /* Contact Block */
-    .contact-block {
-      background-color: rgba(0,0,0,0.4);
-      border: 2px dashed #00ffff;
-      padding: 1.8em;
-      transform: skewX(-1.5deg);
-    }
-
-    /* Mobile adjustments */
     @media (max-width: 800px) {
       body::before, body::after { width: 30px; }
-      main { padding: 0 0.5em; }
-      h1 { font-size: 1.2rem; }
+      main { padding: 0 1em; }
+      h1 { font-size: 1.6rem; }
       .contact-block { transform: skewX(0deg); }
     }
   </style>
@@ -163,35 +189,24 @@
   <section class="contact-block" aria-label="Contact Information">
     <p>
       I am currently accepting new clients and would love to hear from you! Reach out at
-      <a href="mailto:jordanelias@proton.me" target="_blank" rel="noopener noreferrer">
-        jordanelias@proton.me
-      </a>
-      to ask questions, explore whether music therapy could be helpful for you, or simply to start a conversation.
+      <a href="mailto:jordanelias@proton.me" target="_blank" rel="noopener noreferrer">jordanelias@proton.me</a>
+      to ask questions, explore whether music therapy could be helpful for you, or to start a conversation.
     </p>
 
     <p>
-      Interested in starting a new music therapy group, collaborating on community projects, or exploring creative partnerships? Get in touch to discuss how we can work together.
+      Interested in starting a new music therapy group, collaborating on community projects, or exploring creative partnerships? Contact me to discuss possibilities.
     </p>
 
     <p>
-      You can also learn more about me and my approach on
-      <a href="https://complicated.life/jordan-elias" target="_blank" rel="noopener noreferrer">
-        It's Complicated
-      </a>.
+      Learn more about my background and approach on the <a href="/about/">About page</a>.
     </p>
 
     <p>
-      To check availability and book a free 30-minute consultation, visit my
-      <a href="https://calendly.com/jordanphilipelias/30min" target="_blank" rel="noopener noreferrer">
-        Calendly
-      </a> page.
+      To check availability and book a free 30-minute consultation, visit my <a href="https://calendly.com/jordanphilipelias/30min" target="_blank" rel="noopener noreferrer">Calendly</a> page.
     </p>
 
     <p>
-      Follow me on
-      <a href="https://www.instagram.com/music_therapy_berlin/" target="_blank" rel="noopener noreferrer">
-        Instagram
-      </a> for updates on events and offerings.
+      Follow me on <a href="https://www.instagram.com/music_therapy_berlin/" target="_blank" rel="noopener noreferrer">Instagram</a> for updates on events and offerings.
     </p>
   </section>
 </main>
