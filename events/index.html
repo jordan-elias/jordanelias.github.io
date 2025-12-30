@@ -153,7 +153,7 @@
     font-family: 'Space Grotesk', sans-serif;
     color: var(--accent);
     text-decoration: none;
-    margin: 0 22px; /* increased spacing */
+    margin: 0 22px;
     letter-spacing: 0.05em;
     display: inline-block;
     transition: transform 0.15s ease, color 0.15s ease;
@@ -177,19 +177,19 @@
   h1 { font-size: 2.6rem; }
   h2 {
     font-size: 2.2rem;
-    text-align: center;
-    margin: 3em 0 2em;
+    text-align: left;       /* left-aligned heading */
+    margin: 3em 0 1em;
     position: relative;
   }
 
   h2::after {
     content: "";
     display: block;
-    width: 60px;
+    width: 100%;            /* full width line */
     height: 2px;
-    margin: 0.75em auto 0;
+    margin: 0.75em 0 0;
     background-color: var(--text);
-    opacity: 0.15;
+    opacity: 1;             /* fully opaque */
   }
 
   h3 { font-size: 1.6rem; }
@@ -200,14 +200,12 @@
   }
 
   .event {
-    background-color: rgba(0,0,0,0);
-    border: 1px solid var(--text);
+    background-color: rgba(0,0,0,0);  /* transparent */
+    border: 1px solid var(--text);    /* same as font color */
     padding: 1.5em;
     margin-bottom: 2em;
-    border-radius: 0;
+    border-radius: 0;                 /* no rounded corners */
   }
-
-
 
   .event-date {
     font-weight: 700;
@@ -216,12 +214,14 @@
   }
 
   .event p { margin-bottom: 0.8em; }
-  .event a { color: var(--accent); font-weight: 700; transition: color 0.2s ease; }
+  .event a {
+    color: var(--accent);
+    font-weight: 700;
+    transition: color 0.2s ease;
+  }
   .event a:hover {
-  color: var(--accent-hover);   /* changes color on hover */
-}
-
-
+    color: var(--accent-hover);
+  }
 
   .toggle-past { text-align: center; margin: 3em 0; }
   .toggle-past button {
@@ -254,6 +254,7 @@
     }
   }
 </style>
+
 
 </head>
 
