@@ -182,12 +182,28 @@ content="
   }
 
   h1 { font-size: 2.6rem; margin-bottom: 1.5em; }
+  h2 {
+    font-size: 2.2rem;
+    text-align: left;       /* left-aligned heading */
+    margin: 2em 0 1em;
+    position: relative;
+  }
+  h2::after {
+    content: "";
+    display: block;
+    width: 100%;            /* full width line */
+    height: 2px;
+    margin: 0.75em 0 0;
+    background-color: var(--text);
+    opacity: 1;             /* solid line */
+  }
+  h3 { font-size: 1.6rem; }
 
   .contact-block {
-    background-color: rgba(0,0,0,0.05);
-    border: 1px solid rgba(32,38,157,0.15);
+    background-color: rgba(0,0,0,0);  /* transparent */
+    border: 1px solid var(--text);    /* same as font color */
     padding: 2em;
-    border-radius: 6px;
+    border-radius: 0;                 /* no rounded corners */
   }
 
   p {
@@ -195,14 +211,13 @@ content="
   }
 
   a {
-      color: var(--accent);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    a:hover {
-      color: var(--accent-hover);
-    }
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  a:hover {
+    color: var(--accent-hover);
+  }
 
   @media (max-width: 800px) {
     h1 { font-size: 2.1rem; }
@@ -218,6 +233,7 @@ content="
     }
   }
 </style>
+
 
 </head>
 
