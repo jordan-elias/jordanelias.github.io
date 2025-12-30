@@ -10,276 +10,140 @@
   <link rel="icon" type="image/png" href="../images/favicon-32x32.png">
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-
-  <!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Jordan Elias Music Therapy">
-<meta property="og:locale" content="en_DE">
-<meta property="og:url" content="https://www.jordanelias.de/about/">
-<meta property="og:title" content="About Jordan Elias | Board-Certified Music Therapist">
-<meta property="og:description" content="Learn about Jordan Elias, a board-certified music therapist offering humanistic, neuroscience-informed therapy for adults, including neurodivergent clients, in Berlin and online.">
-<meta property="og:image" content="https://www.jordanelias.de/images/hero.jpg">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="About Jordan Elias | Board-Certified Music Therapist">
-<meta name="twitter:description" content="Learn about Jordan Elias, a board-certified music therapist offering humanistic, neuroscience-informed therapy for adults, including neurodivergent clients, in Berlin and online.">
-<meta name="twitter:image" content="https://www.jordanelias.de/images/hero.jpg">
-<meta name="twitter:site" content="@music_therapy_berlin">
-
-<meta http-equiv="Content-Security-Policy"
-content="
-  default-src 'self';
-  img-src 'self' data: https:;
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-  font-src 'self' https://fonts.gstatic.com;
-  script-src 'self';
-  object-src 'none';
-  base-uri 'self';
-  frame-ancestors 'none';
-">
-
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-Frame-Options" content="DENY">
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
-  
-  <!-- Structured Data: Person + Service + WebPage + FAQ -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://www.jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "honorificSuffix": "MT-BC",
-        "jobTitle": "Board-Certified Music Therapist",
-        "url": "https://www.jordanelias.de/about/",
-        "image": "https://www.jordanelias.de/images/headshot.jpg",
-        "alumniOf": [
-    {
-      "@type": "EducationalOrganization",
-      "name": "Freie Universität Berlin",
-      "sameAs": "https://www.fu-berlin.de/"
-    },
-    {
-      "@type": "EducationalOrganization",
-      "name": "Berklee College of Music",
-      "sameAs": "https://www.berklee.edu/"
-    }
-  ],
-    "hasCredential": {
-    "@type": "EducationalOccupationalCredential",
-    "name": "Board Certified Music Therapist (MT-BC)",
-    "credentialCategory": "Professional Certification",
-    "recognizedBy": {
-      "@type": "Organization",
-      "name": "Certification Board for Music Therapists",
-      "url": "https://www.cbmt.org/"
-    }
-  },
-        "knowsAbout": [
-          "Music Therapy",
-          "Neurodiversity",
-          "Autism",
-          "ADHD",
-          "Anxiety",
-          "Burnout",
-          "Emotional Regulation",
-          "Neuroscience of Music",
-          "Creative Therapy",
-          "Trauma-Informed Practice",
-          "Music and Neuroplasticity"
-        ]
-      },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://www.jordanelias.de/#service",
-        "name": "Music Therapy & Creative Support",
-        "provider": { "@id": "https://www.jordanelias.de/#person" },
-        "areaServed": { "@type": "Place", "name": "Berlin, Germany" },
-        "availableChannel": [
-          { "@type": "ServiceChannel", "serviceLocation": { "@type": "Place", "name": "Online" } }
-        ]
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://www.jordanelias.de/about/#webpage",
-        "url": "https://www.jordanelias.de/about/",
-        "name": "About Jordan Elias",
-        "about": { "@id": "https://www.jordanelias.de/#person" },
-        "isPartOf": { "@type": "WebSite", "@id": "https://www.jordanelias.de/#website" }
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Who does Jordan work with?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Neurodivergent individuals, musicians, and adults experiencing burnout, anxiety, or depression." }
-          },
-          {
-            "@type": "Question",
-            "name": "What types of therapy are offered?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Individual sessions, community music programs, creative arts therapy for patients, and adapted music lessons." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is prior musical experience required?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No, sessions are tailored to each individual's abilities and interests." }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I participate online?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, individual therapy sessions are available online for remote clients." }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg: #F1C6D3;
+      --text: #20269D;
+      --accent: #6A1E78;
+      --accent-hover: #FF6F91;
+    }
+
     body {
-      font-family: 'Lato', sans-serif;
-      background: linear-gradient(135deg, #ff00ff, #00ffff);
-      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
       margin: 0;
       padding: 0;
       line-height: 1.6;
-      text-shadow: 1px 1px #ff00ff, -1px -1px #00ffff;
-      position: relative;
-      overflow-x: hidden;
     }
-
-    body::before, body::after {
-      content: "";
-      position: fixed;
-      top: 0;
-      width: 80px;
-      height: 100%;
-      background-image: url('../images/Neon glitchy synth with geometric patterns.png');
-      background-repeat: repeat-y;
-      z-index: 9999;
-    }
-    body::before { left: 0; }
-    body::after { right: 0; }
 
     main {
       max-width: 1000px;
       margin: 2em auto 4em;
-      padding: 0 2em; /* increase padding for mobile */
-      position: relative;
-      z-index: 1;
-      box-sizing: border-box;
+      padding: 0 1em;
     }
 
     header, footer {
       text-align: center;
       padding: 1.5em 1em;
-      background-color: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-      position: relative;
-      z-index: 1;
+      background-color: var(--bg);
     }
 
     nav a {
-      font-family: 'VT323', monospace;
-      color: #00ffff;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent);
       text-decoration: none;
-      margin: 0 10px;
-      letter-spacing: 0.12em;
-      text-shadow: 1px 1px #ff00ff;
+      margin: 0 22px;
+      letter-spacing: 0.05em;
+      display: inline-block;
+      transition: transform 0.15s ease, color 0.2s ease;
     }
-    nav a:hover { text-decoration: underline; }
+
+    nav a:hover {
+      color: var(--accent-hover);
+      transform: translateY(-1px);
+    }
 
     h1, h2, h3 {
-      font-family: 'VT323', monospace;
-      letter-spacing: 0.15em;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.01em;
       margin-top: 0;
-      margin-bottom: 0.8em;
-      text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+      margin-bottom: 0.5em;
     }
 
-    h1 { font-size: 2.2rem; }
-    h2 { font-size: 1.8rem; text-align: center; margin: 3em 0 2em; }
+    h1 { font-size: 2.6rem; }
+    h2 {
+      font-size: 2.1rem;
+      text-align: center;
+      margin: 3em 0 2em;
+      position: relative;
+    }
+
+    h2::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 2px;
+      margin: 0.75em auto 0;
+      background-color: var(--text);
+      opacity: 0.15;
+    }
+
     h3 { font-size: 1.5rem; }
 
-    p { margin-bottom: 1em; word-wrap: break-word; }
-    ul li { margin-bottom: 0.6em; word-wrap: break-word; }
-    a { color: #ff00ff; font-weight: 700; text-decoration: underline; }
+    p { margin-bottom: 1em; }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+    }
 
     .hero {
       display: flex;
-      flex-wrap: wrap;
       gap: 2em;
       align-items: flex-start;
       margin-bottom: 3em;
-      background-color: rgba(0,0,0,0.4);
-      border: 2px dashed #ff00ff;
-      padding: 1.5em;
-      transform: skewX(-2deg);
     }
 
     .hero img {
       width: 260px;
       max-width: 100%;
       height: auto;
-      border: 2px solid #00ffff;
+      border-radius: 6px;
       object-fit: cover;
-      filter: saturate(1.4) contrast(1.2);
       flex-shrink: 0;
     }
 
-    .hero-text { flex: 1; min-width: 200px; }
+    .hero-text {
+      flex: 1;
+    }
 
     .content-block {
-      background-color: rgba(0,0,0,0.4);
-      border: 2px dashed #ff00ff;
-      padding: 1.5em;
       margin-bottom: 3em;
-      transform: skewX(-1.5deg);
-      word-wrap: break-word;
+      padding-bottom: 2em;
+      border-bottom: 1px solid rgba(32,38,157,0.15);
     }
 
     .faq-section {
-      background-color: rgba(0,0,0,0.3);
-      border: 2px solid #00ffff;
-      padding: 1.5em;
-      transform: skewX(1deg);
-      word-wrap: break-word;
+      padding-top: 2em;
+      border-top: 1px solid rgba(32,38,157,0.15);
     }
 
-    /* Mobile-specific content adjustment */
-@media (max-width: 800px) {
-  main {
-    max-width: 100%;       /* Take full width */
-    margin: 2em 1em 4em;   /* Add some horizontal padding */
-    padding: 0 1em;        /* Ensure text doesn't touch screen edges */
-  }
+    ul {
+      padding-left: 1.2em;
+    }
 
-  .content-block, .contact-block, .event, .testimonials {
-    transform: skewX(0deg); /* Remove skew on mobile so text doesn't cut off */
-    padding: 1em;           /* Slightly reduce padding for smaller screens */
-  }
+    @media (max-width: 800px) {
+      .hero {
+        flex-direction: column;
+      }
 
-  h1, h2, h3 {
-    font-size: 1.4rem;      /* Adjust headings for mobile readability */
-  }
-
-  /* Optional: ensure left/right borders don't cover content */
-  body::before, body::after {
-    width: 30px;
-  }
-}
-
+      h1 { font-size: 2.1rem; }
+      h2 { font-size: 1.7rem; }
+      h3 { font-size: 1.4rem; }
+    }
   </style>
 </head>
 
 <body>
+
 <header>
   <h1>About Jordan Elias</h1>
   <nav>
@@ -293,32 +157,25 @@ content="
 
 <main>
 
-  <!-- Hero -->
   <section class="hero">
-    <img src="../images/headshot.jpg" 
-      alt="Jordan Elias leading a music therapy session"
-      loading="lazy"
-      decoding="async">
+    <img src="../images/headshot.jpg" alt="Jordan Elias leading a music therapy session">
     <div class="hero-text">
       <p>Jordan Elias is a board-certified music therapist integrating talk therapy with creative projects to explore emotions, build resilience, and foster meaningful change. Services include individual therapy, community programs, and creative arts therapy for clinical settings.</p>
       <p>Learn more about detailed therapy options on the <a href="/musictherapy/">Music Therapy page</a> or <a href="/contact/">contact me</a> for a consultation.</p>
     </div>
   </section>
 
-  <!-- Approach -->
   <section class="content-block" aria-label="Therapy Approach">
     <h2>Therapeutic Approach</h2>
     <p>Jordan’s approach is collaborative and creative, focusing on how past experiences shape present behaviors and emotions. Sessions use music, art, and lyric analysis to help clients express feelings, process experiences, and build emotional resilience.</p>
     <p>The goal is to empower clients to rewrite unhelpful narratives and strengthen self-awareness and confidence.</p>
   </section>
 
-  <!-- Education & Credentials -->
   <section class="content-block" aria-label="Education & Credentials">
     <h2>Education & Credentials</h2>
     <p>Jordan holds a master’s degree in cognitive neuroscience from Freie Universität Berlin and a bachelor’s in psychology and music therapy from Berklee College of Music. He is board-certified by the Certification Board for Music Therapy and has completed over 1000 hours of supervised clinical practice.</p>
   </section>
 
-  <!-- FAQ -->
   <section class="faq-section" aria-label="Frequently Asked Questions">
     <h2>Frequently Asked Questions</h2>
     <ul>
@@ -341,5 +198,6 @@ content="
   </nav>
   <p style="margin-top:1em;">© 2025 Jordan Elias</p>
 </footer>
+
 </body>
 </html>
