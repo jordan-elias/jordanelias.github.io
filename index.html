@@ -36,28 +36,34 @@
       padding: 0 1em;
     }
 
-    header, footer {
+    header,
+    footer {
       text-align: center;
       padding: 1.5em 1em;
-      background-color: var(--bg)
-      
+      background-color: var(--bg);
     }
 
-}
+    /* Header & Footer Navigation */
+    header nav,
+    footer nav {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+    }
 
-
-    nav a {
+    header nav a,
+    footer nav a {
       font-family: 'Space Grotesk', sans-serif;
       color: var(--accent);
       text-decoration: none;
-      margin: 0 18px;
       letter-spacing: 0.05em;
-      transition: color 0.2s ease;
+      transition: color 0.2s ease, transform 0.15s ease;
     }
 
-    nav a:hover {
+    header nav a:hover,
+    footer nav a:hover {
       color: var(--accent-hover);
-      
+      transform: translateY(-1px);
     }
 
     h1, h2, h3 {
@@ -68,6 +74,7 @@
     }
 
     h1 { font-size: 3rem; }
+
     h2 {
       font-size: 2.2rem;
       text-align: center;
@@ -87,6 +94,7 @@
 
     h3 { font-size: 1.6rem; }
 
+    /* Body Links — color only, no movement */
     a {
       color: var(--accent);
       text-decoration: none;
@@ -95,10 +103,8 @@
 
     a:hover {
       color: var(--accent-hover);
-      
     }
 
-    
     .hero img {
       width: 100%;
       max-height: 420px;
@@ -150,12 +156,6 @@
       padding: 0.5em 1em;
       border-radius: 4px;
       background-color: transparent;
-      transition: transform 0.15s ease;
-    }
-
-    button:hover,
-    .contact-link:hover {
-      transform: translateY(-1px);
     }
 
     @media (max-width: 800px) {
@@ -257,3 +257,4 @@
 
 </body>
 </html>
+
