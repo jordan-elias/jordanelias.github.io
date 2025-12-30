@@ -214,7 +214,10 @@
   }
 
   .event p { margin-bottom: 0.8em; }
-  .event a { color: var(--accent); font-weight: 700; text-decoration: underline; }
+  .event a { color: var(--accent); font-weight: 700; }
+  .event a:hover {
+  color: var(--accent-hover);   /* changes color on hover */
+}
 
   .toggle-past { text-align: center; margin: 3em 0; }
   .toggle-past button {
