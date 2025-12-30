@@ -167,7 +167,7 @@ content="
     font-family: 'Space Grotesk', sans-serif;
     color: var(--accent);
     text-decoration: none;
-    margin: 0 22px; /* increased spacing */
+    margin: 0 22px;
     letter-spacing: 0.05em;
     display: inline-block;
     transition: transform 0.15s ease, color 0.15s ease;
@@ -190,21 +190,22 @@ content="
   }
 
   h1 { font-size: 2.6rem; }
+
   h2 {
     font-size: 2.2rem;
-    text-align: center;
-    margin: 3em 0 2em;
+    text-align: left;        /* left aligned */
+    margin: 3em 0 1em;
     position: relative;
   }
 
   h2::after {
     content: "";
     display: block;
-    width: 60px;
+    width: 100%;             /* full width line */
     height: 2px;
-    margin: 0.75em auto 0;
+    margin: 0.75em 0 0;
     background-color: var(--text);
-    opacity: 0.15;
+    opacity: 1;              /* fully opaque */
   }
 
   h3 { font-size: 1.6rem; }
@@ -228,10 +229,11 @@ content="
     margin-bottom: 2em;
   }
 
+  /* Removed section borders to only show header line */
   .content-block {
     margin-bottom: 3em;
     padding-bottom: 2em;
-    border-bottom: 1px solid rgba(32,38,157,0.15);
+    /* border-bottom removed */
   }
 
   .testimonials {
@@ -255,6 +257,7 @@ content="
     h3 { font-size: 1.4rem; }
   }
 </style>
+
 
 </head>
 
