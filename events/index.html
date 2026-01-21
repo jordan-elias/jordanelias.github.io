@@ -172,32 +172,33 @@ async function loadEvents() {
     const pastEvents = [];
 
     data.events.forEach(event => {
-      if (!event.date || !event.time) {
-        // Missing date or time → treat as upcoming
-        upcomingEvents.push({ ...event, _hasDateTime: false });
-      } else {
+      const hasDateTime = event.date && event.time;
+      if (hasDateTime) {
         const eventDate = new Date(event.date);
         if (eventDate >= today) {
           upcomingEvents.push({ ...event, _hasDateTime: true });
         } else {
           pastEvents.push(event);
         }
+      } else {
+        // Missing date or time → treat as upcoming
+        upcomingEvents.push({ ...event, _hasDateTime: false });
       }
     });
 
-    // Sort upcoming: first events with date/time in chronological order
+    // Upcoming events: first events with date/time in chronological order
     const eventsWithDateTime = upcomingEvents
       .filter(e => e._hasDateTime)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    // Events without date/time sorted alphabetically by title
+    // Then events without date/time alphabetically by title
     const eventsWithoutDateTime = upcomingEvents
       .filter(e => !e._hasDateTime)
       .sort((a, b) => a.title.localeCompare(b.title));
 
     const sortedUpcoming = [...eventsWithDateTime, ...eventsWithoutDateTime];
 
-    // Sort past events in reverse chronological order
+    // Past events: reverse chronological order
     pastEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     function renderEvents(container, eventsArray) {
@@ -208,13 +209,22 @@ async function loadEvents() {
           : "Date TBA";
         const eventTimeText = event.time || "TBA";
 
+        // Convert bullets in description to <ul>
+        let descriptionHTML = event.description
+          .split('\n')
+          .map(line => line.trim())
+          .map(line => line.startsWith('- ') ? `<li>${line.slice(2)}</li>` : line)
+          .join('\n');
+        // Wrap <li> in <ul> if any exist
+        if (descriptionHTML.includes('<li>')) descriptionHTML = `<ul>${descriptionHTML}</ul>`;
+
         container.innerHTML += `
           <div class="event">
             <div class="event-date">${eventDateText}</div>
             <h3>${event.title}</h3>
             <p><strong>Time:</strong> ${eventTimeText}</p>
             <p><strong>Location:</strong> ${event.location || 'TBA'}</p>
-            <p>${event.description}</p>
+            <p>${descriptionHTML}</p>
             ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
           </div>
         `;
@@ -239,6 +249,7 @@ function togglePastEvents() {
 
 loadEvents();
 </script>
+
 
 
 
