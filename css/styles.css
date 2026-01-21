@@ -111,6 +111,14 @@ a:hover {
   color: var(--text);
 }
 
+.inline-img {
+  float: left;          /* image on the left */
+  width: 150px;         /* smaller size */
+  height: auto;         /* keep aspect ratio */
+  margin: 0 15px 15px 0; /* spacing around image */
+  border-radius: 8px;    /* optional */
+}
+
 /* ============================
    Service Section
 ============================ */
