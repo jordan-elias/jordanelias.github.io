@@ -113,7 +113,7 @@ a:hover {
 
 .inline-img {
   float: left;          /* image on the left */
-  width: 150px;         /* smaller size */
+  width: 200px;         /* smaller size */
   height: auto;         /* keep aspect ratio */
   margin: 0 15px 15px 0; /* spacing around image */
   border-radius: 8px;    /* optional */
