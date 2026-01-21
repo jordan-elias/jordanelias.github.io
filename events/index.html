@@ -159,64 +159,83 @@
 </footer>
 
 <script>
-  async function loadEvents() {
-    try {
-      const response = await fetch('/events/events.json');
-      const data = await response.json();
+async function loadEvents() {
+  try {
+    const response = await fetch('/events/events.json');
+    const data = await response.json();
 
-      const upcomingContainer = document.getElementById('upcoming-events');
-      const pastContainer = document.getElementById('past-events');
-      const today = new Date();
+    const upcomingContainer = document.getElementById('upcoming-events');
+    const pastContainer = document.getElementById('past-events');
+    const today = new Date();
 
-      const upcomingEvents = [];
-      const pastEvents = [];
+    const upcomingEvents = [];
+    const pastEvents = [];
 
-      data.events.forEach(event => {
+    data.events.forEach(event => {
+      if (!event.date) {
+        // No date → treat as upcoming
+        upcomingEvents.push({ ...event, _hasDate: false });
+      } else {
         const eventDate = new Date(event.date);
-        if (eventDate >= today) upcomingEvents.push(event);
-        else pastEvents.push(event);
+        if (eventDate >= today) {
+          upcomingEvents.push({ ...event, _hasDate: true });
+        } else {
+          pastEvents.push(event);
+        }
+      }
+    });
+
+    // Sort upcoming: first events with dates in chronological order, then events without dates
+    const eventsWithDates = upcomingEvents
+      .filter(e => e._hasDate)
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const eventsWithoutDates = upcomingEvents.filter(e => !e._hasDate);
+
+    const sortedUpcoming = [...eventsWithDates, ...eventsWithoutDates];
+
+    // Sort past events in reverse chronological order
+    pastEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    function renderEvents(container, eventsArray) {
+      container.innerHTML = '';
+      eventsArray.forEach(event => {
+        const eventDateText = event.date
+          ? new Date(event.date).toLocaleDateString('en-GB', { year:'numeric', month:'long', day:'numeric' })
+          : "Date TBA"; // placeholder for events without a date
+
+        container.innerHTML += `
+          <div class="event">
+            <div class="event-date">${eventDateText}</div>
+            <h3>${event.title}</h3>
+            <p><strong>Time:</strong> ${event.time || 'TBA'}</p>
+            <p><strong>Location:</strong> ${event.location || 'TBA'}</p>
+            <p>${event.description}</p>
+            ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
+          </div>
+        `;
       });
-
-      upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
-      pastEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      function renderEvents(container, eventsArray) {
-        container.innerHTML = '';
-        eventsArray.forEach(event => {
-          const eventDate = new Date(event.date);
-          container.innerHTML += `
-            <div class="event">
-              <div class="event-date">
-                ${eventDate.toLocaleDateString('en-GB', { year:'numeric', month:'long', day:'numeric' })}
-              </div>
-              <h3>${event.title}</h3>
-              <p><strong>Time:</strong> ${event.time}</p>
-              <p><strong>Location:</strong> ${event.location}</p>
-              <p>${event.description}</p>
-              ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
-            </div>
-          `;
-        });
-      }
-
-      renderEvents(upcomingContainer, upcomingEvents);
-      renderEvents(pastContainer, pastEvents);
-
-      if (!upcomingEvents.length) {
-        upcomingContainer.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
-      }
-
-    } catch (error) {
-      console.error("Error loading events:", error);
     }
-  }
 
-  function togglePastEvents() {
-    document.getElementById('past-events').classList.toggle('hidden');
-  }
+    renderEvents(upcomingContainer, sortedUpcoming);
+    renderEvents(pastContainer, pastEvents);
 
-  loadEvents();
+    if (!sortedUpcoming.length) {
+      upcomingContainer.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
+    }
+
+  } catch (error) {
+    console.error("Error loading events:", error);
+  }
+}
+
+function togglePastEvents() {
+  document.getElementById('past-events').classList.toggle('hidden');
+}
+
+loadEvents();
 </script>
+
 
 </body>
 </html>
