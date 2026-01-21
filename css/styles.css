@@ -181,3 +181,38 @@ button,
   h2 { font-size: 1.8rem; }
   h3 { font-size: 1.4rem; }
 }
+
+
+/* BLOG CARDS - matching events style */
+.blog-container {
+    margin: 2em auto 4em;
+    padding: 0 1em;
+}
+
+.blog-card {
+    background-color: rgba(0,0,0,0);  /* transparent */
+    border: 1px solid var(--text);    /* same as font color */
+    padding: 1.5em;
+    margin-bottom: 2em;
+    border-radius: 0;                 /* no rounded corners */
+}
+
+.blog-card-date {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5em;
+}
+
+.blog-card p { 
+    margin-bottom: 0.8em; 
+}
+
+.blog-card a {
+    color: var(--accent);
+    font-weight: 700;
+    transition: color 0.2s ease;
+}
+
+.blog-card a:hover {
+    color: var(--accent-hover);
+}
