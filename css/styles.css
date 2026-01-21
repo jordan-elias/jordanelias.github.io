@@ -26,15 +26,23 @@ main {
   padding: 0 1em;
 }
 
+.hidden {
+  display: none;
+}
+
 /* ============================
-   Header & Navigation
+   Header & Footer
 ============================ */
-header, footer {
+header,
+footer {
   text-align: center;
   padding: 1.5em 1em;
   background-color: var(--bg);
 }
 
+/* ============================
+   Navigation
+============================ */
 nav a {
   font-family: 'Space Grotesk', sans-serif;
   color: var(--text);
@@ -53,18 +61,21 @@ nav a:hover {
 /* ============================
    Headings
 ============================ */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: 'Space Grotesk', sans-serif;
   letter-spacing: -0.01em;
   margin-top: 0;
   margin-bottom: 0.5em;
 }
 
-h1 { font-size: 3rem; }
+h1 {
+  font-size: 3rem;
+}
 
 h2 {
   font-size: 2.2rem;
-  text-align: left;
   margin: 3em 0 1em;
   position: relative;
 }
@@ -74,12 +85,13 @@ h2::after {
   display: block;
   width: 100%;
   height: 2px;
-  margin: 0.75em 0 0;
+  margin-top: 0.75em;
   background-color: var(--text);
-  opacity: 1;
 }
 
-h3 { font-size: 1.6rem; }
+h3 {
+  font-size: 1.6rem;
+}
 
 /* ============================
    Links
@@ -95,7 +107,7 @@ a:hover {
 }
 
 /* ============================
-   Hero Image
+   Images
 ============================ */
 .hero img {
   width: 100%;
@@ -104,23 +116,16 @@ a:hover {
   border-radius: 6px;
 }
 
-.hero figcaption {
-  text-align: center;
-  font-size: 0.95rem;
-  margin-top: 0.5em;
-  color: var(--text);
-}
-
 .inline-img {
-  float: left;          /* image on the left */
-  width: 200px;         /* smaller size */
-  height: auto;         /* keep aspect ratio */
-  margin: 0 15px 15px 0; /* spacing around image */
-  border-radius: 8px;    /* optional */
+  float: left;
+  width: 200px;
+  height: auto;
+  margin: 0 15px 15px 0;
+  border-radius: 8px;
 }
 
 /* ============================
-   Service Section
+   Service Sections
 ============================ */
 .service-section {
   display: flex;
@@ -140,7 +145,7 @@ a:hover {
 }
 
 /* ============================
-   FAQ Section
+   FAQ
 ============================ */
 section[aria-label="Frequently Asked Questions"] {
   padding-top: 2em;
@@ -151,24 +156,81 @@ ul {
 }
 
 /* ============================
-   Address & Contact
+   Events & Blog Cards (Shared Style)
 ============================ */
-address a {
-  color: var(--accent);
+.events-container,
+.blog-container {
+  margin: 2em auto 4em;
+  padding: 0 1em;
 }
 
-button,
-.contact-link {
-  display: inline-block;
-  padding: 0.5em 1em;
-  border-radius: 4px;
+.event,
+.blog-card {
   background-color: transparent;
+  border: 1px solid var(--text);
+  padding: 1.5em;
+  margin-bottom: 2em;
+}
+
+.event-date,
+.blog-card-date {
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.5em;
+}
+
+.event p,
+.blog-card p {
+  margin-bottom: 0.8em;
+}
+
+.event a,
+.blog-card a {
+  color: var(--accent);
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.event a:hover,
+.blog-card a:hover {
+  color: var(--accent-hover);
 }
 
 /* ============================
-   Responsive Styles
+   Toggle Buttons (Events)
+============================ */
+.toggle-past {
+  text-align: center;
+  margin: 3em 0;
+}
+
+.toggle-past button {
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: var(--bg);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 0.9em 1.3em;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.toggle-past button:hover {
+  background-color: var(--accent-hover);
+  color: #ffffff;
+}
+
+/* ============================
+   Responsive
 ============================ */
 @media (max-width: 800px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.8rem; }
+  h3 { font-size: 1.4rem; }
+
+  nav a {
+    margin: 0 12px;
+  }
+
   .service-section {
     flex-direction: column;
   }
@@ -176,43 +238,4 @@ button,
   .service-section img {
     width: 100%;
   }
-
-  h1 { font-size: 2.2rem; }
-  h2 { font-size: 1.8rem; }
-  h3 { font-size: 1.4rem; }
-}
-
-
-/* BLOG CARDS - matching events style */
-.blog-container {
-    margin: 2em auto 4em;
-    padding: 0 1em;
-}
-
-.blog-card {
-    background-color: rgba(0,0,0,0);  /* transparent */
-    border: 1px solid var(--text);    /* same as font color */
-    padding: 1.5em;
-    margin-bottom: 2em;
-    border-radius: 0;                 /* no rounded corners */
-}
-
-.blog-card-date {
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 0.5em;
-}
-
-.blog-card p { 
-    margin-bottom: 0.8em; 
-}
-
-.blog-card a {
-    color: var(--accent);
-    font-weight: 700;
-    transition: color 0.2s ease;
-}
-
-.blog-card a:hover {
-    color: var(--accent-hover);
 }
