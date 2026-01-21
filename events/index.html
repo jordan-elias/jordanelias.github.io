@@ -172,49 +172,47 @@ async function loadEvents() {
     const pastEvents = [];
 
     data.events.forEach(event => {
-      const hasValidDate = event.date && !isNaN(new Date(event.date));
-      if (!hasValidDate) {
-        // No valid date → treat as upcoming without date
-        upcomingEvents.push({ ...event, _hasDate: false });
+      if (!event.date || !event.time) {
+        // Missing date or time → treat as upcoming
+        upcomingEvents.push({ ...event, _hasDateTime: false });
       } else {
         const eventDate = new Date(event.date);
         if (eventDate >= today) {
-          upcomingEvents.push({ ...event, _hasDate: true });
+          upcomingEvents.push({ ...event, _hasDateTime: true });
         } else {
-          pastEvents.push({ ...event, _hasDate: true });
+          pastEvents.push(event);
         }
       }
     });
 
-    // Sort upcoming events: first events with valid dates, then events without dates
-    const eventsWithDates = upcomingEvents
-      .filter(e => e._hasDate)
+    // Sort upcoming: first events with date/time in chronological order
+    const eventsWithDateTime = upcomingEvents
+      .filter(e => e._hasDateTime)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    const eventsWithoutDates = upcomingEvents.filter(e => !e._hasDate);
+    // Events without date/time sorted alphabetically by title
+    const eventsWithoutDateTime = upcomingEvents
+      .filter(e => !e._hasDateTime)
+      .sort((a, b) => a.title.localeCompare(b.title));
 
-    const sortedUpcoming = [...eventsWithDates, ...eventsWithoutDates];
+    const sortedUpcoming = [...eventsWithDateTime, ...eventsWithoutDateTime];
 
     // Sort past events in reverse chronological order
     pastEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     function renderEvents(container, eventsArray) {
       container.innerHTML = '';
-      if (eventsArray.length === 0 && container.id === 'upcoming-events') {
-        container.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
-        return;
-      }
-
       eventsArray.forEach(event => {
-        const eventDateText = event.date && !isNaN(new Date(event.date))
+        const eventDateText = event.date
           ? new Date(event.date).toLocaleDateString('en-GB', { year:'numeric', month:'long', day:'numeric' })
           : "Date TBA";
+        const eventTimeText = event.time || "TBA";
 
         container.innerHTML += `
           <div class="event">
             <div class="event-date">${eventDateText}</div>
             <h3>${event.title}</h3>
-            <p><strong>Time:</strong> ${event.time || 'TBA'}</p>
+            <p><strong>Time:</strong> ${eventTimeText}</p>
             <p><strong>Location:</strong> ${event.location || 'TBA'}</p>
             <p>${event.description}</p>
             ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
@@ -225,6 +223,10 @@ async function loadEvents() {
 
     renderEvents(upcomingContainer, sortedUpcoming);
     renderEvents(pastContainer, pastEvents);
+
+    if (!sortedUpcoming.length) {
+      upcomingContainer.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
+    }
 
   } catch (error) {
     console.error("Error loading events:", error);
@@ -237,6 +239,7 @@ function togglePastEvents() {
 
 loadEvents();
 </script>
+
 
 
 
