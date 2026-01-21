@@ -172,8 +172,8 @@ async function loadEvents() {
     const pastEvents = [];
 
     data.events.forEach(event => {
-      if (!event.date) {
-        // No date → treat as upcoming
+      // Treat events with missing date or time as upcoming without date/time
+      if (!event.date || !event.time) {
         upcomingEvents.push({ ...event, _hasDate: false });
       } else {
         const eventDate = new Date(event.date);
@@ -185,7 +185,9 @@ async function loadEvents() {
       }
     });
 
-    // Sort upcoming: first events with dates in chronological order, then events without dates
+    // Sort upcoming events:
+    // 1. Events with dates in chronological order
+    // 2. Events without date or time at the end
     const eventsWithDates = upcomingEvents
       .filter(e => e._hasDate)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -202,14 +204,17 @@ async function loadEvents() {
       eventsArray.forEach(event => {
         const eventDateText = event.date
           ? new Date(event.date).toLocaleDateString('en-GB', { year:'numeric', month:'long', day:'numeric' })
-          : "Date TBA"; // placeholder for events without a date
+          : "Date TBA";
+
+        const eventTimeText = event.time || "TBA";
+        const eventLocationText = event.location || "TBA";
 
         container.innerHTML += `
           <div class="event">
             <div class="event-date">${eventDateText}</div>
             <h3>${event.title}</h3>
-            <p><strong>Time:</strong> ${event.time || 'TBA'}</p>
-            <p><strong>Location:</strong> ${event.location || 'TBA'}</p>
+            <p><strong>Time:</strong> ${eventTimeText}</p>
+            <p><strong>Location:</strong> ${eventLocationText}</p>
             <p>${event.description}</p>
             ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
           </div>
