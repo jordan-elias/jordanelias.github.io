@@ -172,22 +172,21 @@ async function loadEvents() {
     const pastEvents = [];
 
     data.events.forEach(event => {
-      // Treat events with missing date or time as upcoming without date/time
-      if (!event.date || !event.time) {
+      const hasValidDate = event.date && !isNaN(new Date(event.date));
+      if (!hasValidDate) {
+        // No valid date → treat as upcoming without date
         upcomingEvents.push({ ...event, _hasDate: false });
       } else {
         const eventDate = new Date(event.date);
         if (eventDate >= today) {
           upcomingEvents.push({ ...event, _hasDate: true });
         } else {
-          pastEvents.push(event);
+          pastEvents.push({ ...event, _hasDate: true });
         }
       }
     });
 
-    // Sort upcoming events:
-    // 1. Events with dates in chronological order
-    // 2. Events without date or time at the end
+    // Sort upcoming events: first events with valid dates, then events without dates
     const eventsWithDates = upcomingEvents
       .filter(e => e._hasDate)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -201,20 +200,22 @@ async function loadEvents() {
 
     function renderEvents(container, eventsArray) {
       container.innerHTML = '';
+      if (eventsArray.length === 0 && container.id === 'upcoming-events') {
+        container.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
+        return;
+      }
+
       eventsArray.forEach(event => {
-        const eventDateText = event.date
+        const eventDateText = event.date && !isNaN(new Date(event.date))
           ? new Date(event.date).toLocaleDateString('en-GB', { year:'numeric', month:'long', day:'numeric' })
           : "Date TBA";
-
-        const eventTimeText = event.time || "TBA";
-        const eventLocationText = event.location || "TBA";
 
         container.innerHTML += `
           <div class="event">
             <div class="event-date">${eventDateText}</div>
             <h3>${event.title}</h3>
-            <p><strong>Time:</strong> ${eventTimeText}</p>
-            <p><strong>Location:</strong> ${eventLocationText}</p>
+            <p><strong>Time:</strong> ${event.time || 'TBA'}</p>
+            <p><strong>Location:</strong> ${event.location || 'TBA'}</p>
             <p>${event.description}</p>
             ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
           </div>
@@ -224,10 +225,6 @@ async function loadEvents() {
 
     renderEvents(upcomingContainer, sortedUpcoming);
     renderEvents(pastContainer, pastEvents);
-
-    if (!sortedUpcoming.length) {
-      upcomingContainer.innerHTML = "<p>No upcoming events at the moment. Please check back soon.</p>";
-    }
 
   } catch (error) {
     console.error("Error loading events:", error);
@@ -240,6 +237,7 @@ function togglePastEvents() {
 
 loadEvents();
 </script>
+
 
 
 </body>
