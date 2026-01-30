@@ -41,6 +41,21 @@ base-uri 'self';
 frame-ancestors 'none';
 ">
 
+  <meta http-equiv="Content-Security-Policy"
+content="
+default-src 'self';
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src 'self' https://fonts.gstatic.com;
+script-src 'self' https://analytics.umami.is;
+connect-src 'self' https://api-gateway.umami.dev;
+frame-src https://complicated.life;
+object-src 'none';
+base-uri 'self';
+frame-ancestors 'none';
+">
+
+
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -186,9 +201,10 @@ frame-ancestors 'none';
     <p>Jordan holds a master’s degree in cognitive neuroscience from Freie Universität Berlin and a bachelor’s in psychology and music therapy from Berklee College of Music. He is board-certified by the Certification Board for Music Therapy and has completed over 1000 hours of supervised clinical practice.</p>
   </section>
 
-  <section>
-    <iframe src="https://complicated.life/embed/music-therapist-jordan-elias/badge/g" frameborder="0" width="198" height="48"></iframe>
-  </section>
+<section>
+  <iframe src="https://complicated.life/embed/music-therapist-jordan-elias/badge/g" frameborder="0" width="198" height="48"></iframe>
+</section>
+
   
   <section class="faq-section" aria-label="Frequently Asked Questions">
     <h2>Frequently Asked Questions</h2>
