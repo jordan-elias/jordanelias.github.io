@@ -30,14 +30,16 @@
   
   <meta http-equiv="Content-Security-Policy"
 content="
-  default-src 'self';
-  img-src 'self' data: https:;
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-  font-src 'self' https://fonts.gstatic.com;
-  script-src 'self';
-  object-src 'none';
-  base-uri 'self';
-  frame-ancestors 'none';
+default-src 'self';
+img-src 'self' data: https:;
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+font-src 'self' https://fonts.gstatic.com;
+script-src 'self' https://analytics.umami.is;
+connect-src 'self' https://api-gateway.umami.dev;
+frame-src https://complicated.life;
+object-src 'none';
+base-uri 'self';
+frame-ancestors 'none';
 ">
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
