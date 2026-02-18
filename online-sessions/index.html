@@ -207,7 +207,25 @@
         "@type": "WebSite",
         "@id": "https://www.jordanelias.de/#website"
       }
+    },
+  {
+  "@type": "BreadcrumbList",
+  "@id": "https://www.jordanelias.de/online-sessions/#breadcrumb",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.jordanelias.de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Online Sessions",
+      "item": "https://www.jordanelias.de/online-sessions/"
     }
+  ]
+}
   ]
 }
 </script>
@@ -352,6 +370,12 @@
 
   <main>
 
+    <nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li aria-current="page">Online Sessions</li>
+  </ol>
+    </nav>
 
     <p>
       I offer online music therapy for English-speaking adults living across Europe who are seeking a
