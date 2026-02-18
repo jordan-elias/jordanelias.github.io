@@ -46,90 +46,104 @@ frame-ancestors 'none';
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
-  
-  <!-- Structured Data: Person & Professional Service with Contact -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://www.jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "jobTitle": "Board-Certified Music Therapist",
-        "url": "https://www.jordanelias.de/about/",
-        "image": "https://www.jordanelias.de/images/headshot.jpg",
-        "email": "mailto:jordanelias@proton.me",
-        "alumniOf": [
-          {
-            "@type": "EducationalOrganization",
-            "name": "Freie Universität Berlin",
-            "sameAs": "https://www.fu-berlin.de/"
-          },
-          {
-            "@type": "EducationalOrganization",
-            "name": "Berklee College of Music",
-            "sameAs": "https://www.berklee.edu/"
-          }
-        ],
-    "hasCredential": {
-    "@type": "EducationalOccupationalCredential",
-    "name": "Board Certified Music Therapist (MT-BC)",
-    "credentialCategory": "Professional Certification",
-    "recognizedBy": {
-      "@type": "Organization",
-      "name": "Certification Board for Music Therapists",
-      "url": "https://www.cbmt.org/"
-    }
-  },
-        "knowsAbout": [
-          "Music Therapy",
-          "Neurodiversity",
-          "Autism",
-          "ADHD",
-          "Anxiety",
-          "Burnout",
-          "Emotional Regulation",
-          "Neuroscience of Music",
-          "Creative Therapy",
-          "Trauma-Informed Practice",
-          "Music and Neuroplasticity",
-          "Queer Affirming Therapy"
-        ]
+ <!-- Structured Data: Contact Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://www.jordanelias.de/",
+      "image": "https://www.jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Berlin",
+        "postalCode": "12047",
+        "addressCountry": "DE"
       },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://www.jordanelias.de/#service",
-        "name": "Jordan Elias Music Therapy",
-        "provider": { "@id": "https://www.jordanelias.de/#person" },
-        "description": "Online and in-person music therapy sessions for adults, including neurodivergent clients, as well as community programs and creative collaborations.",
-        "url": "https://www.jordanelias.de/contact/",
-        "image": "https://www.jordanelias.de/images/headshot.jpg",
-        "areaServed": { "@type": "Place", "name": "Berlin, Germany" },
-        "availableChannel": [
-          {
-            "@type": "ServiceChannel",
-            "serviceLocation": { "@type": "Place", "name": "Online" }
-          }
-        ],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "Client inquiries",
-          "email": "mailto:jordanelias@proton.me",
-          "url": "https://www.jordanelias.de/contact/"
+      "worksFor": {
+        "@id": "https://www.jordanelias.de/#service"
+      },
+      "alumniOf": [
+        {
+          "@type": "EducationalOrganization",
+          "name": "Freie Universität Berlin",
+          "sameAs": "https://www.fu-berlin.de/"
+        },
+        {
+          "@type": "EducationalOrganization",
+          "name": "Berklee College of Music",
+          "sameAs": "https://www.berklee.edu/"
+        }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "Certification Board for Music Therapists",
+          "url": "https://www.cbmt.org/"
         }
       },
-      {
-        "@type": "WebPage",
-        "@id": "https://www.jordanelias.de/contact/#webpage",
-        "url": "https://www.jordanelias.de/contact/",
-        "name": "Contact Jordan Elias",
-        "about": { "@id": "https://www.jordanelias.de/#person" },
-        "isPartOf": { "@type": "WebSite", "@id": "https://www.jordanelias.de/#website" }
+      "knowsAbout": [
+        "Music Therapy",
+        "Neurodiversity",
+        "Autism",
+        "ADHD",
+        "Anxiety",
+        "Burnout",
+        "Emotional Regulation",
+        "Neuroscience of Music",
+        "Creative Therapy",
+        "Trauma-Informed Practice",
+        "Music and Neuroplasticity",
+        "Queer Affirming Therapy"
+      ],
+      "sameAs": [
+        "https://www.instagram.com/music_therapy_berlin/"
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://www.jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://www.jordanelias.de/",
+      "founder": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Client inquiries",
+        "email": "jordanelias@proton.me",
+        "url": "https://www.jordanelias.de/contact/"
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "ContactPage",
+      "@id": "https://www.jordanelias.de/contact/#webpage",
+      "url": "https://www.jordanelias.de/contact/",
+      "name": "Contact Jordan Elias — Book a Music Therapy Session",
+      "description": "Get in touch with Jordan Elias to book a free consultation or ask about group music therapy sessions in Berlin and online.",
+      "about": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "author": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://www.jordanelias.de/#website"
+      }
+    }
+  ]
+}
+</script>
 
  
 
