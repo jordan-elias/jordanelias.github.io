@@ -96,6 +96,11 @@ nav[aria-label="Breadcrumb"] a {
   text-decoration: none;
 }
 
+nav[aria-label="Breadcrumb"] a:hover {
+  color: var(--accent-hover);
+  transform: none;
+}
+
 nav[aria-label="Breadcrumb"] [aria-current="page"] {
   color: var(--accent);
 }
