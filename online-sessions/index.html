@@ -53,32 +53,154 @@ content="
   <!-- MAIN STYLESHEET -->
   <link rel="stylesheet" href="/css/styles.css">
   
-  <!-- SCHEMA: SERVICE -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "TherapeuticService",
-    "name": "Online Music Therapy",
-    "url": "https://www.jordanelias.de/online-sessions/",
-    "description": "Online music therapy for English-speaking adults across Europe, offering queer-affirming and neurodiversity-affirming care through creative, humanistic approaches.",
-    "provider": {
+ <!-- Structured Data: Online Sessions Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
       "@type": "Person",
+      "@id": "https://www.jordanelias.de/#person",
       "name": "Jordan Elias",
-      "jobTitle": "Music Therapist"
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://www.jordanelias.de/",
+      "image": "https://www.jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Berlin",
+        "postalCode": "12047",
+        "addressCountry": "DE"
+      },
+      "worksFor": {
+        "@id": "https://www.jordanelias.de/#service"
+      },
+      "alumniOf": [
+        {
+          "@type": "EducationalOrganization",
+          "name": "Freie Universität Berlin",
+          "sameAs": "https://www.fu-berlin.de/"
+        },
+        {
+          "@type": "EducationalOrganization",
+          "name": "Berklee College of Music",
+          "sameAs": "https://www.berklee.edu/"
+        }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "Certification Board for Music Therapists",
+          "url": "https://www.cbmt.org/"
+        }
+      },
+      "knowsAbout": [
+        "Music Therapy",
+        "Neurodiversity",
+        "Autism",
+        "ADHD",
+        "Anxiety",
+        "Burnout",
+        "Emotional Regulation",
+        "Neuroscience of Music",
+        "Creative Therapy",
+        "Trauma-Informed Practice",
+        "Music and Neuroplasticity",
+        "Queer Affirming Therapy"
+      ],
+      "sameAs": [
+        "https://www.instagram.com/music_therapy_berlin/"
+      ]
     },
-    "areaServed": {
-      "@type": "AdministrativeArea",
-      "name": "Europe"
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://www.jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://www.jordanelias.de/",
+      "founder": {
+        "@id": "https://www.jordanelias.de/#person"
+      }
     },
-    "availableChannel": {
-      "@type": "ServiceChannel",
-      "serviceLocation": {
-        "@type": "VirtualLocation",
-        "url": "https://www.jordanelias.de"
+    {
+      "@type": "Service",
+      "@id": "https://www.jordanelias.de/online-sessions/#service-online",
+      "name": "Online Music Therapy Sessions",
+      "description": "A creative, music-based approach to therapy for anyone navigating life's complexities. No music experience needed. Online and in Berlin.",
+      "url": "https://www.jordanelias.de/online-sessions/",
+      "provider": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "isPartOf": {
+        "@id": "https://www.jordanelias.de/#service"
+      },
+      "serviceType": "Music Therapy",
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "name": "Online via Video Call",
+        "availableLanguage": ["English", "German"],
+        "serviceUrl": "https://www.jordanelias.de/online-sessions/",
+        "serviceLocation": {
+          "@type": "VirtualLocation",
+          "url": "https://www.jordanelias.de/online-sessions/"
+        }
+      },
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "Germany"
+        },
+        {
+          "@type": "Continent",
+          "name": "Europe"
+        },
+        "Worldwide"
+      ],
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "English-speaking adults, Neurodivergent individuals, Queer and LGBTQ+ individuals, People experiencing anxiety, burnout, or depression, People navigating loss or illness"
+      },
+      "termsOfService": "https://www.jordanelias.de/online-sessions/",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "EUR",
+          "description": "Session pricing available on request"
+        },
+        "seller": {
+          "@id": "https://www.jordanelias.de/#person"
+        }
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.jordanelias.de/online-sessions/#webpage",
+      "url": "https://www.jordanelias.de/online-sessions/",
+      "name": "Online Music Therapy Sessions — Jordan Elias",
+      "description": "Learn how online music therapy works, what to expect from sessions, and how to get started. Queer-affirming and neurodiversity-affirming care for adults across Europe and beyond.",
+      "about": {
+        "@id": "https://www.jordanelias.de/online-sessions/#service-online"
+      },
+      "author": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://www.jordanelias.de/images/hero.jpg"
+      },
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://www.jordanelias.de/#website"
       }
     }
-  }
-  </script>
+  ]
+}
+</script>
 
   <!-- SCHEMA: FAQ -->
   <script type="application/ld+json">
@@ -123,7 +245,7 @@ content="
         "name": "Who is online music therapy suitable for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Online music therapy is suitable for neurodiverse individuals, LGBTQIA+ clients, people seeking alternative therapies, and anyone looking for creative, humanistic approaches to mental health support."
+          "text": "Online music therapy is suitable for adults of all backgrounds, including neurodivergent individuals, LGBTQIA+ clients, musicians seeking creative support, and anyone looking for a humanistic, creative alternative to conventional talk therapy. No musical experience is required, and sessions are tailored to each person's needs and comfort."
         }
       },
       {
@@ -155,7 +277,7 @@ content="
         "name": "Can I receive creative guidance in online music therapy?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Online sessions can support musicians, composers, and hobbyists looking for new ideas, inspiration, creative prompts, or feedback on projects. The therapist helps overcome writer's block, explore new techniques, and expand your musical palette, regardless of experience level."
+          "text": "Yes. Online sessions can support musicians, composers, and hobbyists looking for new ideas, inspiration, creative prompts, or feedback on projects. I aim to help overcome writer's block, explore new techniques, and expand your musical palette, regardless of experience level."
         }
       },
       {
@@ -189,7 +311,15 @@ content="
           "@type": "Answer",
           "text": "Sessions begin with a free 30-minute consultation and can start immediately afterward, depending on your schedule."
         }
-      }
+      },
+    {
+  "@type": "Question",
+  "name": "What happens in a first online music therapy session?",
+  "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "The first step is a free 30-minute consultation where we talk about what brought you to music therapy, what you're hoping to explore, and whether working together feels like a good fit. There's no pressure and no musical performance involved — it's simply a conversation to see if this is right for you."
+  }
+}
     ]
   }
   </script>
@@ -460,7 +590,7 @@ yours.
 
   <div class="faq-item">
     <h3>Who is online music therapy suitable for?</h3>
-    <p>Online music therapy is suitable for neurodiverse individuals, LGBTQIA+ clients, people seeking alternative therapies, and anyone looking for creative, humanistic approaches to mental health support.</p>
+    <p>Online music therapy is suitable for adults of all backgrounds, including neurodivergent individuals, LGBTQIA+ clients, musicians seeking creative support, and anyone looking for a humanistic, creative alternative to conventional talk therapy. No musical experience is required, and sessions are tailored to each person's needs and comfort.</p>
   </div>
 
   <div class="faq-item">
@@ -481,7 +611,7 @@ yours.
 
   <div class="faq-item">
     <h3>Can I receive creative guidance in online music therapy?</h3>
-    <p>Yes. Online sessions can support musicians, composers, and hobbyists looking for new ideas, inspiration, creative prompts, or feedback on projects. The therapist helps overcome writer's block, explore new techniques, and expand your musical palette, regardless of experience level.</p>
+    <p>Yes. Online sessions can support musicians, composers, and hobbyists looking for new ideas, inspiration, creative prompts, or feedback on projects. I aim to help overcome writer's block, explore new techniques, and expand your musical palette, regardless of experience level.</p>
   </div>
 
   <div class="faq-item">
@@ -503,6 +633,13 @@ yours.
     <h3>How quickly can I start after booking a session?</h3>
     <p>Sessions begin with a free 30-minute consultation and can start immediately afterward, depending on your schedule.</p>
   </div>
+
+   <div class="faq-item">
+    <h3>What happens in a first online music therapy session?</h3>
+    <p>The first step is a free 30-minute consultation where we talk about what brought you to music therapy, what you're hoping to explore, and whether working together feels like a good fit. There's no pressure and no musical performance involved, just a conversation to see if this is right for you.</p>
+  </div>
+
+   
 </section>
 
 
