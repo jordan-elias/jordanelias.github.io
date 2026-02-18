@@ -49,91 +49,134 @@ content="
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
   
-  <!-- Structured Data: Person, Professional Service, WebPage -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://www.jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "honorificSuffix": "MT-BC",
-        "jobTitle": "Music Therapist",
-        "url": "https://www.jordanelias.de/about/",
-        "image": "https://www.jordanelias.de/images/PANO_20200326_183449.vr.jpg",
-        "email": "mailto:jordanelias@proton.me",
-        "alumniOf": [
-          {
-            "@type": "EducationalOrganization",
-            "name": "Freie Universität Berlin",
-            "sameAs": "https://www.fu-berlin.de/"
-          },
-          {
-            "@type": "EducationalOrganization",
-            "name": "Berklee College of Music",
-            "sameAs": "https://www.berklee.edu/"
-          }
-        ],
-    "hasCredential": {
-    "@type": "EducationalOccupationalCredential",
-    "name": "Board Certified Music Therapist (MT-BC)",
-    "credentialCategory": "Professional Certification",
-    "recognizedBy": {
-      "@type": "Organization",
-      "name": "Certification Board for Music Therapists",
-      "url": "https://www.cbmt.org/"
-    }
-  },
-        "knowsAbout": [
-          "Music Therapy",
-          "Neurodiversity",
-          "Autism",
-          "ADHD",
-          "Anxiety",
-          "Burnout",
-          "Emotional Regulation",
-          "Neuroscience of Music",
-          "Creative Therapy",
-          "Trauma-Informed Practice",
-          "Music and Neuroplasticity"
-        ]
+  <!-- Structured Data: Music Therapy Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://www.jordanelias.de/",
+      "image": "https://www.jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Berlin",
+        "postalCode": "12047",
+        "addressCountry": "DE"
       },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://www.jordanelias.de/#service",
-        "name": "Music Therapy & Creative Support",
-        "provider": { "@id": "https://www.jordanelias.de/#person" },
-        "description": "Individual and group music therapy for adults in Berlin and online, neurodivergent-affirming, evidence-informed, and personalized.",
-        "areaServed": { "@type": "Place", "name": "Berlin, Germany" },
-        "availableChannel": [
-          {
-            "@type": "ServiceChannel",
-            "serviceLocation": { "@type": "Place", "name": "Online" }
-          },
-          {
-            "@type": "ServiceChannel",
-            "serviceLocation": { "@type": "Place", "name": "Berlin, Germany" }
-          }
-        ],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "Client inquiries",
-          "email": "mailto:jordanelias@proton.me",
-          "url": "https://www.jordanelias.de/contact/"
+      "worksFor": {
+        "@id": "https://www.jordanelias.de/#service"
+      },
+      "alumniOf": [
+        {
+          "@type": "EducationalOrganization",
+          "name": "Freie Universität Berlin",
+          "sameAs": "https://www.fu-berlin.de/"
+        },
+        {
+          "@type": "EducationalOrganization",
+          "name": "Berklee College of Music",
+          "sameAs": "https://www.berklee.edu/"
+        }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "Certification Board for Music Therapists",
+          "url": "https://www.cbmt.org/"
         }
       },
-      {
-        "@type": "WebPage",
-        "@id": "https://www.jordanelias.de/music-therapy/#webpage",
-        "url": "https://www.jordanelias.de/music-therapy/",
-        "name": "Music Therapy",
-        "about": { "@id": "https://www.jordanelias.de/#person" },
-        "isPartOf": { "@type": "WebSite", "@id": "https://www.jordanelias.de/#website" }
+      "knowsAbout": [
+        "Music Therapy",
+        "Neurodiversity",
+        "Autism",
+        "ADHD",
+        "Anxiety",
+        "Burnout",
+        "Emotional Regulation",
+        "Neuroscience of Music",
+        "Creative Therapy",
+        "Trauma-Informed Practice",
+        "Music and Neuroplasticity",
+        "Queer Affirming Therapy"
+      ],
+      "sameAs": [
+        "https://www.instagram.com/music_therapy_berlin/"
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://www.jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://www.jordanelias.de/",
+      "founder": {
+        "@id": "https://www.jordanelias.de/#person"
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "Article",
+      "@id": "https://www.jordanelias.de/music-therapy/#article",
+      "headline": "What Is Music Therapy? History, Practice, and Clinical Applications",
+      "description": "An overview of music therapy as a clinical practice — its history, evidence base, and how it supports emotional wellbeing, neurodivergent individuals, and adults navigating complex life experiences.",
+      "url": "https://www.jordanelias.de/music-therapy/",
+      "author": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "publisher": {
+        "@id": "https://www.jordanelias.de/#service"
+      },
+      "image": "https://www.jordanelias.de/images/hero.jpg",
+      "inLanguage": "en",
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "Music Therapy",
+          "sameAs": "https://en.wikipedia.org/wiki/Music_therapy"
+        },
+        {
+          "@type": "Thing",
+          "name": "Neurologic Music Therapy",
+          "sameAs": "https://en.wikipedia.org/wiki/Neurologic_music_therapy"
+        }
+      ],
+      "isPartOf": {
+        "@id": "https://www.jordanelias.de/#webpage"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.jordanelias.de/music-therapy/#webpage",
+      "url": "https://www.jordanelias.de/music-therapy/",
+      "name": "What Is Music Therapy? — Jordan Elias, Berlin",
+      "description": "Learn about music therapy as a clinical practice — its history, methods, and how it supports emotional wellbeing for adults and neurodivergent individuals.",
+      "about": {
+        "@type": "Thing",
+        "name": "Music Therapy",
+        "sameAs": "https://en.wikipedia.org/wiki/Music_therapy"
+      },
+      "author": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://www.jordanelias.de/images/hero.jpg"
+      },
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://www.jordanelias.de/#website"
+      }
+    }
+  ]
+}
+</script>
 
 </head>
 
