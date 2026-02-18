@@ -80,10 +80,17 @@ nav a:hover {
 
 .breadcrumb-nav li {
   display: inline;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.6;
+  color: var(--text);
 }
 
 .breadcrumb-nav li + li::before {
   content: " > ";
+  color: var(--text);
 }
 
 .breadcrumb-nav a {
@@ -91,9 +98,8 @@ nav a:hover {
   font-size: 1rem;
   font-weight: 400;
   letter-spacing: 0;
-  color: var(--accent);
+  color: var(--text);
   text-decoration: none;
-  transform: none;
   transition: color 0.2s ease;
 }
 
