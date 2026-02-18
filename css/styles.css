@@ -73,7 +73,8 @@ nav[aria-label="Breadcrumb"] ol {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
+  align-items: center;
+  gap: 0.4rem;
   font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   color: var(--text);
@@ -87,8 +88,7 @@ nav[aria-label="Breadcrumb"] li {
 
 nav[aria-label="Breadcrumb"] li + li::before {
   content: ">";
-  margin-right: 0.3rem;
-  opacity: 0.5;
+  margin-right: 0.4rem;
 }
 
 nav[aria-label="Breadcrumb"] a {
