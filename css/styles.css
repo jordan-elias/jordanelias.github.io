@@ -89,9 +89,9 @@ nav a:hover {
   color: var(--text);
 }
 
-.breadcrumb-nav li:not(:first-child)::before {
+.breadcrumb-nav li + li::before {
   content: ">";
-  margin: 0 0.4rem;
+  margin: 0 0.25rem;    /* smaller gap around separator */
   color: var(--text);
 }
 
