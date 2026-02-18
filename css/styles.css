@@ -103,7 +103,6 @@ nav[aria-label="Breadcrumb"] a:hover {
 
 nav[aria-label="Breadcrumb"] [aria-current="page"] {
   color: var(--accent);
-  font-weight: 500;
 }
 
 /* ============================
