@@ -103,14 +103,16 @@ nav a:hover {
   transition: color 0.2s ease;
 }
 
-.breadcrumb-nav a:hover {
-  color: var(--accent-hover);
-}
 
 .breadcrumb-nav [aria-current="page"] {
   color: var(--accent);
 }
 
+/* Disable hover motion entirely */
+.breadcrumb-nav a:hover {
+  color: inherit;
+  transform: none;
+}
 
 
 /* ============================
