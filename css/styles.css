@@ -94,11 +94,6 @@ nav[aria-label="Breadcrumb"] li + li::before {
 nav[aria-label="Breadcrumb"] a {
   color: var(--text);
   text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-nav[aria-label="Breadcrumb"] a:hover {
-  color: var(--accent-hover);
 }
 
 nav[aria-label="Breadcrumb"] [aria-current="page"] {
