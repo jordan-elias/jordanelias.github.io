@@ -61,31 +61,48 @@ nav a:hover {
 /* ============================
    Breadcrumb
 ============================ */
-nav[aria-label="Breadcrumb"] {
+.breadcrumb-nav {
   max-width: 1000px;
   margin: 0 auto;
   padding: 0.6em 1em 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.6;
 }
 
-nav[aria-label="Breadcrumb"] ol {
+.breadcrumb-nav ol {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
 }
 
-nav[aria-label="Breadcrumb"] li {
-  display: contents;
+.breadcrumb-nav li {
+  display: inline;
 }
 
-nav[aria-label="Breadcrumb"] li + li::before {
+.breadcrumb-nav li + li::before {
   content: " > ";
-  color: var(--text);
 }
 
-nav[aria-label="Breadcrumb"] [aria-current="page"] {
+.breadcrumb-nav a {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--accent);
+  text-decoration: none;
+  transform: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-nav a:hover {
+  color: var(--accent-hover);
+  transform: none;
+}
+
+.breadcrumb-nav [aria-current="page"] {
   color: var(--accent);
 }
 
