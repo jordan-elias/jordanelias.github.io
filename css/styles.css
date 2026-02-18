@@ -61,49 +61,36 @@ nav a:hover {
 /* ============================
    Breadcrumb
 ============================ */
-.breadcrumb-nav {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0.6em 1em 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.6;
-}
-
 .breadcrumb-nav ol {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;          /* flex makes spacing more predictable */
+  flex-wrap: wrap;        /* optional, keeps breadcrumbs from breaking awkwardly */
+  gap: 0.4rem;            /* consistent spacing between items and separators */
 }
 
 .breadcrumb-nav li {
-  display: inline-flex;
-   align-items: center;
+  display: flex;           /* inline-flex replaced by flex */
+  align-items: center;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  letter-spacing: 0;
   line-height: 1.6;
   color: var(--text);
 }
 
 .breadcrumb-nav li + li::before {
-  content: ">";
-   margin: 0 0.5rem;
+  content: ">";            /* the separator */
+  display: inline-block;   /* ensures it behaves the same for all items */
+  margin: 0 0.4rem;        /* equal space on left and right of separator */
   color: var(--text);
-}
-
-.breadcrumb-nav li span {
-  display: inline-block;
 }
 
 .breadcrumb-nav a {
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 400;
-  letter-spacing: 0;
   color: var(--text);
   text-decoration: none;
   transition: color 0.2s ease;
@@ -111,12 +98,12 @@ nav a:hover {
 
 .breadcrumb-nav a:hover {
   color: var(--accent-hover);
-  transform: none;
 }
 
 .breadcrumb-nav [aria-current="page"] {
   color: var(--accent);
 }
+
 
 /* ============================
    Headings
