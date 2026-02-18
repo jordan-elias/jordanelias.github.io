@@ -83,8 +83,10 @@ nav a:hover {
 }
 
 .breadcrumb-nav li {
-  display: flex;
-  align-items: center;
+  display: inline;       /* keep items on same line */
+  margin: 0;             /* remove inherited spacing */
+  padding: 0;            /* remove inherited padding */
+  color: var(--text);
 }
 
 .breadcrumb-nav li:not(:first-child)::before {
@@ -101,6 +103,15 @@ nav a:hover {
   color: var(--text);
   text-decoration: none;
   transition: color 0.2s ease;
+}
+
+/* Links behave like inline text, no extra spacing */
+.breadcrumb-nav li a {
+  color: var(--text);
+  text-decoration: none;
+  display: inline;
+  line-height: 1.4;
+  vertical-align: baseline;
 }
 
 
