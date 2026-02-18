@@ -121,7 +121,7 @@ nav a:hover {
 
 /* Disable hover motion entirely */
 .breadcrumb-nav a:hover {
-  color: inherit;
+  color: var(--accent-hover);
   transform: none;
 }
 
