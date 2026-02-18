@@ -179,7 +179,26 @@ frame-ancestors 'none';
           "acceptedAnswer": { "@type": "Answer", "text": "Yes, individual therapy sessions are available online for remote clients." }
         }
       ]
+    },
+
+  {
+  "@type": "BreadcrumbList",
+  "@id": "https://www.jordanelias.de/about/#breadcrumb",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.jordanelias.de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About",
+      "item": "https://www.jordanelias.de/about/"
     }
+  ]
+}
   ]
 }
 </script>
@@ -205,6 +224,13 @@ frame-ancestors 'none';
 </header>
 
 <main>
+
+  <nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li aria-current="page">About</li>
+  </ol>
+</nav>
 
   <section class="content-block">
     <img src="../images/headshot.jpg" alt="Jordan Elias leading a music therapy session" class="inline-img">
