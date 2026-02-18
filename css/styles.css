@@ -74,7 +74,6 @@ nav[aria-label="Breadcrumb"] ol {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem;
   font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
@@ -90,8 +89,8 @@ nav[aria-label="Breadcrumb"] li {
 }
 
 nav[aria-label="Breadcrumb"] li + li::before {
-  content: ">";
-  margin-right: 0.4rem;
+  content: ">\00a0";
+  padding: 0 0.2rem;
 }
 
 nav[aria-label="Breadcrumb"] a {
