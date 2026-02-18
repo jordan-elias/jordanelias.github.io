@@ -47,142 +47,125 @@ frame-ancestors 'none';
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
 
- <!-- Structured Data: Person -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Jordan Elias",
-  "jobTitle": "Board-Certified Music Therapist",
-  "url": "https://www.jordanelias.de/",
-  "image": "https://www.jordanelias.de/images/headshot.jpg",
-  "email": "jordanelias@proton.me",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Berlin",
-    "postalCode": "12047",
-    "addressCountry": "DE"
-  },
-  "worksFor": {
-    "@type": "ProfessionalService",
-    "name": "Jordan Elias Music Therapy",
-    "url": "https://www.jordanelias.de/"
-  },
-  "alumniOf": [
-    {
-      "@type": "EducationalOrganization",
-      "name": "Freie Universität Berlin",
-      "sameAs": "https://www.fu-berlin.de/"
-    },
-    {
-      "@type": "EducationalOrganization",
-      "name": "Berklee College of Music",
-      "sameAs": "https://www.berklee.edu/"
-    }
-  ],
-  "hasCredential": {
-    "@type": "EducationalOccupationalCredential",
-    "name": "Board Certified Music Therapist (MT-BC)",
-    "credentialCategory": "Professional Certification",
-    "recognizedBy": {
-      "@type": "Organization",
-      "name": "Certification Board for Music Therapists",
-      "url": "https://www.cbmt.org/"
-    }
-  },
-  "knowsAbout": [
-    "Music Therapy",
-    "Neurodiversity",
-    "Autism",
-    "ADHD",
-    "Anxiety",
-    "Burnout",
-    "Emotional Regulation",
-    "Neuroscience of Music",
-    "Creative Therapy",
-    "Trauma-Informed Practice",
-    "Music and Neuroplasticity",
-    "Queer Affirming Therapy"
-  ],
-  "sameAs": [
-    "https://www.instagram.com/music_therapy_berlin/"
-  ]
-}
-</script>
 
-<!-- Structured Data: Professional Service -->
+<!-- Structured Data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "name": "Jordan Elias Music Therapy",
-  "url": "https://www.jordanelias.de/",
-  "logo": "https://www.jordanelias.de/images/favicon.png",
-  "image": "https://www.jordanelias.de/images/hero.jpg",
-  "description": "Music therapy for adults and neurodivergent individuals in Berlin and online, integrating counseling, music-making, and creative support.",
-  "priceRange": "€€",
-  "founder": {
-    "@type": "Person",
-    "name": "Jordan Elias",
-    "url": "https://www.jordanelias.de/about/"
-  },
-  "areaServed": [
+  "@graph": [
     {
-      "@type": "City",
-      "name": "Berlin"
-    },
-    {
-      "@type": "Country",
-      "name": "Germany"
-    },
-    "Worldwide"
-  ],
-  "availableChannel": {
-    "@type": "ServiceChannel",
-    "name": "Online Sessions",
-    "availableLanguage": ["English", "German"],
-    "serviceUrl": "https://www.jordanelias.de/online-sessions/"
-  },
-  "audience": {
-    "@type": "Audience",
-    "audienceType": "Musicians, Neurodivergent individuals, People experiencing anxiety, burnout, or depression. People navigating loss or illness."
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "email": "jordanelias@proton.me",
-    "contactType": "Client inquiries"
-  },
-  "serviceType": [
-    {
-      "@type": "Service",
-      "name": "Individual Music Therapy Sessions",
-      "description": "Personalized weekly or bi-weekly therapy sessions combining talking, music-making, and creative projects for emotional wellbeing.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jordan Elias"
+      "@type": "WebSite",
+      "@id": "https://www.jordanelias.de/#website",
+      "url": "https://www.jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "description": "Music therapy for adults and neurodivergent individuals in Berlin and online, integrating conversation, music-making, and creative support.",
+      "publisher": {
+        "@id": "https://www.jordanelias.de/#person"
       }
     },
     {
-      "@type": "Service",
-      "name": "Community Music Therapy Groups",
-      "description": "Ongoing group sessions focused on song sharing, emotional exploration, and creative connection for adults in Berlin.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jordan Elias"
+      "@type": "WebPage",
+      "@id": "https://www.jordanelias.de/#webpage",
+      "url": "https://www.jordanelias.de/",
+      "name": "Jordan Elias — Board-Certified Music Therapist in Berlin",
+      "description": "Music therapy for adults and neurodivergent individuals in Berlin and online, integrating conversation, music-making, and creative support.",
+      "isPartOf": {
+        "@id": "https://www.jordanelias.de/#website"
+      },
+      "about": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "author": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://www.jordanelias.de/images/hero.jpg"
       }
     },
     {
-      "@type": "Service",
-      "name": "Creative Music Lessons",
-      "description": "Guitar lessons and small group ensembles tailored for neurodivergent individuals to build skills and express creativity.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jordan Elias"
-      }
-    }
-  ]
-}
-</script>
+      "@type": "Person",
+      "@id": "https://www.jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://www.jordanelias.de/",
+      "image": "https://www.jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Berlin",
+        "postalCode": "12047",
+        "addressCountry": "DE"
+      },
+      "worksFor": {
+        "@id": "https://www.jordanelias.de/#service"
+      },
+      "alumniOf": [
+        {
+          "@type": "EducationalOrganization",
+          "name": "Freie Universität Berlin",
+          "sameAs": "https://www.fu-berlin.de/"
+        },
+        {
+          "@type": "EducationalOrganization",
+          "name": "Berklee College of Music",
+          "sameAs": "https://www.berklee.edu/"
+        }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "Certification Board for Music Therapists",
+          "url": "https://www.cbmt.org/"
+        }
+      },
+      "knowsAbout": [
+        "Music Therapy",
+        "Neurodiversity",
+        "Autism",
+        "ADHD",
+        "Anxiety",
+        "Burnout",
+        "Emotional Regulation",
+        "Neuroscience of Music",
+        "Creative Therapy",
+        "Trauma-Informed Practice",
+        "Music and Neuroplasticity",
+        "Queer Affirming Therapy"
+      ],
+      "sameAs": [
+        "https://www.instagram.com/music_therapy_berlin/"
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://www.jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://www.jordanelias.de/",
+      "logo": "https://www.jordanelias.de/images/favicon.png",
+      "image": "https://www.jordanelias.de/images/hero.jpg",
+      "description": "Music therapy for adults and neurodivergent individuals in Berlin and online, integrating conversation, music-making, and creative support.",
+      "priceRange": "€€",
+      "founder": {
+        "@id": "https://www.jordanelias.de/#person"
+      },
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Berlin"
+        },
+        {
+          "@type": "Country",
+          "name": "Germany"
+        },
+        "Worldwide"
+      ],
+      "availableChannel": {
+  
 
   <!-- Structured Data: FAQ -->
   <script type="application/ld+json">
