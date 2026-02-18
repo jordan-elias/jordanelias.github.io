@@ -300,3 +300,20 @@ ul {
     width: 100%;
   }
 }
+
+
+/* Default spacing for the specific ordered list */
+#my-olist li {
+  margin-bottom: 0.8em;  /* gap between list items */
+}
+
+/* Mobile-specific indentation */
+@media (max-width: 768px) {
+  #my-olist {
+    padding-left: 1.5rem;   /* indent the whole list */
+  }
+
+  #my-olist li {
+    margin-bottom: 1em;     /* slightly more space between items on mobile */
+  }
+}
