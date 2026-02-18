@@ -59,6 +59,54 @@ nav a:hover {
 }
 
 /* ============================
+   Breadcrumb
+============================ */
+nav[aria-label="Breadcrumb"] {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0.6em 1em 0;
+}
+
+nav[aria-label="Breadcrumb"] ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+nav[aria-label="Breadcrumb"] li {
+  display: flex;
+  align-items: center;
+}
+
+nav[aria-label="Breadcrumb"] li + li::before {
+  content: ">";
+  margin-right: 0.3rem;
+  opacity: 0.5;
+}
+
+nav[aria-label="Breadcrumb"] a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+nav[aria-label="Breadcrumb"] a:hover {
+  color: var(--accent-hover);
+}
+
+nav[aria-label="Breadcrumb"] [aria-current="page"] {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ============================
    Headings
 ============================ */
 h1,
