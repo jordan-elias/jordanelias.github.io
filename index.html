@@ -180,7 +180,48 @@ frame-ancestors 'none';
         },
         "Worldwide"
       ],
-      "availableChannel": {
+      "availableChannel": {"availableChannel": {
+        "@type": "ServiceChannel",
+        "name": "Online Sessions",
+        "availableLanguage": ["English", "German"],
+        "serviceUrl": "https://www.jordanelias.de/online-sessions/"
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Musicians, Neurodivergent individuals, People experiencing anxiety, burnout, or depression. People navigating loss or illness."
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "jordanelias@proton.me",
+        "contactType": "Client inquiries"
+      },
+      "serviceType": [
+        {
+          "@type": "Service",
+          "name": "Individual Music Therapy Sessions",
+          "description": "Personalized weekly or bi-weekly therapy sessions combining talking, music-making, and creative projects for emotional wellbeing.",
+          "provider": {
+            "@id": "https://www.jordanelias.de/#person"
+          }
+        },
+        {
+          "@type": "Service",
+          "name": "Community Music Therapy Groups",
+          "description": "Ongoing group sessions focused on song sharing, emotional exploration, and creative connection for adults in Berlin.",
+          "provider": {
+            "@id": "https://www.jordanelias.de/#person"
+          }
+        },
+        {
+          "@type": "Service",
+          "name": "Creative Music Lessons",
+          "description": "Guitar lessons and small group ensembles tailored for neurodivergent individuals to build skills and express creativity.",
+          "provider": {
+            "@id": "https://www.jordanelias.de/#person"
+          }
+        }
+      ]
+    },
   
 
   <!-- Structured Data: FAQ -->
