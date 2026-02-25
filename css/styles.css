@@ -77,21 +77,21 @@ nav a:hover {
   padding: 0;
   margin: 0;
   display: flex;
-  flex-wrap: wrap;      /* allows wrap on mobile */
-  gap: 0.4rem;          /* space between items, including last */
+  flex-wrap: wrap;
+  gap: 0.4rem;
   align-items: center;
 }
 
 .breadcrumb-nav li {
-  display: inline;       /* keep items on same line */
-  margin: 0;             /* remove inherited spacing */
-  padding: 0;            /* remove inherited padding */
+  display: inline;
+  margin: 0;
+  padding: 0;
   color: var(--text);
 }
 
 .breadcrumb-nav li + li::before {
   content: ">";
-  margin: 0 0.25rem;    /* smaller gap around separator */
+  margin: 0 0.25rem;
   color: var(--text);
 }
 
@@ -105,7 +105,6 @@ nav a:hover {
   transition: color 0.2s ease;
 }
 
-/* Links behave like inline text, no extra spacing */
 .breadcrumb-nav li a {
   color: var(--text);
   text-decoration: none;
@@ -114,17 +113,14 @@ nav a:hover {
   vertical-align: baseline;
 }
 
-
 .breadcrumb-nav [aria-current="page"] {
   color: var(--accent);
 }
 
-/* Disable hover motion entirely */
 .breadcrumb-nav a:hover {
   color: var(--accent-hover);
   transform: none;
 }
-
 
 /* ============================
    Headings
@@ -214,14 +210,83 @@ a:hover {
 }
 
 /* ============================
-   FAQ
+   FAQ Accordion
 ============================ */
 section[aria-label="Frequently Asked Questions"] {
   padding-top: 2em;
 }
 
-ul {
-  padding-left: 1.2em;
+.faq-list {
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--text);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--text);
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1.25rem 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: color 0.2s ease;
+}
+
+.faq-question:hover {
+  color: var(--accent-hover);
+}
+
+.faq-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.faq-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.faq-item.is-open .faq-icon {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+
+.faq-item.is-open .faq-answer {
+  max-height: 600px;
+}
+
+.faq-answer p {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--text);
+  padding-bottom: 1.25rem;
 }
 
 /* ============================
@@ -309,21 +374,19 @@ ul {
   }
 }
 
-
-
-
-/* Default spacing for the specific ordered list */
+/* ============================
+   Ordered List Spacing
+============================ */
 #my-olist li {
-  margin-bottom: 1em;  /* adds space between each <li> on desktop and mobile */
+  margin-bottom: 1em;
 }
 
-/* Optional: more spacing on mobile */
 @media (max-width: 768px) {
   #my-olist {
-    padding-left: 1.5rem;   /* indent the list for mobile */
+    padding-left: 1.5rem;
   }
 
   #my-olist li {
-    margin-bottom: 1.2em;   /* slightly larger gap on mobile */
+    margin-bottom: 1.2em;
   }
 }
