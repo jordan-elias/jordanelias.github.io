@@ -122,7 +122,8 @@ nav a:hover {
 }
 
 .breadcrumb-nav [aria-current="page"] {
-  color: var(--accent);
+  color: var(--text);
+  text-decoration: underline;
 }
 
 .breadcrumb-nav a:hover {
@@ -165,7 +166,6 @@ h2::after {
 h3 {
   font-size: 1.6rem;
 }
-
 /* ============================
    Links
 ============================ */
@@ -177,6 +177,16 @@ a {
 
 a:hover {
   color: var(--accent-hover);
+}
+
+main a {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+main a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
 }
 
 /* ============================
