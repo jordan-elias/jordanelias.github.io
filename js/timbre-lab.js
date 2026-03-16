@@ -144,12 +144,12 @@
     if (!playing) {
       playing = true;
       startOscs();
-      btn.textContent = '■ stop';
+      btn.textContent = '■\uFE0E stop';
       btn.classList.add('on');
     } else {
       playing = false;
       stopOscsWithRelease();
-      btn.textContent = '▶ play';
+      btn.textContent = '▶\uFE0E play';
       btn.classList.remove('on');
     }
   }
@@ -224,7 +224,7 @@
         '<div class="hcard-f">' + freq + '&nbsp;Hz</div>' +
         '<input type="range" min="0" max="1" step="0.01" value="' + g.toFixed(2) + '">' +
         '<div class="hcard-g">' + g.toFixed(2) + '</div>' +
-        '<div class="hcard-mute-tag">muted</div>';
+        '<div class="hcard-mute-tag"></div>';
 
       /* Closure to capture index */
       (function (idx, el) {
