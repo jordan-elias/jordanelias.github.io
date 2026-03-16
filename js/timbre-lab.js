@@ -215,10 +215,9 @@
       var freq     = Math.round(state.fundamental * state.ratios[i]);
       var g        = state.gains[i];
       var muted    = state.muted[i];
-      var lit      = !muted && g > 0.01;
 
       var card = document.createElement('div');
-      card.className = 'lab-hcard' + (muted ? ' muted' : (lit ? ' lit' : ''));
+      card.className = 'lab-hcard' + (muted ? ' muted' : '');
       card.innerHTML =
         '<div class="hcard-n">H' + (i + 1) + '</div>' +
         '<div class="hcard-r">' + ratioTxt + '</div>' +
@@ -237,11 +236,10 @@
             gainNodes[idx].gain.value = effGain(idx);
           }
           el.classList.toggle('muted', state.muted[idx]);
-          el.classList.toggle('lit', !state.muted[idx] && state.gains[idx] > 0.01);
           clearPresetSelection();
         });
 
-        /* Slider = adjust gain */
+        /* Slider = adjust gain only, no visual card change */
         el.querySelector('input').addEventListener('input', function (e) {
           e.stopPropagation();
           state.gains[idx] = parseFloat(e.target.value);
@@ -249,7 +247,6 @@
             gainNodes[idx].gain.value = effGain(idx);
           }
           el.querySelector('.hcard-g').textContent = state.gains[idx].toFixed(2);
-          el.classList.toggle('lit', !state.muted[idx] && state.gains[idx] > 0.01);
           clearPresetSelection();
         });
       }(i, card));
