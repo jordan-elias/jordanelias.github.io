@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Umami data analytics tag -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="b465c3e2-0fb1-4c36-b5db-6eaf0fe05cb7"></script>
+
+  <title>Timbre Lab: hearing sound structure | Jordan Elias</title>
+  <meta name="description" content="An interactive lab for building sound from sine waves. Explore how overtone structure shapes perception, emotion, and meaning — and experiment with it directly in your browser.">
+  <meta name="author" content="Jordan Elias">
+
+  <!-- SEARCH & AI DISCOVERY -->
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <!-- CANONICAL -->
+  <link rel="canonical" href="https://www.jordanelias.de/blog/timbre-lab/">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jordan Elias Music Therapy">
+  <meta property="og:locale" content="en_DE">
+  <meta property="og:url" content="https://www.jordanelias.de/blog/timbre-lab/">
+  <meta property="og:title" content="Timbre Lab: hearing sound structure">
+  <meta property="og:description" content="An interactive lab for building sound from sine waves and exploring overtone structure directly in your browser.">
+  <meta property="og:image" content="https://www.jordanelias.de/images/headshot.jpg">
+  <meta property="og:image:alt" content="Jordan Elias, music therapist">
+  <meta property="article:published_time" content="2026-03-16">
+  <meta property="article:author" content="https://www.jordanelias.de/about/">
+  <meta property="article:section" content="Music Therapy">
+  <meta property="article:tag" content="Sound perception">
+
+  <!-- TWITTER/X CARD -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Timbre Lab: hearing sound structure">
+  <meta name="twitter:description" content="An interactive lab for building sound from sine waves and exploring overtone structure directly in your browser.">
+  <meta name="twitter:image" content="https://www.jordanelias.de/images/headshot.jpg">
+
+  <!-- SECURITY -->
+  <meta http-equiv="Content-Security-Policy"
+  content="
+    default-src 'self';
+    img-src 'self' data: https:;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    script-src 'self' https://cloud.umami.is;
+    connect-src 'self' https://api-gateway.umami.dev;
+    frame-src https://complicated.life;
+    object-src 'none';
+    base-uri 'self';
+    frame-ancestors 'none';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <!-- MAIN STYLESHEET -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- LAB STYLES -->
+  <style>
+    /* Timbre Lab synthesizer section */
+    .lab-section {
+      border: 1px solid var(--text);
+      padding: 1.5em;
+      margin: 2em 0;
+    }
+
+    .lab-section h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 1em;
+    }
+
+    /* Oscilloscope */
+    .scope-wrap {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--text);
+      margin-bottom: 1.25em;
+    }
+
+    #scope {
+      display: block;
+      width: 100%;
+      height: 110px;
+    }
+
+    /* Transport row */
+    .lab-transport {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 1.25em;
+    }
+
+    .lab-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background-color: var(--bg);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      padding: 0.5em 1.2em;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .lab-btn:hover {
+      background-color: var(--accent-hover);
+      color: #ffffff;
+      border-color: var(--accent-hover);
+    }
+
+    .lab-btn.on {
+      background-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .lab-btn.noise-on {
+      background-color: var(--accent-hover);
+      color: #ffffff;
+      border-color: var(--accent-hover);
+    }
+
+    /* Sliders */
+    .lab-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .lab-ctrl-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      white-space: nowrap;
+      min-width: 62px;
+      opacity: 0.6;
+    }
+
+    .lab-ctrl input[type=range] {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 2px;
+      background: var(--text);
+      outline: none;
+      cursor: pointer;
+      opacity: 0.5;
+    }
+
+    .lab-ctrl input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+    }
+
+    .lab-ctrl input[type=range]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+    }
+
+    .lab-ctrl-val {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      min-width: 52px;
+      text-align: right;
+    }
+
+    /* Presets */
+    .lab-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 1.25em;
+    }
+
+    .lab-presets-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin-right: 4px;
+    }
+
+    .lab-preset-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.15s, background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .lab-preset-btn:hover {
+      opacity: 1;
+      color: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .lab-preset-btn.on {
+      background-color: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      opacity: 1;
+    }
+
+    /* Harmonic grid */
+    .lab-harmonics {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .lab-hcard {
+      border: 1px solid var(--text);
+      padding: 10px 8px 8px;
+      cursor: pointer;
+      transition: border-color 0.12s, opacity 0.15s, background-color 0.12s;
+      user-select: none;
+      opacity: 0.5;
+    }
+
+    .lab-hcard:hover:not(.muted) {
+      border-color: var(--accent-hover);
+    }
+
+    .lab-hcard.lit {
+      opacity: 1;
+      border-color: var(--accent);
+    }
+
+    .lab-hcard.muted {
+      opacity: 0.25;
+    }
+
+    .lab-hcard .hcard-n {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin-bottom: 2px;
+    }
+
+    .lab-hcard .hcard-r {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: var(--text);
+      opacity: 0.5;
+      margin-bottom: 1px;
+    }
+
+    .lab-hcard .hcard-f {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .lab-hcard input[type=range] {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 2px;
+      background: var(--text);
+      outline: none;
+      cursor: pointer;
+      opacity: 0.4;
+      margin-bottom: 5px;
+      pointer-events: auto;
+    }
+
+    .lab-hcard input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+    }
+
+    .lab-hcard input[type=range]::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+    }
+
+    .lab-hcard .hcard-g {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: var(--text);
+      text-align: center;
+      opacity: 0.5;
+    }
+
+    .lab-hcard.lit .hcard-g {
+      color: var(--accent);
+      opacity: 1;
+    }
+
+    .hcard-mute-tag {
+      display: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent-hover);
+      text-align: center;
+      margin-top: 3px;
+      letter-spacing: 0.06em;
+    }
+
+    .lab-hcard.muted .hcard-mute-tag {
+      display: block;
+    }
+
+    .lab-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      opacity: 0.5;
+      margin-top: 1em;
+      text-align: center;
+    }
+
+    /* Exercises */
+    .lab-exercise {
+      border-left: 3px solid var(--accent);
+      padding: 1em 1.25em;
+      margin: 1.5em 0;
+      background-color: rgba(106, 30, 120, 0.04);
+    }
+
+    .lab-exercise h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin: 0 0 0.5em;
+    }
+
+    .lab-exercise p {
+      margin-bottom: 0.6em;
+    }
+
+    .lab-exercise p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Physics chain */
+    .physics-chain {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      padding: 1em 0;
+      margin: 1.5em 0;
+      border-top: 1px solid var(--text);
+      border-bottom: 1px solid var(--text);
+    }
+
+    .chain-step {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 3px 10px;
+      border-radius: 2px;
+      opacity: 0.8;
+    }
+
+    .chain-arrow {
+      font-size: 0.75rem;
+      color: var(--text);
+      opacity: 0.4;
+    }
+
+    /* Prompt grid */
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1em;
+      margin: 1.5em 0;
+    }
+
+    .prompt-card {
+      border: 1px solid var(--text);
+      padding: 1em 1.1em;
+    }
+
+    .prompt-card-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5em;
+      opacity: 0.8;
+    }
+
+    .prompt-card p {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .lab-harmonics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .lab-transport {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .lab-btn {
+        text-align: center;
+      }
+
+      .lab-ctrl {
+        min-width: 100%;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .lab-harmonics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+
+  <!-- STRUCTURED DATA -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://www.jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Board-Certified Music Therapist",
+        "url": "https://www.jordanelias.de/",
+        "image": "https://www.jordanelias.de/images/headshot.jpg",
+        "email": "jordanelias@proton.me",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Berlin",
+          "postalCode": "12047",
+          "addressCountry": "DE"
+        },
+        "worksFor": {
+          "@id": "https://www.jordanelias.de/#service"
+        },
+        "alumniOf": [
+          {
+            "@type": "EducationalOrganization",
+            "name": "Freie Universität Berlin",
+            "sameAs": "https://www.fu-berlin.de/"
+          },
+          {
+            "@type": "EducationalOrganization",
+            "name": "Berklee College of Music",
+            "sameAs": "https://www.berklee.edu/"
+          }
+        ],
+        "hasCredential": {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Board Certified Music Therapist (MT-BC)",
+          "credentialCategory": "Professional Certification",
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "Certification Board for Music Therapists",
+            "url": "https://www.cbmt.org/"
+          }
+        },
+        "knowsAbout": [
+          "Music Therapy",
+          "Neurodiversity",
+          "Autism",
+          "ADHD",
+          "Anxiety",
+          "Burnout",
+          "Emotional Regulation",
+          "Neuroscience of Music",
+          "Creative Therapy",
+          "Trauma-Informed Practice",
+          "Music and Neuroplasticity",
+          "Queer Affirming Therapy"
+        ],
+        "sameAs": [
+          "https://www.instagram.com/music_therapy_berlin/"
+        ]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://www.jordanelias.de/#service",
+        "name": "Jordan Elias Music Therapy",
+        "url": "https://www.jordanelias.de/",
+        "founder": {
+          "@id": "https://www.jordanelias.de/#person"
+        }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://www.jordanelias.de/blog/timbre-lab/#post",
+        "headline": "Timbre Lab: hearing sound structure",
+        "description": "An interactive lab for building sound from sine waves. Explore how overtone structure shapes perception, emotion, and meaning — and experiment with it directly in your browser.",
+        "url": "https://www.jordanelias.de/blog/timbre-lab/",
+        "datePublished": "2026-03-16",
+        "dateModified": "2026-03-16",
+        "inLanguage": "en",
+        "author": {
+          "@id": "https://www.jordanelias.de/#person"
+        },
+        "publisher": {
+          "@id": "https://www.jordanelias.de/#service"
+        },
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://www.jordanelias.de/images/headshot.jpg"
+        },
+        "isPartOf": {
+          "@type": "Blog",
+          "@id": "https://www.jordanelias.de/blog/#blog"
+        },
+        "mainEntityOfPage": {
+          "@id": "https://www.jordanelias.de/blog/timbre-lab/#webpage"
+        },
+        "about": [
+          {
+            "@type": "Thing",
+            "name": "Timbre",
+            "sameAs": "https://en.wikipedia.org/wiki/Timbre"
+          },
+          {
+            "@type": "Thing",
+            "name": "Psychoacoustics",
+            "sameAs": "https://en.wikipedia.org/wiki/Psychoacoustics"
+          }
+        ],
+        "keywords": "timbre, psychoacoustics, sound perception, sine waves, music therapy, harmonic series"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.jordanelias.de/blog/timbre-lab/#webpage",
+        "url": "https://www.jordanelias.de/blog/timbre-lab/",
+        "name": "Timbre Lab: hearing sound structure | Jordan Elias",
+        "description": "An interactive lab for building sound from sine waves. Explore how overtone structure shapes perception, emotion, and meaning — and experiment with it directly in your browser.",
+        "author": {
+          "@id": "https://www.jordanelias.de/#person"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://www.jordanelias.de/images/headshot.jpg"
+        },
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://www.jordanelias.de/#website"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://www.jordanelias.de/blog/timbre-lab/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.jordanelias.de/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://www.jordanelias.de/blog/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Timbre Lab",
+            "item": "https://www.jordanelias.de/blog/timbre-lab/"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+<header>
+  <h1>Music &amp; Mental Health Blog</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/online-sessions/">Online Sessions</a>
+    <a href="/events/">Events</a>
+    <a href="/contact/">Contact</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+</header>
+
+<main>
+
+  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/blog/timbre-lab/" aria-current="page">Timbre Lab</a></li>
+    </ol>
+  </nav>
+
+  <article>
+
+    <section>
+      <h1>Timbre Lab: hearing sound structure</h1>
+      <p class="post-meta">
+        <time datetime="2026-03-16">March 16, 2026</time>
+      </p>
+      <p>Written by Jordan Elias, MT-BC</p>
+      <p class="post-intro">
+        What makes a flute sound like a flute, a violin like a violin, a voice like a voice — even when they play the same note at the same volume? The answer is timbre. And you can build it from scratch, right here in your browser.
+      </p>
+    </section>
+
+    <section>
+      <h2>What is timbre?</h2>
+
+      <p>Every pitched sound is a composite. When a string vibrates at 110 Hz, it simultaneously vibrates at 220 Hz, 330 Hz, 440 Hz, and beyond — all layered at once. These higher frequencies are called harmonics or overtones. The lowest is the fundamental, which gives you the perceived pitch. The overtones determine what the sound <em>feels like</em>: its warmth, brightness, roughness, or humanity.</p>
+
+      <p>At the physics level, timbre is simply the structure of a sound wave — the relationship between a fundamental frequency and its overtones, including their relative volumes. At the perceptual level, it is something far more interesting: the thing that allows us to instantly recognise an instrument, a voice, an environment, a presence — without consciously analysing anything.</p>
+
+      <p>The brain does not hear individual frequencies. It hears <em>relationships</em> between frequencies. Timbre is encoded as spectral patterns — shapes in the distribution of energy across the frequency spectrum. These patterns are processed not only in the auditory cortex but across emotional and embodied networks: the limbic system tags them for safety or threat, sensorimotor areas create physical resonance, meaning-making networks connect them to memory and identity. This is why timbre is never neutral. It always carries psychological information.</p>
+
+      <div class="physics-chain">
+        <span class="chain-step">vibration</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">frequency structure</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">cochlear transduction</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">neural pattern</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">perception</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">emotion</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">meaning</span>
+      </div>
+
+    </section>
+
+    <section>
+      <h2>The lab</h2>
+
+      <p>The synthesiser below runs entirely in your browser using the Web Audio API. It generates six sine wave oscillators simultaneously — one for the fundamental frequency and one for each of the first five overtones. You can adjust the volume of each overtone independently in real time, mute and unmute them by clicking their cards, and watch the composite waveform change shape on the oscilloscope as you do. The attack and release controls shape the envelope — how the sound swells in and fades out. Pink noise can be layered over the harmonic tones.</p>
+
+      <p>Headphones are recommended. The differences between timbres are clearest at moderate volume.</p>
+
+      <!-- THE SYNTHESISER -->
+      <div class="lab-section">
+        <h3>timbre synthesiser</h3>
+
+        <div class="scope-wrap">
+          <canvas id="scope"></canvas>
+        </div>
+
+        <div class="lab-transport">
+          <button class="lab-btn" id="btn-play">▶ play</button>
+          <div class="lab-ctrl">
+            <span class="lab-ctrl-label">fundamental</span>
+            <input type="range" id="fund" min="55" max="440" value="110" step="1">
+            <span class="lab-ctrl-val" id="fund-val">110 Hz</span>
+          </div>
+          <div class="lab-ctrl">
+            <span class="lab-ctrl-label">attack</span>
+            <input type="range" id="atk" min="10" max="3000" value="30" step="10">
+            <span class="lab-ctrl-val" id="atk-val">30 ms</span>
+          </div>
+          <div class="lab-ctrl">
+            <span class="lab-ctrl-label">release</span>
+            <input type="range" id="rel" min="10" max="3000" value="300" step="10">
+            <span class="lab-ctrl-val" id="rel-val">300 ms</span>
+          </div>
+          <button class="lab-btn" id="btn-noise">pink noise</button>
+        </div>
+
+        <div class="lab-presets">
+          <span class="lab-presets-label">presets →</span>
+          <button class="lab-preset-btn" data-p="sine">pure sine</button>
+          <button class="lab-preset-btn" data-p="flute">flute</button>
+          <button class="lab-preset-btn" data-p="string">string</button>
+          <button class="lab-preset-btn" data-p="brass">brass</button>
+          <button class="lab-preset-btn" data-p="voice">voice</button>
+          <button class="lab-preset-btn" data-p="hollow">hollow</button>
+          <button class="lab-preset-btn" data-p="bell">bell</button>
+        </div>
+
+        <div class="lab-harmonics" id="harmonics"></div>
+
+        <p class="lab-hint">click a harmonic card to mute or unmute it · drag its slider to adjust the volume</p>
+      </div>
+
+    </section>
+
+    <section>
+      <h2>Experiments</h2>
+
+      <div class="lab-exercise">
+        <h3>1 — the pure sine</h3>
+        <p>Select <strong>pure sine</strong> and press play. You're hearing a single frequency oscillating air pressure, with nothing added on top of it. Notice what it lacks: warmth, color, instrument character. It barely sounds like anything at all — more like a sensation than a sound. Watch the clean, simple arc on the oscilloscope. This is the floor. Sound with no timbre.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>2 — introduce one harmonic at a time</h3>
+        <p>Stay on pure sine. Now click H2's card to unmute it, and slowly drag its slider up from zero. Listen for the moment warmth appears, and watch the waveform shift on the oscilloscope. Then bring in H3 — something rounder and fuller arrives. H4 adds brightness; H5 and H6 push toward edge and intensity. Each harmonic is a distinct physical layer with a distinct perceptual character. Notice which arrivals feel most dramatic, and whether the changes register in your body as well as your ears.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>3 — sculpt in reverse</h3>
+        <p>Load <strong>brass</strong>. Now click cards to mute harmonics one at a time, starting from H6 and working downward. Track when it stops feeling like brass. At what point does it cross from bright to warm? From metallic to something rounder? The transitions are not clean — timbre has gradients, not hard boundaries. The line between "brass" and "not-brass" is perceptual, not acoustic.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>4 — the bell</h3>
+        <p>Load <strong>bell</strong>. This preset is different from all the others. Instead of integer harmonic ratios (2:1, 3:1, 4:1), the upper partials use inharmonic ratios: 2.7×, 5.8×, 8.9×. These don't belong to any harmonic series. The result is a sound that feels metallic, unstable, and not-quite-pitched — because these frequencies don't fuse into a unified note the way true harmonics do. This is why struck metal objects have that characteristic shimmer. The overtones are real; they simply don't cooperate.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>5 — the hollow clarinet sound</h3>
+        <p>Load <strong>hollow</strong>. This preset uses only odd-numbered harmonics (H1, H3, H5) with H2, H4, and H6 muted. The physical reason clarinets have this particular woody, open quality is precisely this: the cylindrical bore of the instrument suppresses even harmonics, producing a spectrum built only from odd partials. You're hearing the acoustic physics of instrument construction expressed as timbre. Try toggling H2 in and out slowly and listen to the even-odd distinction.</p>
+      </div>
+
+    </section>
+
+    <section>
+      <h2>Attack, release, and the shape of time</h2>
+
+      <p>Timbre is not a static property. It unfolds through time. The <strong>attack</strong> slider controls how quickly the sound swells to full volume when you press play. The <strong>release</strong> controls how quickly it fades when you stop. These two parameters alone can completely transform the character of the same harmonic structure.</p>
+
+      <div class="lab-exercise">
+        <h3>6 — envelope as instrument character</h3>
+        <p>Try <strong>string</strong> with a 1.5 second attack. Press play. The sound blooms from silence, gaining body as it arrives — close to the quality of a bow drawing across a string, pulling the tone out of nothing. Then try <strong>brass</strong> with a 10 ms attack and a 50 ms release. The same harmonic richness becomes percussive, almost like a struck bar. The overtones haven't changed. The shape has.</p>
+        <p>In music therapy contexts, attack time is one of the more reliable tools for nervous system modulation. Long attacks don't trigger the startle reflex; they arrive as gradual presence. Short attacks register as arrival and punctuation. Notice what each does in your body as distinct from your ears. The distinction between acoustic event and physiological response is smaller than it appears.</p>
+      </div>
+
+    </section>
+
+    <section>
+      <h2>Pink noise — texture, breath, and what makes sound feel real</h2>
+
+      <p>Toggle on <strong>pink noise</strong> using the button above. What you're hearing is noise with equal energy per octave — the same total energy exists between 20–40 Hz as between 2,000–4,000 Hz. This differs from white noise, which distributes equal energy at every individual frequency and consequently sounds harsh and artificial to the ear.</p>
+
+      <p>Pink noise is structurally abundant in the natural world: rainfall, rivers, wind through foliage, the ocean heard from a distance. It has no pitch, no harmonic structure, and no predictable moment-to-moment pattern. And yet perceptually it occupies a distinctive position — the nervous system encounters it as unremarkable in a particular way. The absence of pattern is itself a kind of information.</p>
+
+      <div class="lab-exercise">
+        <h3>7 — noise as humanising layer</h3>
+        <p>Load the <strong>flute</strong> preset with harmonics playing. Now activate pink noise at a low level by pressing the pink noise button and adjusting the sense of it in the mix. Notice how the sound becomes more alive — breathy, imperfect, present. An actual flute is not a harmonic series: it's a harmonic series plus breath noise plus room resonance plus the small inaccuracies of a human body. The noise is not a flaw. It's what makes it feel inhabited.</p>
+        <p>Try the same addition with <strong>voice</strong>, then with <strong>brass</strong>. Does the noise feel more or less natural against different timbres? At what level does each begin to feel more "real"?</p>
+      </div>
+
+      <h3>The priming effect — hearing what you expect to hear</h3>
+
+      <p>With only pink noise active — harmonics fully muted — try this. Read the word <strong>waterfall</strong> slowly, hold the image in mind, and listen for thirty seconds. Then read the words <strong>industrial machinery</strong> and listen to the same sound again.</p>
+
+      <p>This is not purely imagination. When a sound is acoustically ambiguous — as pink noise is — the auditory cortex doesn't passively wait for data. It actively draws on prior expectation to construct the percept. Research on exactly this stimulus has found consistent physiological differences in response to identical acoustic information depending solely on the label applied to it: measurable changes in heart rate variability and rated pleasantness between listeners who were told they were hearing a natural water source versus mechanical noise. The physics was unchanged. The perception was not.</p>
+
+      <p>This connects directly to what became briefly famous as the <strong>Laurel/Yanny</strong> phenomenon of 2018 — a single recorded word that listeners would clearly hear as either name, depending on what they expected to hear and, as turned out to matter considerably, which frequency ranges their hearing happened to be most sensitive to. What made the moment disorienting was not the ambiguity itself. It was the demonstration that two people listening to the exact same sound could be having completely different experiences — both fully real, both physiologically grounded — with no objective way to determine which was "correct."</p>
+
+      <p>Perception is not a recording. It is a hypothesis: an active construction shaped by expectation, context, memory, and language. Listening is something the brain does <em>to</em> sound, not something sound does <em>to</em> the brain.</p>
+
+    </section>
+
+    <section>
+      <h2>Imagining instruments</h2>
+
+      <p>This final set of exercises draws on the top-down capacity of auditory perception: the ability to impose interpretive frames on sound and have those frames reshape the experience from the inside. They work best with eyes closed and headphones if possible. The point is not to hallucinate sound but to notice how much the act of listening is already an act of interpretation — and how deliberately shifting that interpretation changes what you hear.</p>
+
+      <div class="prompt-grid">
+        <div class="prompt-card">
+          <p class="prompt-card-label">preset: flute</p>
+          <p>Imagine a wooden flute in a large stone cathedral. Where does the sound seem to originate — close or distant, above or in front? Now move the imagined player outside to a courtyard on a summer evening. Does anything change about how the sound feels?</p>
+        </div>
+        <div class="prompt-card">
+          <p class="prompt-card-label">preset: hollow</p>
+          <p>This is a clarinet-like timbre — only odd harmonics. Imagine you're seated at the back of a recital hall, the performer far away. Now imagine you are the performer. What changes about how the sound feels in your chest and hands?</p>
+        </div>
+        <div class="prompt-card">
+          <p class="prompt-card-label">preset: string</p>
+          <p>Imagine a cello in a small practice room, a bow moving very slowly. Then imagine the same player in a cathedral with eight seconds of reverb. Does the imagined room change the emotional quality of the sound, even though what you're actually hearing is identical in both cases?</p>
+        </div>
+        <div class="prompt-card">
+          <p class="prompt-card-label">build your own</p>
+          <p>Build a timbre from scratch using the sliders. Give it a name. What instrument does it remind you of? What space does it naturally belong to — indoors or out, enclosed or open, human or mechanical? What is it trying to say?</p>
+        </div>
+      </div>
+
+      <p>These prompts engage what researchers call auditory scene analysis — the brain's capacity to place sounds in inferred spaces, reconstruct source characteristics, and build coherent perceptual environments from raw acoustic data. What Pauline Oliveros called <em>deep listening</em> is in part the practice of attending to this constructive process directly: noticing not just what you hear, but how you are hearing it, and what you are bringing to the act. If the <a href="/blog/indeterminacy-in-music-and-life/">indeterminacy post</a> was about expanding attention outward, this is its structural counterpart — attending to the physics underneath the experience.</p>
+
+    </section>
+
+    <section>
+      <h2>Music therapy and sound as nervous system information</h2>
+
+      <p>Timbre is not aesthetic decoration. In a clinical context I think of it as nervous system information. Every spectral structure carries a physiological signal. Warm timbres with strong fundamentals and soft upper harmonics tend to activate parasympathetic responses — the settling that comes with lower arousal. Bright, dense spectra with strong upper partials are activating; they register as presence, urgency, edge. Inharmonic sounds — like the bell preset — sit outside the familiar harmonic grammar and create a kind of acoustic uncanniness that the nervous system notices.</p>
+
+      <p>This means that when clients engage with timbre deliberately — whether through listening, building sounds, or making choices about what to produce — they are also making choices about their own physiological state. Sound design, approached this way, is not an aesthetic activity. It's a form of regulation.</p>
+
+      <p>There's also something in the act of construction itself. When a person builds a timbre from scratch — choosing which harmonics to include, adjusting their balance, noticing the moment a sound suddenly becomes recognisable as warm or as hollow or as alive — they are not consuming a sound. They're authoring it. The relationship between the person and the sonic material is one of agency rather than reception. This matters particularly in work where feelings of agency are part of what needs rebuilding.</p>
+
+      <p>The instrument-imagining prompts above deliberately blur the line between auditory physics and psychological projection — because in practice that line is already blurry. What the exercises make visible is the degree to which our perception of sound is saturated with expectation, memory, and embodied knowledge. That's not a limitation to correct. It's the material we're working with.</p>
+    </section>
+
+    <section>
+      <h2>If this resonates</h2>
+
+      <p>Try the experiments. Begin with pure sine and bring harmonics in one at a time. Notice what changes in your body, not just your ears. Note which timbres feel safe and which feel activating, and whether those responses are consistent or vary with context and mood.</p>
+
+      <p>If you're curious about what music therapy grounded in these ideas looks like in practice — working with sound perception, embodied listening, or the therapeutic dimensions of creative sound-making — please feel free to reach out via the <a href="/contact/">contact page</a>. I work with musicians, neurodivergent individuals, and people navigating trauma, illness, and significant life transitions. Music experience is not required.</p>
+
+      <p>If you're a fellow therapist or researcher interested in the psychoacoustic dimensions of clinical work, I'd genuinely enjoy the conversation.</p>
+
+      <p>Further reading if you'd like to go deeper:</p>
+      <ul>
+        <li><em>The Psychology of Music</em> — Diana Deutsch (ed.)</li>
+        <li><em>This Is Your Brain on Music</em> — Daniel J. Levitin</li>
+        <li><em>Deep Listening</em> — Pauline Oliveros</li>
+        <li><em>Silence</em> — John Cage</li>
+      </ul>
+    </section>
+
+  </article>
+
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/online-sessions/">Online Sessions</a>
+    <a href="/events/">Events</a>
+    <a href="/contact/">Contact</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+  <p>© 2025-2026 Jordan Elias</p>
+</footer>
+
+<script defer src="/js/timbre-lab.js"></script>
+
+</body>
+</html>
