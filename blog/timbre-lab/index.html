@@ -7,7 +7,7 @@
   <script defer src="https://cloud.umami.is/script.js" data-website-id="b465c3e2-0fb1-4c36-b5db-6eaf0fe05cb7"></script>
 
   <title>Timbre Lab: hearing sound structure | Jordan Elias</title>
-  <meta name="description" content="An interactive lab for building sound from sine waves. Explore how overtone structure shapes perception, emotion, and meaning — and experiment with it directly in your browser.">
+  <meta name="description" content="An interactive lab for building sound from sine waves and exploring overtone structure directly in your browser.">
   <meta name="author" content="Jordan Elias">
 
   <!-- SEARCH & AI DISCOVERY -->
@@ -64,7 +64,8 @@
   <!-- MAIN STYLESHEET -->
   <link rel="stylesheet" href="/css/styles.css">
 
-  <!-- LAB STYLES -->
+ 
+<!-- LAB STYLES -->
   <style>
     /* Timbre Lab synthesizer section */
     .lab-section {
@@ -72,7 +73,7 @@
       padding: 1.5em;
       margin: 2em 0;
     }
-
+ 
     .lab-section h3 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.75rem;
@@ -82,7 +83,7 @@
       color: var(--accent);
       margin: 0 0 1em;
     }
-
+ 
     /* Oscilloscope */
     .scope-wrap {
       position: relative;
@@ -90,22 +91,29 @@
       border: 1px solid var(--text);
       margin-bottom: 1.25em;
     }
-
+ 
     #scope {
       display: block;
       width: 100%;
       height: 110px;
     }
-
-    /* Transport row */
-    .lab-transport {
+ 
+    /* Transport — buttons row */
+    .lab-transport-buttons {
       display: flex;
-      flex-wrap: wrap;
       gap: 10px;
       align-items: center;
       margin-bottom: 1.25em;
     }
-
+ 
+    /* Transport — sliders block */
+    .lab-transport-sliders {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 1.75em;
+    }
+ 
     .lab-btn {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.85rem;
@@ -118,33 +126,31 @@
       transition: background-color 0.15s ease, color 0.15s ease;
       white-space: nowrap;
     }
-
+ 
     .lab-btn:hover {
       background-color: var(--accent-hover);
       color: #ffffff;
       border-color: var(--accent-hover);
     }
-
+ 
     .lab-btn.on {
       background-color: var(--accent);
       color: #ffffff;
     }
-
+ 
     .lab-btn.noise-on {
       background-color: var(--accent-hover);
       color: #ffffff;
       border-color: var(--accent-hover);
     }
-
+ 
     /* Sliders */
     .lab-ctrl {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex: 1;
-      min-width: 160px;
+      gap: 10px;
     }
-
+ 
     .lab-ctrl-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
@@ -152,10 +158,11 @@
       text-transform: uppercase;
       color: var(--text);
       white-space: nowrap;
-      min-width: 62px;
+      width: 72px;
+      flex-shrink: 0;
       opacity: 0.6;
     }
-
+ 
     .lab-ctrl input[type=range] {
       flex: 1;
       -webkit-appearance: none;
@@ -166,7 +173,7 @@
       cursor: pointer;
       opacity: 0.5;
     }
-
+ 
     .lab-ctrl input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 14px;
@@ -175,7 +182,7 @@
       background: var(--accent);
       cursor: pointer;
     }
-
+ 
     .lab-ctrl input[type=range]::-moz-range-thumb {
       width: 14px;
       height: 14px;
@@ -184,15 +191,16 @@
       border: none;
       cursor: pointer;
     }
-
+ 
     .lab-ctrl-val {
       font-family: 'Inter', sans-serif;
       font-size: 0.8rem;
       color: var(--text);
-      min-width: 52px;
+      width: 52px;
+      flex-shrink: 0;
       text-align: right;
     }
-
+ 
     /* Presets */
     .lab-presets {
       display: flex;
@@ -201,7 +209,7 @@
       align-items: center;
       margin-bottom: 1.25em;
     }
-
+ 
     .lab-presets-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
@@ -211,7 +219,7 @@
       opacity: 0.5;
       margin-right: 4px;
     }
-
+ 
     .lab-preset-btn {
       font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
@@ -224,49 +232,44 @@
       opacity: 0.6;
       transition: opacity 0.15s, background-color 0.15s, color 0.15s, border-color 0.15s;
     }
-
+ 
     .lab-preset-btn:hover {
       opacity: 1;
       color: var(--accent-hover);
       border-color: var(--accent-hover);
     }
-
+ 
     .lab-preset-btn.on {
       background-color: var(--accent);
       color: #ffffff;
       border-color: var(--accent);
       opacity: 1;
     }
-
+ 
     /* Harmonic grid */
     .lab-harmonics {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 8px;
     }
-
+ 
     .lab-hcard {
       border: 1px solid var(--text);
       padding: 10px 8px 8px;
       cursor: pointer;
-      transition: border-color 0.12s, opacity 0.15s, background-color 0.12s;
+      transition: border-color 0.12s, opacity 0.15s;
       user-select: none;
-      opacity: 0.5;
+      opacity: 1;
     }
-
+ 
     .lab-hcard:hover:not(.muted) {
       border-color: var(--accent-hover);
     }
-
-    .lab-hcard.lit {
-      opacity: 1;
-      border-color: var(--accent);
-    }
-
+ 
     .lab-hcard.muted {
-      opacity: 0.25;
+      opacity: 0.3;
     }
-
+ 
     .lab-hcard .hcard-n {
       font-family: 'Inter', sans-serif;
       font-size: 0.65rem;
@@ -276,7 +279,7 @@
       opacity: 0.5;
       margin-bottom: 2px;
     }
-
+ 
     .lab-hcard .hcard-r {
       font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
@@ -284,7 +287,7 @@
       opacity: 0.5;
       margin-bottom: 1px;
     }
-
+ 
     .lab-hcard .hcard-f {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.8rem;
@@ -292,7 +295,7 @@
       color: var(--text);
       margin-bottom: 8px;
     }
-
+ 
     .lab-hcard input[type=range] {
       width: 100%;
       -webkit-appearance: none;
@@ -305,7 +308,7 @@
       margin-bottom: 5px;
       pointer-events: auto;
     }
-
+ 
     .lab-hcard input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 12px;
@@ -314,7 +317,7 @@
       background: var(--accent);
       cursor: pointer;
     }
-
+ 
     .lab-hcard input[type=range]::-moz-range-thumb {
       width: 12px;
       height: 12px;
@@ -323,7 +326,7 @@
       border: none;
       cursor: pointer;
     }
-
+ 
     .lab-hcard .hcard-g {
       font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
@@ -331,12 +334,7 @@
       text-align: center;
       opacity: 0.5;
     }
-
-    .lab-hcard.lit .hcard-g {
-      color: var(--accent);
-      opacity: 1;
-    }
-
+ 
     .hcard-mute-tag {
       display: none;
       font-family: 'Inter', sans-serif;
@@ -346,11 +344,11 @@
       margin-top: 3px;
       letter-spacing: 0.06em;
     }
-
+ 
     .lab-hcard.muted .hcard-mute-tag {
       display: block;
     }
-
+ 
     .lab-hint {
       font-family: 'Inter', sans-serif;
       font-size: 0.8rem;
@@ -359,7 +357,7 @@
       margin-top: 1em;
       text-align: center;
     }
-
+ 
     /* Exercises */
     .lab-exercise {
       border-left: 3px solid var(--accent);
@@ -367,7 +365,7 @@
       margin: 1.5em 0;
       background-color: rgba(106, 30, 120, 0.04);
     }
-
+ 
     .lab-exercise h3 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1rem;
@@ -375,15 +373,15 @@
       color: var(--accent);
       margin: 0 0 0.5em;
     }
-
+ 
     .lab-exercise p {
       margin-bottom: 0.6em;
     }
-
+ 
     .lab-exercise p:last-child {
       margin-bottom: 0;
     }
-
+ 
     /* Physics chain */
     .physics-chain {
       display: flex;
@@ -395,7 +393,7 @@
       border-top: 1px solid var(--text);
       border-bottom: 1px solid var(--text);
     }
-
+ 
     .chain-step {
       font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
@@ -405,13 +403,13 @@
       border-radius: 2px;
       opacity: 0.8;
     }
-
+ 
     .chain-arrow {
       font-size: 0.75rem;
       color: var(--text);
       opacity: 0.4;
     }
-
+ 
     /* Prompt grid */
     .prompt-grid {
       display: grid;
@@ -419,12 +417,12 @@
       gap: 1em;
       margin: 1.5em 0;
     }
-
+ 
     .prompt-card {
       border: 1px solid var(--text);
       padding: 1em 1.1em;
     }
-
+ 
     .prompt-card-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
@@ -434,33 +432,33 @@
       margin-bottom: 0.5em;
       opacity: 0.8;
     }
-
+ 
     .prompt-card p {
       font-size: 0.92rem;
       line-height: 1.7;
       color: var(--text);
       margin: 0;
     }
-
+ 
     @media (max-width: 600px) {
       .lab-harmonics {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
-
+ 
       .lab-transport {
         flex-direction: column;
         align-items: stretch;
       }
-
+ 
       .lab-btn {
         text-align: center;
       }
-
+ 
       .lab-ctrl {
         min-width: 100%;
       }
     }
-
+ 
     @media (max-width: 360px) {
       .lab-harmonics {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -544,7 +542,7 @@
         "@type": "BlogPosting",
         "@id": "https://www.jordanelias.de/blog/timbre-lab/#post",
         "headline": "Timbre Lab: hearing sound structure",
-        "description": "An interactive lab for building sound from sine waves. Explore how overtone structure shapes perception, emotion, and meaning — and experiment with it directly in your browser.",
+        "description": "An interactive lab for building sound from sine waves and explore overtone structure directly in your browser.",
         "url": "https://www.jordanelias.de/blog/timbre-lab/",
         "datePublished": "2026-03-16",
         "dateModified": "2026-03-16",
@@ -585,7 +583,7 @@
         "@id": "https://www.jordanelias.de/blog/timbre-lab/#webpage",
         "url": "https://www.jordanelias.de/blog/timbre-lab/",
         "name": "Timbre Lab: hearing sound structure | Jordan Elias",
-        "description": "An interactive lab for building sound from sine waves. Explore how overtone structure shapes perception, emotion, and meaning — and experiment with it directly in your browser.",
+        "description": "An interactive lab for building sound from sine waves and explore overtone structure directly in your browser.",
         "author": {
           "@id": "https://www.jordanelias.de/#person"
         },
@@ -661,18 +659,18 @@
       </p>
       <p>Written by Jordan Elias, MT-BC</p>
       <p class="post-intro">
-        What makes a flute sound like a flute, a violin like a violin, a voice like a voice — even when they play the same note at the same volume? The answer is timbre. And you can build it from scratch, right here in your browser.
+        What makes a flute sound like a flute or a violin like a violin, even when they play the same note at the same volume? The unique timbre of a note is the result of the harmonic overtones an instrument generates. Below you can experiment yourself with adding overtones to a pure sine wave and shaping its timbre.
       </p>
     </section>
 
     <section>
       <h2>What is timbre?</h2>
 
-      <p>Every pitched sound is a composite. When a string vibrates at 110 Hz, it simultaneously vibrates at 220 Hz, 330 Hz, 440 Hz, and beyond — all layered at once. These higher frequencies are called harmonics or overtones. The lowest is the fundamental, which gives you the perceived pitch. The overtones determine what the sound <em>feels like</em>: its warmth, brightness, roughness, or humanity.</p>
+      <p>Every pitched sound is a composite. When a string vibrates at 110 Hz, it simultaneously vibrates at 220 Hz, 330 Hz, 440 Hz, and beyond. All this layering is still heard as a single note. These higher frequencies are called harmonics or overtones. The lowest is the fundamental, which gives you the perceived pitch. The overtones determine its warmth, brightness, roughness, or humanity.</p>
 
-      <p>At the physics level, timbre is simply the structure of a sound wave — the relationship between a fundamental frequency and its overtones, including their relative volumes. At the perceptual level, it is something far more interesting: the thing that allows us to instantly recognise an instrument, a voice, an environment, a presence — without consciously analysing anything.</p>
+      <p>At the physics level, timbre is simply the structure of a sound wave; the relationship between a fundamental frequency and its overtones, including their relative volumes. At the perceptual level, it is the thing that allows us to instantly recognise an instrument, a voice, an environment, without consciously analysing anything.</p>
 
-      <p>The brain does not hear individual frequencies. It hears <em>relationships</em> between frequencies. Timbre is encoded as spectral patterns — shapes in the distribution of energy across the frequency spectrum. These patterns are processed not only in the auditory cortex but across emotional and embodied networks: the limbic system tags them for safety or threat, sensorimotor areas create physical resonance, meaning-making networks connect them to memory and identity. This is why timbre is never neutral. It always carries psychological information.</p>
+      <p>The brain does not hear individual frequencies. It hears <em>relationships</em> between frequencies. Timbre is encoded as spectral patterns in the distribution of energy across the frequency spectrum. These patterns are processed not only in the auditory cortex but across emotional and embodied networks: the limbic system tags them for safety or threat, sensorimotor areas create physical resonance, meaning-making networks connect them to memory and identity. This is why timbre is never neutral. It always carries psychological information.</p>
 
       <div class="physics-chain">
         <span class="chain-step">vibration</span>
