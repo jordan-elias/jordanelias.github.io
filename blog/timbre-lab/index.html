@@ -110,31 +110,67 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.85rem;
       font-weight: 500;
-      background-color: var(--bg);
-      color: var(--accent);
-      border: 2px solid var(--accent);
+      background-color: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
       padding: 0.5em 1.2em;
       cursor: pointer;
-      transition: background-color 0.15s ease, color 0.15s ease;
       white-space: nowrap;
       min-width: 90px;
       text-align: center;
       display: inline-block;
+      border-radius: 0;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
  
     .lab-btn:hover {
       background-color: var(--accent-hover);
-      color: #ffffff;
+      color: var(--bg);
+      border-color: var(--accent-hover);
     }
  
-    .lab-btn.on {
-      background-color: var(--accent);
-      color: #ffffff;
-    }
- 
+    .lab-btn.on,
     .lab-btn.noise-on {
+      background-color: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+ 
+    .lab-btn.on:hover,
+    .lab-btn.noise-on:hover {
       background-color: var(--accent-hover);
-      color: #ffffff;
+      color: var(--bg);
+      border-color: var(--accent-hover);
+    }
+ 
+    .lab-preset-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 12px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+ 
+    .lab-preset-btn:hover {
+      background-color: var(--accent-hover);
+      color: var(--bg);
+      border-color: var(--accent-hover);
+    }
+ 
+    .lab-preset-btn.on {
+      background-color: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+ 
+    .lab-preset-btn.on:hover {
+      background-color: var(--accent-hover);
+      color: var(--bg);
+      border-color: var(--accent-hover);
     }
  
     .lab-transport-sliders {
@@ -220,32 +256,6 @@
       color: var(--text);
       opacity: 0.5;
       margin-right: 4px;
-    }
- 
-    .lab-preset-btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--text);
-      padding: 3px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-      opacity: 0.6;
-      transition: opacity 0.15s, background-color 0.15s, color 0.15s, border-color 0.15s;
-    }
- 
-    .lab-preset-btn:hover {
-      opacity: 1;
-      color: var(--accent-hover);
-      border-color: var(--accent-hover);
-    }
- 
-    .lab-preset-btn.on {
-      background-color: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-      opacity: 1;
     }
  
     /* Harmonic grid */
@@ -458,6 +468,10 @@
       #btn-play {
         width: 90px;
         -webkit-tap-highlight-color: transparent;
+      }
+      .lab-transport-sliders {
+        flex-direction: column;
+        gap: 16px;
       }
     }
   </style>
