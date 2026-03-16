@@ -663,49 +663,11 @@
   <article>
 
     <section>
-      <h1>Timbre Lab: hearing sound structure</h1>
-      <p class="post-meta">
-        <time datetime="2026-03-16">March 16, 2026</time>
-      </p>
-      <p>Written by Jordan Elias, MT-BC</p>
-      <p class="post-intro">
-        What makes a flute sound like a flute or a violin like a violin, even when they play the same note at the same volume? The unique timbre of a note is the result of the harmonic overtones an instrument generates. Below you can experiment yourself with adding overtones to a pure sine wave and shaping its timbre.
-      </p>
-    </section>
-
-    <section>
-      <h2>What is timbre?</h2>
-
-      <p>Every pitched sound is a composite. When a string vibrates at 110 Hz, it simultaneously vibrates at 220 Hz, 330 Hz, 440 Hz, and beyond. All this layering is still heard as a single note. These higher frequencies are called harmonics or overtones. The lowest is the fundamental, which gives you the perceived pitch. The overtones determine its warmth, brightness, roughness, or humanity.</p>
-
-      <p>At the physics level, timbre is simply the structure of a sound wave; the relationship between a fundamental frequency and its overtones, including their relative volumes. At the perceptual level, it is the thing that allows us to instantly recognise an instrument, a voice, an environment, without consciously analysing anything.</p>
-
-      <p>The brain does not hear individual frequencies. It hears <em>relationships</em> between frequencies. Timbre is encoded as spectral patterns in the distribution of energy across the frequency spectrum. These patterns are processed not only in the auditory cortex but across emotional and embodied networks: the limbic system tags them for safety or threat, sensorimotor areas create physical resonance, meaning-making networks connect them to memory and identity. This is why timbre is never neutral. It always carries psychological information.</p>
-
-      <div class="physics-chain">
-        <span class="chain-step">vibration</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">frequency structure</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">cochlear transduction</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">neural pattern</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">perception</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">emotion</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">meaning</span>
-      </div>
-
-    </section>
-
-    <section>
       <h2>The lab</h2>
 
-      <p>The synthesiser below runs entirely in your browser using the Web Audio API. It generates six sine wave oscillators simultaneously — one for the fundamental frequency and one for each of the first five overtones. You can adjust the volume of each overtone independently in real time, mute and unmute them by clicking their cards, and watch the composite waveform change shape on the oscilloscope as you do. The attack and release controls shape the envelope — how the sound swells in and fades out. Pink noise can be layered over the harmonic tones.</p>
+      <p>The synthesiser below runs entirely in your browser. It generates six sine wave oscillators simultaneously: one for the fundamental frequency and one for each of the first five overtones. You can adjust the volume of each overtone independently in real time, mute and unmute them, and watch the composite waveform change shape on the oscilloscope as you do. The attack and release controls shape how the sound fades in and out. Pink noise can be layered over the harmonic tones.</p>
 
-      <p>Headphones are recommended. The differences between timbres are clearest at moderate volume. If you are on mobile, the sound may not generate if your phone is on silent.</p>
+      <p>Headphones are recommended to hear the subtler differences. If you are on mobile, the sound might not generate if your phone is on silent.</p>
 
       <!-- THE SYNTHESISER -->
       <div class="lab-section">
@@ -763,6 +725,45 @@
     </section>
 
     <section>
+      <h1>Timbre Lab: hearing sound structure</h1>
+      <p class="post-meta">
+        <time datetime="2026-03-16">March 16, 2026</time>
+      </p>
+      <p>Written by Jordan Elias, MT-BC</p>
+      <p class="post-intro">
+        What makes a flute sound like a flute or a violin like a violin, even when they play the same note at the same volume? The unique timbre of a note is the result of the harmonic overtones an instrument generates. Below you can experiment yourself with adding overtones to a pure sine wave and shaping its timbre.
+      </p>
+    </section>
+
+    <section>
+      <h2>What is timbre?</h2>
+
+      <p>Every pitched sound is a composite. When a string vibrates at 110 Hz, it simultaneously vibrates at 220 Hz, 330 Hz, 440 Hz, and beyond. All this layering is still heard as a single note. These higher frequencies are called harmonics or overtones. The lowest is the fundamental, which gives you the perceived pitch. The overtones determine its warmth, brightness, roughness, or humanity.</p>
+
+      <p>At the physics level, timbre is simply the structure of a sound wave; the relationship between a fundamental frequency and its overtones, including their relative volumes. At the perceptual level, it is the thing that allows us to instantly recognise an instrument, a voice, an environment, without consciously analysing anything.</p>
+
+      <p>The brain does not hear individual frequencies. It hears <em>relationships</em> between frequencies. Timbre is encoded as spectral patterns in the distribution of energy across the frequency spectrum. These patterns are processed not only in the auditory cortex but across emotional and embodied networks: the limbic system tags them for safety or threat, sensorimotor areas create physical resonance, meaning-making networks connect them to memory and identity. This is why timbre is never neutral. It always carries psychological information.</p>
+
+      <div class="physics-chain">
+        <span class="chain-step">vibration</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">frequency structure</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">cochlear transduction</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">neural pattern</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">perception</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">emotion</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">meaning</span>
+      </div>
+
+    </section>
+
+    
+    <section>
       <h2>Experiments</h2>
 
       <div class="lab-exercise">
@@ -798,7 +799,7 @@
       <p>Timbre is not a static property. It unfolds through time. The <strong>attack</strong> slider controls how quickly the sound swells to full volume when you press play. The <strong>release</strong> controls how quickly it fades when you stop. These two parameters alone can completely transform the character of the same harmonic structure.</p>
 
       <div class="lab-exercise">
-        <h3>6 — envelope as instrument character</h3>
+        <h3>6. envelope as instrument character</h3>
         <p>Try <strong>string</strong> with a 1.5 second attack. Press play. The sound blooms from silence, gaining body as it arrives — close to the quality of a bow drawing across a string, pulling the tone out of nothing. Then try <strong>brass</strong> with a 10 ms attack and a 50 ms release. The same harmonic richness becomes percussive, almost like a struck bar. The overtones haven't changed. The shape has.</p>
         <p>In music therapy contexts, attack time is one of the more reliable tools for nervous system modulation. Long attacks don't trigger the startle reflex; they arrive as gradual presence. Short attacks register as arrival and punctuation. Notice what each does in your body as distinct from your ears. The distinction between acoustic event and physiological response is smaller than it appears.</p>
       </div>
@@ -813,7 +814,7 @@
       <p>Pink noise is structurally abundant in the natural world: rainfall, rivers, wind through foliage, the ocean heard from a distance. It has no pitch, no harmonic structure, and no predictable moment-to-moment pattern. And yet perceptually it occupies a distinctive position — the nervous system encounters it as unremarkable in a particular way. The absence of pattern is itself a kind of information.</p>
 
       <div class="lab-exercise">
-        <h3>7 — noise as humanising layer</h3>
+        <h3>7. noise as humanising layer</h3>
         <p>Load the <strong>flute</strong> preset with harmonics playing. Now activate pink noise at a low level by pressing the pink noise button and adjusting the sense of it in the mix. Notice how the sound becomes more alive — breathy, imperfect, present. An actual flute is not a harmonic series: it's a harmonic series plus breath noise plus room resonance plus the small inaccuracies of a human body. The noise is not a flaw. It's what makes it feel inhabited.</p>
         <p>Try the same addition with <strong>voice</strong>, then with <strong>brass</strong>. Does the noise feel more or less natural against different timbres? At what level does each begin to feel more "real"?</p>
       </div>
