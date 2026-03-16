@@ -3,10 +3,18 @@
 ============================ */
 :root {
   --bg: #F1C6D3;
+  --text: #1922D4;
+  --accent: #7177E1;
+  --accent-hover: #FF6F91;
+}
+
+/* old: 
+
+--bg: #F1C6D3;
   --text: #20269D;
   --accent: #6A1E78;
   --accent-hover: #FF6F91;
-}
+*/
 
 /* ============================
    Global Styles
