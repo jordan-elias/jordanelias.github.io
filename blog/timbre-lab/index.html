@@ -451,21 +451,9 @@
     }
  
     @media (max-width: 600px) {
-      .lab-harmonics {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
- 
-      .lab-transport {
+      .lab-transport-sliders {
         flex-direction: column;
-        align-items: stretch;
-      }
- 
-      .lab-btn {
-        text-align: center;
-      }
- 
-      .lab-ctrl {
-        min-width: 100%;
+        gap: 16px;
       }
     }
  
@@ -716,7 +704,7 @@
         </div>
  
         <div class="lab-transport-buttons">
-          <button class="lab-btn" id="btn-play">▶ play</button>
+          <button class="lab-btn" id="btn-play">▶&#xFE0E; play</button>
           <button class="lab-btn" id="btn-noise">pink noise</button>
         </div>
  
@@ -759,7 +747,7 @@
  
         <p class="lab-hint">click a harmonic card to mute or unmute it · drag its slider to adjust the volume</p>
       </div>
- 
+
     </section>
 
     <section>
