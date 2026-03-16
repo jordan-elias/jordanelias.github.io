@@ -710,31 +710,40 @@
       <!-- THE SYNTHESISER -->
       <div class="lab-section">
         <h3>timbre synthesiser</h3>
-
+ 
         <div class="scope-wrap">
           <canvas id="scope"></canvas>
         </div>
-
-        <div class="lab-transport">
+ 
+        <div class="lab-transport-buttons">
           <button class="lab-btn" id="btn-play">▶ play</button>
-          <div class="lab-ctrl">
-            <span class="lab-ctrl-label">fundamental</span>
-            <input type="range" id="fund" min="55" max="440" value="110" step="1">
-            <span class="lab-ctrl-val" id="fund-val">110 Hz</span>
-          </div>
-          <div class="lab-ctrl">
-            <span class="lab-ctrl-label">attack</span>
-            <input type="range" id="atk" min="10" max="3000" value="30" step="10">
-            <span class="lab-ctrl-val" id="atk-val">30 ms</span>
-          </div>
-          <div class="lab-ctrl">
-            <span class="lab-ctrl-label">release</span>
-            <input type="range" id="rel" min="10" max="3000" value="300" step="10">
-            <span class="lab-ctrl-val" id="rel-val">300 ms</span>
-          </div>
           <button class="lab-btn" id="btn-noise">pink noise</button>
         </div>
-
+ 
+        <div class="lab-transport-sliders">
+          <div class="lab-ctrl">
+            <input type="range" id="fund" min="55" max="440" value="110" step="1">
+            <div class="lab-ctrl-bottom">
+              <span class="lab-ctrl-label">fundamental</span>
+              <span class="lab-ctrl-val" id="fund-val">110 Hz</span>
+            </div>
+          </div>
+          <div class="lab-ctrl">
+            <input type="range" id="atk" min="10" max="3000" value="30" step="10">
+            <div class="lab-ctrl-bottom">
+              <span class="lab-ctrl-label">attack</span>
+              <span class="lab-ctrl-val" id="atk-val">30 ms</span>
+            </div>
+          </div>
+          <div class="lab-ctrl">
+            <input type="range" id="rel" min="10" max="3000" value="300" step="10">
+            <div class="lab-ctrl-bottom">
+              <span class="lab-ctrl-label">release</span>
+              <span class="lab-ctrl-val" id="rel-val">300 ms</span>
+            </div>
+          </div>
+        </div>
+ 
         <div class="lab-presets">
           <span class="lab-presets-label">presets →</span>
           <button class="lab-preset-btn" data-p="sine">pure sine</button>
@@ -745,12 +754,12 @@
           <button class="lab-preset-btn" data-p="hollow">hollow</button>
           <button class="lab-preset-btn" data-p="bell">bell</button>
         </div>
-
+ 
         <div class="lab-harmonics" id="harmonics"></div>
-
+ 
         <p class="lab-hint">click a harmonic card to mute or unmute it · drag its slider to adjust the volume</p>
       </div>
-
+ 
     </section>
 
     <section>
