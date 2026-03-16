@@ -98,19 +98,11 @@
       height: 110px;
     }
  
-    /* Transport — buttons row */
+    /* Transport */
     .lab-transport-buttons {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
-      margin-bottom: 1.25em;
-    }
- 
-    /* Transport — sliders block */
-    .lab-transport-sliders {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
       margin-bottom: 1.75em;
     }
  
@@ -144,19 +136,18 @@
       border-color: var(--accent-hover);
     }
  
-    /* Transport — sliders block */
     .lab-transport-sliders {
       display: flex;
       flex-direction: row;
-      gap: 16px;
-      margin-bottom: 1.75em;
+      gap: 24px;
+      margin-bottom: 2em;
     }
  
     .lab-ctrl {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      flex: 1;
+      gap: 6px;
     }
  
     .lab-ctrl input[type=range] {
@@ -216,6 +207,7 @@
       flex-wrap: wrap;
       gap: 6px;
       align-items: center;
+      margin-top: 0.5em;
       margin-bottom: 1.25em;
     }
  
@@ -345,17 +337,26 @@
     }
  
     .hcard-mute-tag {
-      display: none;
       font-family: 'Inter', sans-serif;
       font-size: 0.65rem;
-      color: var(--accent-hover);
       text-align: center;
       margin-top: 3px;
       letter-spacing: 0.06em;
+      color: var(--accent);
+      opacity: 0.6;
+    }
+ 
+    .hcard-mute-tag::before {
+      content: 'active';
     }
  
     .lab-hcard.muted .hcard-mute-tag {
-      display: block;
+      color: var(--accent-hover);
+      opacity: 1;
+    }
+ 
+    .lab-hcard.muted .hcard-mute-tag::before {
+      content: 'muted';
     }
  
     .lab-hint {
