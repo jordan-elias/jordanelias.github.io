@@ -355,21 +355,25 @@ section[aria-label="Frequently Asked Questions"] {
   text-align: center;
   margin: 3em 0;
 }
-
 .toggle-past button {
   font-family: 'Space Grotesk', sans-serif;
-  background-color: var(--bg);
-  color: var(--accent);
-  border: 2px solid var(--accent);
-  padding: 0.9em 1.3em;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--text);
+  border: 2px solid var(--text);
+  padding: 0.5em 1.2em;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  border-radius: 0;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
-
 .toggle-past button:hover {
   background-color: var(--accent-hover);
-  color: #ffffff;
+  color: var(--bg);
+  border-color: var(--accent-hover);
 }
+
 
 /* ============================
    Responsive
