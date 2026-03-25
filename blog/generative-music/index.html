@@ -31,7 +31,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Designing systems: Lucier, Radigue, and generative music">
-  <meta name="twitter:description" content="Two interactive generative music tools inspired by Alvin Lucier and Éliane Radigue, alongside an exploration of process music and its therapeutic dimensions.">
+  <meta name="twitter:description" content="Two interactive generative music tools inspired by Alvin Lucier and Éliane Radigue.">
   <meta name="twitter:image" content="https://www.jordanelias.de/images/headshot.jpg">
 
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cloud.umami.is; connect-src 'self' https://api-gateway.umami.dev; frame-src https://complicated.life; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
@@ -60,10 +60,7 @@
       margin: 0 0 1.5em;
     }
 
-    /* Module dividers */
-    .gen-module {
-      margin-bottom: 1.75em;
-    }
+    .gen-module { margin-bottom: 1.75em; }
 
     .gen-module-label {
       font-family: 'Space Grotesk', sans-serif;
@@ -84,7 +81,7 @@
       opacity: 0.3;
     }
 
-    /* Shared button styles */
+    /* Buttons */
     .lab-btn {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.85rem;
@@ -101,30 +98,10 @@
       border-radius: 0;
       transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
-
-    .lab-btn:hover {
-      background-color: var(--accent-hover);
-      color: var(--bg);
-      border-color: var(--accent-hover);
-    }
-
-    .lab-btn.on {
-      background-color: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-    }
-
-    .lab-btn.on:hover {
-      background-color: var(--accent-hover);
-      color: var(--bg);
-      border-color: var(--accent-hover);
-    }
-
-    .lab-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
+    .lab-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .lab-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
 
     .lab-preset-btn {
       font-family: 'Inter', sans-serif;
@@ -137,26 +114,28 @@
       cursor: pointer;
       transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
+    .lab-preset-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-preset-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .lab-preset-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
 
-    .lab-preset-btn:hover {
-      background-color: var(--accent-hover);
-      color: var(--bg);
-      border-color: var(--accent-hover);
+    /* File upload styled as preset button */
+    .upload-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 12px;
+      border-radius: 0;
+      cursor: pointer;
+      display: inline-block;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
+    .upload-label:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .upload-label.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    #lucier-file-input { display: none; }
 
-    .lab-preset-btn.on {
-      background-color: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-    }
-
-    .lab-preset-btn.on:hover {
-      background-color: var(--accent-hover);
-      color: var(--bg);
-      border-color: var(--accent-hover);
-    }
-
-    /* Row layouts */
+    /* Rows */
     .gen-row {
       display: flex;
       align-items: center;
@@ -176,6 +155,15 @@
       white-space: nowrap;
     }
 
+    /* Record state label */
+    .rec-state-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text);
+      opacity: 0.7;
+      padding: 3px 0;
+    }
+
     /* Sliders */
     .lab-transport-sliders {
       display: flex;
@@ -183,64 +171,25 @@
       gap: 24px;
       margin-bottom: 1.25em;
     }
-
-    .lab-ctrl {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
+    .lab-ctrl { flex: 1; display: flex; flex-direction: column; gap: 6px; }
     .lab-ctrl input[type=range] {
-      width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 2px;
-      background: var(--text);
-      outline: none;
-      cursor: pointer;
-      opacity: 0.5;
+      width: 100%; -webkit-appearance: none; appearance: none;
+      height: 2px; background: var(--text); outline: none; cursor: pointer; opacity: 0.5;
     }
-
     .lab-ctrl input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: var(--text);
-      cursor: pointer;
+      -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--text); cursor: pointer;
     }
-
     .lab-ctrl input[type=range]::-moz-range-thumb {
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: var(--text);
-      border: none;
-      cursor: pointer;
+      width: 14px; height: 14px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
     }
-
-    .lab-ctrl-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-
+    .lab-ctrl-bottom { display: flex; justify-content: space-between; align-items: baseline; }
     .lab-ctrl-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text);
-      opacity: 0.5;
+      font-family: 'Inter', sans-serif; font-size: 0.68rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text); opacity: 0.5;
     }
+    .lab-ctrl-val { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text); opacity: 0.7; }
 
-    .lab-ctrl-val {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
-      color: var(--text);
-      opacity: 0.7;
-    }
-
-    /* Lucier iteration display */
+    /* Lucier display */
     .lucier-iter-display {
       border: 1px solid var(--text);
       padding: 0.75em 1.25em;
@@ -251,43 +200,62 @@
       flex-wrap: wrap;
       gap: 0.75em;
     }
+    .lucier-iter-count { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 500; color: var(--text); }
+    .lucier-iter-sub { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text); opacity: 0.5; }
+    .lucier-status { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text); opacity: 0.5; font-style: italic; }
 
-    .lucier-iter-count {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .lucier-iter-sub {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
-      color: var(--text);
-      opacity: 0.5;
-    }
-
-    .lucier-status {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
-      color: var(--text);
-      opacity: 0.5;
-      font-style: italic;
-    }
-
-    /* Radigue frequency display */
-    .radigue-freq-display {
+    /* Download rows */
+    .download-row {
+      border-top: 1px solid var(--text);
+      padding-top: 1em;
+      margin-top: 0.5em;
       display: flex;
-      gap: 1.5em;
-      margin-bottom: 1em;
+      align-items: center;
+      gap: 8px;
       flex-wrap: wrap;
     }
+    .download-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: var(--text);
+      opacity: 0.4;
+    }
+    .download-progress {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: var(--text);
+      opacity: 0.6;
+      display: none;
+    }
 
+    /* Selects */
+    .gen-select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 8px;
+      border-radius: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    /* Radigue frequency display — stable fixed-width layout */
+    .radigue-freq-display {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1em;
+      flex-wrap: nowrap;
+    }
     .radigue-freq-col {
+      width: 120px;
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
       gap: 3px;
     }
-
     .radigue-freq-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.65rem;
@@ -296,12 +264,13 @@
       color: var(--text);
       opacity: 0.5;
     }
-
     .radigue-freq-val {
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Courier New', 'Lucida Console', monospace;
       font-size: 0.9rem;
       font-weight: 500;
       color: var(--text);
+      font-variant-numeric: tabular-nums;
+      min-width: 90px;
     }
 
     .lab-hint {
@@ -314,71 +283,29 @@
     }
 
     /* Article */
-    .lab-exercise {
-      border-left: 3px solid var(--text);
-      padding: 1em 1.25em;
-      margin: 1.5em 0;
-    }
-
-    .lab-exercise h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text);
-      margin: 0 0 0.5em;
-    }
-
+    .lab-exercise { border-left: 3px solid var(--text); padding: 1em 1.25em; margin: 1.5em 0; }
+    .lab-exercise h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 0.5em; }
     .lab-exercise p { margin-bottom: 0.6em; }
     .lab-exercise p:last-child { margin-bottom: 0; }
 
-    blockquote {
-      border-left: 3px solid var(--text);
-      margin: 1.5em 0;
-      padding: 0.75em 1.25em;
-      opacity: 0.75;
-    }
-
+    blockquote { border-left: 3px solid var(--text); margin: 1.5em 0; padding: 0.75em 1.25em; opacity: 0.75; }
     blockquote p { margin-bottom: 0.4em; }
     blockquote p:last-child { margin-bottom: 0; }
+    blockquote cite { font-family: 'Inter', sans-serif; font-size: 0.8rem; font-style: normal; opacity: 0.6; }
 
-    blockquote cite {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
-      font-style: normal;
-      opacity: 0.6;
-    }
-
-    .cta-wrap {
-      text-align: center;
-      margin: 2em 0 1em;
-    }
-
+    .cta-wrap { text-align: center; margin: 2em 0 1em; }
     .cta-btn {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      display: inline-block;
-      background-color: transparent;
-      color: var(--text);
-      border: 2px solid var(--text);
-      padding: 0.6em 1.6em;
-      border-radius: 0;
-      text-decoration: none;
-      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 500;
+      display: inline-block; background-color: transparent; color: var(--text);
+      border: 2px solid var(--text); padding: 0.6em 1.6em; border-radius: 0;
+      text-decoration: none; transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
-
-    .cta-btn:hover {
-      background-color: var(--accent-hover);
-      color: var(--bg);
-      border-color: var(--accent-hover);
-      text-decoration: none;
-    }
+    .cta-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); text-decoration: none; }
 
     @media (max-width: 600px) {
       .lab-transport-sliders { flex-direction: column; gap: 16px; }
-      #btn-play { -webkit-tap-highlight-color: transparent; }
-      #lucier-play { -webkit-tap-highlight-color: transparent; }
-      #radigue-play { -webkit-tap-highlight-color: transparent; }
+      .radigue-freq-display { flex-wrap: wrap; }
+      .radigue-freq-col { width: 100px; }
     }
   </style>
 
@@ -487,11 +414,10 @@
     </ol>
   </nav>
 
-  <!-- TOOLS FIRST -->
   <div class="lab-section">
     <h3>generative music tools</h3>
 
-    <!-- MODULE 1: LUCIER -->
+    <!-- ── LUCIER MODULE ── -->
     <div class="gen-module">
       <p class="gen-module-label">Lucier — iterative room processing</p>
 
@@ -503,36 +429,57 @@
         <div class="lucier-status" id="lucier-status">ready</div>
       </div>
 
+      <!-- Source row -->
       <div class="gen-row">
         <span class="gen-row-label">source →</span>
         <button class="lab-preset-btn on" id="src-generated">generated voice</button>
-        <button class="lab-preset-btn" id="src-mic">record from mic</button>
-        <button class="lab-btn" id="lucier-record" style="display:none;min-width:70px">&#9679; record</button>
+        <label class="upload-label" id="upload-label" for="lucier-file-input">upload file</label>
+        <input type="file" id="lucier-file-input" accept="audio/*">
+        <button class="lab-preset-btn" id="src-mic">microphone</button>
+        <!-- Mic recording controls — shown when mic is selected -->
+        <button class="lab-btn" id="lucier-record" style="display:none;min-width:80px">&#9679;&#xFE0E; record</button>
+        <span class="rec-state-label" id="rec-state-label" style="display:none"></span>
+        <button class="lab-preset-btn" id="rec-new-btn" style="display:none">record new</button>
       </div>
 
+      <!-- Playback controls -->
       <div class="gen-row">
-        <span class="gen-row-label">room →</span>
-        <button class="lab-preset-btn" data-room="small">small</button>
-        <button class="lab-preset-btn on" data-room="medium">medium</button>
-        <button class="lab-preset-btn" data-room="large">large</button>
-      </div>
-
-      <div class="gen-row">
-        <button class="lab-btn" id="lucier-play">&#9654;&#xFE0E; play</button>
+        <button class="lab-btn" id="lucier-play" style="min-width:80px">&#9654;&#xFE0E; play</button>
+        <button class="lab-btn" id="lucier-loop" style="min-width:70px">loop</button>
         <button class="lab-btn" id="lucier-iterate">+ iterate</button>
         <button class="lab-btn" id="lucier-reset" style="min-width:70px">reset</button>
       </div>
 
-      <p class="lab-hint">each iteration reinforces the room's resonant frequencies · repeat 6–10 times to hear the transformation</p>
+      <!-- Download row -->
+      <div class="download-row">
+        <span class="gen-row-label">download →</span>
+        <select class="gen-select" id="lucier-dl-from">
+          <option value="0">from iter 0</option>
+        </select>
+        <select class="gen-select" id="lucier-dl-to">
+          <option value="0">to iter 0</option>
+        </select>
+        <select class="gen-select" id="lucier-dl-loops">
+          <option value="1">1×</option>
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+          <option value="8">8×</option>
+        </select>
+        <button class="lab-btn" id="lucier-dl-btn" disabled style="min-width:100px">download wav</button>
+        <span class="download-note" id="lucier-dl-note">build iterations first</span>
+        <span class="download-progress" id="lucier-dl-progress">rendering…</span>
+      </div>
+
+      <p class="lab-hint">each iteration reinforces resonant frequencies · repeat 8–15 times · volume stays consistent</p>
     </div>
 
     <hr class="gen-separator">
 
-    <!-- MODULE 2: RADIGUE -->
+    <!-- ── RADIGUE MODULE ── -->
     <div class="gen-module">
       <p class="gen-module-label">Radigue — evolving drone</p>
 
-      <div class="radigue-freq-display" id="radigue-freq-display">
+      <div class="radigue-freq-display">
         <div class="radigue-freq-col">
           <span class="radigue-freq-label">osc 1</span>
           <span class="radigue-freq-val" id="r-f1">110.0 Hz</span>
@@ -566,7 +513,7 @@
           <input type="range" id="r-drift" min="0.01" max="0.3" value="0.07" step="0.01">
           <div class="lab-ctrl-bottom">
             <span class="lab-ctrl-label">drift rate</span>
-            <span class="lab-ctrl-val" id="r-drift-val">0.07 Hz</span>
+            <span class="lab-ctrl-val" id="r-drift-val">0.07</span>
           </div>
         </div>
         <div class="lab-ctrl">
@@ -588,7 +535,20 @@
         <button class="lab-btn" id="radigue-play">&#9654;&#xFE0E; play</button>
       </div>
 
-      <p class="lab-hint">the oscillators drift slowly — let it run for several minutes · changes are most perceptible at low volume</p>
+      <!-- Radigue download -->
+      <div class="download-row">
+        <span class="gen-row-label">download →</span>
+        <select class="gen-select" id="radigue-dl-dur">
+          <option value="1">1 min (~5 MB)</option>
+          <option value="3">3 min (~15 MB)</option>
+          <option value="5" selected>5 min (~25 MB)</option>
+          <option value="10">10 min (~50 MB)</option>
+        </select>
+        <button class="lab-btn" id="radigue-dl-btn" style="min-width:100px">download wav</button>
+        <span class="download-progress" id="radigue-dl-progress">rendering…</span>
+      </div>
+
+      <p class="lab-hint">the oscillators drift slowly · let it run for several minutes · most perceptible at low volume</p>
     </div>
 
   </div>
@@ -607,9 +567,9 @@
 
       <p>Most music, in the Western tradition at least, involves a composer specifying what sounds should occur: which notes, in which order, at which volume, for how long. The performer's job is to realise those specifications as faithfully as possible. The composer's hand is in every moment of the work.</p>
 
-      <p>Generative music inverts this relationship. The composer  creates a set of rules, conditions, or processes, and then allows those conditions to unfold without further intervention. The music emerges from the architecture of the system, not from moment-to-moment decisions. Brian Eno, who coined the term, described the experience of setting up generative systems and then encountering the output as a listener rather than an author, surprised by what his own rules had produced.</p>
+      <p>Generative music inverts this relationship. The composer — or designer — creates a set of rules, conditions, or processes, and then allows those conditions to unfold without further intervention. The music emerges from the architecture of the system, not from moment-to-moment decisions. Brian Eno, who coined the term, described the experience of setting up generative systems and then encountering the output as a listener rather than an author — surprised by what his own rules had produced.</p>
 
-      <p>This is not the same as improvisation, where a performer makes real-time decisions. It is not the same as chance music either, where a composer uses dice or random operations to determine content. Generative music is deterministic at the system level; the rules are fixed but unpredictable at the output level, because the interactions between elements produce results that were not explicitly composed. The composer designs the conditions for music to happen. The music happens.</p>
+      <p>This is not the same as improvisation, where a performer makes real-time decisions. It is not the same as chance music either, where a composer uses dice or random operations to determine content. Generative music is deterministic at the system level — the rules are fixed — but unpredictable at the output level, because the interactions between elements produce results that were not explicitly composed. The composer designs the conditions for music to happen. The music happens.</p>
 
       <p>Two composers explored this territory with particular depth and rigour: Alvin Lucier, who made the physical environment itself a generative instrument, and Éliane Radigue, who composed through the infinitely slow evolution of electronic drone.</p>
     </section>
@@ -619,23 +579,19 @@
 
       <p>In 1969, Alvin Lucier sat in a room and recorded himself reading a short text describing what he was about to do. He then played that recording back into the room through a speaker, and re-recorded the sound in the room. He played that recording back, re-recorded it again, and repeated the process dozens of times. Each iteration, the room acted as a filter — reinforcing certain frequencies that corresponded to its physical dimensions and absorbing others. Gradually, his voice dissolved. The room's acoustic fingerprint — its resonant frequencies, determined by the length, width, and height of the space — became audible as pure sustained tones. The speech transformed into music. The piece is called <em>I Am Sitting in a Room</em>.</p>
 
-      <p>What makes the work so elegant is that the room is not a backdrop. It is a compositional instrument. The room has a voice — a set of frequencies at which it naturally resonates, determined by its geometry in the same way that a tuning fork resonates at a frequency determined by its physical dimensions. Lucier designed a process that revealed that voice, not through analysis or measurement, but through repetition. He didn't compose the tones that emerge at the end. They were always there, latent in the room's architecture. The process excavated them.</p>
+      <p>What makes the work so elegant is that the room is not a backdrop. It is a compositional instrument. Every enclosed space has resonant frequencies called room modes — standing waves that form when a sound wave reflects between parallel surfaces and arrives back in phase with itself, reinforcing. The lowest mode depends on the longest dimension of the room: in a room 5 metres long, the lowest axial mode is around 34 Hz. Higher modes occur at integer multiples. These modes are normally inaudible in daily life, but Lucier's iterative process amplifies them dramatically. Each pass through the room's acoustic response squares the filter's effect — frequencies the room prefers become more prominent, others disappear. After many iterations, only the room's voice remains.</p>
 
-      <p>The text Lucier reads during the recording begins: <em>"I am sitting in a room different from the one you are in now. I am recording the sound of my speaking voice..."</em> The content of the text matters because it gradually becomes unintelligible. Words — units of meaning — transform over dozens of iterations into sustained resonances that carry no semantic content. This is not a flaw in the process. It is the point.</p>
-
-      <p>The Lucier module above simulates this process. The starting material — either the generated voice approximation or your own recorded voice — passes through a bank of resonant filters representing a small, medium, or large room's resonant frequencies. Each time you press iterate, another pass through those filters reinforces them further, gradually stripping away the complex, irregular content of speech and leaving only the sustained tones the room wants to produce. After six to ten iterations, the transformation is clearly audible.</p>
+      <p>The text Lucier reads during the recording begins: <em>"I am sitting in a room different from the one you are in now."</em> Words — units of meaning — transform over iterations into sustained resonances that carry no semantic content. This is not a flaw. It is the point. The piece does not argue with the meaning of the words. It simply runs them through a process until the meaning falls away.</p>
     </section>
 
     <section>
-      <h2>Room acoustics — why spaces have a voice</h2>
+      <h2>Try it yourself — beyond the browser</h2>
 
-      <p>Every enclosed space has a set of resonant frequencies called room modes or standing waves. These occur when a sound wave travels between two parallel surfaces, reflects, and arrives back at its starting point in phase with itself — reinforcing rather than cancelling. The lowest mode, called the axial mode, depends on the longest dimension of the room: in a room 5 metres long, the lowest axial mode is approximately 34 Hz (the speed of sound, 340 m/s, divided by twice the room length). Higher modes occur at integer multiples of this frequency.</p>
+      <p>The Lucier module above simulates this process using digital filters. But the original process is even more interesting to try with real rooms and real equipment, and requires nothing more than a phone and some patience.</p>
 
-      <p>In a normal listening environment, these modes are largely inaudible because the room is constantly excited by many different frequencies and the modes blend into what we experience as the acoustic character or "feel" of the space. But when a single frequency is sustained in a room, the resonance becomes clearly audible as a boost or coloration. Musicians notice this as certain notes that seem louder or more resonant in a particular room.</p>
+      <p>Record yourself saying a sentence — a single short phrase works best. Play it back through your phone speaker in a room. Record that playback on another device: a second phone, a laptop microphone, anything. You now have the first iteration. Play that recording back in the same room and record it again on the first device. Repeat this four or five times. If you are consistent with placement — keeping the speaker and the recording microphone in roughly the same positions — you will hear the room's resonant frequencies beginning to emerge. The closer the recording microphone is to a wall or corner, the more the room modes will be reinforced, because those are the locations where standing waves have maximum amplitude.</p>
 
-      <p>Lucier's iterative process amplifies this effect dramatically. By repeatedly recording and playing back in the same space, he is essentially running the room's frequency response function multiple times on the same signal. Each iteration squares the filter's effect — frequencies the room boosts become more boosted, frequencies it attenuates become more attenuated. After many iterations, only the room's preferred frequencies remain. The voice has become the room.</p>
-
-      <p>This is also why the piece sounds different in every space it is performed. The tones that emerge are not chosen by Lucier — they are determined entirely by the physical geometry of wherever he happens to be sitting. Two performances in different rooms produce completely different music, from the same process, with the same voice.</p>
+      <p>A few variables to experiment with: different rooms (bathroom, stairwell, and large hallway are all interesting), different source materials (speech, singing, a single sustained note), and different distances between speaker and microphone. Each configuration produces a different outcome because it engages the room's acoustic properties differently. The process is consistent; the environment is the variable.</p>
     </section>
 
     <section>
@@ -645,9 +601,7 @@
 
       <p>Radigue came to music through Pierre Schaeffer and Pierre Henry's Paris studio, working as an assistant before developing her own practice. She was deeply influenced by Tibetan Buddhism — she became a practitioner in 1975 — and the connection between her musical philosophy and Buddhist ideas about time, impermanence, and sustained attention is explicit in her own statements about the work. She described composing as a form of meditation practice, attending to the smallest fluctuations in the sound with the same quality of presence she brought to formal practice.</p>
 
-      <p>The technical basis of her drone compositions is deceptively simple: two or three oscillators tuned to nearly identical frequencies, whose slight differences produce slow beating — an amplitude modulation at the difference frequency. If two oscillators are tuned to 110 Hz and 112.5 Hz, they produce a beat at 2.5 Hz — a slow, barely perceptible pulse that waxes and wanes over about 400 milliseconds. As the oscillator frequencies drift slightly over time, the beat frequency changes, and with it the entire texture of the sound. The mathematics is elementary. The perceptual result, sustained over long duration with careful attention, is surprisingly complex.</p>
-
-      <p>The Radigue module above generates exactly this structure. Three oscillators slightly detuned from each other, with a drift rate that slowly changes their frequency relationships over time. The noise floor parameter adds a thin layer of pink noise beneath the tones — approximating the analogue noise floor of vintage synthesizer equipment, which Radigue considered part of the sound rather than an artefact to be minimised. Let it run for ten or fifteen minutes and attend to what changes. The music is in the attention as much as the sound.</p>
+      <p>The technical basis of her drone compositions is deceptively simple: two or three oscillators tuned to nearly identical frequencies, whose slight differences produce slow beating — an amplitude modulation at the difference frequency. If two oscillators are tuned to 110 Hz and 112.5 Hz, they produce a beat at 2.5 Hz — a slow, barely perceptible pulse that waxes and wanes. As the oscillator frequencies drift slightly over time, the beat frequency changes, and with it the entire texture of the sound. The mathematics is elementary. The perceptual result, sustained over long duration with careful attention, is surprisingly complex. The analogue noise floor of her vintage equipment — which she considered part of the sound — added a thin layer of texture that gave the tones a sense of materiality and presence absent from a pure digital sine wave.</p>
     </section>
 
     <section>
@@ -655,19 +609,17 @@
 
       <p>There is a way of understanding both Lucier's and Radigue's approaches that maps directly onto central ideas in contemporary psychotherapy — not as a loose metaphor, but as a structural correspondence that illuminates something about how therapeutic change actually works.</p>
 
-      <p><strong>Lucier and cognitive defusion.</strong> In Acceptance and Commitment Therapy, one of the core processes is called cognitive defusion — the practice of creating distance between a person and their thoughts so that thoughts can be observed as thoughts rather than fused with as literal truth. When someone is strongly fused with a thought, "I am fundamentally inadequate," "I will always be alone", it functions not as a belief that could be questioned but as a transparent fact about reality, as invisible and unquestionable as the air. Defusion techniques create perceptual distance: the thought is repeated until its meaning fades, or observed as passing weather rather than permanent climate, or heard as words rather than experienced as statements about the world.</p>
+      <p><strong>Lucier and cognitive defusion.</strong> In Acceptance and Commitment Therapy, one of the core processes is called cognitive defusion — the practice of creating distance between a person and their thoughts so that thoughts can be observed as thoughts rather than fused with as literal truth. When someone is strongly fused with a thought — "I am fundamentally inadequate," "I will always be alone" — it functions not as a belief that could be questioned but as a transparent fact about reality. Defusion techniques create perceptual distance: the thought is repeated until its meaning fades, or observed as passing weather rather than permanent climate, or heard as words rather than experienced as statements about the world.</p>
 
-      <p>The Lucier process is a physical enactment of defusion. A sentence — a unit of semantic meaning — is run through a process that gradually strips away its meaning until only its resonant structure remains. The words dissolve. What was language becomes sound. The Lucier piece does not argue with the sentence's meaning, does not challenge or reframe it. It simply runs it through a system until the meaning falls away on its own. This is, structurally, what defusion asks the mind to do with painful thoughts. Not to fight them. Not to fix them. To run them through a process — of attention, of repetition, of gentle observation — until their grip loosens and something underneath becomes audible.</p>
+      <p>The Lucier process is a physical enactment of defusion. A sentence — a unit of semantic meaning — is run through a process that gradually strips away its meaning until only its resonant structure remains. The words dissolve. What was language becomes sound. The piece does not argue with the sentence's meaning, does not challenge or reframe it. It simply runs it through a system — of attention, of repetition, of gentle observation — until the meaning falls away and something underneath becomes audible. This is, structurally, what defusion asks the mind to do with painful thoughts.</p>
 
-      <p><strong>Radigue and present-moment awareness.</strong> The central practice of Mindfulness-Based Stress Reduction and its derivatives is deliberately simple: direct your attention to what is happening now, with curiosity and without judgment. Notice the breath, the body, the sounds in the room. When attention wanders and thoughts turn to planning, to rumination, to self-criticism, notice that it has wandered and return. The skill being developed is not the absence of mind-wandering but the noticing of it, and the capacity to return without punishment.</p>
+      <p><strong>Radigue and present-moment awareness.</strong> The central practice of Mindfulness-Based Stress Reduction is deliberately simple: direct your attention to what is happening now, with curiosity and without judgment. When attention wanders, notice that it has wandered and return. The skill being developed is not the absence of mind-wandering but the noticing of it, and the capacity to return without self-criticism.</p>
 
-      <p>Radigue's music demands exactly this quality of attention. Nothing announces itself. There are no events to mark, no melodies to follow, no rhythmic pattern to anchor the ear. What there is: a sustained field of sound that changes so slowly the changes are perceptible only if you are genuinely present for consecutive moments. If your attention wanders and returns, you will often find yourself unable to locate the change that occurred in your absence. The music rewards the same thing mindfulness practice develops: non-grasping, present-moment attention without expectation of dramatic content.</p>
+      <p>Radigue's music demands exactly this quality of attention. Nothing announces itself. There are no events to mark, no melodies to follow, no rhythmic pattern to anchor the ear. What there is: a sustained field of sound that changes so slowly the changes are perceptible only if you are genuinely present for consecutive moments. If your attention wanders and returns, you will find yourself unable to locate the change that occurred in your absence. The music rewards the same thing mindfulness practice develops: non-grasping, present-moment attention without expectation of dramatic content.</p>
 
-      <p>There is also something important about the scale of duration in her work. An hour-long drone does not permit the kind of engagement that expects resolution within a few minutes. It requires a different relationship with time, one where something can be present and valid without needing to move toward a conclusion. This is therapeutically significant for people who struggle with the sense that their inner life is stuck, or that nothing is changing, or that growth must be perceptible to be real.</p>
+      <p>There is also something important about the scale of duration. An hour-long drone does not permit the kind of engagement that expects resolution within a few minutes. It requires a different relationship with time — one where something can be present and valid without progressing toward a conclusion. This is therapeutically significant for people who struggle with the sense that their inner life is stuck, or that nothing is changing, or that growth must be perceptible to be real.</p>
 
-      <p>The generative frame and the therapeutic relationship.> More broadly, the model of the composer as system designer rather than moment-to-moment decision-maker maps onto a particular understanding of what the therapist does. I see the role of the therapist not as someone producing change directly. They design conditions: the quality of the relationship, the frame of the work, the specific practices or invitations offered. Within those conditions, change happens. The therapist, like the generative composer, allows the music to emerge.</p>
-
-      <p>This is not a passive model. Designing good conditions requires skill, attunement, and continuous adjustment. But it involves a fundamental acceptance that the output cannot be specified in advance, and that the attempt to specify it too tightly will likely produce worse results than allowing the system — the person — to generate their own transformation within a well-designed structure.</p>
+      <p><strong>The generative frame and the therapeutic relationship.</strong> More broadly, the model of the composer as system designer rather than moment-to-moment decision-maker maps onto a particular understanding of what the therapist does — and what they do not do. The therapist does not produce therapeutic change directly. They design conditions: the quality of the relationship, the frame of the work, the specific practices or invitations offered. Within those conditions, change happens — or it does not. The therapist, like the generative composer, is responsible for the architecture. The music that emerges is not theirs to control.</p>
     </section>
 
     <section>
@@ -675,23 +627,23 @@
 
       <div class="lab-exercise">
         <h3>Lucier — listening to meaning dissolve</h3>
-        <p>Use the generated voice source. Press play to hear the starting material, then press iterate once. Listen to the difference between iteration 0 and iteration 1. The change is subtle. Press play after each iteration and track what changes and what remains. At what point does it stop sounding like speech? At what point does it start sounding like music? Is there a moment when neither description fits?</p>
-        <p>Then try recording your own voice using the microphone option. Say a single sentence — something short and emotionally neutral, or something that carries some weight for you. Run it through eight or ten iterations. Notice what relationship you have to the sentence at iteration 0 compared to iteration 8. Does anything change about how it feels?</p>
+        <p>Use the generated voice source. Press play, then press iterate once and play the result. Track what changes with each step. At what point does it stop sounding like speech? At what point does it start sounding like music? Is there a moment when neither description fits?</p>
+        <p>Then try recording your own voice using the microphone option. Say a single sentence — something short and emotionally neutral, or something that carries some weight for you. Run it through eight or ten iterations. Notice what relationship you have to the sentence at iteration 0 compared to iteration 10. Does anything change about how it feels to hear those words processed into pure resonance?</p>
       </div>
 
       <div class="lab-exercise">
-        <h3>Lucier — the room as variable</h3>
-        <p>Run the same starting material through five iterations with small room selected, then reset and run five iterations with large room. The two results should sound distinctly different — the small room produces brighter, more prominent resonances, the large room produces deeper, slower-evolving ones. Notice how the same input material, subjected to the same number of iterations, produces completely different output depending on the environment it passes through. This is a useful frame for thinking about how the same event can mean something entirely different depending on the context in which it occurs.</p>
+        <h3>Lucier — the loop and the mantra</h3>
+        <p>Record a short phrase and enable loop mode. Let a single iteration play on a continuous loop for two or three minutes. This approximates what happens in certain contemplative practices where a phrase is repeated until its semantic content fades and what remains is something more purely sonic. Notice whether the meaning of the words changes under repetition, and whether that change is welcome or unsettling.</p>
       </div>
 
       <div class="lab-exercise">
         <h3>Radigue — attending to slow change</h3>
-        <p>Start the drone and set a timer for five minutes. Close your eyes. Your only task is to track what is changing in the sound — not to name it or evaluate it, but to stay in contact with it. When attention wanders, return. After five minutes, notice whether your relationship to the sound changed over that duration, and whether your experience of time shifted. The drone is designed to be long enough that something will have changed from the beginning, but gradually enough that you cannot identify a specific moment when it happened.</p>
+        <p>Start the drone and set a timer for five minutes. Close your eyes. Your only task is to track what is changing in the sound — not to name it or evaluate it, but to stay in contact with it. When attention wanders, return. After five minutes, notice whether your relationship to the sound changed over that duration, and whether your experience of time shifted. The drone is designed so that something will have changed from the beginning, but gradually enough that you cannot identify the exact moment it happened.</p>
       </div>
 
       <div class="lab-exercise">
         <h3>Radigue — the noise floor as presence</h3>
-        <p>Bring the noise slider to its maximum. Listen for several minutes. Then bring it to zero. What changes about the character of the sound? Many people find the tones feel thinner, more artificial, or more exposed without the noise floor. The noise is not music in the conventional sense — it has no pitch, no structure, no pattern. But it creates a sense of presence, of materiality, of the sound existing in a physical medium rather than floating in a digital vacuum. Notice whether this distinction — between pitch content and ambient texture — maps onto anything in your own experience of what makes a space feel inhabited versus empty.</p>
+        <p>Bring the noise slider to maximum. Listen for several minutes. Then bring it to zero. What changes about the character of the sound? Many people find the tones feel thinner or more exposed without the noise floor beneath them. The noise carries no pitch, no structure, no pattern — but it creates a sense of materiality, of the sound existing in a physical medium. This distinction maps onto something in human experience as well: the difference between a presence that fills a space and an absence that merely occupies it.</p>
       </div>
     </section>
 
@@ -702,17 +654,17 @@
 
       <p>In sessions, I have used iterative audio processing of a client's own recorded voice as a way of creating literal distance from the content of negative self-statements — running the Lucier process on words that carry painful associations and listening as those words become frequencies become silence. This is not a technique I would use with everyone, or early in a therapeutic relationship. But for some people, at the right moment, the perceptual experience of meaning dissolving is more compelling than any cognitive reframe.</p>
 
-      <p>The Radigue drone as a backdrop for body-oriented work is more broadly applicable. The sustained tones, because they have no rhythmic structure and no melodic development, make no demands on cognitive attention. They create an acoustic field without pulling the person out of their body and into listening. This is a meaningful distinction — much background music (even ostensibly relaxing music) has enough structure to engage narrative-processing systems, which is the opposite of what somatic awareness work requires.</p>
+      <p>The Radigue drone as a backdrop for body-oriented work is more broadly applicable. The sustained tones, because they have no rhythmic structure and no melodic development, make no demands on cognitive attention. They create an acoustic field without pulling the person out of their body and into listening. Much background music has enough structure to engage narrative-processing systems — which is the opposite of what somatic awareness work requires. These tones are different.</p>
 
-      <p>The tools on this page are also available as standalone applications with additional features, including microphone input and audio export, on <a href="https://github.com/jordan-elias" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+      <p>The tools on this page are available as standalone applications with additional features on <a href="https://github.com/jordan-elias" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
     </section>
 
     <section>
       <h2>If this resonates</h2>
 
-      <p>This post is part of a series on sound, perception, and experimental music as therapeutic tools. Earlier posts cover <a href="/blog/timbre-lab/">how overtone structure shapes emotional experience</a> and <a href="/blog/binaural-beats-generator/">what EEG research actually shows about binaural beats</a>. Coming next: a Reich-style phase machine for exploring rhythm perception, and a random note generator with connections to the second Viennese school.</p>
+      <p>This post is part of a series on sound, perception, and experimental music as therapeutic tools. Earlier posts cover <a href="/blog/timbre-lab/">how overtone structure shapes emotional experience</a> and <a href="/blog/binaural-beats-generator/">what EEG research actually shows about binaural beats</a>. Coming next: a Reich-style phase machine and a random note generator with connections to the second Viennese school.</p>
 
-      <p>If you are curious about what music therapy grounded in these ideas looks like in practice — working with experimental music, body-oriented listening, or the therapeutic dimensions of sound — feel free to reach out via the <a href="/contact/">contact page</a>. I work with musicians, neurodivergent individuals, and people navigating significant life transitions. No musical experience required.</p>
+      <p>If you are curious about what music therapy grounded in these ideas looks like in practice, feel free to reach out via the <a href="/contact/">contact page</a>. I work with musicians, neurodivergent individuals, and people navigating significant life transitions. No musical experience required.</p>
 
       <p>I offer a free 30-minute consultation to explore whether working together might be a fit.</p>
 
@@ -724,7 +676,6 @@
       <ul>
         <li><em>Silence</em> — John Cage</li>
         <li><em>Deep Listening</em> — Pauline Oliveros</li>
-        <li><em>Music of Changes</em> — Kyle Gann (on process music)</li>
         <li><em>Acceptance and Commitment Therapy</em> — Hayes, Strosahl, Wilson</li>
         <li><em>Full Catastrophe Living</em> — Jon Kabat-Zinn</li>
       </ul>
