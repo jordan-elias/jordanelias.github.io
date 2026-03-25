@@ -73,32 +73,39 @@
     }
 
     /* Band info card — centered */
+
+
     .bb-band-card {
-      border: 1px solid var(--text);
-      padding: 1.25em 1em;
-      margin-bottom: 1.5em;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      flex-wrap: wrap;
-    }
+  border: 1px solid var(--text);
+  padding: 1.25em 1em;
+  margin-bottom: 1.5em;
+  display: flex;
+  justify-content: flex-start;   /* not centered */
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 24px;                     /* consistent spacing */
+}
 
-    .bb-freq-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 0 1.5em;
-      border-right: 1px solid var(--text);
-    }
+   .bb-freq-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;   /* left aligned */
+  gap: 6px;
 
-    .bb-band-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 0 1.5em;
-    }
+  min-width: 110px;          /* prevents shifting */
+  padding-right: 16px;
+
+  border-right: 1px solid var(--text);
+}
+
+   .bb-band-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+
+  min-width: 160px;
+}
 
     .bb-freq-label {
       font-family: 'Inter', sans-serif;
