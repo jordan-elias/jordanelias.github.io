@@ -450,3 +450,9 @@ section[aria-label="Frequently Asked Questions"] {
   color: var(--bg);
   border-color: var(--accent-hover);
 }
+
+    /* Centered CTA */
+    .cta-btn {
+      text-align: center;
+      margin: 2em 0 1em;
+    }
