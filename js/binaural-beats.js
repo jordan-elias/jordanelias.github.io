@@ -3,20 +3,20 @@
 
   /* ── Presets ── */
   var PRESETS = {
-    sleep:   { carrier: 200, beat: 2,  ambient: 'brown', ambientVol: 0.4, label: 'delta',  desc: 'deep sleep · restorative · 0.5–4 Hz' },
-    calm:    { carrier: 220, beat: 6,  ambient: 'pink',  ambientVol: 0.35, label: 'theta', desc: 'drowsy · meditative · 4–8 Hz' },
-    focus:   { carrier: 200, beat: 10, ambient: 'none',  ambientVol: 0.3, label: 'alpha',  desc: 'relaxed wakefulness · eyes closed · 8–13 Hz' },
-    energise:{ carrier: 220, beat: 20, ambient: 'none',  ambientVol: 0.2, label: 'beta',   desc: 'alert · focused · active thinking · 13–30 Hz' },
+    sleep:   { carrier: 200, beat: 2,   ambient: 'brown', ambientVol: 0.4,  label: 'delta', desc: 'deep sleep · restorative · 0.5–4 Hz' },
+    calm:    { carrier: 220, beat: 6,   ambient: 'pink',  ambientVol: 0.35, label: 'theta', desc: 'drowsy · meditative · 4–8 Hz' },
+    focus:   { carrier: 200, beat: 10,  ambient: 'none',  ambientVol: 0.3,  label: 'alpha', desc: 'relaxed wakefulness · eyes closed · 8–13 Hz' },
+    energise:{ carrier: 220, beat: 20,  ambient: 'none',  ambientVol: 0.2,  label: 'beta',  desc: 'alert · focused · active thinking · 13–30 Hz' },
     custom:  null
   };
 
   /* ── EEG band lookup ── */
   function getBand(hz) {
-    if (hz < 4)  return { name: 'delta',  desc: 'deep sleep · restorative · 0.5–4 Hz' };
-    if (hz < 8)  return { name: 'theta',  desc: 'drowsy · meditative · 4–8 Hz' };
-    if (hz < 13) return { name: 'alpha',  desc: 'relaxed wakefulness · eyes closed · 8–13 Hz' };
-    if (hz < 30) return { name: 'beta',   desc: 'alert · focused · active thinking · 13–30 Hz' };
-    return       { name: 'gamma',         desc: 'high-level processing · binding · 30+ Hz' };
+    if (hz < 4)  return { name: 'delta', desc: 'deep sleep · restorative · 0.5–4 Hz' };
+    if (hz < 8)  return { name: 'theta', desc: 'drowsy · meditative · 4–8 Hz' };
+    if (hz < 13) return { name: 'alpha', desc: 'relaxed wakefulness · eyes closed · 8–13 Hz' };
+    if (hz < 30) return { name: 'beta',  desc: 'alert · focused · active thinking · 13–30 Hz' };
+    return             { name: 'gamma', desc: 'high-level processing · binding · 30+ Hz' };
   }
 
   /* ── State ── */
@@ -30,84 +30,68 @@
   };
 
   /* ── Audio nodes ── */
-  var audioCtx     = null;
-  var leftOsc      = null;
-  var rightOsc     = null;
-  var leftGain     = null;
-  var rightGain    = null;
-  var masterGain   = null;
-  var merger       = null;
-  var ambientSrc   = null;
-  var ambientGain  = null;
-  var analyser     = null;
+  var audioCtx    = null;
+  var leftOsc     = null;
+  var rightOsc    = null;
+  var masterGain  = null;
+  var merger      = null;
+  var ambientSrc  = null;
+  var ambientGain = null;
 
-  var playing      = false;
+  var playing       = false;
   var timerInterval = null;
   var timerRemaining = 0;
-  var scopeRunning = false;
 
-  /* ── Init audio context ── */
+  /* ── Init audio ── */
   function initAudio() {
     if (audioCtx) return;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 2048;
-
     masterGain = audioCtx.createGain();
     masterGain.gain.value = state.vol;
-    masterGain.connect(analyser);
-    analyser.connect(audioCtx.destination);
+    masterGain.connect(audioCtx.destination);
 
     ambientGain = audioCtx.createGain();
     ambientGain.gain.value = 0;
     ambientGain.connect(audioCtx.destination);
-
-    startScope();
   }
 
-  /* ── Noise generators ── */
-  function makePinkNoise() {
-    var sr = audioCtx.sampleRate;
-    var len = sr * 4;
-    var buf = audioCtx.createBuffer(1, len, sr);
+  /* ── Noise buffers ── */
+  function makePinkBuf(actx, durationSecs) {
+    var sr = actx.sampleRate;
+    var len = Math.floor(sr * durationSecs);
+    var buf = actx.createBuffer(1, len, sr);
     var d = buf.getChannelData(0);
     var b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
     for (var i = 0; i < len; i++) {
-      var w = Math.random() * 2 - 1;
-      b0 = 0.99886*b0 + w*0.0555179;
-      b1 = 0.99332*b1 + w*0.0750759;
-      b2 = 0.96900*b2 + w*0.1538520;
-      b3 = 0.86650*b3 + w*0.3104856;
-      b4 = 0.55000*b4 + w*0.5329522;
-      b5 = -0.7616*b5 - w*0.0168980;
-      d[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) * 0.11;
-      b6 = w * 0.115926;
+      var w = Math.random()*2-1;
+      b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+      b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+      b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+      d[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.11;
+      b6=w*0.115926;
     }
     return buf;
   }
 
-  function makeBrownNoise() {
-    var sr = audioCtx.sampleRate;
-    var len = sr * 4;
-    var buf = audioCtx.createBuffer(1, len, sr);
+  function makeBrownBuf(actx, durationSecs) {
+    var sr = actx.sampleRate;
+    var len = Math.floor(sr * durationSecs);
+    var buf = actx.createBuffer(1, len, sr);
     var d = buf.getChannelData(0);
     var last = 0;
     for (var i = 0; i < len; i++) {
-      var w = Math.random() * 2 - 1;
-      last = (last + 0.02 * w) / 1.02;
+      var w = Math.random()*2-1;
+      last = (last + 0.02*w) / 1.02;
       d[i] = last * 3.5;
     }
     return buf;
   }
 
-  /* ── Start/stop ambient ── */
+  /* ── Ambient ── */
   function startAmbient() {
     stopAmbient();
-    if (state.ambient === 'none') {
-      ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
-      return;
-    }
-    var buf = state.ambient === 'pink' ? makePinkNoise() : makeBrownNoise();
+    if (state.ambient === 'none' || !audioCtx) return;
+    var buf = state.ambient === 'pink' ? makePinkBuf(audioCtx, 4) : makeBrownBuf(audioCtx, 4);
     ambientSrc = audioCtx.createBufferSource();
     ambientSrc.buffer = buf;
     ambientSrc.loop = true;
@@ -117,35 +101,28 @@
   }
 
   function stopAmbient() {
-    if (ambientSrc) {
-      try { ambientSrc.stop(); } catch(e) {}
-      ambientSrc = null;
-    }
-    if (ambientGain) ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    if (ambientSrc) { try { ambientSrc.stop(); } catch(e) {} ambientSrc = null; }
+    if (ambientGain && audioCtx) ambientGain.gain.setValueAtTime(0, audioCtx.currentTime);
   }
 
-  /* ── Start binaural tones ── */
+  /* ── Tones ── */
   function startTones() {
     stopTones();
-
     merger = audioCtx.createChannelMerger(2);
     merger.connect(masterGain);
 
-    leftGain  = audioCtx.createGain(); leftGain.gain.value  = 1;
-    rightGain = audioCtx.createGain(); rightGain.gain.value = 1;
+    var lg = audioCtx.createGain(); lg.gain.value = 1;
+    var rg = audioCtx.createGain(); rg.gain.value = 1;
 
     leftOsc  = audioCtx.createOscillator();
     rightOsc = audioCtx.createOscillator();
-
     leftOsc.type  = 'sine';
     rightOsc.type = 'sine';
     leftOsc.frequency.value  = state.carrier;
     rightOsc.frequency.value = state.carrier + state.beat;
 
-    leftOsc.connect(leftGain);
-    rightOsc.connect(rightGain);
-    leftGain.connect(merger, 0, 0);
-    rightGain.connect(merger, 0, 1);
+    leftOsc.connect(lg);  lg.connect(merger, 0, 0);
+    rightOsc.connect(rg); rg.connect(merger, 0, 1);
 
     var now = audioCtx.currentTime;
     masterGain.gain.setValueAtTime(0, now);
@@ -171,8 +148,7 @@
       startTones();
       startAmbient();
       if (state.timerMins > 0) startTimer();
-      btn.textContent = '&#9632;\uFE0E stop';
-      btn.innerHTML   = '&#9632;&#xFE0E; stop';
+      btn.innerHTML = '&#9632;&#xFE0E; stop';
       btn.classList.add('on');
     } else {
       stopAll();
@@ -190,20 +166,19 @@
     document.getElementById('timer-display').textContent = '';
   }
 
-  /* ── Oscillator frequency update ── */
+  /* ── Frequency update ── */
   function updateFrequencies() {
     if (leftOsc  && playing) leftOsc.frequency.setValueAtTime(state.carrier, audioCtx.currentTime);
     if (rightOsc && playing) rightOsc.frequency.setValueAtTime(state.carrier + state.beat, audioCtx.currentTime);
     updateDisplays();
   }
 
-  /* ── Displays ── */
   function updateDisplays() {
     var band = getBand(state.beat);
-    document.getElementById('disp-left').textContent  = state.carrier + ' Hz';
-    document.getElementById('disp-right').textContent = (state.carrier + state.beat) + ' Hz';
-    document.getElementById('disp-beat').textContent  = state.beat + ' Hz';
-    document.getElementById('disp-band').textContent  = band.name;
+    document.getElementById('disp-left').textContent      = state.carrier + ' Hz';
+    document.getElementById('disp-right').textContent     = (state.carrier + state.beat) + ' Hz';
+    document.getElementById('disp-beat').textContent      = state.beat + ' Hz';
+    document.getElementById('disp-band').textContent      = band.name;
     document.getElementById('disp-band-desc').textContent = band.desc;
   }
 
@@ -229,8 +204,135 @@
     if (timerRemaining <= 0) return;
     var m = Math.floor(timerRemaining / 60);
     var s = timerRemaining % 60;
-    document.getElementById('timer-display').textContent =
-      m + ':' + (s < 10 ? '0' : '') + s;
+    document.getElementById('timer-display').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  /* ── WAV export ── */
+  function exportWav() {
+    if (state.timerMins === 0) return;
+    var btn = document.getElementById('btn-download');
+    var note = document.getElementById('download-note');
+    btn.textContent = 'rendering\u2026';
+    btn.disabled = true;
+    note.textContent = 'rendering audio, this may take a moment\u2026';
+
+    var durationSecs = state.timerMins * 60;
+    var sr = 44100;
+    var offCtx = new OfflineAudioContext(2, sr * durationSecs, sr);
+
+    /* Binaural tones */
+    var offMerger = offCtx.createChannelMerger(2);
+    offMerger.connect(offCtx.destination);
+
+    var offMaster = offCtx.createGain();
+    offMaster.gain.value = state.vol;
+    offMaster.connect(offCtx.destination);
+
+    var offMerger2 = offCtx.createChannelMerger(2);
+    offMerger2.connect(offMaster);
+
+    var offL = offCtx.createOscillator();
+    var offR = offCtx.createOscillator();
+    var offLG = offCtx.createGain(); offLG.gain.value = 1;
+    var offRG = offCtx.createGain(); offRG.gain.value = 1;
+    offL.type = 'sine'; offL.frequency.value = state.carrier;
+    offR.type = 'sine'; offR.frequency.value = state.carrier + state.beat;
+    offL.connect(offLG); offLG.connect(offMerger2, 0, 0);
+    offR.connect(offRG); offRG.connect(offMerger2, 0, 1);
+    offL.start(0); offR.start(0);
+    offL.stop(durationSecs); offR.stop(durationSecs);
+
+    /* Ambient layer — mono, same to both channels */
+    if (state.ambient !== 'none') {
+      var ambBuf = state.ambient === 'pink'
+        ? makePinkBuf(offCtx, Math.min(durationSecs, 4))
+        : makeBrownBuf(offCtx, Math.min(durationSecs, 4));
+      var offAmb = offCtx.createBufferSource();
+      offAmb.buffer = ambBuf;
+      offAmb.loop = true;
+      var offAmbG = offCtx.createGain();
+      offAmbG.gain.value = state.ambientVol;
+      offAmb.connect(offAmbG);
+      offAmbG.connect(offCtx.destination);
+      offAmb.start(0);
+      offAmb.stop(durationSecs);
+    }
+
+    offCtx.startRendering().then(function (renderedBuffer) {
+      var wavBlob = audioBufferToWav(renderedBuffer);
+      var url = URL.createObjectURL(wavBlob);
+      var a = document.createElement('a');
+      a.href = url;
+      var preset = getActivePresetName();
+      a.download = 'binaural-' + preset + '-' + state.timerMins + 'min.wav';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+
+      btn.textContent = 'download wav';
+      btn.disabled = false;
+      note.textContent = state.timerMins + ' min · ' + formatFileSize(renderedBuffer);
+    }).catch(function (err) {
+      btn.textContent = 'download wav';
+      btn.disabled = false;
+      note.textContent = 'render failed — please try again';
+      console.error('WAV render error:', err);
+    });
+  }
+
+  function getActivePresetName() {
+    var active = document.querySelector('[data-p].on');
+    return active ? active.getAttribute('data-p') : 'custom';
+  }
+
+  function formatFileSize(buffer) {
+    var bytes = buffer.length * buffer.numberOfChannels * 2 + 44;
+    if (bytes > 1048576) return (bytes / 1048576).toFixed(0) + ' MB';
+    return (bytes / 1024).toFixed(0) + ' KB';
+  }
+
+  /* ── PCM → WAV blob ── */
+  function audioBufferToWav(buffer) {
+    var numChannels = buffer.numberOfChannels;
+    var sampleRate  = buffer.sampleRate;
+    var numSamples  = buffer.length;
+    var bytesPerSample = 2;
+    var blockAlign  = numChannels * bytesPerSample;
+    var byteRate    = sampleRate * blockAlign;
+    var dataSize    = numSamples * blockAlign;
+    var bufSize     = 44 + dataSize;
+    var ab = new ArrayBuffer(bufSize);
+    var view = new DataView(ab);
+
+    function writeStr(off, str) {
+      for (var i = 0; i < str.length; i++) view.setUint8(off + i, str.charCodeAt(i));
+    }
+
+    writeStr(0, 'RIFF');
+    view.setUint32(4, bufSize - 8, true);
+    writeStr(8, 'WAVE');
+    writeStr(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, byteRate, true);
+    view.setUint16(32, blockAlign, true);
+    view.setUint16(34, bytesPerSample * 8, true);
+    writeStr(36, 'data');
+    view.setUint32(40, dataSize, true);
+
+    var offset = 44;
+    for (var i = 0; i < numSamples; i++) {
+      for (var ch = 0; ch < numChannels; ch++) {
+        var sample = buffer.getChannelData(ch)[i];
+        sample = Math.max(-1, Math.min(1, sample));
+        view.setInt16(offset, sample < 0 ? sample * 32768 : sample * 32767, true);
+        offset += 2;
+      }
+    }
+    return new Blob([ab], { type: 'audio/wav' });
   }
 
   /* ── Presets ── */
@@ -242,14 +344,14 @@
     state.ambientVol = p.ambientVol;
     state.ambient    = p.ambient;
 
-    document.getElementById('carrier').value   = p.carrier;
-    document.getElementById('beat-freq').value = p.beat;
+    document.getElementById('carrier').value     = p.carrier;
+    document.getElementById('beat-freq').value   = p.beat;
     document.getElementById('ambient-vol').value = p.ambientVol;
-    document.getElementById('carrier-val').textContent   = p.carrier + ' Hz';
-    document.getElementById('beat-val').textContent      = p.beat + ' Hz';
+    document.getElementById('carrier-val').textContent     = p.carrier + ' Hz';
+    document.getElementById('beat-val').textContent        = p.beat + ' Hz';
     document.getElementById('ambient-vol-val').textContent = Math.round(p.ambientVol * 100) + '%';
 
-    setAmbient(p.ambient);
+    setAmbient(p.ambient, true);
     updateFrequencies();
 
     document.querySelectorAll('[data-p]').forEach(function (b) {
@@ -257,98 +359,38 @@
     });
   }
 
-  function setAmbient(type) {
+  function setAmbient(type, skipPresetClear) {
     state.ambient = type;
     if (playing) startAmbient();
     document.querySelectorAll('[data-ambient]').forEach(function (b) {
       b.classList.toggle('on', b.getAttribute('data-ambient') === type);
     });
+    if (!skipPresetClear) clearPresetSelection();
   }
 
   function clearPresetSelection() {
-    document.querySelectorAll('[data-p]').forEach(function (b) {
-      b.classList.remove('on');
-    });
+    document.querySelectorAll('[data-p]').forEach(function (b) { b.classList.remove('on'); });
     document.querySelector('[data-p="custom"]').classList.add('on');
   }
 
-  /* ── Oscilloscope ── */
-  function startScope() {
-    if (scopeRunning) return;
-    scopeRunning = true;
-    var canvas = document.getElementById('bb-canvas');
-    if (!canvas) return;
-    var ctx2 = canvas.getContext('2d');
-    var buf  = new Float32Array(analyser.fftSize);
-
-    function drawGrid(W, H) {
-      ctx2.strokeStyle = 'rgba(32,38,157,0.08)';
-      ctx2.lineWidth   = 0.5;
-      for (var x = 0; x <= 8; x++) {
-        ctx2.beginPath();
-        ctx2.moveTo((x/8)*W, 0); ctx2.lineTo((x/8)*W, H); ctx2.stroke();
-      }
-      for (var y = 0; y <= 4; y++) {
-        ctx2.beginPath();
-        ctx2.moveTo(0, (y/4)*H); ctx2.lineTo(W, (y/4)*H); ctx2.stroke();
-      }
+  /* ── Download button state ── */
+  function updateDownloadBtn() {
+    var btn  = document.getElementById('btn-download');
+    var note = document.getElementById('download-note');
+    if (state.timerMins > 0) {
+      btn.disabled = false;
+      var approxMB = Math.round((state.timerMins * 60 * 44100 * 2 * 2 + 44) / 1048576);
+      note.textContent = 'will export ' + state.timerMins + ' min · approx ' + approxMB + ' MB';
+    } else {
+      btn.disabled = true;
+      note.textContent = 'select a timer duration to enable download';
     }
-
-    function draw() {
-      requestAnimationFrame(draw);
-      var dpr = window.devicePixelRatio || 1;
-      var W   = canvas.offsetWidth  * dpr;
-      var H   = canvas.offsetHeight * dpr;
-      if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
-      ctx2.clearRect(0, 0, W, H);
-      drawGrid(W, H);
-      analyser.getFloatTimeDomainData(buf);
-      ctx2.beginPath();
-      for (var i = 0; i < buf.length; i++) {
-        var x = (i / buf.length) * W;
-        var y = ((1 - buf[i]) / 2) * H;
-        if (i === 0) { ctx2.moveTo(x, y); } else { ctx2.lineTo(x, y); }
-      }
-      ctx2.strokeStyle = playing ? '#20269D' : 'rgba(32,38,157,0.2)';
-      ctx2.lineWidth   = 1.5 * dpr;
-      ctx2.stroke();
-    }
-    draw();
   }
 
-  /* Static scope before AudioContext */
-  function startStaticScope() {
-    var canvas = document.getElementById('bb-canvas');
-    if (!canvas) return;
-    var ctx2 = canvas.getContext('2d');
-    function draw() {
-      if (scopeRunning) return;
-      requestAnimationFrame(draw);
-      var dpr = window.devicePixelRatio || 1;
-      var W   = canvas.offsetWidth  * dpr;
-      var H   = canvas.offsetHeight * dpr;
-      if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
-      ctx2.clearRect(0, 0, W, H);
-      ctx2.strokeStyle = 'rgba(32,38,157,0.08)';
-      ctx2.lineWidth = 0.5;
-      for (var x = 0; x <= 8; x++) {
-        ctx2.beginPath();
-        ctx2.moveTo((x/8)*W, 0); ctx2.lineTo((x/8)*W, H); ctx2.stroke();
-      }
-      for (var y = 0; y <= 4; y++) {
-        ctx2.beginPath();
-        ctx2.moveTo(0, (y/4)*H); ctx2.lineTo(W, (y/4)*H); ctx2.stroke();
-      }
-      ctx2.beginPath(); ctx2.moveTo(0, H/2); ctx2.lineTo(W, H/2);
-      ctx2.strokeStyle = 'rgba(32,38,157,0.2)';
-      ctx2.lineWidth = 1.5 * dpr; ctx2.stroke();
-    }
-    draw();
-  }
-
-  /* ── Wire up controls ── */
+  /* ── Init ── */
   function init() {
     document.getElementById('btn-play').addEventListener('click', togglePlay);
+    document.getElementById('btn-download').addEventListener('click', exportWav);
 
     document.getElementById('carrier').addEventListener('input', function (e) {
       state.carrier = parseInt(e.target.value, 10);
@@ -367,39 +409,31 @@
     document.getElementById('vol').addEventListener('input', function (e) {
       state.vol = parseFloat(e.target.value);
       document.getElementById('vol-val').textContent = Math.round(state.vol * 100) + '%';
-      if (masterGain) masterGain.gain.setValueAtTime(state.vol, audioCtx.currentTime);
+      if (masterGain && audioCtx) masterGain.gain.setValueAtTime(state.vol, audioCtx.currentTime);
     });
 
     document.getElementById('ambient-vol').addEventListener('input', function (e) {
       state.ambientVol = parseFloat(e.target.value);
       document.getElementById('ambient-vol-val').textContent = Math.round(state.ambientVol * 100) + '%';
-      if (ambientGain) ambientGain.gain.setValueAtTime(state.ambientVol, audioCtx.currentTime);
+      if (ambientGain && audioCtx) ambientGain.gain.setValueAtTime(state.ambientVol, audioCtx.currentTime);
     });
 
-    /* Ambient buttons */
     document.querySelectorAll('[data-ambient]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        setAmbient(btn.getAttribute('data-ambient'));
-        clearPresetSelection();
-      });
+      btn.addEventListener('click', function () { setAmbient(btn.getAttribute('data-ambient')); });
     });
 
-    /* Timer buttons */
     document.querySelectorAll('[data-mins]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         state.timerMins = parseInt(btn.getAttribute('data-mins'), 10);
         document.querySelectorAll('[data-mins]').forEach(function (b) {
           b.classList.toggle('on', b === btn);
         });
-        if (playing && state.timerMins > 0) {
-          startTimer();
-        } else if (state.timerMins === 0) {
-          clearTimer();
-        }
+        if (playing && state.timerMins > 0) { startTimer(); }
+        else if (state.timerMins === 0)     { clearTimer(); }
+        updateDownloadBtn();
       });
     });
 
-    /* Session preset buttons */
     document.querySelectorAll('[data-p]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var name = btn.getAttribute('data-p');
@@ -407,9 +441,9 @@
       });
     });
 
-    /* Apply default preset on load */
     applyPreset('focus');
-    startStaticScope();
+    updateDisplays();
+    updateDownloadBtn();
   }
 
   init();
