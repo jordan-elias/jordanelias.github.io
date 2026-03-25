@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="b465c3e2-0fb1-4c36-b5db-6eaf0fe05cb7"></script>
+
+  <title>Designing systems: Lucier, Radigue, and generative music | Jordan Elias</title>
+  <meta name="description" content="Two interactive generative music tools inspired by Alvin Lucier and Éliane Radigue, alongside an exploration of process music, room acoustics, and the therapeutic dimensions of relinquishing control.">
+  <meta name="author" content="Jordan Elias">
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <link rel="canonical" href="https://www.jordanelias.de/blog/generative-music/">
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jordan Elias Music Therapy">
+  <meta property="og:locale" content="en_DE">
+  <meta property="og:url" content="https://www.jordanelias.de/blog/generative-music/">
+  <meta property="og:title" content="Designing systems: Lucier, Radigue, and generative music">
+  <meta property="og:description" content="Two interactive generative music tools inspired by Alvin Lucier and Éliane Radigue, alongside an exploration of process music, room acoustics, and the therapeutic dimensions of relinquishing control.">
+  <meta property="og:image" content="https://www.jordanelias.de/images/headshot.jpg">
+  <meta property="og:image:alt" content="Jordan Elias, music therapist">
+  <meta property="article:published_time" content="2026-05-01">
+  <meta property="article:author" content="https://www.jordanelias.de/about/">
+  <meta property="article:section" content="Music Therapy">
+  <meta property="article:tag" content="Generative music">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Designing systems: Lucier, Radigue, and generative music">
+  <meta name="twitter:description" content="Two interactive generative music tools inspired by Alvin Lucier and Éliane Radigue, alongside an exploration of process music and its therapeutic dimensions.">
+  <meta name="twitter:image" content="https://www.jordanelias.de/images/headshot.jpg">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cloud.umami.is; connect-src 'self' https://api-gateway.umami.dev; frame-src https://complicated.life; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), geolocation=()">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+    .lab-section {
+      border: 1px solid var(--text);
+      padding: 1.5em;
+      margin: 0 0 2em;
+    }
+
+    .lab-section > h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin: 0 0 1.5em;
+    }
+
+    /* Module dividers */
+    .gen-module {
+      margin-bottom: 1.75em;
+    }
+
+    .gen-module-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin: 0 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--text);
+    }
+
+    .gen-separator {
+      border: none;
+      border-top: 1px solid var(--text);
+      margin: 1.75em 0;
+      opacity: 0.3;
+    }
+
+    /* Shared button styles */
+    .lab-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background-color: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 0.5em 1.2em;
+      cursor: pointer;
+      white-space: nowrap;
+      min-width: 90px;
+      text-align: center;
+      display: inline-block;
+      border-radius: 0;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .lab-btn:hover {
+      background-color: var(--accent-hover);
+      color: var(--bg);
+      border-color: var(--accent-hover);
+    }
+
+    .lab-btn.on {
+      background-color: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .lab-btn.on:hover {
+      background-color: var(--accent-hover);
+      color: var(--bg);
+      border-color: var(--accent-hover);
+    }
+
+    .lab-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .lab-preset-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 12px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .lab-preset-btn:hover {
+      background-color: var(--accent-hover);
+      color: var(--bg);
+      border-color: var(--accent-hover);
+    }
+
+    .lab-preset-btn.on {
+      background-color: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .lab-preset-btn.on:hover {
+      background-color: var(--accent-hover);
+      color: var(--bg);
+      border-color: var(--accent-hover);
+    }
+
+    /* Row layouts */
+    .gen-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1em;
+      flex-wrap: wrap;
+    }
+
+    .gen-row-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin-right: 4px;
+      white-space: nowrap;
+    }
+
+    /* Sliders */
+    .lab-transport-sliders {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      margin-bottom: 1.25em;
+    }
+
+    .lab-ctrl {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .lab-ctrl input[type=range] {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 2px;
+      background: var(--text);
+      outline: none;
+      cursor: pointer;
+      opacity: 0.5;
+    }
+
+    .lab-ctrl input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--text);
+      cursor: pointer;
+    }
+
+    .lab-ctrl input[type=range]::-moz-range-thumb {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--text);
+      border: none;
+      cursor: pointer;
+    }
+
+    .lab-ctrl-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .lab-ctrl-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+    }
+
+    .lab-ctrl-val {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text);
+      opacity: 0.7;
+    }
+
+    /* Lucier iteration display */
+    .lucier-iter-display {
+      border: 1px solid var(--text);
+      padding: 0.75em 1.25em;
+      margin-bottom: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75em;
+    }
+
+    .lucier-iter-count {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .lucier-iter-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text);
+      opacity: 0.5;
+    }
+
+    .lucier-status {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text);
+      opacity: 0.5;
+      font-style: italic;
+    }
+
+    /* Radigue frequency display */
+    .radigue-freq-display {
+      display: flex;
+      gap: 1.5em;
+      margin-bottom: 1em;
+      flex-wrap: wrap;
+    }
+
+    .radigue-freq-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .radigue-freq-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+    }
+
+    .radigue-freq-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .lab-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      opacity: 0.5;
+      margin-top: 1em;
+      text-align: center;
+    }
+
+    /* Article */
+    .lab-exercise {
+      border-left: 3px solid var(--text);
+      padding: 1em 1.25em;
+      margin: 1.5em 0;
+    }
+
+    .lab-exercise h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin: 0 0 0.5em;
+    }
+
+    .lab-exercise p { margin-bottom: 0.6em; }
+    .lab-exercise p:last-child { margin-bottom: 0; }
+
+    blockquote {
+      border-left: 3px solid var(--text);
+      margin: 1.5em 0;
+      padding: 0.75em 1.25em;
+      opacity: 0.75;
+    }
+
+    blockquote p { margin-bottom: 0.4em; }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    blockquote cite {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-style: normal;
+      opacity: 0.6;
+    }
+
+    .cta-wrap {
+      text-align: center;
+      margin: 2em 0 1em;
+    }
+
+    .cta-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-block;
+      background-color: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 0.6em 1.6em;
+      border-radius: 0;
+      text-decoration: none;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .cta-btn:hover {
+      background-color: var(--accent-hover);
+      color: var(--bg);
+      border-color: var(--accent-hover);
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .lab-transport-sliders { flex-direction: column; gap: 16px; }
+      #btn-play { -webkit-tap-highlight-color: transparent; }
+      #lucier-play { -webkit-tap-highlight-color: transparent; }
+      #radigue-play { -webkit-tap-highlight-color: transparent; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://www.jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Board-Certified Music Therapist",
+        "url": "https://www.jordanelias.de/",
+        "image": "https://www.jordanelias.de/images/headshot.jpg",
+        "email": "jordanelias@proton.me",
+        "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+        "worksFor": { "@id": "https://www.jordanelias.de/#service" },
+        "alumniOf": [
+          { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+          { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+        ],
+        "hasCredential": {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Board Certified Music Therapist (MT-BC)",
+          "credentialCategory": "Professional Certification",
+          "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
+        },
+        "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+        "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://www.jordanelias.de/#service",
+        "name": "Jordan Elias Music Therapy",
+        "url": "https://www.jordanelias.de/",
+        "founder": { "@id": "https://www.jordanelias.de/#person" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://www.jordanelias.de/blog/generative-music/#post",
+        "headline": "Designing systems: Lucier, Radigue, and generative music",
+        "description": "Two interactive generative music tools inspired by Alvin Lucier and Éliane Radigue, alongside an exploration of process music, room acoustics, and the therapeutic dimensions of relinquishing control.",
+        "url": "https://www.jordanelias.de/blog/generative-music/",
+        "datePublished": "2026-05-01",
+        "dateModified": "2026-05-01",
+        "inLanguage": "en",
+        "author": { "@id": "https://www.jordanelias.de/#person" },
+        "publisher": { "@id": "https://www.jordanelias.de/#service" },
+        "image": { "@type": "ImageObject", "url": "https://www.jordanelias.de/images/headshot.jpg" },
+        "isPartOf": { "@type": "Blog", "@id": "https://www.jordanelias.de/blog/#blog" },
+        "mainEntityOfPage": { "@id": "https://www.jordanelias.de/blog/generative-music/#webpage" },
+        "about": [
+          { "@type": "Person", "name": "Alvin Lucier", "sameAs": "https://en.wikipedia.org/wiki/Alvin_Lucier" },
+          { "@type": "Person", "name": "Éliane Radigue", "sameAs": "https://en.wikipedia.org/wiki/%C3%89liane_Radigue" },
+          { "@type": "Thing", "name": "Generative music", "sameAs": "https://en.wikipedia.org/wiki/Generative_music" }
+        ],
+        "keywords": "generative music, Alvin Lucier, Éliane Radigue, process music, room acoustics, drone music, music therapy, ACT, mindfulness"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.jordanelias.de/blog/generative-music/#webpage",
+        "url": "https://www.jordanelias.de/blog/generative-music/",
+        "name": "Designing systems: Lucier, Radigue, and generative music | Jordan Elias",
+        "description": "Two interactive generative music tools inspired by Alvin Lucier and Éliane Radigue, alongside an exploration of process music and its therapeutic dimensions.",
+        "author": { "@id": "https://www.jordanelias.de/#person" },
+        "primaryImageOfPage": { "@type": "ImageObject", "url": "https://www.jordanelias.de/images/headshot.jpg" },
+        "isPartOf": { "@type": "WebSite", "@id": "https://www.jordanelias.de/#website" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://www.jordanelias.de/blog/generative-music/#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.jordanelias.de/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.jordanelias.de/blog/" },
+          { "@type": "ListItem", "position": 3, "name": "Generative music", "item": "https://www.jordanelias.de/blog/generative-music/" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+<header>
+  <h1>Music &amp; Mental Health Blog</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/online-sessions/">Online Sessions</a>
+    <a href="/events/">Events</a>
+    <a href="/contact/">Contact</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+</header>
+
+<main>
+
+  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/blog/generative-music/" aria-current="page">Generative music</a></li>
+    </ol>
+  </nav>
+
+  <!-- TOOLS FIRST -->
+  <div class="lab-section">
+    <h3>generative music tools</h3>
+
+    <!-- MODULE 1: LUCIER -->
+    <div class="gen-module">
+      <p class="gen-module-label">Lucier — iterative room processing</p>
+
+      <div class="lucier-iter-display">
+        <div>
+          <div class="lucier-iter-count" id="lucier-iter-count">iteration 0</div>
+          <div class="lucier-iter-sub" id="lucier-iter-sub">original source · unprocessed</div>
+        </div>
+        <div class="lucier-status" id="lucier-status">ready</div>
+      </div>
+
+      <div class="gen-row">
+        <span class="gen-row-label">source →</span>
+        <button class="lab-preset-btn on" id="src-generated">generated voice</button>
+        <button class="lab-preset-btn" id="src-mic">record from mic</button>
+        <button class="lab-btn" id="lucier-record" style="display:none;min-width:70px">&#9679; record</button>
+      </div>
+
+      <div class="gen-row">
+        <span class="gen-row-label">room →</span>
+        <button class="lab-preset-btn" data-room="small">small</button>
+        <button class="lab-preset-btn on" data-room="medium">medium</button>
+        <button class="lab-preset-btn" data-room="large">large</button>
+      </div>
+
+      <div class="gen-row">
+        <button class="lab-btn" id="lucier-play">&#9654;&#xFE0E; play</button>
+        <button class="lab-btn" id="lucier-iterate">+ iterate</button>
+        <button class="lab-btn" id="lucier-reset" style="min-width:70px">reset</button>
+      </div>
+
+      <p class="lab-hint">each iteration reinforces the room's resonant frequencies · repeat 6–10 times to hear the transformation</p>
+    </div>
+
+    <hr class="gen-separator">
+
+    <!-- MODULE 2: RADIGUE -->
+    <div class="gen-module">
+      <p class="gen-module-label">Radigue — evolving drone</p>
+
+      <div class="radigue-freq-display" id="radigue-freq-display">
+        <div class="radigue-freq-col">
+          <span class="radigue-freq-label">osc 1</span>
+          <span class="radigue-freq-val" id="r-f1">110.0 Hz</span>
+        </div>
+        <div class="radigue-freq-col">
+          <span class="radigue-freq-label">osc 2</span>
+          <span class="radigue-freq-val" id="r-f2">112.5 Hz</span>
+        </div>
+        <div class="radigue-freq-col">
+          <span class="radigue-freq-label">osc 3</span>
+          <span class="radigue-freq-val" id="r-f3">107.5 Hz</span>
+        </div>
+      </div>
+
+      <div class="lab-transport-sliders">
+        <div class="lab-ctrl">
+          <input type="range" id="r-base" min="40" max="300" value="110" step="1">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">base freq</span>
+            <span class="lab-ctrl-val" id="r-base-val">110 Hz</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="r-detune" min="0.5" max="8" value="2.5" step="0.5">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">detuning</span>
+            <span class="lab-ctrl-val" id="r-detune-val">2.5 Hz</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="r-drift" min="0.01" max="0.3" value="0.07" step="0.01">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">drift rate</span>
+            <span class="lab-ctrl-val" id="r-drift-val">0.07 Hz</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="r-noise" min="0" max="0.15" value="0.03" step="0.005">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">noise floor</span>
+            <span class="lab-ctrl-val" id="r-noise-val">low</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gen-row">
+        <span class="gen-row-label">oscillators →</span>
+        <button class="lab-preset-btn" data-oscs="2">2</button>
+        <button class="lab-preset-btn on" data-oscs="3">3</button>
+      </div>
+
+      <div class="gen-row">
+        <button class="lab-btn" id="radigue-play">&#9654;&#xFE0E; play</button>
+      </div>
+
+      <p class="lab-hint">the oscillators drift slowly — let it run for several minutes · changes are most perceptible at low volume</p>
+    </div>
+
+  </div>
+
+  <article>
+
+    <section>
+      <h1>Designing systems: Lucier, Radigue, and generative music</h1>
+      <p class="post-meta"><time datetime="2026-05-01">May 1, 2026</time></p>
+      <p>Written by Jordan Elias, MT-BC</p>
+      <p class="post-intro">What happens when a composer steps back from moment-to-moment decision-making and designs a process instead? Two tools above let you explore this question directly — one inspired by Alvin Lucier's iterative room recordings, one by Éliane Radigue's slowly evolving drones. The article below traces the ideas behind both, and considers what generative music has to offer as both an artistic philosophy and a therapeutic framework.</p>
+    </section>
+
+    <section>
+      <h2>What is a generative system in music?</h2>
+
+      <p>Most music, in the Western tradition at least, involves a composer specifying what sounds should occur: which notes, in which order, at which volume, for how long. The performer's job is to realise those specifications as faithfully as possible. The composer's hand is in every moment of the work.</p>
+
+      <p>Generative music inverts this relationship. The composer  creates a set of rules, conditions, or processes, and then allows those conditions to unfold without further intervention. The music emerges from the architecture of the system, not from moment-to-moment decisions. Brian Eno, who coined the term, described the experience of setting up generative systems and then encountering the output as a listener rather than an author, surprised by what his own rules had produced.</p>
+
+      <p>This is not the same as improvisation, where a performer makes real-time decisions. It is not the same as chance music either, where a composer uses dice or random operations to determine content. Generative music is deterministic at the system level; the rules are fixed but unpredictable at the output level, because the interactions between elements produce results that were not explicitly composed. The composer designs the conditions for music to happen. The music happens.</p>
+
+      <p>Two composers explored this territory with particular depth and rigour: Alvin Lucier, who made the physical environment itself a generative instrument, and Éliane Radigue, who composed through the infinitely slow evolution of electronic drone.</p>
+    </section>
+
+    <section>
+      <h2>Alvin Lucier and the room as instrument</h2>
+
+      <p>In 1969, Alvin Lucier sat in a room and recorded himself reading a short text describing what he was about to do. He then played that recording back into the room through a speaker, and re-recorded the sound in the room. He played that recording back, re-recorded it again, and repeated the process dozens of times. Each iteration, the room acted as a filter — reinforcing certain frequencies that corresponded to its physical dimensions and absorbing others. Gradually, his voice dissolved. The room's acoustic fingerprint — its resonant frequencies, determined by the length, width, and height of the space — became audible as pure sustained tones. The speech transformed into music. The piece is called <em>I Am Sitting in a Room</em>.</p>
+
+      <p>What makes the work so elegant is that the room is not a backdrop. It is a compositional instrument. The room has a voice — a set of frequencies at which it naturally resonates, determined by its geometry in the same way that a tuning fork resonates at a frequency determined by its physical dimensions. Lucier designed a process that revealed that voice, not through analysis or measurement, but through repetition. He didn't compose the tones that emerge at the end. They were always there, latent in the room's architecture. The process excavated them.</p>
+
+      <p>The text Lucier reads during the recording begins: <em>"I am sitting in a room different from the one you are in now. I am recording the sound of my speaking voice..."</em> The content of the text matters because it gradually becomes unintelligible. Words — units of meaning — transform over dozens of iterations into sustained resonances that carry no semantic content. This is not a flaw in the process. It is the point.</p>
+
+      <p>The Lucier module above simulates this process. The starting material — either the generated voice approximation or your own recorded voice — passes through a bank of resonant filters representing a small, medium, or large room's resonant frequencies. Each time you press iterate, another pass through those filters reinforces them further, gradually stripping away the complex, irregular content of speech and leaving only the sustained tones the room wants to produce. After six to ten iterations, the transformation is clearly audible.</p>
+    </section>
+
+    <section>
+      <h2>Room acoustics — why spaces have a voice</h2>
+
+      <p>Every enclosed space has a set of resonant frequencies called room modes or standing waves. These occur when a sound wave travels between two parallel surfaces, reflects, and arrives back at its starting point in phase with itself — reinforcing rather than cancelling. The lowest mode, called the axial mode, depends on the longest dimension of the room: in a room 5 metres long, the lowest axial mode is approximately 34 Hz (the speed of sound, 340 m/s, divided by twice the room length). Higher modes occur at integer multiples of this frequency.</p>
+
+      <p>In a normal listening environment, these modes are largely inaudible because the room is constantly excited by many different frequencies and the modes blend into what we experience as the acoustic character or "feel" of the space. But when a single frequency is sustained in a room, the resonance becomes clearly audible as a boost or coloration. Musicians notice this as certain notes that seem louder or more resonant in a particular room.</p>
+
+      <p>Lucier's iterative process amplifies this effect dramatically. By repeatedly recording and playing back in the same space, he is essentially running the room's frequency response function multiple times on the same signal. Each iteration squares the filter's effect — frequencies the room boosts become more boosted, frequencies it attenuates become more attenuated. After many iterations, only the room's preferred frequencies remain. The voice has become the room.</p>
+
+      <p>This is also why the piece sounds different in every space it is performed. The tones that emerge are not chosen by Lucier — they are determined entirely by the physical geometry of wherever he happens to be sitting. Two performances in different rooms produce completely different music, from the same process, with the same voice.</p>
+    </section>
+
+    <section>
+      <h2>Éliane Radigue and the art of slow time</h2>
+
+      <p>Éliane Radigue spent decades composing music that refuses to announce itself. Her works, largely created with an ARP 2500 synthesizer and later with acoustic instruments, unfold over extremely long durations — often exceeding an hour — with changes so gradual that individual moments of transformation are difficult to locate. The music does not have events in the conventional sense. It has states that imperceptibly become other states.</p>
+
+      <p>Radigue came to music through Pierre Schaeffer and Pierre Henry's Paris studio, working as an assistant before developing her own practice. She was deeply influenced by Tibetan Buddhism — she became a practitioner in 1975 — and the connection between her musical philosophy and Buddhist ideas about time, impermanence, and sustained attention is explicit in her own statements about the work. She described composing as a form of meditation practice, attending to the smallest fluctuations in the sound with the same quality of presence she brought to formal practice.</p>
+
+      <p>The technical basis of her drone compositions is deceptively simple: two or three oscillators tuned to nearly identical frequencies, whose slight differences produce slow beating — an amplitude modulation at the difference frequency. If two oscillators are tuned to 110 Hz and 112.5 Hz, they produce a beat at 2.5 Hz — a slow, barely perceptible pulse that waxes and wanes over about 400 milliseconds. As the oscillator frequencies drift slightly over time, the beat frequency changes, and with it the entire texture of the sound. The mathematics is elementary. The perceptual result, sustained over long duration with careful attention, is surprisingly complex.</p>
+
+      <p>The Radigue module above generates exactly this structure. Three oscillators slightly detuned from each other, with a drift rate that slowly changes their frequency relationships over time. The noise floor parameter adds a thin layer of pink noise beneath the tones — approximating the analogue noise floor of vintage synthesizer equipment, which Radigue considered part of the sound rather than an artefact to be minimised. Let it run for ten or fifteen minutes and attend to what changes. The music is in the attention as much as the sound.</p>
+    </section>
+
+    <section>
+      <h2>Generative systems as psychotherapy</h2>
+
+      <p>There is a way of understanding both Lucier's and Radigue's approaches that maps directly onto central ideas in contemporary psychotherapy — not as a loose metaphor, but as a structural correspondence that illuminates something about how therapeutic change actually works.</p>
+
+      <p><strong>Lucier and cognitive defusion.</strong> In Acceptance and Commitment Therapy, one of the core processes is called cognitive defusion — the practice of creating distance between a person and their thoughts so that thoughts can be observed as thoughts rather than fused with as literal truth. When someone is strongly fused with a thought, "I am fundamentally inadequate," "I will always be alone", it functions not as a belief that could be questioned but as a transparent fact about reality, as invisible and unquestionable as the air. Defusion techniques create perceptual distance: the thought is repeated until its meaning fades, or observed as passing weather rather than permanent climate, or heard as words rather than experienced as statements about the world.</p>
+
+      <p>The Lucier process is a physical enactment of defusion. A sentence — a unit of semantic meaning — is run through a process that gradually strips away its meaning until only its resonant structure remains. The words dissolve. What was language becomes sound. The Lucier piece does not argue with the sentence's meaning, does not challenge or reframe it. It simply runs it through a system until the meaning falls away on its own. This is, structurally, what defusion asks the mind to do with painful thoughts. Not to fight them. Not to fix them. To run them through a process — of attention, of repetition, of gentle observation — until their grip loosens and something underneath becomes audible.</p>
+
+      <p><strong>Radigue and present-moment awareness.</strong> The central practice of Mindfulness-Based Stress Reduction and its derivatives is deliberately simple: direct your attention to what is happening now, with curiosity and without judgment. Notice the breath, the body, the sounds in the room. When attention wanders and thoughts turn to planning, to rumination, to self-criticism, notice that it has wandered and return. The skill being developed is not the absence of mind-wandering but the noticing of it, and the capacity to return without punishment.</p>
+
+      <p>Radigue's music demands exactly this quality of attention. Nothing announces itself. There are no events to mark, no melodies to follow, no rhythmic pattern to anchor the ear. What there is: a sustained field of sound that changes so slowly the changes are perceptible only if you are genuinely present for consecutive moments. If your attention wanders and returns, you will often find yourself unable to locate the change that occurred in your absence. The music rewards the same thing mindfulness practice develops: non-grasping, present-moment attention without expectation of dramatic content.</p>
+
+      <p>There is also something important about the scale of duration in her work. An hour-long drone does not permit the kind of engagement that expects resolution within a few minutes. It requires a different relationship with time, one where something can be present and valid without needing to move toward a conclusion. This is therapeutically significant for people who struggle with the sense that their inner life is stuck, or that nothing is changing, or that growth must be perceptible to be real.</p>
+
+      <p>The generative frame and the therapeutic relationship.> More broadly, the model of the composer as system designer rather than moment-to-moment decision-maker maps onto a particular understanding of what the therapist does. I see the role of the therapist not as someone producing change directly. They design conditions: the quality of the relationship, the frame of the work, the specific practices or invitations offered. Within those conditions, change happens. The therapist, like the generative composer, allows the music to emerge.</p>
+
+      <p>This is not a passive model. Designing good conditions requires skill, attunement, and continuous adjustment. But it involves a fundamental acceptance that the output cannot be specified in advance, and that the attempt to specify it too tightly will likely produce worse results than allowing the system — the person — to generate their own transformation within a well-designed structure.</p>
+    </section>
+
+    <section>
+      <h2>Experiments</h2>
+
+      <div class="lab-exercise">
+        <h3>Lucier — listening to meaning dissolve</h3>
+        <p>Use the generated voice source. Press play to hear the starting material, then press iterate once. Listen to the difference between iteration 0 and iteration 1. The change is subtle. Press play after each iteration and track what changes and what remains. At what point does it stop sounding like speech? At what point does it start sounding like music? Is there a moment when neither description fits?</p>
+        <p>Then try recording your own voice using the microphone option. Say a single sentence — something short and emotionally neutral, or something that carries some weight for you. Run it through eight or ten iterations. Notice what relationship you have to the sentence at iteration 0 compared to iteration 8. Does anything change about how it feels?</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>Lucier — the room as variable</h3>
+        <p>Run the same starting material through five iterations with small room selected, then reset and run five iterations with large room. The two results should sound distinctly different — the small room produces brighter, more prominent resonances, the large room produces deeper, slower-evolving ones. Notice how the same input material, subjected to the same number of iterations, produces completely different output depending on the environment it passes through. This is a useful frame for thinking about how the same event can mean something entirely different depending on the context in which it occurs.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>Radigue — attending to slow change</h3>
+        <p>Start the drone and set a timer for five minutes. Close your eyes. Your only task is to track what is changing in the sound — not to name it or evaluate it, but to stay in contact with it. When attention wanders, return. After five minutes, notice whether your relationship to the sound changed over that duration, and whether your experience of time shifted. The drone is designed to be long enough that something will have changed from the beginning, but gradually enough that you cannot identify a specific moment when it happened.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>Radigue — the noise floor as presence</h3>
+        <p>Bring the noise slider to its maximum. Listen for several minutes. Then bring it to zero. What changes about the character of the sound? Many people find the tones feel thinner, more artificial, or more exposed without the noise floor. The noise is not music in the conventional sense — it has no pitch, no structure, no pattern. But it creates a sense of presence, of materiality, of the sound existing in a physical medium rather than floating in a digital vacuum. Notice whether this distinction — between pitch content and ambient texture — maps onto anything in your own experience of what makes a space feel inhabited versus empty.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>A note on therapeutic applications</h2>
+
+      <p>Neither of the tools above is a clinical intervention in itself. What they offer is experiential access to ideas that are therapeutically relevant: that meaning is not fixed in material, that attention to slow change develops a capacity for presence, that designing good conditions and then releasing control of the outcome is both an artistic practice and a relational one.</p>
+
+      <p>In sessions, I have used iterative audio processing of a client's own recorded voice as a way of creating literal distance from the content of negative self-statements — running the Lucier process on words that carry painful associations and listening as those words become frequencies become silence. This is not a technique I would use with everyone, or early in a therapeutic relationship. But for some people, at the right moment, the perceptual experience of meaning dissolving is more compelling than any cognitive reframe.</p>
+
+      <p>The Radigue drone as a backdrop for body-oriented work is more broadly applicable. The sustained tones, because they have no rhythmic structure and no melodic development, make no demands on cognitive attention. They create an acoustic field without pulling the person out of their body and into listening. This is a meaningful distinction — much background music (even ostensibly relaxing music) has enough structure to engage narrative-processing systems, which is the opposite of what somatic awareness work requires.</p>
+
+      <p>The tools on this page are also available as standalone applications with additional features, including microphone input and audio export, on <a href="https://github.com/jordan-elias" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+    </section>
+
+    <section>
+      <h2>If this resonates</h2>
+
+      <p>This post is part of a series on sound, perception, and experimental music as therapeutic tools. Earlier posts cover <a href="/blog/timbre-lab/">how overtone structure shapes emotional experience</a> and <a href="/blog/binaural-beats-generator/">what EEG research actually shows about binaural beats</a>. Coming next: a Reich-style phase machine for exploring rhythm perception, and a random note generator with connections to the second Viennese school.</p>
+
+      <p>If you are curious about what music therapy grounded in these ideas looks like in practice — working with experimental music, body-oriented listening, or the therapeutic dimensions of sound — feel free to reach out via the <a href="/contact/">contact page</a>. I work with musicians, neurodivergent individuals, and people navigating significant life transitions. No musical experience required.</p>
+
+      <p>I offer a free 30-minute consultation to explore whether working together might be a fit.</p>
+
+      <div class="cta-wrap">
+        <a href="https://cal.meetergo.com/jordanelias/consultation" target="_blank" rel="noopener noreferrer" class="cta-btn">Book an intro call</a>
+      </div>
+
+      <p>Further reading:</p>
+      <ul>
+        <li><em>Silence</em> — John Cage</li>
+        <li><em>Deep Listening</em> — Pauline Oliveros</li>
+        <li><em>Music of Changes</em> — Kyle Gann (on process music)</li>
+        <li><em>Acceptance and Commitment Therapy</em> — Hayes, Strosahl, Wilson</li>
+        <li><em>Full Catastrophe Living</em> — Jon Kabat-Zinn</li>
+      </ul>
+    </section>
+
+  </article>
+
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/online-sessions/">Online Sessions</a>
+    <a href="/events/">Events</a>
+    <a href="/contact/">Contact</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+  <p>© 2025-2026 Jordan Elias</p>
+</footer>
+
+<script defer src="/js/generative-music.js"></script>
+
+</body>
+</html>
