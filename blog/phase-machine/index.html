@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="b465c3e2-0fb1-4c36-b5db-6eaf0fe05cb7"></script>
+
+  <title>Phase machine: Steve Reich and the music of process</title>
+  <meta name="description" content="An interactive phase machine inspired by Steve Reich's tape and process compositions. Load any audio, set a drift rate, and listen as two identical loops slowly pull apart. Hold K to re-sync. An exploration of rhythm perception, emergent pattern, and process music as therapeutic frame.">
+  <meta name="author" content="Jordan Elias">
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <link rel="canonical" href="https://www.jordanelias.de/blog/phase-machine/">
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jordan Elias Music Therapy">
+  <meta property="og:locale" content="en_DE">
+  <meta property="og:url" content="https://www.jordanelias.de/blog/phase-machine/">
+  <meta property="og:title" content="Phase machine: Steve Reich and the music of process">
+  <meta property="og:description" content="An interactive phase machine inspired by Steve Reich's tape and process compositions. Load any audio, set a drift rate, and listen as two identical loops slowly pull apart.">
+  <meta property="og:image" content="https://www.jordanelias.de/images/headshot.jpg">
+  <meta property="og:image:alt" content="Jordan Elias, music therapist">
+  <meta property="article:published_time" content="2026-06-01">
+  <meta property="article:author" content="https://www.jordanelias.de/about/">
+  <meta property="article:section" content="Music Therapy">
+  <meta property="article:tag" content="Process music">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Phase machine: Steve Reich and the music of process">
+  <meta name="twitter:description" content="An interactive phase machine inspired by Steve Reich. Load any audio, set a drift rate, hold K to re-sync.">
+  <meta name="twitter:image" content="https://www.jordanelias.de/images/headshot.jpg">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cloud.umami.is; connect-src 'self' https://api-gateway.umami.dev; frame-src https://complicated.life; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+    .lab-section {
+      border: 1px solid var(--text);
+      padding: 1.5em;
+      margin: 0 0 2em;
+    }
+
+    .lab-section > h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin: 0 0 1.25em;
+    }
+
+    /* Tape player cards */
+    .tape-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1.25em;
+    }
+
+    .tape-card {
+      border: 1px solid var(--text);
+      padding: 1em;
+    }
+
+    .tape-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin-bottom: 0.75em;
+    }
+
+    /* Phase position display */
+    .phase-display {
+      border: 1px solid var(--text);
+      padding: 0.75em 1.25em;
+      margin-bottom: 1.25em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75em;
+    }
+
+    .phase-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .phase-col-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+    }
+
+    .phase-col-val {
+      font-family: 'Courier New', 'Lucida Console', monospace;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      min-width: 72px;
+    }
+
+    /* Phase bar */
+    .phase-bar-wrap {
+      flex: 1;
+      height: 4px;
+      background: rgba(32,38,157,0.12);
+      position: relative;
+      min-width: 80px;
+    }
+
+    .phase-bar-fill {
+      position: absolute;
+      left: 0; top: 0; height: 100%;
+      background: var(--text);
+      width: 0%;
+      transition: width 0.08s linear;
+    }
+
+    /* Sync key indicator */
+    .sync-key-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.25em;
+      flex-wrap: wrap;
+    }
+
+    .sync-key-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border: 2px solid var(--text);
+      padding: 0.25em 0.7em;
+      letter-spacing: 0.05em;
+      transition: background-color 0.08s, color 0.08s;
+      user-select: none;
+      cursor: default;
+    }
+
+    .sync-key-badge.synced {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .sync-key-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text);
+      opacity: 0.5;
+    }
+
+    /* Buttons */
+    .lab-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background-color: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 0.5em 1.2em;
+      cursor: pointer;
+      white-space: nowrap;
+      min-width: 90px;
+      text-align: center;
+      display: inline-block;
+      border-radius: 0;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .lab-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .lab-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+    .lab-preset-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 12px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .lab-preset-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-preset-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .lab-preset-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+
+    .upload-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 12px;
+      cursor: pointer;
+      display: inline-block;
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .upload-label:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .upload-label.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    #pm-file-input { display: none; }
+
+    /* Rows */
+    .gen-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1em;
+      flex-wrap: wrap;
+    }
+    .gen-row-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin-right: 4px;
+      white-space: nowrap;
+    }
+    .rec-state-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text);
+      opacity: 0.7;
+      padding: 3px 0;
+    }
+
+    /* Sliders */
+    .lab-transport-sliders {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      margin-bottom: 1.25em;
+    }
+    .lab-ctrl { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .lab-ctrl input[type=range] {
+      width: 100%; -webkit-appearance: none; appearance: none;
+      height: 2px; background: var(--text); outline: none; cursor: pointer; opacity: 0.5;
+    }
+    .lab-ctrl input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--text); cursor: pointer;
+    }
+    .lab-ctrl input[type=range]::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
+    }
+    .lab-ctrl-bottom { display: flex; justify-content: space-between; align-items: baseline; }
+    .lab-ctrl-label { font-family: 'Inter', sans-serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); opacity: 0.5; }
+    .lab-ctrl-val { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text); opacity: 0.7; }
+
+    .lab-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      opacity: 0.5;
+      margin-top: 1em;
+      text-align: center;
+    }
+
+    /* Article */
+    .lab-exercise {
+      border-left: 3px solid var(--text);
+      padding: 1em 1.25em;
+      margin: 1.5em 0;
+    }
+    .lab-exercise h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 0.5em; }
+    .lab-exercise p { margin-bottom: 0.6em; }
+    .lab-exercise p:last-child { margin-bottom: 0; }
+
+    .cta-wrap { text-align: center; margin: 2em 0 1em; }
+    .cta-btn {
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 500;
+      display: inline-block; background-color: transparent; color: var(--text);
+      border: 2px solid var(--text); padding: 0.6em 1.6em; border-radius: 0;
+      text-decoration: none; transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .cta-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .tape-grid { grid-template-columns: 1fr; }
+      .lab-transport-sliders { flex-direction: column; gap: 16px; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://www.jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Board-Certified Music Therapist",
+        "url": "https://www.jordanelias.de/",
+        "image": "https://www.jordanelias.de/images/headshot.jpg",
+        "email": "jordanelias@proton.me",
+        "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+        "worksFor": { "@id": "https://www.jordanelias.de/#service" },
+        "alumniOf": [
+          { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+          { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+        ],
+        "hasCredential": {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Board Certified Music Therapist (MT-BC)",
+          "credentialCategory": "Professional Certification",
+          "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
+        },
+        "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+        "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://www.jordanelias.de/#service",
+        "name": "Jordan Elias Music Therapy",
+        "url": "https://www.jordanelias.de/",
+        "founder": { "@id": "https://www.jordanelias.de/#person" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://www.jordanelias.de/blog/phase-machine/#post",
+        "headline": "Phase machine: Steve Reich and the music of process",
+        "description": "An interactive phase machine inspired by Steve Reich's tape and process compositions. Load any audio, set a drift rate, and listen as two identical loops slowly pull apart. Hold K to re-sync.",
+        "url": "https://www.jordanelias.de/blog/phase-machine/",
+        "datePublished": "2026-06-01",
+        "dateModified": "2026-06-01",
+        "inLanguage": "en",
+        "author": { "@id": "https://www.jordanelias.de/#person" },
+        "publisher": { "@id": "https://www.jordanelias.de/#service" },
+        "image": { "@type": "ImageObject", "url": "https://www.jordanelias.de/images/headshot.jpg" },
+        "isPartOf": { "@type": "Blog", "@id": "https://www.jordanelias.de/blog/#blog" },
+        "mainEntityOfPage": { "@id": "https://www.jordanelias.de/blog/phase-machine/#webpage" },
+        "about": [
+          { "@type": "Person", "name": "Steve Reich", "sameAs": "https://en.wikipedia.org/wiki/Steve_Reich" },
+          { "@type": "Thing", "name": "Phase music", "sameAs": "https://en.wikipedia.org/wiki/Phase_(music)" },
+          { "@type": "Thing", "name": "Process music", "sameAs": "https://en.wikipedia.org/wiki/Process_music" }
+        ],
+        "keywords": "Steve Reich, phase music, process music, tape music, rhythm perception, music therapy, indeterminacy"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.jordanelias.de/blog/phase-machine/#webpage",
+        "url": "https://www.jordanelias.de/blog/phase-machine/",
+        "name": "Phase machine: Steve Reich and the music of process | Jordan Elias",
+        "description": "An interactive phase machine inspired by Steve Reich's tape and process compositions.",
+        "author": { "@id": "https://www.jordanelias.de/#person" },
+        "primaryImageOfPage": { "@type": "ImageObject", "url": "https://www.jordanelias.de/images/headshot.jpg" },
+        "isPartOf": { "@type": "WebSite", "@id": "https://www.jordanelias.de/#website" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://www.jordanelias.de/blog/phase-machine/#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.jordanelias.de/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.jordanelias.de/blog/" },
+          { "@type": "ListItem", "position": 3, "name": "Phase machine", "item": "https://www.jordanelias.de/blog/phase-machine/" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+<header>
+  <h1>Music &amp; Mental Health Blog</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/online-sessions/">Online Sessions</a>
+    <a href="/events/">Events</a>
+    <a href="/contact/">Contact</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+</header>
+
+<main>
+
+  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/blog/phase-machine/" aria-current="page">Phase machine</a></li>
+    </ol>
+  </nav>
+
+  <!-- TOOL FIRST -->
+  <div class="lab-section">
+    <h3>phase machine</h3>
+
+    <!-- Source loading -->
+    <div class="gen-row">
+      <span class="gen-row-label">source →</span>
+      <button class="lab-preset-btn on" id="src-default">default loop</button>
+      <label  class="upload-label" id="pm-upload-label" for="pm-file-input">upload file</label>
+      <input  type="file" id="pm-file-input" accept="audio/*">
+      <button class="lab-preset-btn" id="src-mic">microphone</button>
+      <button class="lab-btn" id="pm-record" style="display:none;min-width:80px">&#9679;&#xFE0E; record</button>
+      <span   class="rec-state-label" id="pm-rec-state" style="display:none"></span>
+      <button class="lab-preset-btn" id="pm-rec-new" style="display:none">record new</button>
+    </div>
+
+    <!-- Phase display -->
+    <div class="phase-display">
+      <div class="phase-col">
+        <span class="phase-col-label">tape A</span>
+        <span class="phase-col-val" id="disp-a">0.000 s</span>
+      </div>
+      <div class="phase-bar-wrap">
+        <div class="phase-bar-fill" id="phase-bar"></div>
+      </div>
+      <div class="phase-col">
+        <span class="phase-col-label">tape B</span>
+        <span class="phase-col-val" id="disp-b">0.000 s</span>
+      </div>
+      <div class="phase-col">
+        <span class="phase-col-label">offset</span>
+        <span class="phase-col-val" id="disp-offset">0.000 s</span>
+      </div>
+      <div class="phase-col">
+        <span class="phase-col-label">drift speed</span>
+        <span class="phase-col-val" id="disp-drift">+1.0%</span>
+      </div>
+    </div>
+
+    <!-- Transport -->
+    <div class="gen-row">
+      <button class="lab-btn" id="pm-play" style="min-width:80px">&#9654;&#xFE0E; play</button>
+      <button class="lab-btn" id="pm-reset" style="min-width:80px">reset</button>
+    </div>
+
+    <!-- Sliders -->
+    <div class="lab-transport-sliders">
+      <div class="lab-ctrl">
+        <input type="range" id="pm-drift" min="0.1" max="5" value="1" step="0.1">
+        <div class="lab-ctrl-bottom">
+          <span class="lab-ctrl-label">drift rate</span>
+          <span class="lab-ctrl-val" id="pm-drift-val">+1.0%</span>
+        </div>
+      </div>
+      <div class="lab-ctrl">
+        <input type="range" id="pm-vol-a" min="0" max="1" value="0.75" step="0.01">
+        <div class="lab-ctrl-bottom">
+          <span class="lab-ctrl-label">tape A vol</span>
+          <span class="lab-ctrl-val" id="pm-vol-a-val">75%</span>
+        </div>
+      </div>
+      <div class="lab-ctrl">
+        <input type="range" id="pm-vol-b" min="0" max="1" value="0.75" step="0.01">
+        <div class="lab-ctrl-bottom">
+          <span class="lab-ctrl-label">tape B vol</span>
+          <span class="lab-ctrl-val" id="pm-vol-b-val">75%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sync key -->
+    <div class="sync-key-row">
+      <span class="gen-row-label">sync hold →</span>
+      <span class="sync-key-badge" id="sync-badge">K</span>
+      <span class="sync-key-desc">hold K to run both tapes at the same speed · release to resume drift</span>
+    </div>
+
+    <p class="lab-hint">tape A plays at normal speed · tape B runs slightly faster · the offset accumulates until the loops re-align</p>
+  </div>
+
+  <article>
+
+    <section>
+      <h1>Phase machine: Steve Reich and the music of process</h1>
+      <p class="post-meta"><time datetime="2026-06-01">June 1, 2026</time></p>
+      <p>Written by Jordan Elias, MT-BC</p>
+      <p class="post-intro">In 1965, Steve Reich placed two identical tape loops on two separate machines and pressed play at the same time. Because the machines ran at slightly different speeds, the loops began to drift. What emerged — without intention, without composition — was one of the most significant musical discoveries of the twentieth century. This is a browser version of that machine. Load any audio, set a drift rate, and listen.</p>
+    </section>
+
+    <section>
+      <h2>It's gonna rain</h2>
+
+      <p>The piece that started it was called <em>It's Gonna Rain</em>. The source material was a field recording of Brother Walter, a Pentecostal preacher Reich had encountered in Union Square, San Francisco in 1964. He had recorded Walter's sermon on a portable machine, and later extracted a single phrase — "it's gonna rain" — which he looped on two separate tape machines.</p>
+
+      <p>The machines were meant to run in unison. They did not. One ran slightly faster than the other. Over the next several minutes, the loops drifted apart and gradually back together, creating in the process a cascade of rhythmic effects that Reich had never composed: canons, syncopations, unison moments, dense polyrhythm, the gradual dissolution of the phrase into pure rhythm, the re-emergence of intelligible speech as the loops converged again. The machine had done something neither Reich nor the tape had intended. He decided to let it.</p>
+
+      <p>This discovery became the foundation of his compositional practice. What had been an accident of analogue technology — the slight inconsistency of motor speed between two tape machines — became a deliberate compositional method. In later works like <em>Piano Phase</em> (1967) and <em>Violin Phase</em> (1967), Reich transferred the phasing process to live performers: two pianists or two violinists playing the same repeating figure, with one player instructed to gradually speed up. The process is the composition. The score specifies the starting material and the instruction to phase. Everything else emerges.</p>
+    </section>
+
+    <section>
+      <h2>The sync function — and what it reveals</h2>
+
+      <p>In the phase machine above, tape A runs at normal speed and tape B runs slightly faster, accumulating offset over time until the loops have drifted a full cycle and re-align. The K key is a sync hold: while pressed, both tapes run at the same speed, the offset freezes, and for a moment you hear the loops in unison. Releasing the key allows drift to resume from wherever the offset had reached.</p>
+
+      <p>This feature was present in Reich's live performance practice — a performer could hold a phase position rather than continuously drifting — but it is almost universally omitted from digital phase machine implementations. Its absence matters because it changes the nature of the tool. Without sync hold, a digital phase machine can only simulate the original tape accident: continuous, uncontrollable drift. With it, the performer has agency over the process. They can choose when to drift and when to hold, making phasing a compositional gesture rather than an automatic consequence.</p>
+
+      <p>This distinction is worth dwelling on. Reich's tape pieces were, in his own words, an encounter with a process he could not control. The machine did what the machine did. The performer's job was to listen to what emerged. The fact that phasing began as an artefact of imprecise mechanical equipment — not as a consciously chosen musical idea — is part of what makes it interesting. Reich did not decide to write music that drifted. He noticed that drifting was interesting, and built a practice around attending to it carefully.</p>
+    </section>
+
+    <section>
+      <h2>What the ear does with drift</h2>
+
+      <p>When two identical loops are slightly out of phase, something surprising happens in the auditory system: you begin to hear melodies, rhythms, and patterns that are not present in either loop individually. The brain does not hear two separate streams. It actively groups and re-groups the incoming material, finding structure in the relationship between the two signals — structure that exists only in the perceptual interaction between them, not in the physical sound waves.</p>
+
+      <p>This is a vivid demonstration of what Albert Bregman called auditory scene analysis: the brain's continuous work of organising acoustic input into coherent perceptual objects. In the context of phasing, that work produces emergent melodic patterns, apparent accelerations and decelerations in the rhythm, moments where the two streams seem to merge into one, and moments where they become clearly separate voices. None of these are composed. All of them are heard.</p>
+
+      <p>The perceptual effects are most pronounced at the mid-phase position — when the offset is roughly half the loop length. This is where the material from the two loops is most interleaved, and where the auditory system has the most work to do in constructing a coherent percept. Many listeners report that this region of the drift cycle sounds the most rhythmically complex, the most unexpected, and the most musically interesting — even though the raw material is maximally simple.</p>
+    </section>
+
+    <section>
+      <h2>Process music and psychotherapy</h2>
+
+      <p>Reich's 1968 essay <em>Music as a Gradual Process</em> articulates something that has stayed with me since I first read it: the idea that the listener's engagement with process music is not passive reception but active participation — the slow perceptual tracking of a change that is too gradual to pinpoint but too large to miss. You cannot hear the moment the loops drift. But you can hear that they have drifted. The experience is one of continuous presence with something that is always already different from how it was.</p>
+
+      <p>This maps closely onto what happens in effective therapy. Change in the therapeutic process is rarely visible at the moment it occurs. The session where something shifts usually does not feel dramatically different from the sessions before and after it. What becomes apparent is a retrospective sense — weeks, months later — that something is now different, that a pattern has moved, that a position once held with great force is now held more lightly. The client cannot identify the moment it changed because there was no moment. There was a gradual process, attended to carefully over time.</p>
+
+      <p>The connection to the <a href="/blog/indeterminacy-in-music-and-life/">indeterminacy post</a> is direct: Reich's process music, like Cage's chance operations and Oliveros's deep listening, involves a fundamental reorientation toward uncertainty. The performer does not know what the phase relationship will produce at any given moment. The listener does not know what pattern the auditory system will construct next. Both are in a relationship with a process they can observe but not determine. This is not a limitation. It is the condition of the work.</p>
+
+      <p>The standalone version of this tool, with additional options including loop length control, is available on <a href="https://github.com/jordan-elias" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+    </section>
+
+    <section>
+      <h2>Experiments</h2>
+
+      <div class="lab-exercise">
+        <h3>The first encounter</h3>
+        <p>Use the default loop. Press play and do nothing for two full minutes. Don't adjust any controls. Simply listen as the loops drift apart. Notice when you begin to hear emergent patterns — rhythms, melodies, or textures that feel distinct from what you heard at the start. Notice when the loops seem to merge. Notice when the original material becomes unrecognisable. Notice when it returns. Try to locate the moment the transformation happened. You will find it is difficult to identify.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>Using sync hold</h3>
+        <p>Let the loops drift to a point that feels rhythmically interesting — a texture you want to stay with. Hold K. The drift freezes. You can now listen to that phase relationship as a sustained rhythmic pattern without it changing. Release K and drift resumes. This is a form of editing — choosing which moments to hold and which to let pass. Notice what it feels like to have agency over a process that was previously automatic.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>Your own material</h3>
+        <p>Record a short phrase using the microphone — a word, a few syllables, a sustained note. Keep it under three seconds. Start the phase machine and listen as your own voice multiplies and drifts. At different phase positions, the phrase becomes a different phrase. The meaning of the words, if there are words, shifts. Notice which phase positions you prefer and which feel uncomfortable. The material is unchanged. Your relationship to it is not.</p>
+      </div>
+
+    </section>
+
+    <section>
+      <h2>If this resonates</h2>
+
+      <p>This is part of a series on sound, perception, and experimental music as therapeutic frameworks. Related posts: <a href="/blog/timbre-lab/">timbre and how structure becomes meaning</a>, <a href="/blog/binaural-beats-generator/">binaural beats and what EEG actually shows</a>, and <a href="/blog/generative-music/">Lucier, Radigue, and generative systems</a>. The <a href="/blog/indeterminacy-in-music-and-life/">indeterminacy post</a> covers Cage, Oliveros, and the therapeutic dimensions of uncertainty more broadly — a good companion to this one.</p>
+
+      <p>If you are curious about music therapy in practice, feel free to reach out via the <a href="/contact/">contact page</a>. I offer a free 30-minute consultation.</p>
+
+      <div class="cta-wrap">
+        <a href="https://cal.meetergo.com/jordanelias/consultation" target="_blank" rel="noopener noreferrer" class="cta-btn">Book an intro call</a>
+      </div>
+
+      <p>Further reading:</p>
+      <ul>
+        <li><em>Writings on Music 1965–2000</em> — Steve Reich</li>
+        <li><em>Auditory Scene Analysis</em> — Albert Bregman</li>
+        <li><em>Silence</em> — John Cage</li>
+      </ul>
+    </section>
+
+  </article>
+
+</main>
+
+<footer>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/online-sessions/">Online Sessions</a>
+    <a href="/events/">Events</a>
+    <a href="/contact/">Contact</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+  <p>© 2025-2026 Jordan Elias</p>
+</footer>
+
+<script defer src="/js/phase-machine.js"></script>
+
+</body>
+</html>
