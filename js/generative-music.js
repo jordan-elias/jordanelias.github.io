@@ -343,7 +343,6 @@
       updateLucierDisplay();
       updateDownloadSelects();
       setLucierStatus('ready');
-      lucierPlay();
     }).catch(function() { setLucierStatus('generation failed'); });
   }
 
@@ -363,7 +362,6 @@
         updateDownloadSelects();
         setSourceUI('file');
         setLucierStatus('loaded: ' + file.name.substring(0,24));
-        lucierPlay();
       }, function() {
         setLucierStatus('could not decode file');
       });
@@ -394,7 +392,6 @@
             updateDownloadSelects();
             setRecordingState('has_recording');
             setLucierStatus('ready');
-            lucierPlay();
           }, function() { setLucierStatus('decode failed'); });
         };
         fr.readAsArrayBuffer(blob);
