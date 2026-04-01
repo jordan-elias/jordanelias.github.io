@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocktail Party Problem: Interactive Training Modules</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #bdc3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 3rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .intro {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .module {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        select, input[type="range"], button {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        button:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .choice-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .choice-btn {
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            background: var(--card-bg);
+            border: 2px solid var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .choice-btn.correct {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .choice-btn.incorrect {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .feedback {
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .feedback.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .stats {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem;
+            background: var(--bg-color);
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        canvas {
+            width: 100%;
+            height: 200px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: #000;
+            margin: 1rem 0;
+        }
+
+        .visualization {
+            margin: 1.5rem 0;
+        }
+
+        .toggle-viz {
+            background: var(--bg-color);
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .spatial-diagram {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            margin: 1rem auto;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            background: radial-gradient(circle, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .sound-source {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .source-target {
+            background: var(--accent-color);
+            border: 2px solid darkred;
+        }
+
+        .source-masker {
+            background: var(--secondary-color);
+            border: 2px solid darkblue;
+        }
+
+        .listener {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .collapsible {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .collapsible-header {
+            padding: 1rem;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.active {
+            max-height: 1000px;
+            padding: 1rem;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+        }
+
+        .slider-value {
+            min-width: 60px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .warning strong {
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .choice-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .clickable-diagram {
+            cursor: crosshair;
+        }
+
+        .user-guess {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ffa500;
+            border: 2px solid #ff8c00;
+            transform: translate(-50%, -50%);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .explanation {
+            background: #e3f2fd;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary-color);
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .explanation h4 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Cocktail Party Problem</h1>
+        <p style="font-size: 1.2rem; color: #7f8c8d; margin-bottom: 2rem;">
+            Interactive Training Modules for Auditory Scene Analysis
+        </p>
+
+        <div class="intro">
+            <h3>About These Modules</h3>
+            <p>These interactive exercises allow you to experience and train the auditory scene analysis abilities your brain uses every day to separate sound sources in complex acoustic environments. Each module targets specific perceptual skills that are essential for understanding speech in noise and tracking sounds in space.</p>
+            
+            <div class="warning">
+                <strong>⚠️ Headphones Required:</strong> These modules use binaural audio rendering to create realistic 3D spatial sound. Please use headphones for the full experience.
+            </div>
+        </div>
+
+        <!-- MODULE 1: Word Identification -->
+        <h2>Module 1: Word Identification in Noise</h2>
+        
+        <div class="module">
+            <div class="explanation">
+                <h4>What You're Training</h4>
+                <p><strong>Spectral and temporal attention:</strong> This module trains your ability to focus on a target voice while filtering out competing sounds. You're practicing the same auditory scene analysis your brain performs at a crowded party when you need to hear one person amid dozens of conversations, background music, and environmental noise.</p>
+                
+                <p style="margin-top: 1rem;"><strong>The neuroscience:</strong> Success in this task depends on multiple brain mechanisms working together: spatial separation (using binaural cues to locate the target), harmonic grouping (recognizing the spectral signature of the target voice), and selective attention (enhancing the target while suppressing maskers). The difficulty increases as the signal-to-noise ratio decreases, requiring more top-down attentional control from prefrontal and parietal cortex to modulate activity in auditory cortex.</p>
+            </div>
+
+            <h3>Instructions</h3>
+            <p>1. Choose your difficulty level (Easy, Medium, or Hard) or customize the settings manually<br>
+            2. Select whether you want to identify colors or numbers<br>
+            3. Click "Play" to hear a word spoken amid background noise<br>
+            4. Click the button for the word you heard<br>
+            5. You get one retry if incorrect, then the answer is revealed</p>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="m1-trials">0</div>
+                    <div class="stat-label">Trials</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="m1-correct">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="m1-accuracy">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="m1-difficulty">Difficulty Preset</label>
+                    <select id="m1-difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="m1-wordset">Word Set</label>
+                    <select id="m1-wordset">
+                        <option value="colors">Colors</option>
+                        <option value="numbers">Numbers</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" id="m1-advanced-toggle">
+                    Advanced Controls
+                    <span>▼</span>
+                </div>
+                <div class="collapsible-content" id="m1-advanced">
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label>Target Volume</label>
+                            <div class="slider-container">
+                                <input type="range" id="m1-target-vol" min="0" max="1" step="0.1" value="0.8">
+                                <span class="slider-value" id="m1-target-vol-value">0.8</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Playback Speed</label>
+                            <div class="slider-container">
+                                <input type="range" id="m1-speed" min="0.5" max="1.5" step="0.05" value="1.0">
+                                <span class="slider-value" id="m1-speed-value">1.0x</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="m1-masker-count">Number of Maskers</label>
+                            <select id="m1-masker-count">
+                                <option value="1">1 Masker</option>
+                                <option value="2">2 Maskers</option>
+                                <option value="3">3 Maskers</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="m1-maskers">
+                        <!-- Masker controls will be dynamically generated -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="m1-play">▶ Play</button>
+                <button id="m1-repeat" disabled>🔄 Repeat</button>
+                <button id="m1-next" disabled>Next →</button>
+            </div>
+
+            <div id="m1-feedback"></div>
+
+            <div class="choice-buttons" id="m1-choices">
+                <!-- Buttons will be dynamically generated -->
+            </div>
+
+            <div class="visualization">
+                <button class="toggle-viz" id="m1-toggle-spec">Toggle Spectrogram</button>
+                <canvas id="m1-spectrogram" class="hidden"></canvas>
+            </div>
+
+            <div class="visualization">
+                <h4 style="text-align: center; margin-bottom: 1rem;">Spatial Configuration</h4>
+                <div class="spatial-diagram" id="m1-spatial">
+                    <div class="listener"></div>
+                    <!-- Source positions will be dynamically added -->
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 2: Spatial Tracking -->
+        <h2>Module 2: Spatial Tracking</h2>
+        
+        <div class="module">
+            <div class="explanation">
+                <h4>What You're Training</h4>
+                <p><strong>Dynamic spatial attention and object tracking:</strong> This module trains your ability to track a moving sound source through 3D space while other sources move simultaneously. This requires sustained spatial attention, object continuity (recognizing that the same source is moving, not multiple sources appearing and disappearing), and the integration of binaural cues over time.</p>
+                
+                <p style="margin-top: 1rem;"><strong>The neuroscience:</strong> Tracking moving sound sources engages the dorsal auditory pathway (the "where" stream) that extends from auditory cortex through parietal cortex. This pathway processes spatial location and motion. Successfully following one target among multiple moving sources requires top-down attention to modulate spatial representations continuously, updating the predicted position of the target while suppressing distractors. This is fundamentally different from static source separation—you're tracking an object across space and time, not just identifying a location.</p>
+            </div>
+
+            <h3>Instructions</h3>
+            <p>1. You'll hear 2-3 pleasant tones moving through 3D space around you<br>
+            2. The visualization shows where each tone starts (the target is highlighted)<br>
+            3. After a few seconds, the visualization fades and you must track the target by ear only<br>
+            4. When the sounds stop, click on the diagram where you think the target tone ended<br>
+            5. Try to be as precise as possible!</p>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="m2-trials">0</div>
+                    <div class="stat-label">Trials</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="m2-avg-error">0°</div>
+                    <div class="stat-label">Avg Error</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="m2-accuracy">0%</div>
+                    <div class="stat-label">Within 30°</div>
+                </div>
+            </div>
+
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="m2-difficulty">Difficulty</label>
+                    <select id="m2-difficulty">
+                        <option value="easy">Easy (2 sources, slow)</option>
+                        <option value="medium">Medium (3 sources, moderate)</option>
+                        <option value="hard">Hard (3 sources, fast)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="m2-duration">Duration (seconds)</label>
+                    <select id="m2-duration">
+                        <option value="5">5 seconds</option>
+                        <option value="8" selected>8 seconds</option>
+                        <option value="10">10 seconds</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="m2-start">▶ Start</button>
+                <button id="m2-reset" disabled>Reset</button>
+            </div>
+
+            <div id="m2-feedback"></div>
+
+            <div class="visualization">
+                <h4 style="text-align: center; margin-bottom: 1rem;">Spatial Tracking</h4>
+                <p style="text-align: center; color: #7f8c8d; margin-bottom: 1rem;" id="m2-instruction">
+                    Click "Start" to begin
+                </p>
+                <div class="spatial-diagram clickable-diagram" id="m2-spatial">
+                    <div class="listener"></div>
+                    <!-- Moving sources will be dynamically added -->
+                </div>
+            </div>
+        </div>
+
+        <div class="intro" style="margin-top: 3rem;">
+            <h3>About Auditory Scene Analysis</h3>
+            <p>The cocktail party problem—named by psychologist Colin Cherry in 1953—describes the challenge of separating one sound source from many simultaneous sources. Your brain solves this problem using multiple cues: spatial location (which ear sounds arrive at first and loudest), spectral content (the unique frequency signature of each voice or instrument), temporal coherence (sounds that start and stop together belong together), and predictive models (what you expect to hear based on context).</p>
+            
+            <p style="margin-top: 1rem;">These modules train these mechanisms explicitly. With practice, you can improve your selective attention, reduce listening fatigue in noisy environments, and better understand how your auditory system organizes the acoustic world. For more information about the neuroscience of auditory scene analysis, see the accompanying article.</p>
+        </div>
+    </div>
+
+    <!-- Resonance Audio Library -->
+    <script src="https://cdn.jsdelivr.net/npm/resonance-audio/build/resonance-audio.min.js"></script>
+
+    <script>
+        // ========================================
+        // SHARED AUDIO CONTEXT AND UTILITIES
+        // ========================================
+        
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        let resonanceAudioScene;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+                // Initialize Resonance Audio
+                resonanceAudioScene = new ResonanceAudio(audioCtx);
+                resonanceAudioScene.output.connect(audioCtx.destination);
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Pink noise generator
+        function createPinkNoise(duration) {
+            const sampleRate = audioCtx.sampleRate;
+            const bufferSize = sampleRate * duration;
+            const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+            const output = buffer.getChannelData(0);
+            
+            let b0, b1, b2, b3, b4, b5, b6;
+            b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+            
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                b0 = 0.99886 * b0 + white * 0.0555179;
+                b1 = 0.99332 * b1 + white * 0.0750759;
+                b2 = 0.96900 * b2 + white * 0.1538520;
+                b3 = 0.86650 * b3 + white * 0.3104856;
+                b4 = 0.55000 * b4 + white * 0.5329522;
+                b5 = -0.7616 * b5 - white * 0.0168980;
+                output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                output[i] *= 0.11;
+                b6 = white * 0.115926;
+            }
+            
+            return buffer;
+        }
+
+        // Speech-shaped noise generator
+        function createSpeechShapedNoise(duration) {
+            const sampleRate = audioCtx.sampleRate;
+            const bufferSize = sampleRate * duration;
+            const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+            const output = buffer.getChannelData(0);
+            
+            // Generate white noise
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+            
+            // Apply speech-like filtering (emphasis on 500-4000 Hz)
+            const filterNode = audioCtx.createBiquadFilter();
+            filterNode.type = 'bandpass';
+            filterNode.frequency.value = 2000;
+            filterNode.Q.value = 0.5;
+            
+            return buffer;
+        }
+
+        // Generate synthetic party babble (multiple overlapping voices)
+        function createPartyBabble(duration, numVoices = 5) {
+            const utterances = [
+                "how are you", "nice to meet you", "what do you think",
+                "that sounds great", "I completely agree", "interesting point",
+                "let me tell you", "by the way", "as I was saying"
+            ];
+            
+            // For v1, just return pink noise as placeholder
+            // Will be replaced with actual multi-voice synthesis in v2
+            return createPinkNoise(duration);
+        }
+
+        // ========================================
+        // MODULE 1: WORD IDENTIFICATION
+        // ========================================
+        
+        const m1 = {
+            trials: 0,
+            correct: 0,
+            currentWord: null,
+            choices: [],
+            attempts: 0,
+            source: null,
+            maskerSources: [],
+            isPlaying: false,
+            
+            wordSets: {
+                colors: ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown', 'black', 'white',
+                        'gray', 'silver', 'gold', 'violet', 'indigo', 'cyan', 'magenta', 'turquoise', 'lime', 'maroon'],
+                numbers: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+            },
+            
+            difficulties: {
+                easy: { snr: 10, maskerCount: 1, maskerType: 'pink', speed: 0.85 },
+                medium: { snr: 0, maskerCount: 2, maskerType: 'speech', speed: 1.0 },
+                hard: { snr: -5, maskerCount: 3, maskerType: 'party', speed: 1.0 }
+            },
+            
+            maskerTypes: {
+                pink: { name: 'Pink Noise', generator: createPinkNoise },
+                speech: { name: 'Speech-Shaped Noise', generator: createSpeechShapedNoise },
+                party: { name: 'Party Babble', generator: createPartyBabble },
+                traffic: { name: 'Traffic Sounds', generator: createPinkNoise }, // Placeholder
+                nature: { name: 'Nature Sounds', generator: createPinkNoise } // Placeholder
+            }
+        };
+
+        // Initialize Module 1
+        function initModule1() {
+            // Difficulty preset handler
+            document.getElementById('m1-difficulty').addEventListener('change', (e) => {
+                const difficulty = e.target.value;
+                if (difficulty !== 'custom') {
+                    applyDifficultyPreset(difficulty);
+                }
+            });
+
+            // Advanced controls toggle
+            document.getElementById('m1-advanced-toggle').addEventListener('click', () => {
+                const content = document.getElementById('m1-advanced');
+                const isActive = content.classList.toggle('active');
+                document.querySelector('#m1-advanced-toggle span').textContent = isActive ? '▲' : '▼';
+            });
+
+            // Masker count handler
+            document.getElementById('m1-masker-count').addEventListener('change', () => {
+                updateMaskerControls();
+            });
+
+            // Slider value displays
+            document.getElementById('m1-target-vol').addEventListener('input', (e) => {
+                document.getElementById('m1-target-vol-value').textContent = e.target.value;
+            });
+
+            document.getElementById('m1-speed').addEventListener('input', (e) => {
+                document.getElementById('m1-speed-value').textContent = e.target.value + 'x';
+            });
+
+            // Button handlers
+            document.getElementById('m1-play').addEventListener('click', () => playModule1());
+            document.getElementById('m1-repeat').addEventListener('click', () => repeatModule1());
+            document.getElementById('m1-next').addEventListener('click', () => nextModule1());
+            
+            // Spectrogram toggle
+            document.getElementById('m1-toggle-spec').addEventListener('click', () => {
+                document.getElementById('m1-spectrogram').classList.toggle('hidden');
+            });
+
+            // Initialize masker controls
+            updateMaskerControls();
+            
+            // Apply default difficulty
+            applyDifficultyPreset('easy');
+        }
+
+        function applyDifficultyPreset(difficulty) {
+            const preset = m1.difficulties[difficulty];
+            
+            document.getElementById('m1-masker-count').value = preset.maskerCount;
+            document.getElementById('m1-speed').value = preset.speed;
+            document.getElementById('m1-speed-value').textContent = preset.speed + 'x';
+            
+            updateMaskerControls();
+            
+            // Set all maskers to the preset type
+            const maskerSelects = document.querySelectorAll('[id^="m1-masker-type-"]');
+            maskerSelects.forEach(select => {
+                select.value = preset.maskerType;
+            });
+        }
+
+        function updateMaskerControls() {
+            const count = parseInt(document.getElementById('m1-masker-count').value);
+            const container = document.getElementById('m1-maskers');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const maskerDiv = document.createElement('div');
+                maskerDiv.className = 'controls-grid';
+                maskerDiv.style.marginTop = '1rem';
+                maskerDiv.style.padding = '1rem';
+                maskerDiv.style.background = '#f8f9fa';
+                maskerDiv.style.borderRadius = '4px';
+                
+                maskerDiv.innerHTML = `
+                    <div class="control-group">
+                        <label for="m1-masker-type-${i}">Masker ${i + 1} Type</label>
+                        <select id="m1-masker-type-${i}">
+                            <option value="pink">Pink Noise</option>
+                            <option value="speech">Speech-Shaped Noise</option>
+                            <option value="party">Party Babble</option>
+                            <option value="traffic">Traffic Sounds</option>
+                            <option value="nature">Nature Sounds</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Masker ${i + 1} Volume</label>
+                        <div class="slider-container">
+                            <input type="range" id="m1-masker-vol-${i}" min="0" max="1" step="0.1" value="0.5">
+                            <span class="slider-value" id="m1-masker-vol-${i}-value">0.5</span>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(maskerDiv);
+                
+                // Add event listener for volume slider
+                document.getElementById(`m1-masker-vol-${i}`).addEventListener('input', (e) => {
+                    document.getElementById(`m1-masker-vol-${i}-value`).textContent = e.target.value;
+                });
+            }
+            
+            updateSpatialDiagram();
+        }
+
+        function updateSpatialDiagram() {
+            const diagram = document.getElementById('m1-spatial');
+            const count = parseInt(document.getElementById('m1-masker-count').value);
+            
+            // Remove old sources
+            const oldSources = diagram.querySelectorAll('.sound-source');
+            oldSources.forEach(s => s.remove());
+            
+            // Add target (center)
+            const target = document.createElement('div');
+            target.className = 'sound-source source-target';
+            target.style.left = '50%';
+            target.style.top = '50%';
+            target.title = 'Target Voice';
+            diagram.appendChild(target);
+            
+            // Add maskers at spatial positions
+            const positions = [
+                { left: '20%', top: '50%', angle: -90 },  // Left
+                { left: '30%', top: '30%', angle: -60 },  // Front-left
+                { left: '70%', top: '30%', angle: 60 },   // Front-right
+                { left: '50%', top: '80%', angle: 180 }   // Behind
+            ];
+            
+            for (let i = 0; i < count; i++) {
+                const masker = document.createElement('div');
+                masker.className = 'sound-source source-masker';
+                masker.style.left = positions[i].left;
+                masker.style.top = positions[i].top;
+                masker.title = `Masker ${i + 1} (${positions[i].angle}°)`;
+                diagram.appendChild(masker);
+            }
+        }
+
+        function playModule1() {
+            initAudio();
+            
+            const wordSet = document.getElementById('m1-wordset').value;
+            const words = m1.wordSets[wordSet];
+            
+            // Select random target word
+            m1.currentWord = words[Math.floor(Math.random() * words.length)];
+            
+            // Select 3 random distractors (different from target)
+            const distractors = words.filter(w => w !== m1.currentWord);
+            const shuffled = distractors.sort(() => Math.random() - 0.5);
+            m1.choices = [m1.currentWord, ...shuffled.slice(0, 3)].sort(() => Math.random() - 0.5);
+            
+            // Reset attempts
+            m1.attempts = 0;
+            
+            // Create choice buttons
+            const choicesContainer = document.getElementById('m1-choices');
+            choicesContainer.innerHTML = '';
+            
+            m1.choices.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+                btn.onclick = () => checkAnswer1(word);
+                choicesContainer.appendChild(btn);
+            });
+            
+            // Synthesize and play audio
+            synthesizeAndPlay();
+            
+            // Update UI
+            document.getElementById('m1-play').disabled = true;
+            document.getElementById('m1-repeat').disabled = false;
+            document.getElementById('m1-feedback').innerHTML = '';
+        }
+
+        function synthesizeAndPlay() {
+            const utterance = new SpeechSynthesisUtterance(m1.currentWord);
+            
+            // Set speech parameters
+            const speed = parseFloat(document.getElementById('m1-speed').value);
+            utterance.rate = speed;
+            
+            // Randomize voice for variability
+            const voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
+            if (voices.length > 0) {
+                utterance.voice = voices[Math.floor(Math.random() * voices.length)];
+            }
+            
+            // This is a simplified version - in full implementation,
+            // we would capture the audio, mix with maskers using Resonance Audio,
+            // and play through the spatial audio scene
+            
+            // For v1, we'll use the Web Speech API directly
+            // and add pink noise as a simple masker
+            speechSynthesis.speak(utterance);
+            
+            // Play maskers (simplified for v1)
+            playMaskers();
+        }
+
+        function playMaskers() {
+            const count = parseInt(document.getElementById('m1-masker-count').value);
+            const positions = [-90, -60, 60, 180]; // Azimuth angles
+            
+            m1.maskerSources.forEach(source => {
+                if (source) source.stop();
+            });
+            m1.maskerSources = [];
+            
+            for (let i = 0; i < count; i++) {
+                const type = document.getElementById(`m1-masker-type-${i}`).value;
+                const volume = parseFloat(document.getElementById(`m1-masker-vol-${i}`).value);
+                
+                // Generate masker audio
+                const buffer = m1.maskerTypes[type].generator(3);
+                
+                // Create source
+                const source = audioCtx.createBufferSource();
+                source.buffer = buffer;
+                
+                // Create Resonance Audio source
+                const audioSource = resonanceAudioScene.createSource();
+                
+                // Position source at azimuth
+                const angle = positions[i] * Math.PI / 180;
+                const x = Math.sin(angle) * 2;
+                const z = -Math.cos(angle) * 2;
+                audioSource.setPosition(x, 0, z);
+                
+                // Create gain node for volume control
+                const gain = audioCtx.createGain();
+                gain.gain.value = volume;
+                
+                // Connect: source -> gain -> audioSource
+                source.connect(gain);
+                gain.connect(audioSource.input);
+                
+                source.start();
+                m1.maskerSources.push(source);
+            }
+        }
+
+        function repeatModule1() {
+            synthesizeAndPlay();
+        }
+
+        function checkAnswer1(selected) {
+            m1.attempts++;
+            
+            if (selected === m1.currentWord) {
+                // Correct!
+                showFeedback1('success', '✓ Correct!');
+                m1.correct++;
+                m1.trials++;
+                updateStats1();
+                
+                // Highlight correct button
+                const buttons = document.querySelectorAll('.choice-btn');
+                buttons.forEach(btn => {
+                    if (btn.textContent.toLowerCase() === m1.currentWord.toLowerCase()) {
+                        btn.classList.add('correct');
+                    }
+                    btn.disabled = true;
+                });
+                
+                // Enable next button
+                document.getElementById('m1-next').disabled = false;
+                
+            } else if (m1.attempts < 2) {
+                // First incorrect attempt - allow retry
+                showFeedback1('error', '✗ Try again');
+                
+                // Highlight incorrect button briefly
+                const buttons = document.querySelectorAll('.choice-btn');
+                buttons.forEach(btn => {
+                    if (btn.textContent.toLowerCase() === selected.toLowerCase()) {
+                        btn.classList.add('incorrect');
+                        setTimeout(() => btn.classList.remove('incorrect'), 1000);
+                    }
+                });
+                
+            } else {
+                // Second incorrect attempt - reveal answer
+                showFeedback1('error', `✗ The word was: ${m1.currentWord}`);
+                m1.trials++;
+                updateStats1();
+                
+                // Highlight correct answer
+                const buttons = document.querySelectorAll('.choice-btn');
+                buttons.forEach(btn => {
+                    if (btn.textContent.toLowerCase() === m1.currentWord.toLowerCase()) {
+                        btn.classList.add('correct');
+                    }
+                    btn.disabled = true;
+                });
+                
+                // Enable next button
+                document.getElementById('m1-next').disabled = false;
+            }
+        }
+
+        function showFeedback1(type, message) {
+            const feedback = document.getElementById('m1-feedback');
+            feedback.className = `feedback ${type}`;
+            feedback.textContent = message;
+        }
+
+        function updateStats1() {
+            document.getElementById('m1-trials').textContent = m1.trials;
+            document.getElementById('m1-correct').textContent = m1.correct;
+            const accuracy = m1.trials > 0 ? Math.round((m1.correct / m1.trials) * 100) : 0;
+            document.getElementById('m1-accuracy').textContent = accuracy + '%';
+        }
+
+        function nextModule1() {
+            // Reset for next trial
+            document.getElementById('m1-play').disabled = false;
+            document.getElementById('m1-repeat').disabled = true;
+            document.getElementById('m1-next').disabled = true;
+            document.getElementById('m1-feedback').innerHTML = '';
+            
+            const choicesContainer = document.getElementById('m1-choices');
+            choicesContainer.innerHTML = '';
+        }
+
+        // ========================================
+        // MODULE 2: SPATIAL TRACKING
+        // ========================================
+        
+        const m2 = {
+            trials: 0,
+            totalError: 0,
+            within30: 0,
+            sources: [],
+            targetIndex: 0,
+            isPlaying: false,
+            userGuess: null,
+            actualPosition: null
+        };
+
+        function initModule2() {
+            document.getElementById('m2-start').addEventListener('click', () => startModule2());
+            document.getElementById('m2-reset').addEventListener('click', () => resetModule2());
+            
+            // Make diagram clickable
+            document.getElementById('m2-spatial').addEventListener('click', (e) => {
+                if (m2.isPlaying === 'awaiting_input') {
+                    handleDiagramClick(e);
+                }
+            });
+        }
+
+        function startModule2() {
+            initAudio();
+            
+            const difficulty = document.getElementById('m2-difficulty').value;
+            const duration = parseInt(document.getElementById('m2-duration').value);
+            
+            // Determine number of sources and speed based on difficulty
+            let numSources, speed;
+            switch(difficulty) {
+                case 'easy':
+                    numSources = 2;
+                    speed = 0.5;
+                    break;
+                case 'medium':
+                    numSources = 3;
+                    speed = 1.0;
+                    break;
+                case 'hard':
+                    numSources = 3;
+                    speed = 1.5;
+                    break;
+            }
+            
+            // Initialize sources with random starting positions
+            m2.sources = [];
+            m2.targetIndex = Math.floor(Math.random() * numSources);
+            
+            const diagram = document.getElementById('m2-spatial');
+            const listener = diagram.querySelector('.listener');
+            
+            // Remove old sources
+            const oldSources = diagram.querySelectorAll('.sound-source');
+            oldSources.forEach(s => s.remove());
+            
+            // Create sources with pleasant tones (major triad notes)
+            const notes = [261.63, 329.63, 392.00]; // C, E, G
+            
+            for (let i = 0; i < numSources; i++) {
+                // Random starting angle
+                const startAngle = Math.random() * 360;
+                const startRad = startAngle * Math.PI / 180;
+                
+                // Random ending angle (different from start)
+                let endAngle = (startAngle + 90 + Math.random() * 180) % 360;
+                const endRad = endAngle * Math.PI / 180;
+                
+                // Create visual element
+                const source = document.createElement('div');
+                source.className = `sound-source ${i === m2.targetIndex ? 'source-target' : 'source-masker'}`;
+                
+                // Position on circle (200px radius)
+                const radius = 180;
+                const startX = 50 + Math.sin(startRad) * radius / 4; // Convert to percentage
+                const startY = 50 - Math.cos(startRad) * radius / 4;
+                
+                source.style.left = startX + '%';
+                source.style.top = startY + '%';
+                
+                diagram.appendChild(source);
+                
+                m2.sources.push({
+                    element: source,
+                    startAngle,
+                    endAngle,
+                    frequency: notes[i % notes.length],
+                    rhythm: 0.3 + i * 0.15 // Different rhythm for each
+                });
+            }
+            
+            // Show instruction
+            document.getElementById('m2-instruction').textContent = 
+                `The RED tone is your target. Follow it as all tones move...`;
+            
+            // Animate sources
+            setTimeout(() => {
+                animateSources(duration, speed);
+            }, 2000);
+            
+            m2.isPlaying = 'animating';
+            document.getElementById('m2-start').disabled = true;
+        }
+
+        function animateSources(duration, speed) {
+            const startTime = Date.now();
+            const diagram = document.getElementById('m2-spatial');
+            
+            // Fade visualization after 2 seconds
+            setTimeout(() => {
+                const sources = diagram.querySelectorAll('.sound-source');
+                sources.forEach(s => {
+                    s.style.opacity = '0';
+                });
+                document.getElementById('m2-instruction').textContent = 
+                    'Visualization faded - track by ear only...';
+            }, 2000);
+            
+            function animate() {
+                const elapsed = (Date.now() - startTime) / 1000;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                if (progress < 1) {
+                    m2.sources.forEach(source => {
+                        const currentAngle = source.startAngle + 
+                            (source.endAngle - source.startAngle) * progress;
+                        const rad = currentAngle * Math.PI / 180;
+                        
+                        const radius = 180;
+                        const x = 50 + Math.sin(rad) * radius / 4;
+                        const y = 50 - Math.cos(rad) * radius / 4;
+                        
+                        source.element.style.left = x + '%';
+                        source.element.style.top = y + '%';
+                    });
+                    
+                    requestAnimationFrame(animate);
+                } else {
+                    // Animation complete
+                    finishAnimation();
+                }
+            }
+            
+            animate();
+            
+            // Play tones (simplified - would use JSAmbisonics in full version)
+            playMovingTones(duration);
+        }
+
+        function playMovingTones(duration) {
+            // Simplified version - would implement full spatial audio with JSAmbisonics
+            m2.sources.forEach((source, index) => {
+                const osc = audioCtx.createOscillator();
+                osc.frequency.value = source.frequency;
+                osc.type = 'sine';
+                
+                const gain = audioCtx.createGain();
+                gain.gain.value = 0.1;
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                // Simple rhythmic gating
+                const now = audioCtx.currentTime;
+                for (let t = 0; t < duration; t += source.rhythm) {
+                    gain.gain.setValueAtTime(0.1, now + t);
+                    gain.gain.setValueAtTime(0, now + t + source.rhythm * 0.5);
+                }
+                
+                osc.start(now);
+                osc.stop(now + duration);
+            });
+        }
+
+        function finishAnimation() {
+            m2.isPlaying = 'awaiting_input';
+            m2.actualPosition = {
+                angle: m2.sources[m2.targetIndex].endAngle,
+                x: parseFloat(m2.sources[m2.targetIndex].element.style.left),
+                y: parseFloat(m2.sources[m2.targetIndex].element.style.top)
+            };
+            
+            document.getElementById('m2-instruction').textContent = 
+                'Click where you think the RED target tone ended';
+            document.getElementById('m2-reset').disabled = false;
+        }
+
+        function handleDiagramClick(e) {
+            const diagram = document.getElementById('m2-spatial');
+            const rect = diagram.getBoundingClientRect();
+            
+            // Calculate click position relative to diagram center
+            const clickX = ((e.clientX - rect.left) / rect.width) * 100;
+            const clickY = ((e.clientY - rect.top) / rect.height) * 100;
+            
+            // Convert to angle
+            const dx = clickX - 50;
+            const dy = -(clickY - 50); // Invert Y
+            const clickAngle = Math.atan2(dx, dy) * 180 / Math.PI;
+            const normalizedAngle = (clickAngle + 360) % 360;
+            
+            // Show user's guess
+            const guess = document.createElement('div');
+            guess.className = 'user-guess';
+            guess.style.left = clickX + '%';
+            guess.style.top = clickY + '%';
+            diagram.appendChild(guess);
+            
+            // Show actual position
+            m2.sources.forEach(s => {
+                s.element.style.opacity = '1';
+            });
+            
+            // Calculate error
+            let angleDiff = Math.abs(normalizedAngle - m2.actualPosition.angle);
+            if (angleDiff > 180) angleDiff = 360 - angleDiff;
+            
+            m2.totalError += angleDiff;
+            m2.trials++;
+            if (angleDiff <= 30) m2.within30++;
+            
+            // Show feedback
+            const feedback = document.getElementById('m2-feedback');
+            feedback.className = angleDiff <= 30 ? 'feedback success' : 'feedback error';
+            feedback.textContent = `Error: ${Math.round(angleDiff)}° ${angleDiff <= 30 ? '✓ Great!' : ''}`;
+            
+            updateStats2();
+            
+            document.getElementById('m2-instruction').textContent = 
+                'Click Reset to try again';
+            
+            m2.isPlaying = 'complete';
+        }
+
+        function resetModule2() {
+            m2.isPlaying = false;
+            document.getElementById('m2-start').disabled = false;
+            document.getElementById('m2-reset').disabled = true;
+            document.getElementById('m2-feedback').innerHTML = '';
+            document.getElementById('m2-instruction').textContent = 'Click "Start" to begin';
+            
+            const diagram = document.getElementById('m2-spatial');
+            const sources = diagram.querySelectorAll('.sound-source, .user-guess');
+            sources.forEach(s => s.remove());
+        }
+
+        function updateStats2() {
+            document.getElementById('m2-trials').textContent = m2.trials;
+            const avgError = m2.trials > 0 ? Math.round(m2.totalError / m2.trials) : 0;
+            document.getElementById('m2-avg-error').textContent = avgError + '°';
+            const accuracy = m2.trials > 0 ? Math.round((m2.within30 / m2.trials) * 100) : 0;
+            document.getElementById('m2-accuracy').textContent = accuracy + '%';
+        }
+
+        // ========================================
+        // INITIALIZE ON LOAD
+        // ========================================
+        
+        window.addEventListener('load', () => {
+            // Wait for speech synthesis voices to load
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = () => {
+                    initModule1();
+                    initModule2();
+                };
+            } else {
+                initModule1();
+                initModule2();
+            }
+        });
+    </script>
+</body>
+</html>
