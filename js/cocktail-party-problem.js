@@ -266,7 +266,7 @@ function updateMaskerConfigs() {
         <select class="gen-select" id="masker-type-${i}">
           <option value="pink">Pink Noise</option>
           <option value="speech">Speech-Shaped Noise</option>
-          <option value="party">Party Babble</option>
+          <option value="party">Party Sounds</option>
           <option value="traffic">Traffic Sounds</option>
           <option value="nature">Nature Sounds</option>
         </select>
@@ -620,7 +620,7 @@ function checkAnswer(selected) {
   
   if (selected === state.currentWord) {
     // Correct!
-    showFeedback('success', '✓ Correct!');
+    showFeedback('success', 'Correct!');
     state.correct++;
     state.trials++;
     updateStats();
@@ -638,7 +638,7 @@ function checkAnswer(selected) {
     
   } else if (state.attempts < 2) {
     // First incorrect attempt - allow retry
-    showFeedback('error', '✗ Try again');
+    showFeedback('error', 'Try again');
     
     const buttons = document.querySelectorAll('.choice-btn');
     buttons.forEach(btn => {
@@ -650,7 +650,7 @@ function checkAnswer(selected) {
     
   } else {
     // Second incorrect attempt - reveal answer
-    showFeedback('error', `✗ The word was: ${state.currentWord}`);
+    showFeedback('error', `The word was: ${state.currentWord}`);
     state.trials++;
     updateStats();
     
