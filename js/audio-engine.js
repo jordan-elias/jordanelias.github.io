@@ -171,7 +171,7 @@ class AssetLoader {
   }
 
   async loadTargetWord(word, variant = 0) {
-    const url = `./audio/targets/${word}_${variant}.mp3`;
+    const url = `/audio/targets/${word}_${variant}.mp3`;
     const buffer = await this.loadAudio(url);
     
     if (!this.buffers.targets[word]) {
