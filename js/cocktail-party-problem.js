@@ -90,9 +90,9 @@ function initAudio() {
 
 async function loadAudioFiles() {
   const files = {
-    party: './audio/party.mp3',
-    traffic: './audio/traffic.mp3',
-    nature: './audio/nature.mp3'
+    party: '/audio/party.mp3',
+    traffic: '/audio/traffic.mp3',
+    nature: '/audio/nature.mp3'
   };
 
   for (const [key, url] of Object.entries(files)) {
