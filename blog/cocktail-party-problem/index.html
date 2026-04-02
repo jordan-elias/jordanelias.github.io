@@ -1,1503 +1,514 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Cocktail Party Problem: Interactive Training Modules</title>
-    <style>
-        :root {
-            --bg-color: #fafafa;
-            --text-color: #1a1a1a;
-            --accent-color: #0066cc;
-            --border-color: #e0e0e0;
-            --card-bg: #ffffff;
-            --success-color: #27ae60;
-            --error-color: #e74c3c;
-            --muted-color: #666666;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.7;
-            padding: 20px;
-            font-size: 16px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-            letter-spacing: -0.02em;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-top: 3rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-color);
-            letter-spacing: -0.01em;
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: var(--text-color);
-        }
-
-        h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-
-        p {
-            margin-bottom: 1rem;
-            color: var(--text-color);
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--muted-color);
-            margin-bottom: 2rem;
-        }
-
-        .intro {
-            background: var(--card-bg);
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-        }
-
-        .module {
-            background: var(--card-bg);
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-        }
-
-        .explanation {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-left: 3px solid var(--accent-color);
-            margin: 1.5rem 0;
-        }
-
-        .warning {
-            background: #fff9e6;
-            border: 1px solid #ffcc00;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-
-        .warning strong {
-            color: #b38600;
-        }
-
-        .controls-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        label {
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: var(--text-color);
-        }
-
-        select, input[type="range"] {
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            background: white;
-            font-size: 1rem;
-            font-family: inherit;
-        }
-
-        select {
-            cursor: pointer;
-        }
-
-        select:focus, input[type="range"]:focus {
-            outline: 2px solid var(--accent-color);
-            outline-offset: 2px;
-        }
-
-        button {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: opacity 0.2s ease;
-        }
-
-        button:hover:not(:disabled) {
-            opacity: 0.85;
-        }
-
-        button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-        }
-
-        .choice-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .choice-btn {
-            padding: 1.5rem;
-            font-size: 1.1rem;
-            background: white;
-            border: 2px solid var(--border-color);
-            color: var(--text-color);
-            transition: all 0.2s ease;
-        }
-
-        .choice-btn:hover:not(:disabled) {
-            border-color: var(--accent-color);
-            background: #f0f7ff;
-        }
-
-        .choice-btn.correct {
-            background: var(--success-color);
-            color: white;
-            border-color: var(--success-color);
-        }
-
-        .choice-btn.incorrect {
-            background: var(--error-color);
-            color: white;
-            border-color: var(--error-color);
-        }
-
-        .feedback {
-            padding: 1rem;
-            margin: 1rem 0;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .feedback.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .feedback.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .stats {
-            display: flex;
-            gap: 2rem;
-            padding: 1.5rem;
-            background: #f8f9fa;
-            border: 1px solid var(--border-color);
-            margin: 1.5rem 0;
-        }
-
-        .stat {
-            flex: 1;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--accent-color);
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--muted-color);
-            margin-top: 0.25rem;
-        }
-
-        canvas {
-            width: 100%;
-            height: 200px;
-            border: 1px solid var(--border-color);
-            background: #000;
-            margin: 1rem 0;
-            display: block;
-        }
-
-        .visualization {
-            margin: 1.5rem 0;
-        }
-
-        .toggle-viz {
-            background: white;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .spatial-diagram {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            height: 400px;
-            margin: 1.5rem auto;
-            border: 2px solid var(--border-color);
-            border-radius: 50%;
-            background: radial-gradient(circle, #ffffff 0%, #f5f5f5 100%);
-        }
-
-        .sound-source {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
-
-        .source-target {
-            background: #e74c3c;
-            border: 2px solid #c0392b;
-            box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
-        }
-
-        .source-masker {
-            background: #3498db;
-            border: 2px solid #2980b9;
-        }
-
-        .listener {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 30px;
-            height: 30px;
-            background: var(--text-color);
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 5;
-        }
-
-        .collapsible {
-            background: white;
-            border: 1px solid var(--border-color);
-            margin: 1.5rem 0;
-        }
-
-        .collapsible-header {
-            padding: 1rem;
-            cursor: pointer;
-            user-select: none;
-            font-weight: 500;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8f9fa;
-        }
-
-        .collapsible-header:hover {
-            background: #e9ecef;
-        }
-
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-
-        .collapsible-content.active {
-            max-height: 2000px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .collapsible-inner {
-            padding: 1.5rem;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .slider-container input[type="range"] {
-            flex: 1;
-        }
-
-        .slider-value {
-            min-width: 60px;
-            text-align: right;
-            font-weight: 500;
-            color: var(--accent-color);
-        }
-
-        .masker-config {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border: 1px solid var(--border-color);
-        }
-
-        .masker-config h5 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-color);
-        }
-
-        @media (max-width: 768px) {
-            .controls-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .choice-buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .stats {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .container {
-                padding: 0 10px;
-            }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .clickable-diagram {
-            cursor: crosshair;
-        }
-
-        .user-guess {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #f39c12;
-            border: 2px solid #e67e22;
-            transform: translate(-50%, -50%);
-            animation: pulse 1s infinite;
-            z-index: 15;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
-        }
-
-        .fade-out {
-            opacity: 0 !important;
-            transition: opacity 1s ease-out;
-        }
-
-        .instruction-text {
-            text-align: center;
-            color: var(--muted-color);
-            margin: 1rem 0;
-            font-size: 0.95rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="b465c3e2-0fb1-4c36-b5db-6eaf0fe05cb7"></script>
+
+  <title>The Cocktail Party Problem: Auditory Scene Analysis Training</title>
+  <meta name="description" content="Interactive module for training word identification in noise using spatial audio and real-time spectrogram visualization.">
+  <meta name="author" content="Jordan Elias">
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <link rel="canonical" href="https://www.jordanelias.de/blog/cocktail-party-problem/">
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jordan Elias Music Therapy">
+  <meta property="og:locale" content="en_DE">
+  <meta property="og:url" content="https://www.jordanelias.de/blog/cocktail-party-problem/">
+  <meta property="og:title" content="The Cocktail Party Problem: Auditory Scene Analysis Training">
+  <meta property="og:description" content="Interactive module for training word identification in noise using spatial audio and real-time spectrogram visualization.">
+  <meta property="og:image" content="https://www.jordanelias.de/images/hero.jpg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Cocktail Party Problem: Auditory Scene Analysis Training">
+  <meta name="twitter:description" content="Interactive module for training word identification in noise using spatial audio.">
+  <meta name="twitter:image" content="https://www.jordanelias.de/images/hero.jpg">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cloud.umami.is https://cdn.jsdelivr.net; connect-src 'self' https://api-gateway.umami.dev; frame-src https://complicated.life; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+    .lab-section {
+      border: 1px solid var(--text);
+      padding: 1.5em;
+      margin: 0 0 2em;
+    }
+
+    .lab-section > h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin: 0 0 1.5em;
+    }
+
+    .gen-module { margin-bottom: 1.75em; }
+
+    .gen-module-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin: 0 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--text);
+    }
+
+    /* Stats display */
+    .cocktail-stats {
+      border: 1px solid var(--text);
+      padding: 0.75em 1.25em;
+      margin-bottom: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5em;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25em;
+    }
+
+    .stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+    }
+
+    /* Buttons */
+    .lab-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background-color: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 0.5em 1.2em;
+      cursor: pointer;
+      white-space: nowrap;
+      min-width: 90px;
+      text-align: center;
+      display: inline-block;
+      border-radius: 0;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .lab-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .lab-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+    .lab-preset-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 12px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .lab-preset-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-preset-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .lab-preset-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+
+    /* Choice buttons */
+    .choice-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75em;
+      margin: 1.5em 0;
+    }
+
+    .choice-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      background-color: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 1.25em 1em;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 0;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .choice-btn:hover:not(:disabled) { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .choice-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .choice-btn.correct { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .choice-btn.incorrect { background-color: transparent; color: var(--text); border-color: var(--text); opacity: 0.4; }
+
+    /* Rows */
+    .gen-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1em;
+      flex-wrap: wrap;
+    }
+
+    .gen-row-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin-right: 4px;
+      white-space: nowrap;
+    }
+
+    /* Sliders */
+    .lab-transport-sliders {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      margin-bottom: 1.25em;
+    }
+    .lab-ctrl { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .lab-ctrl input[type=range] {
+      width: 100%; -webkit-appearance: none; appearance: none;
+      height: 2px; background: var(--text); outline: none; cursor: pointer; opacity: 0.5;
+    }
+    .lab-ctrl input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--text); cursor: pointer;
+    }
+    .lab-ctrl input[type=range]::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
+    }
+    .lab-ctrl-bottom { display: flex; justify-content: space-between; align-items: baseline; }
+    .lab-ctrl-label {
+      font-family: 'Inter', sans-serif; font-size: 0.68rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text); opacity: 0.5;
+    }
+    .lab-ctrl-val { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text); opacity: 0.7; }
+
+    /* Selects */
+    .gen-select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 8px;
+      border-radius: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    /* Collapsible */
+    .collapsible-section {
+      border-top: 1px solid var(--text);
+      margin-top: 1em;
+      padding-top: 1em;
+    }
+
+    .collapsible-header {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .collapsible-content.active {
+      max-height: 2000px;
+      padding-top: 1em;
+    }
+
+    /* Masker config */
+    .masker-config {
+      margin-bottom: 1em;
+      padding: 1em;
+      border: 1px solid var(--text);
+      opacity: 0.8;
+    }
+
+    .masker-config-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.6;
+      margin-bottom: 0.75em;
+    }
+
+    /* Feedback */
+    .feedback-msg {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text);
+      padding: 0.75em 1em;
+      margin: 1em 0;
+      border: 1px solid var(--text);
+      text-align: center;
+    }
+
+    .feedback-msg.success { opacity: 1; }
+    .feedback-msg.error { opacity: 0.6; }
+
+    /* Canvas */
+    canvas {
+      width: 100%;
+      height: 180px;
+      border: 1px solid var(--text);
+      background: #000;
+      margin: 1em 0 0.5em;
+      display: block;
+    }
+
+    /* Spatial diagram */
+    .spatial-diagram {
+      position: relative;
+      width: 100%;
+      max-width: 300px;
+      height: 300px;
+      margin: 1em auto;
+      border: 1px solid var(--text);
+      border-radius: 50%;
+      background: transparent;
+    }
+
+    .sound-source {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s ease;
+    }
+
+    .source-target {
+      background: var(--text);
+      border: 2px solid var(--text);
+    }
+
+    .source-masker {
+      background: transparent;
+      border: 2px solid var(--text);
+    }
+
+    .listener {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      background: var(--text);
+      border-radius: 50%;
+      opacity: 0.3;
+    }
+
+    .lab-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      opacity: 0.5;
+      margin-top: 1em;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .lab-transport-sliders { flex-direction: column; gap: 16px; }
+      .choice-buttons { grid-template-columns: 1fr; }
+      .cocktail-stats { flex-direction: column; gap: 1em; }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>The Cocktail Party Problem...still in progress!</h1>
-        <p class="subtitle">Interactive Training Modules for Auditory Scene Analysis</p>
 
-        <div class="intro">
-            <h3>About These Modules</h3>
-            <p>These interactive exercises allow you to experience and train the auditory scene analysis abilities your brain uses every day to separate sound sources in complex acoustic environments. Each module targets specific perceptual skills that are essential for understanding speech in noise and tracking sounds in space.</p>
-            
-            <div class="warning">
-                <strong>⚠️ Headphones Required:</strong> These modules use binaural audio rendering to create realistic 3D spatial sound. Please use headphones for the full experience.
-            </div>
+<header>
+  <h1>Music &amp; Mental Health Blog</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/online-sessions/">Online Sessions</a>
+    <a href="/events/">Events</a>
+    <a href="/contact/">Contact</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+</header>
+
+<main>
+
+  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/blog/cocktail-party-problem/" aria-current="page">Cocktail Party Problem</a></li>
+    </ol>
+  </nav>
+
+  <h1>The Cocktail Party Problem</h1>
+
+  <p>[Article introduction will go here]</p>
+
+  <div class="lab-section">
+    <h3>word identification in noise</h3>
+
+    <div class="gen-module">
+
+      <!-- Stats Display -->
+      <div class="cocktail-stats">
+        <div class="stat-item">
+          <div class="stat-value" id="stat-trials">0</div>
+          <div class="stat-label">trials</div>
         </div>
-
-        <!-- MODULE 1: Word Identification -->
-        <h2>Module 1: Word Identification in Noise</h2>
-        
-        <div class="module">
-            <div class="explanation">
-                <h4>What You're Training</h4>
-                <p><strong>Spectral and temporal attention:</strong> This module trains your ability to focus on a target voice while filtering out competing sounds. You're practicing the same auditory scene analysis your brain performs at a crowded party when you need to hear one person amid dozens of conversations, background music, and environmental noise.</p>
-                
-                <p style="margin-top: 1rem;"><strong>The neuroscience:</strong> Success in this task depends on multiple brain mechanisms working together: spatial separation (using binaural cues to locate the target), harmonic grouping (recognizing the spectral signature of the target voice), and selective attention (enhancing the target while suppressing maskers). The difficulty increases as the signal-to-noise ratio decreases, requiring more top-down attentional control from prefrontal and parietal cortex to modulate activity in auditory cortex.</p>
-            </div>
-
-            <h3>Instructions</h3>
-            <p>1. Choose your difficulty level (Easy, Medium, or Hard) or customize the settings manually<br>
-            2. Select whether you want to identify colors or numbers<br>
-            3. Click "Play" to hear a word spoken amid background noise<br>
-            4. Click the button for the word you heard<br>
-            5. You get one retry if incorrect, then the answer is revealed</p>
-
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-value" id="m1-trials">0</div>
-                    <div class="stat-label">Trials</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="m1-correct">0</div>
-                    <div class="stat-label">Correct</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="m1-accuracy">0%</div>
-                    <div class="stat-label">Accuracy</div>
-                </div>
-            </div>
-
-            <div class="controls-grid">
-                <div class="control-group">
-                    <label for="m1-difficulty">Difficulty Preset</label>
-                    <select id="m1-difficulty">
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                        <option value="custom">Custom</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <label for="m1-wordset">Word Set</label>
-                    <select id="m1-wordset">
-                        <option value="colors">Colors</option>
-                        <option value="numbers">Numbers</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="collapsible">
-                <div class="collapsible-header" id="m1-advanced-toggle">
-                    <span>Advanced Controls</span>
-                    <span id="m1-toggle-icon">▼</span>
-                </div>
-                <div class="collapsible-content" id="m1-advanced">
-                    <div class="collapsible-inner">
-                        <div class="controls-grid">
-                            <div class="control-group">
-                                <label>Target Volume</label>
-                                <div class="slider-container">
-                                    <input type="range" id="m1-target-vol" min="0" max="1" step="0.1" value="0.8">
-                                    <span class="slider-value" id="m1-target-vol-value">0.8</span>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label>Playback Speed</label>
-                                <div class="slider-container">
-                                    <input type="range" id="m1-speed" min="0.5" max="1.5" step="0.05" value="1.0">
-                                    <span class="slider-value" id="m1-speed-value">1.0x</span>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label for="m1-masker-count">Number of Maskers</label>
-                                <select id="m1-masker-count">
-                                    <option value="1">1 Masker</option>
-                                    <option value="2">2 Maskers</option>
-                                    <option value="3">3 Maskers</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div id="m1-maskers">
-                            <!-- Masker controls will be dynamically generated -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-group">
-                <button id="m1-play">▶ Play</button>
-                <button id="m1-repeat" disabled>🔄 Repeat</button>
-                <button id="m1-next" disabled>Next →</button>
-            </div>
-
-            <div id="m1-feedback"></div>
-
-            <div class="choice-buttons" id="m1-choices">
-                <!-- Buttons will be dynamically generated -->
-            </div>
-
-            <div class="visualization">
-                <button class="toggle-viz" id="m1-toggle-spec">Show Spectrogram</button>
-                <canvas id="m1-spectrogram" class="hidden" width="800" height="200"></canvas>
-            </div>
-
-            <div class="visualization">
-                <h4 style="text-align: center; margin-bottom: 1rem;">Spatial Configuration</h4>
-                <div class="spatial-diagram" id="m1-spatial">
-                    <div class="listener"></div>
-                </div>
-            </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-correct">0</div>
+          <div class="stat-label">correct</div>
         </div>
-
-        <!-- MODULE 2: Spatial Tracking -->
-        <h2>Module 2: Spatial Tracking</h2>
-        
-        <div class="module">
-            <div class="explanation">
-                <h4>What You're Training</h4>
-                <p><strong>Dynamic spatial attention and object tracking:</strong> This module trains your ability to track a moving sound source through 3D space while other sources move simultaneously. This requires sustained spatial attention, object continuity (recognizing that the same source is moving, not multiple sources appearing and disappearing), and the integration of binaural cues over time.</p>
-                
-                <p style="margin-top: 1rem;"><strong>The neuroscience:</strong> Tracking moving sound sources engages the dorsal auditory pathway (the "where" stream) that extends from auditory cortex through parietal cortex. This pathway processes spatial location and motion. Successfully following one target among multiple moving sources requires top-down attention to modulate spatial representations continuously, updating the predicted position of the target while suppressing distractors. This is fundamentally different from static source separation—you're tracking an object across space and time, not just identifying a location.</p>
-            </div>
-
-            <h3>Instructions</h3>
-            <p>1. You'll hear 2-3 tones moving through 3D space around you<br>
-            2. The visualization shows where each tone starts (the target is highlighted)<br>
-            3. After a few seconds, the visualization fades and you must track the target by ear only<br>
-            4. When the sounds stop, click on the diagram where you think the target tone ended<br>
-            5. Try to be as precise as possible!</p>
-
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-value" id="m2-trials">0</div>
-                    <div class="stat-label">Trials</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="m2-avg-error">0°</div>
-                    <div class="stat-label">Avg Error</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="m2-accuracy">0%</div>
-                    <div class="stat-label">Within 30°</div>
-                </div>
-            </div>
-
-            <div class="controls-grid">
-                <div class="control-group">
-                    <label for="m2-difficulty">Difficulty</label>
-                    <select id="m2-difficulty">
-                        <option value="easy">Easy (2 sources, slow)</option>
-                        <option value="medium">Medium (3 sources, moderate)</option>
-                        <option value="hard">Hard (3 sources, fast)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="button-group">
-                <button id="m2-start">▶ Start</button>
-                <button id="m2-reset" disabled>Reset</button>
-            </div>
-
-            <div id="m2-feedback"></div>
-
-            <div class="visualization">
-                <h4 style="text-align: center; margin-bottom: 1rem;">Spatial Tracking</h4>
-                <p class="instruction-text" id="m2-instruction">
-                    Click "Start" to begin
-                </p>
-                <div class="spatial-diagram clickable-diagram" id="m2-spatial">
-                    <div class="listener"></div>
-                </div>
-            </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-accuracy">0%</div>
+          <div class="stat-label">accuracy</div>
         </div>
+      </div>
 
-        <div class="intro" style="margin-top: 3rem;">
-            <h3>About Auditory Scene Analysis</h3>
-            <p>The cocktail party problem—named by psychologist Colin Cherry in 1953—describes the challenge of separating one sound source from many simultaneous sources. Your brain solves this problem using multiple cues: spatial location (which ear sounds arrive at first and loudest), spectral content (the unique frequency signature of each voice or instrument), temporal coherence (sounds that start and stop together belong together), and predictive models (what you expect to hear based on context).</p>
-            
-            <p style="margin-top: 1rem;">These modules train these mechanisms explicitly. With practice, you can improve your selective attention, reduce listening fatigue in noisy environments, and better understand how your auditory system organizes the acoustic world.</p>
+      <!-- Difficulty & Word Set -->
+      <div class="gen-row">
+        <span class="gen-row-label">difficulty →</span>
+        <button class="lab-preset-btn on" data-difficulty="easy">easy</button>
+        <button class="lab-preset-btn" data-difficulty="medium">medium</button>
+        <button class="lab-preset-btn" data-difficulty="hard">hard</button>
+        <button class="lab-preset-btn" data-difficulty="custom">custom</button>
+      </div>
+
+      <div class="gen-row">
+        <span class="gen-row-label">word set →</span>
+        <button class="lab-preset-btn on" data-wordset="colors">colors</button>
+        <button class="lab-preset-btn" data-wordset="numbers">numbers</button>
+      </div>
+
+      <!-- Main Controls -->
+      <div class="gen-row">
+        <button class="lab-btn" id="btn-play">&#9654;&#xFE0E; play</button>
+        <button class="lab-btn" id="btn-repeat" disabled>&#8634;&#xFE0E; repeat</button>
+        <button class="lab-btn" id="btn-next" disabled>next</button>
+      </div>
+
+      <!-- Feedback -->
+      <div id="feedback-container"></div>
+
+      <!-- Choice Buttons -->
+      <div class="choice-buttons" id="choice-buttons">
+        <!-- Dynamically populated -->
+      </div>
+
+      <!-- Advanced Controls (Collapsible) -->
+      <div class="collapsible-section">
+        <div class="collapsible-header" id="advanced-toggle">
+          <span>advanced controls</span>
+          <span id="advanced-icon">▼</span>
         </div>
+        <div class="collapsible-content" id="advanced-content">
+          
+          <div class="lab-transport-sliders">
+            <div class="lab-ctrl">
+              <input type="range" id="target-volume" min="0" max="1" step="0.1" value="0.8">
+              <div class="lab-ctrl-bottom">
+                <span class="lab-ctrl-label">target volume</span>
+                <span class="lab-ctrl-val" id="target-volume-val">0.8</span>
+              </div>
+            </div>
+            <div class="lab-ctrl">
+              <input type="range" id="playback-speed" min="0.5" max="1.5" step="0.05" value="1.0">
+              <div class="lab-ctrl-bottom">
+                <span class="lab-ctrl-label">playback speed</span>
+                <span class="lab-ctrl-val" id="playback-speed-val">1.0×</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gen-row">
+            <span class="gen-row-label">maskers →</span>
+            <button class="lab-preset-btn on" data-masker-count="1">1</button>
+            <button class="lab-preset-btn" data-masker-count="2">2</button>
+            <button class="lab-preset-btn" data-masker-count="3">3</button>
+          </div>
+
+          <div id="masker-configs">
+            <!-- Dynamically populated -->
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Visualizations -->
+      <div class="gen-row" style="margin-top: 1.5em;">
+        <button class="lab-preset-btn" id="toggle-spectrogram">show spectrogram</button>
+        <button class="lab-preset-btn" id="toggle-spatial">show spatial diagram</button>
+      </div>
+
+      <canvas id="spectrogram" style="display: none;" width="800" height="180"></canvas>
+
+      <div id="spatial-container" style="display: none;">
+        <div class="spatial-diagram" id="spatial-diagram">
+          <div class="listener"></div>
+        </div>
+        <p class="lab-hint">listener at center · target voice forward · maskers positioned spatially</p>
+      </div>
+
+      <p class="lab-hint">headphones recommended for spatial audio</p>
+
     </div>
+  </div>
 
-    <!-- Resonance Audio Library -->
-    <script src="https://cdn.jsdelivr.net/npm/resonance-audio/build/resonance-audio.min.js"></script>
-    <!-- JSAmbisonics Library -->
-    <script src="https://cdn.jsdelivr.net/gh/polarch/JSAmbisonics@master/dist/ambisonics.umd.js"></script>
+  <p>[Article content will continue here]</p>
 
-    <script>
-        // ========================================
-        // SHARED AUDIO CONTEXT AND UTILITIES
-        // ========================================
-        
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        let resonanceAudioScene;
-        let ambisonicOrder = 3;
-        let ambisonicDecoder;
+</main>
 
-        // Audio file buffers
-        const audioBuffers = {
-            party: null,
-            traffic: null,
-            nature: null
-        };
+<footer>
+  <p>&copy; 2026 Jordan Elias. Music therapist based in Berlin.</p>
+</footer>
 
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
-                
-                // Initialize Resonance Audio
-                resonanceAudioScene = new ResonanceAudio(audioCtx);
-                resonanceAudioScene.output.connect(audioCtx.destination);
-                
-                // Load audio files
-                loadAudioFiles();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
+<!-- Resonance Audio Library -->
+<script src="https://cdn.jsdelivr.net/npm/resonance-audio/build/resonance-audio.min.js"></script>
 
-        async function loadAudioFiles() {
-            const files = {
-                party: './audio/party.mp3',
-                traffic: './audio/traffic.mp3',
-                nature: './audio/nature.mp3'
-            };
+<!-- Main Script -->
+<script src="js/cocktail-party-problem.js"></script>
 
-            for (const [key, url] of Object.entries(files)) {
-                try {
-                    const response = await fetch(url);
-                    const arrayBuffer = await response.arrayBuffer();
-                    audioBuffers[key] = await audioCtx.decodeAudioData(arrayBuffer);
-                    console.log(`Loaded ${key} audio file`);
-                } catch (error) {
-                    console.warn(`Could not load ${key} audio file:`, error);
-                }
-            }
-        }
-
-        // Get random excerpt from audio buffer
-        function getRandomExcerpt(buffer, duration = 8) {
-            if (!buffer) return null;
-            
-            const sampleRate = audioCtx.sampleRate;
-            const excerptLength = sampleRate * duration;
-            const maxStart = buffer.length - excerptLength;
-            const startSample = Math.floor(Math.random() * maxStart);
-            
-            const excerptBuffer = audioCtx.createBuffer(
-                buffer.numberOfChannels,
-                excerptLength,
-                sampleRate
-            );
-            
-            for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-                const sourceData = buffer.getChannelData(channel);
-                const excerptData = excerptBuffer.getChannelData(channel);
-                for (let i = 0; i < excerptLength; i++) {
-                    excerptData[i] = sourceData[startSample + i];
-                }
-            }
-            
-            return excerptBuffer;
-        }
-
-        // Pink noise generator
-        function createPinkNoise(duration) {
-            const sampleRate = audioCtx.sampleRate;
-            const bufferSize = sampleRate * duration;
-            const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
-            const output = buffer.getChannelData(0);
-            
-            let b0, b1, b2, b3, b4, b5, b6;
-            b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
-            
-            for (let i = 0; i < bufferSize; i++) {
-                const white = Math.random() * 2 - 1;
-                b0 = 0.99886 * b0 + white * 0.0555179;
-                b1 = 0.99332 * b1 + white * 0.0750759;
-                b2 = 0.96900 * b2 + white * 0.1538520;
-                b3 = 0.86650 * b3 + white * 0.3104856;
-                b4 = 0.55000 * b4 + white * 0.5329522;
-                b5 = -0.7616 * b5 - white * 0.0168980;
-                output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-                output[i] *= 0.11;
-                b6 = white * 0.115926;
-            }
-            
-            return buffer;
-        }
-
-        // Speech-shaped noise generator
-        function createSpeechShapedNoise(duration) {
-            const sampleRate = audioCtx.sampleRate;
-            const bufferSize = sampleRate * duration;
-            const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
-            const output = buffer.getChannelData(0);
-            
-            for (let i = 0; i < bufferSize; i++) {
-                output[i] = (Math.random() * 2 - 1) * 0.1;
-            }
-            
-            return buffer;
-        }
-
-        // ========================================
-        // SPECTROGRAM VISUALIZATION
-        // ========================================
-        
-        let spectrogramAnalyser = null;
-        let spectrogramAnimationId = null;
-
-        function setupSpectrogram() {
-            const canvas = document.getElementById('m1-spectrogram');
-            if (!canvas) return;
-            
-            spectrogramAnalyser = audioCtx.createAnalyser();
-            spectrogramAnalyser.fftSize = 2048;
-            spectrogramAnalyser.smoothingTimeConstant = 0.8;
-            
-            // Connect to destination so we can analyze the mix
-            spectrogramAnalyser.connect(audioCtx.destination);
-        }
-
-        function drawSpectrogram() {
-            if (!spectrogramAnalyser) return;
-            
-            const canvas = document.getElementById('m1-spectrogram');
-            const canvasCtx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            
-            const bufferLength = spectrogramAnalyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-            
-            function draw() {
-                spectrogramAnimationId = requestAnimationFrame(draw);
-                
-                spectrogramAnalyser.getByteFrequencyData(dataArray);
-                
-                // Scroll existing content left
-                const imageData = canvasCtx.getImageData(1, 0, width - 1, height);
-                canvasCtx.putImageData(imageData, 0, 0);
-                
-                // Draw new column
-                const maxFreqIndex = Math.floor(bufferLength * 0.5); // Show up to 8kHz
-                for (let i = 0; i < maxFreqIndex; i++) {
-                    const value = dataArray[i];
-                    const percent = value / 255;
-                    const y = height - (i / maxFreqIndex) * height;
-                    
-                    // Viridis-inspired colormap
-                    const hue = 240 - (percent * 240);
-                    const lightness = 20 + (percent * 60);
-                    canvasCtx.fillStyle = `hsl(${hue}, 70%, ${lightness}%)`;
-                    canvasCtx.fillRect(width - 1, y, 1, height / maxFreqIndex);
-                }
-            }
-            
-            draw();
-        }
-
-        function stopSpectrogram() {
-            if (spectrogramAnimationId) {
-                cancelAnimationFrame(spectrogramAnimationId);
-                spectrogramAnimationId = null;
-            }
-        }
-
-        // ========================================
-        // MODULE 1: WORD IDENTIFICATION
-        // ========================================
-        
-        const m1 = {
-            trials: 0,
-            correct: 0,
-            currentWord: null,
-            choices: [],
-            attempts: 0,
-            sources: [],
-            isPlaying: false,
-            currentMix: null,
-            
-            wordSets: {
-                colors: ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown', 'black', 'white',
-                        'gray', 'silver', 'gold', 'violet', 'indigo', 'cyan', 'magenta', 'turquoise', 'lime', 'maroon'],
-                numbers: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
-            },
-            
-            difficulties: {
-                easy: { snr: 10, maskerCount: 1, maskerType: 'pink', speed: 0.85 },
-                medium: { snr: 0, maskerCount: 2, maskerType: 'speech', speed: 1.0 },
-                hard: { snr: -5, maskerCount: 3, maskerType: 'party', speed: 1.0 }
-            },
-            
-            maskerTypes: {
-                pink: { name: 'Pink Noise', generator: () => createPinkNoise(8) },
-                speech: { name: 'Speech-Shaped Noise', generator: () => createSpeechShapedNoise(8) },
-                party: { name: 'Party Babble', generator: () => getRandomExcerpt(audioBuffers.party, 8) || createPinkNoise(8) },
-                traffic: { name: 'Traffic Sounds', generator: () => getRandomExcerpt(audioBuffers.traffic, 8) || createPinkNoise(8) },
-                nature: { name: 'Nature Sounds', generator: () => getRandomExcerpt(audioBuffers.nature, 8) || createPinkNoise(8) }
-            }
-        };
-
-        function initModule1() {
-            // Difficulty preset handler
-            document.getElementById('m1-difficulty').addEventListener('change', (e) => {
-                const difficulty = e.target.value;
-                if (difficulty !== 'custom') {
-                    applyDifficultyPreset(difficulty);
-                } else {
-                    document.getElementById('m1-advanced').classList.add('active');
-                    document.getElementById('m1-toggle-icon').textContent = '▲';
-                }
-            });
-
-            // Advanced controls toggle
-            document.getElementById('m1-advanced-toggle').addEventListener('click', () => {
-                const content = document.getElementById('m1-advanced');
-                const icon = document.getElementById('m1-toggle-icon');
-                const isActive = content.classList.toggle('active');
-                icon.textContent = isActive ? '▲' : '▼';
-            });
-
-            // Masker count handler
-            document.getElementById('m1-masker-count').addEventListener('change', () => {
-                updateMaskerControls();
-            });
-
-            // Slider value displays
-            document.getElementById('m1-target-vol').addEventListener('input', (e) => {
-                document.getElementById('m1-target-vol-value').textContent = e.target.value;
-            });
-
-            document.getElementById('m1-speed').addEventListener('input', (e) => {
-                document.getElementById('m1-speed-value').textContent = e.target.value + 'x';
-            });
-
-            // Button handlers
-            document.getElementById('m1-play').addEventListener('click', () => playModule1());
-            document.getElementById('m1-repeat').addEventListener('click', () => repeatModule1());
-            document.getElementById('m1-next').addEventListener('click', () => nextModule1());
-            
-            // Spectrogram toggle
-            document.getElementById('m1-toggle-spec').addEventListener('click', (e) => {
-                const canvas = document.getElementById('m1-spectrogram');
-                const isHidden = canvas.classList.toggle('hidden');
-                e.target.textContent = isHidden ? 'Show Spectrogram' : 'Hide Spectrogram';
-                
-                if (!isHidden && !spectrogramAnalyser) {
-                    setupSpectrogram();
-                }
-            });
-
-            // Initialize masker controls
-            updateMaskerControls();
-            applyDifficultyPreset('easy');
-        }
-
-        function applyDifficultyPreset(difficulty) {
-            const preset = m1.difficulties[difficulty];
-            
-            document.getElementById('m1-masker-count').value = preset.maskerCount;
-            document.getElementById('m1-speed').value = preset.speed;
-            document.getElementById('m1-speed-value').textContent = preset.speed + 'x';
-            
-            updateMaskerControls();
-            
-            const maskerSelects = document.querySelectorAll('[id^="m1-masker-type-"]');
-            maskerSelects.forEach(select => {
-                select.value = preset.maskerType;
-            });
-        }
-
-        function updateMaskerControls() {
-            const count = parseInt(document.getElementById('m1-masker-count').value);
-            const container = document.getElementById('m1-maskers');
-            container.innerHTML = '';
-            
-            for (let i = 0; i < count; i++) {
-                const maskerDiv = document.createElement('div');
-                maskerDiv.className = 'masker-config';
-                
-                maskerDiv.innerHTML = `
-                    <h5>Masker ${i + 1}</h5>
-                    <div class="controls-grid">
-                        <div class="control-group">
-                            <label for="m1-masker-type-${i}">Type</label>
-                            <select id="m1-masker-type-${i}">
-                                <option value="pink">Pink Noise</option>
-                                <option value="speech">Speech-Shaped Noise</option>
-                                <option value="party">Party Babble</option>
-                                <option value="traffic">Traffic Sounds</option>
-                                <option value="nature">Nature Sounds</option>
-                            </select>
-                        </div>
-                        <div class="control-group">
-                            <label>Volume</label>
-                            <div class="slider-container">
-                                <input type="range" id="m1-masker-vol-${i}" min="0" max="1" step="0.1" value="0.5">
-                                <span class="slider-value" id="m1-masker-vol-${i}-value">0.5</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(maskerDiv);
-                
-                document.getElementById(`m1-masker-vol-${i}`).addEventListener('input', (e) => {
-                    document.getElementById(`m1-masker-vol-${i}-value`).textContent = e.target.value;
-                });
-            }
-            
-            updateSpatialDiagram();
-        }
-
-        function updateSpatialDiagram() {
-            const diagram = document.getElementById('m1-spatial');
-            const count = parseInt(document.getElementById('m1-masker-count').value);
-            
-            const oldSources = diagram.querySelectorAll('.sound-source');
-            oldSources.forEach(s => s.remove());
-            
-            const target = document.createElement('div');
-            target.className = 'sound-source source-target';
-            target.style.left = '50%';
-            target.style.top = '50%';
-            target.title = 'Target Voice (Center)';
-            diagram.appendChild(target);
-            
-            const positions = [
-                { left: '20%', top: '50%', angle: -90 },
-                { left: '30%', top: '30%', angle: -60 },
-                { left: '70%', top: '30%', angle: 60 },
-                { left: '50%', top: '80%', angle: 180 }
-            ];
-            
-            for (let i = 0; i < count; i++) {
-                const masker = document.createElement('div');
-                masker.className = 'sound-source source-masker';
-                masker.style.left = positions[i].left;
-                masker.style.top = positions[i].top;
-                masker.title = `Masker ${i + 1} (${positions[i].angle}°)`;
-                diagram.appendChild(masker);
-            }
-        }
-
-        function playModule1() {
-            initAudio();
-            
-            // Stop any existing playback
-            stopModule1();
-            
-            const wordSet = document.getElementById('m1-wordset').value;
-            const words = m1.wordSets[wordSet];
-            
-            m1.currentWord = words[Math.floor(Math.random() * words.length)];
-            
-            const distractors = words.filter(w => w !== m1.currentWord);
-            const shuffled = distractors.sort(() => Math.random() - 0.5);
-            m1.choices = [m1.currentWord, ...shuffled.slice(0, 3)].sort(() => Math.random() - 0.5);
-            
-            m1.attempts = 0;
-            
-            const choicesContainer = document.getElementById('m1-choices');
-            choicesContainer.innerHTML = '';
-            
-            m1.choices.forEach(word => {
-                const btn = document.createElement('button');
-                btn.className = 'choice-btn';
-                btn.textContent = word.charAt(0).toUpperCase() + word.slice(1);
-                btn.onclick = () => checkAnswer1(word);
-                choicesContainer.appendChild(btn);
-            });
-            
-            synthesizeAndPlay();
-            
-            document.getElementById('m1-play').disabled = true;
-            document.getElementById('m1-repeat').disabled = false;
-            document.getElementById('m1-feedback').innerHTML = '';
-            
-            // Start spectrogram if visible
-            if (!document.getElementById('m1-spectrogram').classList.contains('hidden')) {
-                drawSpectrogram();
-            }
-        }
-
-        function synthesizeAndPlay() {
-            // Create mixer for target and maskers
-            const mixer = audioCtx.createGain();
-            mixer.gain.value = 1.0;
-            
-            if (spectrogramAnalyser) {
-                mixer.connect(spectrogramAnalyser);
-            } else {
-                mixer.connect(audioCtx.destination);
-            }
-            
-            // Synthesize target word using Web Speech API
-            const utterance = new SpeechSynthesisUtterance(m1.currentWord);
-            const speed = parseFloat(document.getElementById('m1-speed').value);
-            utterance.rate = speed;
-            
-            const voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
-            if (voices.length > 0) {
-                utterance.voice = voices[Math.floor(Math.random() * voices.length)];
-            }
-            
-            // We can't easily capture Web Speech API output, so we'll speak it separately
-            // and play maskers simultaneously
-            speechSynthesis.speak(utterance);
-            
-            // Play maskers through spatial audio
-            playMaskers(mixer);
-            
-            m1.isPlaying = true;
-        }
-
-        function playMaskers(destination) {
-            const count = parseInt(document.getElementById('m1-masker-count').value);
-            const positions = [-90, -60, 60, 180];
-            
-            m1.sources.forEach(source => {
-                if (source && source.stop) {
-                    try { source.stop(); } catch(e) {}
-                }
-            });
-            m1.sources = [];
-            
-            for (let i = 0; i < count; i++) {
-                const type = document.getElementById(`m1-masker-type-${i}`).value;
-                const volume = parseFloat(document.getElementById(`m1-masker-vol-${i}`).value);
-                
-                const buffer = m1.maskerTypes[type].generator();
-                if (!buffer) continue;
-                
-                const source = audioCtx.createBufferSource();
-                source.buffer = buffer;
-                
-                const audioSource = resonanceAudioScene.createSource();
-                const angle = positions[i] * Math.PI / 180;
-                const x = Math.sin(angle) * 2;
-                const z = -Math.cos(angle) * 2;
-                audioSource.setPosition(x, 0, z);
-                
-                const gain = audioCtx.createGain();
-                gain.gain.value = volume;
-                
-                source.connect(gain);
-                gain.connect(audioSource.input);
-                
-                source.start();
-                m1.sources.push(source);
-                
-                // Stop after buffer duration
-                setTimeout(() => {
-                    try { source.stop(); } catch(e) {}
-                }, buffer.duration * 1000);
-            }
-        }
-
-        function stopModule1() {
-            m1.sources.forEach(source => {
-                if (source && source.stop) {
-                    try { source.stop(); } catch(e) {}
-                }
-            });
-            m1.sources = [];
-            stopSpectrogram();
-            m1.isPlaying = false;
-        }
-
-        function repeatModule1() {
-            synthesizeAndPlay();
-        }
-
-        function checkAnswer1(selected) {
-            m1.attempts++;
-            
-            if (selected === m1.currentWord) {
-                showFeedback1('success', '✓ Correct!');
-                m1.correct++;
-                m1.trials++;
-                updateStats1();
-                
-                const buttons = document.querySelectorAll('.choice-btn');
-                buttons.forEach(btn => {
-                    if (btn.textContent.toLowerCase() === m1.currentWord.toLowerCase()) {
-                        btn.classList.add('correct');
-                    }
-                    btn.disabled = true;
-                });
-                
-                document.getElementById('m1-next').disabled = false;
-                
-            } else if (m1.attempts < 2) {
-                showFeedback1('error', '✗ Try again');
-                
-                const buttons = document.querySelectorAll('.choice-btn');
-                buttons.forEach(btn => {
-                    if (btn.textContent.toLowerCase() === selected.toLowerCase()) {
-                        btn.classList.add('incorrect');
-                        setTimeout(() => btn.classList.remove('incorrect'), 1000);
-                    }
-                });
-                
-            } else {
-                showFeedback1('error', `✗ The word was: ${m1.currentWord}`);
-                m1.trials++;
-                updateStats1();
-                
-                const buttons = document.querySelectorAll('.choice-btn');
-                buttons.forEach(btn => {
-                    if (btn.textContent.toLowerCase() === m1.currentWord.toLowerCase()) {
-                        btn.classList.add('correct');
-                    }
-                    btn.disabled = true;
-                });
-                
-                document.getElementById('m1-next').disabled = false;
-            }
-        }
-
-        function showFeedback1(type, message) {
-            const feedback = document.getElementById('m1-feedback');
-            feedback.className = `feedback ${type}`;
-            feedback.textContent = message;
-        }
-
-        function updateStats1() {
-            document.getElementById('m1-trials').textContent = m1.trials;
-            document.getElementById('m1-correct').textContent = m1.correct;
-            const accuracy = m1.trials > 0 ? Math.round((m1.correct / m1.trials) * 100) : 0;
-            document.getElementById('m1-accuracy').textContent = accuracy + '%';
-        }
-
-        function nextModule1() {
-            stopModule1();
-            document.getElementById('m1-play').disabled = false;
-            document.getElementById('m1-repeat').disabled = true;
-            document.getElementById('m1-next').disabled = true;
-            document.getElementById('m1-feedback').innerHTML = '';
-            document.getElementById('m1-choices').innerHTML = '';
-        }
-
-        // ========================================
-        // MODULE 2: SPATIAL TRACKING
-        // ========================================
-        
-        const m2 = {
-            trials: 0,
-            totalError: 0,
-            within30: 0,
-            sources: [],
-            targetIndex: 0,
-            isPlaying: false,
-            userGuess: null,
-            actualPosition: null,
-            oscillators: [],
-            duration: 15 // Fixed 15 seconds
-        };
-
-        function initModule2() {
-            document.getElementById('m2-start').addEventListener('click', () => startModule2());
-            document.getElementById('m2-reset').addEventListener('click', () => resetModule2());
-            
-            document.getElementById('m2-spatial').addEventListener('click', (e) => {
-                if (m2.isPlaying === 'awaiting_input') {
-                    handleDiagramClick(e);
-                }
-            });
-        }
-
-        function startModule2() {
-            initAudio();
-            
-            const difficulty = document.getElementById('m2-difficulty').value;
-            
-            let numSources, speed;
-            switch(difficulty) {
-                case 'easy':
-                    numSources = 2;
-                    speed = 0.5;
-                    break;
-                case 'medium':
-                    numSources = 3;
-                    speed = 1.0;
-                    break;
-                case 'hard':
-                    numSources = 3;
-                    speed = 1.5;
-                    break;
-            }
-            
-            m2.sources = [];
-            m2.oscillators = [];
-            m2.targetIndex = Math.floor(Math.random() * numSources);
-            
-            const diagram = document.getElementById('m2-spatial');
-            const oldSources = diagram.querySelectorAll('.sound-source');
-            oldSources.forEach(s => s.remove());
-            
-            // Major triad frequencies
-            const notes = [261.63, 329.63, 392.00]; // C4, E4, G4
-            
-            for (let i = 0; i < numSources; i++) {
-                const startAngle = Math.random() * 360;
-                const startRad = startAngle * Math.PI / 180;
-                
-                let endAngle = (startAngle + 90 + Math.random() * 180) % 360;
-                const endRad = endAngle * Math.PI / 180;
-                
-                const source = document.createElement('div');
-                source.className = `sound-source ${i === m2.targetIndex ? 'source-target' : 'source-masker'}`;
-                
-                const radius = 180;
-                const startX = 50 + Math.sin(startRad) * radius / 4;
-                const startY = 50 - Math.cos(startRad) * radius / 4;
-                
-                source.style.left = startX + '%';
-                source.style.top = startY + '%';
-                
-                diagram.appendChild(source);
-                
-                m2.sources.push({
-                    element: source,
-                    startAngle,
-                    endAngle,
-                    frequency: notes[i % notes.length],
-                    rhythm: 0.3 + i * 0.15
-                });
-            }
-            
-            document.getElementById('m2-instruction').textContent = 
-                `The RED tone is your target. Follow it as all tones move...`;
-            
-            setTimeout(() => {
-                animateSources(m2.duration, speed);
-            }, 2000);
-            
-            m2.isPlaying = 'animating';
-            document.getElementById('m2-start').disabled = true;
-        }
-
-        function animateSources(duration, speed) {
-            const startTime = Date.now();
-            const diagram = document.getElementById('m2-spatial');
-            
-            // Start audio
-            playMovingTones(duration);
-            
-            // Fade visualization after 3 seconds
-            setTimeout(() => {
-                const sources = diagram.querySelectorAll('.sound-source');
-                sources.forEach(s => {
-                    s.classList.add('fade-out');
-                });
-                document.getElementById('m2-instruction').textContent = 
-                    'Visualization faded - track by ear only...';
-            }, 3000);
-            
-            function animate() {
-                const elapsed = (Date.now() - startTime) / 1000;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                if (progress < 1) {
-                    m2.sources.forEach(source => {
-                        const currentAngle = source.startAngle + 
-                            (source.endAngle - source.startAngle) * progress;
-                        const rad = currentAngle * Math.PI / 180;
-                        
-                        const radius = 180;
-                        const x = 50 + Math.sin(rad) * radius / 4;
-                        const y = 50 - Math.cos(rad) * radius / 4;
-                        
-                        source.element.style.left = x + '%';
-                        source.element.style.top = y + '%';
-                    });
-                    
-                    requestAnimationFrame(animate);
-                } else {
-                    finishAnimation();
-                }
-            }
-            
-            animate();
-        }
-
-        function playMovingTones(duration) {
-            // Create simple spatial panning for now
-            // Full JSAmbisonics implementation would be more complex
-            
-            m2.sources.forEach((source, index) => {
-                const osc = audioCtx.createOscillator();
-                osc.frequency.value = source.frequency;
-                osc.type = 'sine';
-                
-                const panner = audioCtx.createStereoPanner();
-                const gain = audioCtx.createGain();
-                gain.gain.value = 0;
-                
-                osc.connect(gain);
-                gain.connect(panner);
-                panner.connect(audioCtx.destination);
-                
-                // Rhythmic gating
-                const now = audioCtx.currentTime;
-                for (let t = 0; t < duration; t += source.rhythm) {
-                    gain.gain.setValueAtTime(0.08, now + t);
-                    gain.gain.setValueAtTime(0, now + t + source.rhythm * 0.5);
-                }
-                
-                // Animate panning based on angle
-                const startAngle = source.startAngle;
-                const endAngle = source.endAngle;
-                const steps = Math.floor(duration / 0.1);
-                
-                for (let i = 0; i <= steps; i++) {
-                    const progress = i / steps;
-                    const angle = startAngle + (endAngle - startAngle) * progress;
-                    const pan = Math.sin(angle * Math.PI / 180);
-                    panner.pan.setValueAtTime(pan, now + i * 0.1);
-                }
-                
-                osc.start(now);
-                osc.stop(now + duration);
-                
-                m2.oscillators.push(osc);
-            });
-        }
-
-        function finishAnimation() {
-            m2.isPlaying = 'awaiting_input';
-            m2.actualPosition = {
-                angle: m2.sources[m2.targetIndex].endAngle,
-                x: parseFloat(m2.sources[m2.targetIndex].element.style.left),
-                y: parseFloat(m2.sources[m2.targetIndex].element.style.top)
-            };
-            
-            document.getElementById('m2-instruction').textContent = 
-                'Click where you think the RED target tone ended';
-            document.getElementById('m2-reset').disabled = false;
-        }
-
-        function handleDiagramClick(e) {
-            const diagram = document.getElementById('m2-spatial');
-            const rect = diagram.getBoundingClientRect();
-            
-            const clickX = ((e.clientX - rect.left) / rect.width) * 100;
-            const clickY = ((e.clientY - rect.top) / rect.height) * 100;
-            
-            const dx = clickX - 50;
-            const dy = -(clickY - 50);
-            const clickAngle = Math.atan2(dx, dy) * 180 / Math.PI;
-            const normalizedAngle = (clickAngle + 360) % 360;
-            
-            const guess = document.createElement('div');
-            guess.className = 'user-guess';
-            guess.style.left = clickX + '%';
-            guess.style.top = clickY + '%';
-            diagram.appendChild(guess);
-            
-            m2.sources.forEach(s => {
-                s.element.style.opacity = '1';
-                s.element.classList.remove('fade-out');
-            });
-            
-            let angleDiff = Math.abs(normalizedAngle - m2.actualPosition.angle);
-            if (angleDiff > 180) angleDiff = 360 - angleDiff;
-            
-            m2.totalError += angleDiff;
-            m2.trials++;
-            if (angleDiff <= 30) m2.within30++;
-            
-            const feedback = document.getElementById('m2-feedback');
-            feedback.className = angleDiff <= 30 ? 'feedback success' : 'feedback error';
-            feedback.textContent = `Error: ${Math.round(angleDiff)}° ${angleDiff <= 30 ? '✓ Excellent!' : ''}`;
-            
-            updateStats2();
-            
-            document.getElementById('m2-instruction').textContent = 
-                'Click Reset to try again';
-            
-            m2.isPlaying = 'complete';
-        }
-
-        function resetModule2() {
-            m2.oscillators.forEach(osc => {
-                try { osc.stop(); } catch(e) {}
-            });
-            m2.oscillators = [];
-            
-            m2.isPlaying = false;
-            document.getElementById('m2-start').disabled = false;
-            document.getElementById('m2-reset').disabled = true;
-            document.getElementById('m2-feedback').innerHTML = '';
-            document.getElementById('m2-instruction').textContent = 'Click "Start" to begin';
-            
-            const diagram = document.getElementById('m2-spatial');
-            const sources = diagram.querySelectorAll('.sound-source, .user-guess');
-            sources.forEach(s => s.remove());
-        }
-
-        function updateStats2() {
-            document.getElementById('m2-trials').textContent = m2.trials;
-            const avgError = m2.trials > 0 ? Math.round(m2.totalError / m2.trials) : 0;
-            document.getElementById('m2-avg-error').textContent = avgError + '°';
-            const accuracy = m2.trials > 0 ? Math.round((m2.within30 / m2.trials) * 100) : 0;
-            document.getElementById('m2-accuracy').textContent = accuracy + '%';
-        }
-
-        // ========================================
-        // INITIALIZE ON LOAD
-        // ========================================
-        
-        window.addEventListener('load', () => {
-            if (speechSynthesis.onvoiceschanged !== undefined) {
-                speechSynthesis.onvoiceschanged = () => {
-                    initModule1();
-                    initModule2();
-                };
-            } else {
-                initModule1();
-                initModule2();
-            }
-        });
-    </script>
 </body>
 </html>
