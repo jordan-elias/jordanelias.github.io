@@ -39,9 +39,9 @@ const state = {
   
   // Difficulty presets
   presets: {
-    easy:   { snr: 10,  maskerCount: 1, maskerTypes: ['nature'] },
-    medium: { snr: 0,   maskerCount: 2, maskerTypes: ['nature', 'traffic'] },
-    hard:   { snr: -5,  maskerCount: 3, maskerTypes: ['nature', 'traffic', 'voices'] }
+    easy:   { snr: 5,  maskerCount: 1, maskerTypes: ['nature'] },
+    medium: { snr: -2.5,   maskerCount: 2, maskerTypes: ['nature', 'traffic'] },
+    hard:   { snr: -10,  maskerCount: 3, maskerTypes: ['nature', 'traffic', 'voices'] }
   }
 };
 
