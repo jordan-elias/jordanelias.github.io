@@ -446,7 +446,7 @@ function checkAnswer(selected) {
   
   if (selected === state.currentWord) {
     // Correct!
-    showFeedback('success', '✓ correct');
+    showFeedback('success', 'correct!');
     state.correct++;
     state.trials++;
     updateStats();
@@ -463,7 +463,7 @@ function checkAnswer(selected) {
     
   } else if (state.attempts < 2) {
     // First incorrect - allow retry
-    showFeedback('error', '✗ try again');
+    showFeedback('error', 'try again');
     
     const buttons = document.querySelectorAll('.choice-btn');
     buttons.forEach(btn => {
