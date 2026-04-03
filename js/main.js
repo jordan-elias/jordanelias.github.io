@@ -39,7 +39,7 @@ const state = {
   
   // Difficulty presets
   presets: {
-    easy:   { snr: 5,  maskerCount: 1, maskerTypes: ['nature'] },
+    easy:   { snr: 10,  maskerCount: 1, maskerTypes: ['nature'] },
     medium: { snr: -2.5,   maskerCount: 2, maskerTypes: ['nature', 'traffic'] },
     hard:   { snr: -10,  maskerCount: 3, maskerTypes: ['nature', 'traffic', 'voices'] }
   }
@@ -149,14 +149,17 @@ function setupVisualToggles() {
   document.getElementById('toggle-spectrogram').addEventListener('click', () => {
     state.spectrogramEnabled = !state.spectrogramEnabled;
     const canvas = document.getElementById('spectrogram');
+    const placeholder = document.getElementById('spectrogram-placeholder');
     const btn = document.getElementById('toggle-spectrogram');
     
     if (state.spectrogramEnabled) {
       canvas.style.display = 'block';
+      placeholder.style.display = 'none';
       btn.classList.add('on');
       btn.textContent = 'hide spectrogram';
     } else {
       canvas.style.display = 'none';
+      placeholder.style.display = 'block';
       btn.classList.remove('on');
       btn.textContent = 'show spectrogram';
       stopSpectrogram();
@@ -248,8 +251,8 @@ function updateMaskerConfigs() {
     config.className = 'masker-config';
     config.innerHTML = `
       <div class="gen-row" style="margin-bottom: 0;">
-        <span class="gen-row-label" style="min-width: 60px;">masker ${i + 1}</span>
-        <select class="gen-select" id="masker-type-${i}" style="flex: 1;">
+        <span class="gen-row-label">masker ${i + 1} →</span>
+        <select class="gen-select" id="masker-type-${i}">
           <option value="nature">nature</option>
           <option value="traffic">traffic</option>
           <option value="voices">voices</option>
@@ -446,7 +449,7 @@ function checkAnswer(selected) {
   
   if (selected === state.currentWord) {
     // Correct!
-    showFeedback('success', 'correct!');
+    showFeedback('success', 'correct');
     state.correct++;
     state.trials++;
     updateStats();
