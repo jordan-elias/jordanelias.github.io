@@ -35,19 +35,40 @@
 
     .gen-module { margin-bottom: 0; }
 
-    /* Compact stats */
-    .cocktail-stats {
+    /* Spectrogram container at top */
+    .spectrogram-container {
       border: 1px solid var(--text);
-      padding: 0.5em 0.75em;
+      padding: 0;
       margin-bottom: 0.75em;
+      min-height: 120px;
       display: flex;
-      gap: 1.5em;
+      align-items: center;
       justify-content: center;
+      background: #000;
     }
 
-    .stat-item { display: flex; flex-direction: column; align-items: center; gap: 0.15em; }
-    .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 500; color: var(--text); }
+    .spectrogram-placeholder {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      color: var(--text);
+      opacity: 0.3;
+      text-align: center;
+    }
+
+    /* Compact inline stats */
+    .cocktail-stats {
+      display: flex;
+      gap: 1em;
+      justify-content: center;
+      margin: 0.75em 0;
+      padding: 0.4em 0;
+      border-top: 1px solid var(--text);
+      border-bottom: 1px solid var(--text);
+    }
+
+    .stat-item { display: flex; align-items: baseline; gap: 0.3em; }
     .stat-label { font-family: 'Inter', sans-serif; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); opacity: 0.5; }
+    .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--text); }
 
     /* Buttons */
     .lab-btn {
@@ -82,12 +103,13 @@
     .lab-preset-btn:hover { background-color: var(--accent-hover); color: var(--bg); }
     .lab-preset-btn.on { background-color: var(--text); color: var(--bg); }
 
-    /* Choice buttons */
+    /* Choice buttons - fixed height to prevent layout shift */
     .choice-buttons {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 0.5em;
       margin: 0.75em 0;
+      min-height: 84px; /* Prevents layout shift when buttons appear/disappear */
     }
 
     .choice-btn {
@@ -106,6 +128,13 @@
     .choice-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     .choice-btn.correct { background-color: var(--text); color: var(--bg); }
     .choice-btn.incorrect { opacity: 0.4; }
+
+    /* Placeholder buttons when empty */
+    .choice-btn-placeholder {
+      border: 1px dashed var(--text);
+      opacity: 0.15;
+      pointer-events: none;
+    }
 
     /* Rows */
     .gen-row {
@@ -197,6 +226,10 @@
       opacity: 0.8;
     }
 
+    .masker-config .gen-select {
+      max-width: 120px;
+    }
+
     /* Feedback */
     .feedback-msg {
       font-family: 'Inter', sans-serif;
@@ -215,9 +248,9 @@
     canvas {
       width: 100%;
       height: 120px;
-      border: 1px solid var(--text);
+      border: none;
       background: #000;
-      margin: 0.5em 0;
+      margin: 0;
       display: block;
     }
 
@@ -306,19 +339,11 @@
 
     <div class="gen-module">
 
-      <!-- Stats -->
-      <div class="cocktail-stats">
-        <div class="stat-item">
-          <div class="stat-value" id="stat-trials">0</div>
-          <div class="stat-label">trials</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="stat-correct">0</div>
-          <div class="stat-label">correct</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="stat-accuracy">0%</div>
-          <div class="stat-label">accuracy</div>
+      <!-- Spectrogram Container (top) -->
+      <div class="spectrogram-container">
+        <canvas id="spectrogram" width="800" height="120" style="display: none;"></canvas>
+        <div id="spectrogram-placeholder" class="spectrogram-placeholder">
+          spectrogram appears here when enabled
         </div>
       </div>
 
@@ -347,16 +372,35 @@
       <!-- Feedback -->
       <div id="feedback-container"></div>
 
-      <!-- Choice Buttons -->
-      <div class="choice-buttons" id="choice-buttons"></div>
+      <!-- Choice Buttons (with placeholders) -->
+      <div class="choice-buttons" id="choice-buttons">
+        <div class="choice-btn-placeholder"></div>
+        <div class="choice-btn-placeholder"></div>
+        <div class="choice-btn-placeholder"></div>
+        <div class="choice-btn-placeholder"></div>
+      </div>
+
+      <!-- Stats (below choice buttons) -->
+      <div class="cocktail-stats">
+        <div class="stat-item">
+          <span class="stat-label">trials</span>
+          <span class="stat-value" id="stat-trials">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">correct</span>
+          <span class="stat-value" id="stat-correct">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">accuracy</span>
+          <span class="stat-value" id="stat-accuracy">0%</span>
+        </div>
+      </div>
 
       <!-- Visualizations -->
       <div class="gen-row">
         <button class="lab-preset-btn" id="toggle-spectrogram">show spectrogram</button>
         <button class="lab-preset-btn" id="toggle-spatial">show spatial</button>
       </div>
-
-      <canvas id="spectrogram" style="display: none;" width="800" height="120"></canvas>
 
       <div id="spatial-container" style="display: none;">
         <div class="spatial-diagram" id="spatial-diagram">
@@ -401,7 +445,7 @@
         </div>
       </div>
 
-      <p class="lab-hint">headphones recommended · 4 second window · target appears randomly</p>
+      <p class="lab-hint">headphones recommended</p>
 
     </div>
   </div>
