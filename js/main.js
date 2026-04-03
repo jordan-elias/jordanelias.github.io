@@ -475,7 +475,7 @@ function checkAnswer(selected) {
     
   } else {
     // Second incorrect - reveal
-    showFeedback('error', `✗ answer: ${state.currentWord}`);
+    showFeedback('error', `answer: ${state.currentWord}`);
     state.trials++;
     updateStats();
     
