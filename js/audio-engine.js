@@ -183,7 +183,7 @@ class AssetLoader {
   }
 
   async loadMasker(type) {
-    const url = `./audio/maskers/${type}.mp3`;
+    const url = `/audio/maskers/${type}.mp3`;
     const buffer = await this.loadAudio(url);
     this.buffers.maskers[type] = buffer;
     return buffer;
