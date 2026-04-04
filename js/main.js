@@ -34,7 +34,7 @@ const state = {
   snr: 10, // Signal-to-Noise Ratio in dB
   
   // Visuals
-  spectrogramEnabled: true,
+  spectrogramEnabled: false,
   spatialEnabled: false,
   
   // Difficulty presets
@@ -76,8 +76,6 @@ async function init() {
   updateMaskerConfigs();
   updateSpatialDiagram();
 
-  // ADD THIS LINE at the very bottom of init()
-  refreshVisualToggleUI();
   
   console.log('✓ Cocktail Party Problem initialized');
 }
