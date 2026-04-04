@@ -23,25 +23,28 @@ const state = {
   trials: 0,
   correct: 0,
   currentWord: null,
+  currentTargetBuffer: null,
+  currentMaskerBuffers: null,
   choices: [],
   attempts: 0,
+  isPlaying: false,
   
   // Settings
   difficulty: 'easy',
   wordSet: 'colors',
-  maskerCount: 1,
+  activeMaskers: ['nature'], // Track which maskers are active
   targetGain: 1.0,
   snr: 10, // Signal-to-Noise Ratio in dB
   
   // Visuals
-  spectrogramEnabled: false,
+  spectrogramEnabled: true, // On by default
   spatialEnabled: false,
   
   // Difficulty presets
   presets: {
-    easy:   { snr: 10,  maskerCount: 1, maskerTypes: ['nature'] },
-    medium: { snr: -2.5,   maskerCount: 2, maskerTypes: ['nature', 'traffic'] },
-    hard:   { snr: -10,  maskerCount: 3, maskerTypes: ['nature', 'traffic', 'voices'] }
+    easy:   { snr: 10,  maskers: ['nature'] },
+    medium: { snr: -2.5,   maskers: ['nature', 'traffic'] },
+    hard:   { snr: -10,  maskers: ['nature', 'traffic', 'voices'] }
   }
 };
 
@@ -65,17 +68,19 @@ async function init() {
   // Setup UI
   setupDifficultyButtons();
   setupWordSetButtons();
-  setupMaskerCountButtons();
+  setupMaskerToggles();
   setupControlButtons();
   setupVisualToggles();
   setupSliders();
-  setupAdvancedToggle();
   
   // Apply default preset
   applyPreset('easy');
-  updateMaskerConfigs();
   updateSpatialDiagram();
-
+  
+  // Start spectrogram by default
+  if (state.spectrogramEnabled) {
+    startSpectrogram();
+  }
   
   console.log('✓ Cocktail Party Problem initialized');
 }
@@ -128,13 +133,23 @@ function setupWordSetButtons() {
   });
 }
 
-function setupMaskerCountButtons() {
-  document.querySelectorAll('[data-masker-count]').forEach(btn => {
+function setupMaskerToggles() {
+  document.querySelectorAll('[data-masker]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-masker-count]').forEach(b => b.classList.remove('on'));
-      btn.classList.add('on');
-      state.maskerCount = parseInt(btn.dataset.maskerCount);
-      updateMaskerConfigs();
+      const masker = btn.dataset.masker;
+      
+      if (btn.classList.contains('active')) {
+        // Deactivate (but keep at least one active)
+        if (state.activeMaskers.length > 1) {
+          btn.classList.remove('active');
+          state.activeMaskers = state.activeMaskers.filter(m => m !== masker);
+        }
+      } else {
+        // Activate
+        btn.classList.add('active');
+        state.activeMaskers.push(masker);
+      }
+      
       updateSpatialDiagram();
     });
   });
@@ -150,17 +165,15 @@ function setupVisualToggles() {
   document.getElementById('toggle-spectrogram').addEventListener('click', () => {
     state.spectrogramEnabled = !state.spectrogramEnabled;
     const canvas = document.getElementById('spectrogram');
-    const placeholder = document.getElementById('spectrogram-placeholder');
     const btn = document.getElementById('toggle-spectrogram');
     
     if (state.spectrogramEnabled) {
       canvas.style.display = 'block';
-      placeholder.style.display = 'none';
       btn.classList.add('on');
       btn.textContent = 'hide spectrogram';
+      startSpectrogram();
     } else {
       canvas.style.display = 'none';
-      placeholder.style.display = 'block';
       btn.classList.remove('on');
       btn.textContent = 'show spectrogram';
       stopSpectrogram();
@@ -199,15 +212,6 @@ function setupSliders() {
   });
 }
 
-function setupAdvancedToggle() {
-  document.getElementById('advanced-toggle').addEventListener('click', () => {
-    const content = document.getElementById('advanced-content');
-    const icon = document.getElementById('advanced-icon');
-    const isActive = content.classList.toggle('active');
-    icon.textContent = isActive ? '▲' : '▼';
-  });
-}
-
 // ========================================
 // DIFFICULTY PRESETS
 // ========================================
@@ -217,51 +221,23 @@ function applyPreset(difficulty) {
   if (!preset) return;
   
   state.snr = preset.snr;
-  state.maskerCount = preset.maskerCount;
+  state.activeMaskers = [...preset.maskers];
   
   // Update UI
   document.getElementById('snr').value = preset.snr;
   document.getElementById('snr-val').textContent = preset.snr + ' dB';
   
-  document.querySelectorAll('[data-masker-count]').forEach(b => b.classList.remove('on'));
-  document.querySelector(`[data-masker-count="${preset.maskerCount}"]`).classList.add('on');
-  
-  updateMaskerConfigs();
-  
-  // Set masker types from preset
-  setTimeout(() => {
-    preset.maskerTypes.forEach((type, index) => {
-      const select = document.getElementById(`masker-type-${index}`);
-      if (select) select.value = type;
-    });
-  }, 50);
+  // Update masker toggle buttons
+  document.querySelectorAll('[data-masker]').forEach(btn => {
+    const masker = btn.dataset.masker;
+    if (state.activeMaskers.includes(masker)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
   
   updateSpatialDiagram();
-}
-
-// ========================================
-// MASKER CONFIGURATION UI
-// ========================================
-
-function updateMaskerConfigs() {
-  const container = document.getElementById('masker-configs');
-  container.innerHTML = '';
-  
-  for (let i = 0; i < state.maskerCount; i++) {
-    const config = document.createElement('div');
-    config.className = 'masker-config';
-    config.innerHTML = `
-      <div class="gen-row" style="margin-bottom: 0;">
-        <span class="gen-row-label">masker ${i + 1} →</span>
-        <select class="gen-select" id="masker-type-${i}">
-          <option value="nature">nature</option>
-          <option value="traffic">traffic</option>
-          <option value="voices">voices</option>
-        </select>
-      </div>
-    `;
-    container.appendChild(config);
-  }
 }
 
 // ========================================
@@ -290,7 +266,7 @@ function updateSpatialDiagram() {
     { left: '50%', top: '75%' }   // Behind
   ];
   
-  for (let i = 0; i < state.maskerCount; i++) {
+  for (let i = 0; i < state.activeMaskers.length; i++) {
     const masker = document.createElement('div');
     masker.className = 'sound-source source-masker';
     masker.style.left = positions[i].left;
@@ -351,6 +327,15 @@ function stopSpectrogram() {
 // ========================================
 
 async function play() {
+  // If already playing, stop
+  if (state.isPlaying) {
+    audioEngine.stopAll();
+    stopSpectrogram();
+    state.isPlaying = false;
+    document.getElementById('btn-play').innerHTML = '&#9654;&#xFE0E; play';
+    return;
+  }
+  
   audioEngine.resume();
   
   const words = WORD_ASSETS[state.wordSet];
@@ -371,6 +356,9 @@ async function play() {
     return;
   }
   
+  // Store for repeat functionality
+  state.currentTargetBuffer = targetBuffer;
+  
   // Select 3 random distractors
   const distractors = words.filter(w => w !== state.currentWord);
   const shuffled = distractors.sort(() => Math.random() - 0.5);
@@ -378,31 +366,29 @@ async function play() {
   
   state.attempts = 0;
   
-  // Create choice buttons
-  const choicesContainer = document.getElementById('choice-buttons');
-  choicesContainer.innerHTML = '';
-  
-  state.choices.forEach(word => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
+  // Populate choice buttons (always 4 buttons exist, just update text)
+  const choiceButtons = document.querySelectorAll('#choice-buttons .choice-btn');
+  state.choices.forEach((word, index) => {
+    const btn = choiceButtons[index];
     btn.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+    btn.disabled = false;
+    btn.classList.remove('correct', 'incorrect');
     btn.onclick = () => checkAnswer(word);
-    choicesContainer.appendChild(btn);
   });
   
-  // Load masker buffers
+  // Load masker buffers based on active maskers
   const maskerBuffers = [];
-  for (let i = 0; i < state.maskerCount; i++) {
-    const typeSelect = document.getElementById(`masker-type-${i}`);
-    const type = typeSelect ? typeSelect.value : 'nature';
-    
-    let maskerBuffer = assetLoader.getMaskerBuffer(type);
+  for (const maskerType of state.activeMaskers) {
+    let maskerBuffer = assetLoader.getMaskerBuffer(maskerType);
     if (maskerBuffer) {
       // Get random 4-second excerpt
       maskerBuffer = assetLoader.getRandomExcerpt(maskerBuffer, 4.0);
     }
     maskerBuffers.push(maskerBuffer);
   }
+  
+  // Store for repeat functionality
+  state.currentMaskerBuffers = maskerBuffers;
   
   // Calculate masker gain based on SNR
   const maskerGain = audioEngine.calculateMaskerGain(state.snr, state.targetGain);
@@ -414,9 +400,10 @@ async function play() {
   });
   
   // Update UI
-  document.getElementById('btn-play').disabled = true;
+  state.isPlaying = true;
+  document.getElementById('btn-play').innerHTML = '&#9632;&#xFE0E; stop';
   document.getElementById('btn-repeat').disabled = false;
-  document.getElementById('feedback-container').innerHTML = '';
+  showFeedback('', '');
   
   // Start spectrogram
   if (state.spectrogramEnabled) {
@@ -425,24 +412,68 @@ async function play() {
   
   // Auto-enable controls after playback
   setTimeout(() => {
+    state.isPlaying = false;
+    document.getElementById('btn-play').innerHTML = '&#9654;&#xFE0E; play';
     if (state.spectrogramEnabled) stopSpectrogram();
   }, duration * 1000);
 }
 
 function repeat() {
-  // Replay same word
-  play();
+  if (!state.currentTargetBuffer || !state.currentMaskerBuffers) {
+    return;
+  }
+  
+  audioEngine.resume();
+  
+  // Calculate masker gain based on SNR
+  const maskerGain = audioEngine.calculateMaskerGain(state.snr, state.targetGain);
+  
+  // Replay same trial with same buffers
+  const duration = audioEngine.playTrial(
+    state.currentTargetBuffer,
+    state.currentMaskerBuffers,
+    {
+      targetGain: state.targetGain,
+      maskerGain: maskerGain
+    }
+  );
+  
+  // Update UI
+  state.isPlaying = true;
+  document.getElementById('btn-play').innerHTML = '&#9632;&#xFE0E; stop';
+  
+  // Start spectrogram
+  if (state.spectrogramEnabled) {
+    startSpectrogram();
+  }
+  
+  // Auto-enable controls after playback
+  setTimeout(() => {
+    state.isPlaying = false;
+    document.getElementById('btn-play').innerHTML = '&#9654;&#xFE0E; play';
+    if (state.spectrogramEnabled) stopSpectrogram();
+  }, duration * 1000);
 }
 
 function next() {
   audioEngine.stopAll();
   stopSpectrogram();
   
-  document.getElementById('btn-play').disabled = false;
+  state.isPlaying = false;
+  document.getElementById('btn-play').innerHTML = '&#9654;&#xFE0E; play';
   document.getElementById('btn-repeat').disabled = true;
   document.getElementById('btn-next').disabled = true;
-  document.getElementById('feedback-container').innerHTML = '';
-  document.getElementById('choice-buttons').innerHTML = '';
+  
+  // Clear feedback
+  showFeedback('', '');
+  
+  // Clear choice button text but keep boxes visible
+  const choiceButtons = document.querySelectorAll('#choice-buttons .choice-btn');
+  choiceButtons.forEach(btn => {
+    btn.textContent = '';
+    btn.disabled = true;
+    btn.classList.remove('correct', 'incorrect');
+  });
 }
 
 function checkAnswer(selected) {
@@ -450,7 +481,7 @@ function checkAnswer(selected) {
   
   if (selected === state.currentWord) {
     // Correct!
-    showFeedback('success', 'correct');
+    showFeedback('success', 'correct!');
     state.correct++;
     state.trials++;
     updateStats();
@@ -479,7 +510,7 @@ function checkAnswer(selected) {
     
   } else {
     // Second incorrect - reveal
-    showFeedback('error', `answer: ${state.currentWord}`);
+    showFeedback('error', `✗ answer: ${state.currentWord}`);
     state.trials++;
     updateStats();
     
@@ -496,8 +527,12 @@ function checkAnswer(selected) {
 }
 
 function showFeedback(type, message) {
-  const container = document.getElementById('feedback-container');
-  container.innerHTML = `<div class="feedback-msg ${type}">${message}</div>`;
+  const feedbackMsg = document.getElementById('feedback-msg');
+  feedbackMsg.textContent = message;
+  feedbackMsg.className = 'feedback-msg';
+  if (type) {
+    feedbackMsg.classList.add(type);
+  }
 }
 
 function updateStats() {
