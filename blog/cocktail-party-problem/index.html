@@ -226,18 +226,20 @@
     /* Feedback - inline with buttons, always visible */
     .feedback-msg {
       font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       color: var(--text);
       padding: 0.4em 1em;
       border: 0px solid var(--text);
       text-align: left;
       min-height: 36px;
-      display: flex;
-      align-items: left;
-      justify-content: left;
+      white-space: nowrap;
+      min-width: 70px;
+      border-radius: 0;
     }
 
 
+   
+    
     .feedback-msg.success { opacity: 1; }
     .feedback-msg.error { opacity: 0.6; }
     .feedback-msg:empty { opacity: 0.2; }
