@@ -75,6 +75,9 @@ async function init() {
   applyPreset('easy');
   updateMaskerConfigs();
   updateSpatialDiagram();
+
+  // ADD THIS LINE at the very bottom of init()
+  refreshVisualToggleUI();
   
   console.log('✓ Cocktail Party Problem initialized');
 }
