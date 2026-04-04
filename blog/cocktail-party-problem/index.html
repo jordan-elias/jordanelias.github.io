@@ -35,24 +35,16 @@
 
     .gen-module { margin-bottom: 0; }
 
-    /* Spectrogram container at top */
+    /* Spectrogram container at top - visible by default */
     .spectrogram-container {
       border: 1px solid var(--text);
       padding: 0;
       margin-bottom: 0.75em;
-      min-height: 120px;
+      height: 120px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #000;
-    }
-
-    .spectrogram-placeholder {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.65rem;
-      color: var(--text);
-      opacity: 0.3;
-      text-align: center;
     }
 
     /* Compact inline stats */
@@ -103,13 +95,13 @@
     .lab-preset-btn:hover { background-color: var(--accent-hover); color: var(--bg); }
     .lab-preset-btn.on { background-color: var(--text); color: var(--bg); }
 
-    /* Choice buttons - fixed height to prevent layout shift */
+    /* Choice buttons - fixed height, always visible */
     .choice-buttons {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 0.5em;
       margin: 0.75em 0;
-      min-height: 84px; /* Prevents layout shift when buttons appear/disappear */
+      height: 84px;
     }
 
     .choice-btn {
@@ -123,17 +115,16 @@
       cursor: pointer;
       border-radius: 0;
       transition: background-color 0.15s ease;
+      min-height: 0;
     }
     .choice-btn:hover:not(:disabled) { background-color: var(--accent-hover); color: var(--bg); }
     .choice-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     .choice-btn.correct { background-color: var(--text); color: var(--bg); }
     .choice-btn.incorrect { opacity: 0.4; }
-
-    /* Placeholder buttons when empty */
-    .choice-btn-placeholder {
-      border: 1px dashed var(--text);
-      opacity: 0.15;
-      pointer-events: none;
+    
+    /* Empty choice button state */
+    .choice-btn:empty {
+      visibility: hidden;
     }
 
     /* Rows */
@@ -153,6 +144,23 @@
       color: var(--text);
       opacity: 0.5;
       white-space: nowrap;
+    }
+
+    /* Control row with feedback - fixed layout */
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 0.6em;
+    }
+
+    .control-row .lab-btn {
+      flex-shrink: 0;
+    }
+
+    .control-row .feedback-msg {
+      flex: 1;
+      min-width: 120px;
     }
 
     /* Sliders */
@@ -185,64 +193,53 @@
       appearance: none;
     }
 
-    /* Collapsible */
-    .collapsible-section {
-      border-top: 1px solid var(--text);
-      margin-top: 0.75em;
-      padding-top: 0.75em;
-    }
-
-    .collapsible-header {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text);
-      opacity: 0.5;
-      cursor: pointer;
-      user-select: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0;
-    }
-
-    .collapsible-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-    }
-
-    .collapsible-content.active {
-      max-height: 1000px;
-      padding-top: 0.75em;
-    }
-
-    /* Masker config */
-    .masker-config {
-      margin-bottom: 0.5em;
+    /* Masker controls - inline toggles */
+    .masker-toggles {
+      background: var(--bg);
       padding: 0.5em;
+      margin-bottom: 0.6em;
       border: 1px solid var(--text);
-      opacity: 0.8;
+      display: flex;
+      gap: 6px;
+      align-items: center;
     }
 
-    .masker-config .gen-select {
-      max-width: 120px;
+    .masker-toggle-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 10px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      opacity: 0.4;
     }
+    .masker-toggle-btn.active {
+      background-color: var(--text);
+      color: var(--bg);
+      opacity: 1;
+    }
+    .masker-toggle-btn:hover { opacity: 1; }
 
-    /* Feedback */
+    /* Feedback - inline with buttons, always visible */
     .feedback-msg {
       font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       color: var(--text);
-      padding: 0.5em;
-      margin: 0.5em 0;
-      border: 1px solid var(--text);
+      padding: 0.4em 1em;
+      border: 2px solid var(--text);
       text-align: center;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .feedback-msg.success { opacity: 1; }
     .feedback-msg.error { opacity: 0.6; }
+    .feedback-msg:empty { opacity: 0.2; }
 
     /* Canvas */
     canvas {
@@ -339,12 +336,9 @@
 
     <div class="gen-module">
 
-      <!-- Spectrogram Container (top) -->
+      <!-- Spectrogram Container (top, visible by default) -->
       <div class="spectrogram-container">
-        <canvas id="spectrogram" width="800" height="120" style="display: none;"></canvas>
-        <div id="spectrogram-placeholder" class="spectrogram-placeholder">
-          spectrogram appears here when enabled
-        </div>
+        <canvas id="spectrogram" width="800" height="120"></canvas>
       </div>
 
       <!-- Difficulty & Word Set -->
@@ -353,7 +347,6 @@
         <button class="lab-preset-btn on" data-difficulty="easy">easy</button>
         <button class="lab-preset-btn" data-difficulty="medium">medium</button>
         <button class="lab-preset-btn" data-difficulty="hard">hard</button>
-        <button class="lab-preset-btn" data-difficulty="custom">custom</button>
       </div>
 
       <div class="gen-row">
@@ -362,22 +355,46 @@
         <button class="lab-preset-btn" data-wordset="numbers">numbers</button>
       </div>
 
-      <!-- Main Controls -->
+      <!-- Masker Toggles (background box with inline toggles) -->
+      <div class="masker-toggles">
+        <span class="gen-row-label">maskers →</span>
+        <button class="masker-toggle-btn active" data-masker="nature">nature</button>
+        <button class="masker-toggle-btn" data-masker="traffic">traffic</button>
+        <button class="masker-toggle-btn" data-masker="voices">voices</button>
+      </div>
+
+      <!-- Volume & SNR Controls -->
       <div class="gen-row">
+        <div class="lab-ctrl">
+          <input type="range" id="target-volume" min="0" max="1" step="0.1" value="1.0">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">volume</span>
+            <span class="lab-ctrl-val" id="target-volume-val">1.0</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="snr" min="-10" max="15" step="1" value="10">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">snr</span>
+            <span class="lab-ctrl-val" id="snr-val">10 dB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Controls + Feedback (inline) -->
+      <div class="control-row">
         <button class="lab-btn" id="btn-play">&#9654;&#xFE0E; play</button>
         <button class="lab-btn" id="btn-repeat" disabled>&#8634;&#xFE0E; repeat</button>
         <button class="lab-btn" id="btn-next" disabled>next</button>
+        <div class="feedback-msg" id="feedback-msg"></div>
       </div>
 
-      <!-- Feedback -->
-      <div id="feedback-container"></div>
-
-      <!-- Choice Buttons (with placeholders) -->
+      <!-- Choice Buttons (always visible, 4 empty boxes) -->
       <div class="choice-buttons" id="choice-buttons">
-        <div class="choice-btn-placeholder"></div>
-        <div class="choice-btn-placeholder"></div>
-        <div class="choice-btn-placeholder"></div>
-        <div class="choice-btn-placeholder"></div>
+        <button class="choice-btn"></button>
+        <button class="choice-btn"></button>
+        <button class="choice-btn"></button>
+        <button class="choice-btn"></button>
       </div>
 
       <!-- Stats (below choice buttons) -->
@@ -398,7 +415,7 @@
 
       <!-- Visualizations -->
       <div class="gen-row">
-        <button class="lab-preset-btn" id="toggle-spectrogram">show spectrogram</button>
+        <button class="lab-preset-btn on" id="toggle-spectrogram">hide spectrogram</button>
         <button class="lab-preset-btn" id="toggle-spatial">show spatial</button>
       </div>
 
@@ -408,44 +425,7 @@
         </div>
       </div>
 
-      <!-- Advanced Controls (Collapsible) -->
-      <div class="collapsible-section">
-        <div class="collapsible-header" id="advanced-toggle">
-          <span>advanced controls</span>
-          <span id="advanced-icon">▼</span>
-        </div>
-        <div class="collapsible-content" id="advanced-content">
-          
-          <div class="gen-row">
-            <div class="lab-ctrl">
-              <input type="range" id="target-volume" min="0" max="1" step="0.1" value="1.0">
-              <div class="lab-ctrl-bottom">
-                <span class="lab-ctrl-label">target volume</span>
-                <span class="lab-ctrl-val" id="target-volume-val">1.0</span>
-              </div>
-            </div>
-            <div class="lab-ctrl">
-              <input type="range" id="snr" min="-10" max="15" step="1" value="10">
-              <div class="lab-ctrl-bottom">
-                <span class="lab-ctrl-label">snr</span>
-                <span class="lab-ctrl-val" id="snr-val">10 dB</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="gen-row">
-            <span class="gen-row-label">maskers →</span>
-            <button class="lab-preset-btn on" data-masker-count="1">1</button>
-            <button class="lab-preset-btn" data-masker-count="2">2</button>
-            <button class="lab-preset-btn" data-masker-count="3">3</button>
-          </div>
-
-          <div id="masker-configs"></div>
-
-        </div>
-      </div>
-
-      <p class="lab-hint">headphones recommended</p>
+      <p class="lab-hint">headphones recommended · 4 second window · target appears randomly</p>
 
     </div>
   </div>
