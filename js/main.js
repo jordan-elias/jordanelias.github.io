@@ -34,7 +34,7 @@ const state = {
   snr: 10, // Signal-to-Noise Ratio in dB
   
   // Visuals
-  spectrogramEnabled: false,
+  spectrogramEnabled: true,
   spatialEnabled: false,
   
   // Difficulty presets
