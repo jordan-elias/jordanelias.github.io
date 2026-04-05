@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sensory Intelligence Lab – Login</title>
+
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background-color: #0066cc;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background-color: #0052a3;
+    }
+
+    .secondary {
+      background-color: #e9ecef;
+      color: #333;
+    }
+
+    #message {
+      margin-top: 1rem;
+      font-size: 14px;
+      color: #333;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sensory Intelligence Lab</h1>
+    <p>Log in or create an account to access your dashboard.</p>
+
+    <input type="email" id="email" placeholder="Email address" required />
+    <input type="password" id="password" placeholder="Password" />
+
+    <button id="loginBtn">Log In</button>
+    <button id="signupBtn" class="secondary">Create Account</button>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    // =============================
+    // CONFIGURATION
+    // =============================
+
+    const SUPABASE_URL = "https://lrjuufvrgkuvfxcmybtf.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_VyiIJOgsGueUOVU_ed49-Q_rS4mi7J1";
+
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const messageDiv = document.getElementById("message");
+
+    // =============================
+    // LOGIN
+    // =============================
+
+    document
+      .getElementById("loginBtn")
+      .addEventListener("click", async () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        messageDiv.textContent = "Logging in...";
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) {
+          messageDiv.textContent = error.message;
+          return;
+        }
+
+        messageDiv.textContent = "Login successful! Redirecting...";
+
+        window.location.href = "/sensory-intelligence-lab/dashboard/";
+      });
+
+    // =============================
+    // SIGN UP
+    // =============================
+
+    document
+      .getElementById("signupBtn")
+      .addEventListener("click", async () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        messageDiv.textContent = "Creating account...";
+
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+        });
+
+        if (error) {
+          messageDiv.textContent = error.message;
+          return;
+        }
+
+        messageDiv.textContent =
+          "Account created! Check your email to confirm your account.";
+      });
+
+    // =============================
+    // AUTO-REDIRECT IF LOGGED IN
+    // =============================
+
+    async function checkSession() {
+      const {
+        data: { session },
+      } = await supabaseClient.auth.getSession();
+
+      if (session) {
+        window.location.href = "/sensory-intelligence-lab/dashboard/";
+      }
+    }
+
+    checkSession();
+  </script>
+</body>
+</html>
