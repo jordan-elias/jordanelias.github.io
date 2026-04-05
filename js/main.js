@@ -34,7 +34,7 @@ const state = {
   wordSet: 'colors',
   activeMaskers: ['nature'], // Track which maskers are active
   targetGain: 1.0,
-  snr: 10, // Signal-to-Noise Ratio in dB
+  snr: 5, // Signal-to-Noise Ratio in dB
   
   // Visuals
   spectrogramEnabled: true, // On by default
@@ -42,9 +42,9 @@ const state = {
   
   // Difficulty presets
   presets: {
-    easy:   { snr: 10,  maskers: ['nature'] },
-    medium: { snr: -2.5,   maskers: ['nature', 'traffic'] },
-    hard:   { snr: -10,  maskers: ['nature', 'traffic', 'voices'] }
+    easy:   { snr: 5,  maskers: ['nature'] },
+    medium: { snr: -5,   maskers: ['nature', 'traffic'] },
+    hard:   { snr: -15,  maskers: ['nature', 'traffic', 'voices'] }
   }
 };
 
