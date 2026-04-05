@@ -630,9 +630,9 @@ class SpatialGame {
     selectedDot.classList.add('source-selected');
     
     if (isCorrect) {
-      this.showFeedback('success', '✓ correct!');
+      this.showFeedback('success', 'correct!');
     } else {
-      this.showFeedback('error', '✗ incorrect');
+      this.showFeedback('error', 'incorrect');
       
       // Reveal the actual target
       const targetIndex = this.sources.findIndex(s => s.isTarget);
