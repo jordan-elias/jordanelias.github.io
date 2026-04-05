@@ -5,6 +5,172 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sensory Intelligence Lab - Login / Sign Up</title>
 
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .auth-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      margin-top: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #0066cc;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .toggle-btns {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .toggle-btns button {
+      width: 48%;
+      background-color: #e0e0e0;
+      color: black;
+    }
+
+    .toggle-btns button.active {
+      background-color: #0066cc;
+      color: white;
+    }
+
+    #signupFields {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-container">
+  <div class="toggle-btns">
+    <button id="showSignIn" class="active">Sign In</button>
+    <button id="showSignUp">Create Account</button>
+  </div>
+
+  <form id="authForm">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+
+    <div id="signupFields">
+      <input type="text" id="fullName" placeholder="Full Name" required />
+      <!-- Add more required fields here if needed -->
+    </div>
+
+    <button type="submit" id="submitBtn">Sign In</button>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // REPLACE THESE WITH YOUR SUPABASE PROJECT INFO
+  const SUPABASE_URL = "https://lrjuufvrgkuvfxcmybtf.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_VyiIJOgsGueUOVU_ed49-Q_rS4mi7J1";
+
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let isSignUp = false;
+
+  const showSignInBtn = document.getElementById('showSignIn');
+  const showSignUpBtn = document.getElementById('showSignUp');
+  const signupFields = document.getElementById('signupFields');
+  const submitBtn = document.getElementById('submitBtn');
+
+  // Toggle to Sign Up
+  showSignUpBtn.addEventListener('click', () => {
+    isSignUp = true;
+    signupFields.style.display = 'block';
+    submitBtn.textContent = 'Sign Up';
+    showSignUpBtn.classList.add('active');
+    showSignInBtn.classList.remove('active');
+  });
+
+  // Toggle to Sign In
+  showSignInBtn.addEventListener('click', () => {
+    isSignUp = false;
+    signupFields.style.display = 'none';
+    submitBtn.textContent = 'Sign In';
+    showSignInBtn.classList.add('active');
+    showSignUpBtn.classList.remove('active');
+  });
+
+  // Form submission handler
+  document.getElementById('authForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    if (isSignUp) {
+      const fullName = document.getElementById('fullName').value;
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName }
+        }
+      });
+
+      if (error) {
+        console.error(error);
+        return alert(error.message);
+      }
+
+      alert('Check your email to confirm your account!');
+    } else {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        console.error(error);
+        return alert(error.message);
+      }
+
+      // Redirect to dashboard after successful login
+      window.location.href = '/sensory-intelligence-lab/dashboard/';
+    }
+  });
+});
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensory Intelligence Lab - Login / Sign Up</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
