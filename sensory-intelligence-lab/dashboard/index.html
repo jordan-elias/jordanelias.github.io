@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensory Intelligence Lab – Dashboard</title>
+
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      background-color: #f4f6f8;
+    }
+
+    header {
+      background-color: #0066cc;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .prompt {
+      background: #e9ecef;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .module-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .module-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .module-card h3 {
+      margin-top: 0;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #e74c3c;
+      color: white;
+      cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Sensory Intelligence Lab Dashboard</h1>
+  <button class="logout-btn" id="logoutBtn">Log Out</button>
+</header>
+
+<div class="container">
+  <div class="prompt" id="dailyPrompt">
+    Loading today's listening prompt...
+  </div>
+
+  <div class="modules">
+    <div class="module-card" onclick="location.href='checkin/'">
+      <h3>Check-In</h3>
+      <p>Track your emotional and sensory state over time.</p>
+    </div>
+
+    <div class="module-card" onclick="location.href='recordings/'">
+      <h3>Recordings</h3>
+      <p>Collect and organize your field recordings.</p>
+    </div>
+
+    <div class="module-card" onclick="location.href='spatial-game/'">
+      <h3>Spatial & Auditory Game</h3>
+      <p>Mini games for spatial and auditory scene analysis.</p>
+    </div>
+
+    <div class="module-card" onclick="location.href='ear-training/'">
+      <h3>Ear Training</h3>
+      <p>Train your auditory perception skills.</p>
+    </div>
+
+    <!-- Add more modules here as you expand -->
+  </div>
+</div>
+
+<script>
+  // =============================
+  // CONFIGURATION
+  // =============================
+
+  const SUPABASE_URL = "YOUR_SUPABASE_URL";
+  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // =============================
+  // CHECK AUTH SESSION
+  // =============================
+
+  async function checkAuth() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (!session) {
+      window.location.href = '/sensory-intelligence-lab/';
+    } else {
+      loadDailyPrompt();
+    }
+  }
+
+  checkAuth();
+
+  // =============================
+  // LOGOUT
+  // =============================
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await supabaseClient.auth.signOut();
+    window.location.href = '/sensory-intelligence-lab/';
+  });
+
+  // =============================
+  // LOAD DAILY PROMPT (placeholder)
+  // =============================
+
+  function loadDailyPrompt() {
+    const prompts = [
+      "Take 2 minutes to focus on the ambient sounds around you.",
+      "Listen to your favorite song and note how it affects your mood.",
+      "Spend 5 minutes paying attention to your breathing and surrounding noises."
+    ];
+
+    const index = new Date().getDate() % prompts.length;
+    document.getElementById('dailyPrompt').textContent = prompts[index];
+  }
+</script>
+
+</body>
+</html>
