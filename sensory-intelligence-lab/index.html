@@ -3,313 +3,331 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sensory Intelligence Lab - Login / Sign Up</title>
-
-  <!-- Supabase JS SDK -->
+  <title>Sensory Intelligence Lab</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: #f4f6f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f0ede8;
+      --surface: #faf8f5;
+      --border: #d8d3ca;
+      --text: #1a1815;
+      --text-muted: #7a7570;
+      --accent: #2d5a3d;
+      --accent-light: #e8f0eb;
+      --error: #8b3a3a;
+      --mono: 'DM Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
     }
 
-    .auth-container {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    body {
+      font-family: var(--sans);
+      background-color: var(--bg);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(45,90,61,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(45,90,61,0.04) 0%, transparent 50%);
+    }
+
+    .wrapper {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
+    }
+
+    .wordmark {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
       text-align: center;
+    }
+
+    .wordmark span {
+      color: var(--accent);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.5rem;
+    }
+
+    .tab-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.65rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .tab-btn:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .tab-btn:not(.active):hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
     }
 
     input {
       width: 100%;
-      padding: 0.75rem;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: white;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
     }
 
-    button {
-      padding: 0.75rem 1.5rem;
-      margin-top: 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #0066cc;
-      color: white;
-      cursor: pointer;
-      width: 100%;
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(45,90,61,0.1);
     }
 
-    .toggle-btns {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1rem;
+    input::placeholder {
+      color: #b8b3ae;
     }
 
-    .toggle-btns button {
-      width: 48%;
-      background-color: #e0e0e0;
-      color: black;
-    }
-
-    .toggle-btns button.active {
-      background-color: #0066cc;
-      color: white;
-    }
-
-    #signupFields {
+    .signup-fields {
       display: none;
+      overflow: hidden;
+    }
+
+    .signup-fields.visible {
+      display: block;
+      animation: slideDown 0.2s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: 3px;
+      background: var(--accent);
+      color: white;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .submit-btn:hover { opacity: 0.88; }
+    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .message {
+      margin-top: 1rem;
+      padding: 0.7rem 0.85rem;
+      border-radius: 3px;
+      font-size: 0.83rem;
+      font-family: var(--sans);
+      display: none;
+    }
+
+    .message.error {
+      background: #f9edec;
+      border: 1px solid #e8c4c4;
+      color: var(--error);
+      display: block;
+    }
+
+    .message.success {
+      background: var(--accent-light);
+      border: 1px solid #c0d9c8;
+      color: var(--accent);
+      display: block;
+    }
+
+    .footer-note {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
     }
   </style>
 </head>
 <body>
 
-<div class="auth-container">
-  <div class="toggle-btns">
-    <button id="showSignIn" class="active">Sign In</button>
-    <button id="showSignUp">Create Account</button>
-  </div>
+<div class="wrapper">
+  <p class="wordmark"><span>◆</span> Sensory Intelligence Lab</p>
 
-  <form id="authForm">
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-
-    <div id="signupFields">
-      <input type="text" id="fullName" placeholder="Full Name" required />
-      <!-- Add more required fields here if needed -->
+  <div class="card">
+    <div class="tab-row">
+      <button class="tab-btn active" id="showSignIn">Sign In</button>
+      <button class="tab-btn" id="showSignUp">Create Account</button>
     </div>
 
-    <button type="submit" id="submitBtn">Sign In</button>
-  </form>
-</div>
+    <form id="authForm" novalidate>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // REPLACE THESE WITH YOUR SUPABASE PROJECT INFO
-  const SUPABASE_URL = "https://lrjuufvrgkuvfxcmybtf.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_VyiIJOgsGueUOVU_ed49-Q_rS4mi7J1";
+      <div class="signup-fields" id="signupFields">
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" placeholder="Your name" autocomplete="name" />
+        </div>
+      </div>
 
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
 
-  let isSignUp = false;
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
 
-  const showSignInBtn = document.getElementById('showSignIn');
-  const showSignUpBtn = document.getElementById('showSignUp');
-  const signupFields = document.getElementById('signupFields');
-  const submitBtn = document.getElementById('submitBtn');
+      <div class="message" id="message"></div>
 
-  // Toggle to Sign Up
-  showSignUpBtn.addEventListener('click', () => {
-    isSignUp = true;
-    signupFields.style.display = 'block';
-    submitBtn.textContent = 'Sign Up';
-    showSignUpBtn.classList.add('active');
-    showSignInBtn.classList.remove('active');
-  });
-
-  // Toggle to Sign In
-  showSignInBtn.addEventListener('click', () => {
-    isSignUp = false;
-    signupFields.style.display = 'none';
-    submitBtn.textContent = 'Sign In';
-    showSignInBtn.classList.add('active');
-    showSignUpBtn.classList.remove('active');
-  });
-
-  // Form submission handler
-  document.getElementById('authForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    if (isSignUp) {
-      const fullName = document.getElementById('fullName').value;
-
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: fullName }
-        }
-      });
-
-      if (error) {
-        console.error(error);
-        return alert(error.message);
-      }
-
-      alert('Check your email to confirm your account!');
-    } else {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        console.error(error);
-        return alert(error.message);
-      }
-
-      // Redirect to dashboard after successful login
-      window.location.href = '/sensory-intelligence-lab/dashboard/';
-    }
-  });
-});
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sensory Intelligence Lab - Login / Sign Up</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: #f4f6f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .auth-container {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    input {
-      width: 100%;
-      padding: 0.75rem;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      padding: 0.75rem 1.5rem;
-      margin-top: 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #0066cc;
-      color: white;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .toggle-btns {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    .toggle-btns button {
-      width: 48%;
-      background-color: #e0e0e0;
-      color: black;
-    }
-
-    .toggle-btns button.active {
-      background-color: #0066cc;
-      color: white;
-    }
-
-    #signupFields {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-
-<div class="auth-container">
-  <div class="toggle-btns">
-    <button id="showSignIn" class="active">Sign In</button>
-    <button id="showSignUp">Create Account</button>
+      <button type="submit" class="submit-btn" id="submitBtn">Sign In</button>
+    </form>
   </div>
 
-  <form id="authForm">
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-
-    <div id="signupFields">
-      <input type="text" id="fullName" placeholder="Full Name" required />
-      <!-- Add more required fields here if needed -->
-    </div>
-
-    <button type="submit" id="submitBtn">Sign In</button>
-  </form>
+  <p class="footer-note">Access requires an active subscription.</p>
 </div>
 
 <script>
   const SUPABASE_URL = "https://lrjuufvrgkuvfxcmybtf.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_VyiIJOgsGueUOVU_ed49-Q_rS4mi7J1";
 
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // Fix: use the global `supabase` object from the CDN, assign to a different variable name
+  const { createClient } = supabase;
+  const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let isSignUp = false;
 
   const showSignInBtn = document.getElementById('showSignIn');
   const showSignUpBtn = document.getElementById('showSignUp');
-  const signupFields = document.getElementById('signupFields');
-  const submitBtn = document.getElementById('submitBtn');
+  const signupFields  = document.getElementById('signupFields');
+  const submitBtn     = document.getElementById('submitBtn');
+  const fullNameInput = document.getElementById('fullName');
+  const messageEl     = document.getElementById('message');
+
+  function showMessage(text, type) {
+    messageEl.textContent = text;
+    messageEl.className = 'message ' + type;
+  }
+
+  function clearMessage() {
+    messageEl.textContent = '';
+    messageEl.className = 'message';
+  }
 
   showSignUpBtn.addEventListener('click', () => {
     isSignUp = true;
-    signupFields.style.display = 'block';
-    submitBtn.textContent = 'Sign Up';
+    signupFields.classList.add('visible');
+    fullNameInput.required = true;
+    document.getElementById('password').autocomplete = 'new-password';
+    submitBtn.textContent = 'Create Account';
     showSignUpBtn.classList.add('active');
     showSignInBtn.classList.remove('active');
+    clearMessage();
   });
 
   showSignInBtn.addEventListener('click', () => {
     isSignUp = false;
-    signupFields.style.display = 'none';
+    signupFields.classList.remove('visible');
+    fullNameInput.required = false;
+    document.getElementById('password').autocomplete = 'current-password';
     submitBtn.textContent = 'Sign In';
     showSignInBtn.classList.add('active');
     showSignUpBtn.classList.remove('active');
+    clearMessage();
   });
 
   document.getElementById('authForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    clearMessage();
 
-    const email = document.getElementById('email').value;
+    const email    = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
-    if (isSignUp) {
-      const fullName = document.getElementById('fullName').value;
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: fullName }
-        }
-      });
+    submitBtn.disabled = true;
+    submitBtn.textContent = isSignUp ? 'Creating account…' : 'Signing in…';
 
-      if (error) return alert(error.message);
-      alert('Check your email to confirm your account!');
-    } else {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return alert(error.message);
-      window.location.href = '/sensory-intelligence-lab/dashboard/';
+    try {
+      if (isSignUp) {
+        const fullName = fullNameInput.value.trim();
+        if (!fullName) {
+          showMessage('Please enter your full name.', 'error');
+          return;
+        }
+
+        const { data, error } = await client.auth.signUp({
+          email,
+          password,
+          options: { data: { full_name: fullName } }
+        });
+
+        if (error) throw error;
+        showMessage('Account created! Check your email to confirm before signing in.', 'success');
+
+      } else {
+        const { data, error } = await client.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        window.location.href = '/sensory-intelligence-lab/dashboard/';
+      }
+    } catch (err) {
+      showMessage(err.message || 'Something went wrong. Please try again.', 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
     }
   });
 </script>
-
 </body>
 </html>
