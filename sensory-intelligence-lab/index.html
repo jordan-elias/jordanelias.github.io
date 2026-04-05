@@ -3,136 +3,306 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sensory Intelligence Lab</title>
+  <title>Sign In — Sensory Intelligence Lab</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+  <!-- Match site fonts exactly -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+
   <style>
+    /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* ── Tokens — mirrored from the site's styles.css conventions ── */
     :root {
-      --bg: #f0ede8;
-      --surface: #faf8f5;
-      --border: #d8d3ca;
-      --text: #1a1815;
-      --text-muted: #7a7570;
-      --accent: #2d5a3d;
-      --accent-light: #e8f0eb;
-      --error: #8b3a3a;
-      --mono: 'DM Mono', monospace;
-      --sans: 'DM Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --color-bg: #ffffff;
+      --color-surface: #f9f9f7;
+      --color-border: #e5e5e0;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-accent: #2a5c45;        /* calm green — consistent with the lab aesthetic */
+      --color-accent-light: #edf4f0;
+      --color-accent-hover: #1e4433;
+      --color-error-bg: #fdf2f2;
+      --color-error-border: #e8c4c4;
+      --color-error-text: #7a2e2e;
+      --color-success-bg: #edf4f0;
+      --color-success-border: #b8d9c8;
+      --color-success-text: #1e4433;
+      --max-width: 680px;
+      --header-height: 56px;
     }
+
+    /* ── Base ── */
+    html { font-size: 16px; }
 
     body {
-      font-family: var(--sans);
-      background-color: var(--bg);
+      font-family: var(--font-body);
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
       min-height: 100vh;
+    }
+
+    a {
+      color: var(--color-text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    a:hover { color: var(--color-accent); }
+
+    /* ── Header — match site exactly ── */
+    header {
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 2rem;
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--color-bg);
+      z-index: 10;
+    }
+
+    header h1 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    header nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    header nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--color-muted);
+      transition: color 0.15s;
+    }
+
+    header nav a:hover { color: var(--color-text); }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb-nav {
+      padding: 1rem 2rem 0;
+      max-width: calc(var(--max-width) + 4rem);
+      margin: 0 auto;
+    }
+
+    .breadcrumb-nav ol {
+      list-style: none;
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--color-muted);
+    }
+
+    .breadcrumb-nav li + li::before {
+      content: '/';
+      margin-right: 0.4rem;
+      color: var(--color-border);
+    }
+
+    .breadcrumb-nav a {
+      color: var(--color-muted);
+      text-decoration: none;
+    }
+
+    .breadcrumb-nav a:hover { color: var(--color-accent); text-decoration: underline; }
+
+    /* ── Main content ── */
+    main {
+      max-width: calc(var(--max-width) + 4rem);
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    /* ── Page header section ── */
+    .page-header {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .page-header h1 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .page-intro {
+      font-size: 1rem;
+      color: var(--color-muted);
+      max-width: 520px;
+      line-height: 1.65;
+    }
+
+    /* ── Two-column layout ── */
+    .auth-layout {
       display: grid;
-      place-items: center;
-      padding: 1.5rem;
-      background-image:
-        radial-gradient(ellipse at 20% 50%, rgba(45,90,61,0.06) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(45,90,61,0.04) 0%, transparent 50%);
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
     }
 
-    .wrapper {
-      width: 100%;
-      max-width: 420px;
+    @media (max-width: 640px) {
+      .auth-layout { grid-template-columns: 1fr; gap: 2rem; }
+      header nav { gap: 1rem; }
+      header h1 { font-size: 0.875rem; }
     }
 
-    .wordmark {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-      text-align: center;
+    /* ── Benefits column ── */
+    .benefits h2 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
     }
 
-    .wordmark span {
-      color: var(--accent);
+    .benefit-item {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      align-items: flex-start;
     }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
+    .benefit-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-accent-light);
+      color: var(--color-accent);
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .benefit-text strong {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .benefit-text p {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      line-height: 1.5;
+    }
+
+    .pricing-note {
+      margin-top: 2rem;
+      padding: 1rem 1.1rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       border-radius: 4px;
-      padding: 2.5rem;
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      line-height: 1.6;
     }
 
+    .pricing-note strong {
+      display: block;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 0.2rem;
+      font-size: 0.875rem;
+    }
+
+    /* ── Auth form column ── */
+    .auth-form-wrap {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 1.75rem;
+    }
+
+    /* Tab toggle */
     .tab-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      border: 1px solid var(--border);
+      border: 1px solid var(--color-border);
       border-radius: 3px;
       overflow: hidden;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
+      background: white;
     }
 
     .tab-btn {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.65rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
       border: none;
       background: transparent;
-      color: var(--text-muted);
+      color: var(--color-muted);
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
     }
 
-    .tab-btn:first-child {
-      border-right: 1px solid var(--border);
-    }
+    .tab-btn:first-child { border-right: 1px solid var(--color-border); }
 
     .tab-btn.active {
-      background: var(--accent);
-      color: #fff;
+      background: var(--color-accent);
+      color: white;
     }
 
     .tab-btn:not(.active):hover {
-      background: var(--accent-light);
-      color: var(--accent);
+      background: var(--color-accent-light);
+      color: var(--color-accent);
     }
 
-    .field {
-      margin-bottom: 1rem;
-    }
+    /* Fields */
+    .field { margin-bottom: 1rem; }
 
     label {
       display: block;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
+      font-size: 0.775rem;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 0.35rem;
     }
 
     input {
       width: 100%;
-      padding: 0.7rem 0.85rem;
-      border: 1px solid var(--border);
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--color-border);
       border-radius: 3px;
       background: white;
-      font-family: var(--sans);
-      font-size: 0.9rem;
-      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--color-text);
       transition: border-color 0.15s, box-shadow 0.15s;
       outline: none;
     }
 
     input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(45,90,61,0.1);
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(42,92,69,0.1);
     }
 
-    input::placeholder {
-      color: #b8b3ae;
-    }
+    input::placeholder { color: #aaa; }
 
+    /* Signup fields animation */
     .signup-fields {
       display: none;
       overflow: hidden;
@@ -140,111 +310,191 @@
 
     .signup-fields.visible {
       display: block;
-      animation: slideDown 0.2s ease;
+      animation: slideIn 0.18s ease;
     }
 
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-6px); }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-5px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* Submit */
     .submit-btn {
       width: 100%;
-      margin-top: 1.5rem;
-      padding: 0.8rem 1rem;
+      margin-top: 0.5rem;
+      padding: 0.7rem 1rem;
       border: none;
       border-radius: 3px;
-      background: var(--accent);
+      background: var(--color-accent);
       color: white;
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s;
+      transition: background 0.15s, opacity 0.15s;
     }
 
-    .submit-btn:hover { opacity: 0.88; }
-    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn:hover { background: var(--color-accent-hover); }
+    .submit-btn:active { opacity: 0.85; }
     .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    /* Messages */
     .message {
-      margin-top: 1rem;
-      padding: 0.7rem 0.85rem;
+      margin-top: 0.85rem;
+      padding: 0.65rem 0.8rem;
       border-radius: 3px;
-      font-size: 0.83rem;
-      font-family: var(--sans);
+      font-size: 0.8rem;
+      line-height: 1.5;
       display: none;
     }
 
     .message.error {
-      background: #f9edec;
-      border: 1px solid #e8c4c4;
-      color: var(--error);
+      background: var(--color-error-bg);
+      border: 1px solid var(--color-error-border);
+      color: var(--color-error-text);
       display: block;
     }
 
     .message.success {
-      background: var(--accent-light);
-      border: 1px solid #c0d9c8;
-      color: var(--accent);
+      background: var(--color-success-bg);
+      border: 1px solid var(--color-success-border);
+      color: var(--color-success-text);
       display: block;
     }
 
-    .footer-note {
-      margin-top: 1.5rem;
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--color-border);
+      padding: 1.5rem 2rem;
       text-align: center;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
+      font-size: 0.8rem;
+      color: var(--color-muted);
     }
   </style>
 </head>
 <body>
 
-<div class="wrapper">
-  <p class="wordmark"><span>◆</span> Sensory Intelligence Lab</p>
+<!-- Match site header exactly -->
+<header>
+  <h1>Music &amp; Mental Health Blog</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/online-sessions/">Online Sessions</a>
+    <a href="/events/">Events</a>
+    <a href="/contact/">Contact</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+</header>
 
-  <div class="card">
-    <div class="tab-row">
-      <button class="tab-btn active" id="showSignIn">Sign In</button>
-      <button class="tab-btn" id="showSignUp">Create Account</button>
-    </div>
+<!-- Breadcrumb -->
+<nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/sensory-intelligence-lab/">Sensory Intelligence Lab</a></li>
+    <li>Sign In</li>
+  </ol>
+</nav>
 
-    <form id="authForm" novalidate>
+<main>
 
-      <div class="signup-fields" id="signupFields">
-        <div class="field">
-          <label for="fullName">Full Name</label>
-          <input type="text" id="fullName" placeholder="Your name" autocomplete="name" />
+  <!-- Page header -->
+  <div class="page-header">
+    <h1>Sensory Intelligence Lab</h1>
+    <p class="page-intro">
+      A members-only space for deeper explorations — guided listening modules, research notes, and experimental exercises at the edge of sound, perception, and therapy.
+    </p>
+  </div>
+
+  <div class="auth-layout">
+
+    <!-- Benefits column -->
+    <div class="benefits">
+      <h2>What's included</h2>
+
+      <div class="benefit-item">
+        <div class="benefit-icon">◎</div>
+        <div class="benefit-text">
+          <strong>Guided listening modules</strong>
+          <p>Structured deep listening exercises drawing from Oliveros, Lucier, and Radigue — with accompanying scores and reflection prompts.</p>
         </div>
       </div>
 
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+      <div class="benefit-item">
+        <div class="benefit-icon">◈</div>
+        <div class="benefit-text">
+          <strong>Research & field notes</strong>
+          <p>Ongoing notes from my practice and research, including work on sound source attribution, music therapy applications, and acoustic ecology.</p>
+        </div>
       </div>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" />
+      <div class="benefit-item">
+        <div class="benefit-icon">◇</div>
+        <div class="benefit-text">
+          <strong>Experimental exercises</strong>
+          <p>DIY sound experiments — piezo microphones, drone construction, and other at-home practices from the Secret Sounds approach.</p>
+        </div>
       </div>
 
-      <div class="message" id="message"></div>
+      <div class="benefit-item">
+        <div class="benefit-icon">○</div>
+        <div class="benefit-text">
+          <strong>New content monthly</strong>
+          <p>Modules added regularly, with early access to workshop materials, prompt card sets, and curated listening recommendations.</p>
+        </div>
+      </div>
 
-      <button type="submit" class="submit-btn" id="submitBtn">Sign In</button>
-    </form>
+      <div class="pricing-note">
+        <strong>Subscription access</strong>
+        Already have an account? Sign in below. New here? Create an account — after signup you'll be able to choose a subscription plan to unlock the full lab.
+      </div>
+    </div>
+
+    <!-- Auth form column -->
+    <div class="auth-form-wrap">
+      <div class="tab-row">
+        <button class="tab-btn active" id="showSignIn">Sign in</button>
+        <button class="tab-btn" id="showSignUp">Create account</button>
+      </div>
+
+      <form id="authForm" novalidate>
+
+        <div class="signup-fields" id="signupFields">
+          <div class="field">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" placeholder="Your name" autocomplete="name" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Sign in</button>
+
+      </form>
+    </div>
+
   </div>
+</main>
 
-  <p class="footer-note">Access requires an active subscription.</p>
-</div>
+<footer>
+  <p>Jordan Elias Music Therapy · Berlin · <a href="/contact/">Contact</a></p>
+</footer>
 
 <script>
   const SUPABASE_URL = "https://lrjuufvrgkuvfxcmybtf.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_VyiIJOgsGueUOVU_ed49-Q_rS4mi7J1";
 
-  // Fix: use the global `supabase` object from the CDN, assign to a different variable name
   const { createClient } = supabase;
   const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -272,7 +522,7 @@
     signupFields.classList.add('visible');
     fullNameInput.required = true;
     document.getElementById('password').autocomplete = 'new-password';
-    submitBtn.textContent = 'Create Account';
+    submitBtn.textContent = 'Create account';
     showSignUpBtn.classList.add('active');
     showSignInBtn.classList.remove('active');
     clearMessage();
@@ -283,7 +533,7 @@
     signupFields.classList.remove('visible');
     fullNameInput.required = false;
     document.getElementById('password').autocomplete = 'current-password';
-    submitBtn.textContent = 'Sign In';
+    submitBtn.textContent = 'Sign in';
     showSignInBtn.classList.add('active');
     showSignUpBtn.classList.remove('active');
     clearMessage();
@@ -306,16 +556,13 @@
           showMessage('Please enter your full name.', 'error');
           return;
         }
-
         const { data, error } = await client.auth.signUp({
           email,
           password,
           options: { data: { full_name: fullName } }
         });
-
         if (error) throw error;
         showMessage('Account created! Check your email to confirm before signing in.', 'success');
-
       } else {
         const { data, error } = await client.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -325,9 +572,10 @@
       showMessage(err.message || 'Something went wrong. Please try again.', 'error');
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
+      submitBtn.textContent = isSignUp ? 'Create account' : 'Sign in';
     }
   });
 </script>
+
 </body>
 </html>
