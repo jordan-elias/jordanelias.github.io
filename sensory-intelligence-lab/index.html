@@ -1,180 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sensory Intelligence Lab – Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensory Intelligence Lab - Login / Sign Up</title>
 
-  <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body {
       font-family: Arial, Helvetica, sans-serif;
       background-color: #f4f6f8;
-      margin: 0;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
+      margin: 0;
     }
 
-    .container {
+    .auth-container {
       background: white;
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       width: 100%;
       max-width: 400px;
       text-align: center;
     }
 
-    h1 {
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      color: #555;
-      margin-bottom: 1.5rem;
-    }
-
     input {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
       border-radius: 8px;
       border: 1px solid #ccc;
-      font-size: 16px;
     }
 
     button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      margin-top: 1rem;
       border: none;
+      border-radius: 8px;
       background-color: #0066cc;
       color: white;
-      font-size: 16px;
       cursor: pointer;
-      margin-bottom: 10px;
+      width: 100%;
     }
 
-    button:hover {
-      background-color: #0052a3;
+    .toggle-btns {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
     }
 
-    .secondary {
-      background-color: #e9ecef;
-      color: #333;
+    .toggle-btns button {
+      width: 48%;
+      background-color: #e0e0e0;
+      color: black;
     }
 
-    #message {
-      margin-top: 1rem;
-      font-size: 14px;
-      color: #333;
-      min-height: 20px;
+    .toggle-btns button.active {
+      background-color: #0066cc;
+      color: white;
+    }
+
+    #signupFields {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Sensory Intelligence Lab</h1>
-    <p>Log in or create an account to access your dashboard.</p>
 
-    <input type="email" id="email" placeholder="Email address" required />
-    <input type="password" id="password" placeholder="Password" />
-
-    <button id="loginBtn">Log In</button>
-    <button id="signupBtn" class="secondary">Create Account</button>
-
-    <div id="message"></div>
+<div class="auth-container">
+  <div class="toggle-btns">
+    <button id="showSignIn" class="active">Sign In</button>
+    <button id="showSignUp">Create Account</button>
   </div>
 
-  <script>
-    // =============================
-    // CONFIGURATION
-    // =============================
+  <form id="authForm">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
 
-    const SUPABASE_URL = "https://lrjuufvrgkuvfxcmybtf.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_VyiIJOgsGueUOVU_ed49-Q_rS4mi7J1";
+    <div id="signupFields">
+      <input type="text" id="fullName" placeholder="Full Name" required />
+      <!-- Add more required fields here if needed -->
+    </div>
 
-    const supabaseClient = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+    <button type="submit" id="submitBtn">Sign In</button>
+  </form>
+</div>
 
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const messageDiv = document.getElementById("message");
+<script>
+  const SUPABASE_URL = "YOUR_SUPABASE_URL";
+  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-    // =============================
-    // LOGIN
-    // =============================
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    document
-      .getElementById("loginBtn")
-      .addEventListener("click", async () => {
-        const email = emailInput.value;
-        const password = passwordInput.value;
+  let isSignUp = false;
 
-        messageDiv.textContent = "Logging in...";
+  const showSignInBtn = document.getElementById('showSignIn');
+  const showSignUpBtn = document.getElementById('showSignUp');
+  const signupFields = document.getElementById('signupFields');
+  const submitBtn = document.getElementById('submitBtn');
 
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email: email,
-          password: password,
-        });
+  showSignUpBtn.addEventListener('click', () => {
+    isSignUp = true;
+    signupFields.style.display = 'block';
+    submitBtn.textContent = 'Sign Up';
+    showSignUpBtn.classList.add('active');
+    showSignInBtn.classList.remove('active');
+  });
 
-        if (error) {
-          messageDiv.textContent = error.message;
-          return;
+  showSignInBtn.addEventListener('click', () => {
+    isSignUp = false;
+    signupFields.style.display = 'none';
+    submitBtn.textContent = 'Sign In';
+    showSignInBtn.classList.add('active');
+    showSignUpBtn.classList.remove('active');
+  });
+
+  document.getElementById('authForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    if (isSignUp) {
+      const fullName = document.getElementById('fullName').value;
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName }
         }
-
-        messageDiv.textContent = "Login successful! Redirecting...";
-
-        window.location.href = "/sensory-intelligence-lab/dashboard/";
       });
 
-    // =============================
-    // SIGN UP
-    // =============================
-
-    document
-      .getElementById("signupBtn")
-      .addEventListener("click", async () => {
-        const email = emailInput.value;
-        const password = passwordInput.value;
-
-        messageDiv.textContent = "Creating account...";
-
-        const { data, error } = await supabaseClient.auth.signUp({
-          email: email,
-          password: password,
-        });
-
-        if (error) {
-          messageDiv.textContent = error.message;
-          return;
-        }
-
-        messageDiv.textContent =
-          "Account created! Check your email to confirm your account.";
-      });
-
-    // =============================
-    // AUTO-REDIRECT IF LOGGED IN
-    // =============================
-
-    async function checkSession() {
-      const {
-        data: { session },
-      } = await supabaseClient.auth.getSession();
-
-      if (session) {
-        window.location.href = "/sensory-intelligence-lab/dashboard/";
-      }
+      if (error) return alert(error.message);
+      alert('Check your email to confirm your account!');
+    } else {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) return alert(error.message);
+      window.location.href = '/sensory-intelligence-lab/dashboard/';
     }
+  });
+</script>
 
-    checkSession();
-  </script>
 </body>
 </html>
