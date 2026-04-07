@@ -505,8 +505,9 @@
 </footer>
 
 <script>
-  const SUPABASE_URL     = 'YOUR_SUPABASE_URL';
-  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+  const SUPABASE_URL = "https://lrjuufvrgkuvfxcmybtf.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_VyiIJOgsGueUOVU_ed49-Q_rS4mi7J1";
+
 
   // Reuse the client created in the auth gate, or create a fresh one
   const client = window.__supabaseClient || supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -530,6 +531,9 @@
   });
 
   // ── Daily listening prompt ──
+ // ── Daily listening prompt ──
+document.addEventListener('DOMContentLoaded', function () {
+
   const prompts = [
     "Sit still for two minutes. Without trying to identify anything, let sounds arrive and pass like weather.",
     "Choose one sound in your environment right now. Follow it until it ends — or until you can't hear it anymore.",
@@ -567,7 +571,21 @@
   const dayOfYear = Math.floor(
     (new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000
   );
-  document.getElementById('dailyPrompt').textContent = prompts[dayOfYear % prompts.length];
+
+  const promptElement = document.getElementById('dailyPrompt');
+
+  if (promptElement) {
+    promptElement.textContent =
+      prompts[dayOfYear % prompts.length];
+  } else {
+  console.error("dailyPrompt element not found");
+}
+
+
+});
+
+  
+
 </script>
 
 </body>
