@@ -50,14 +50,12 @@
     @media (max-width: 400px) { .breadcrumb-nav li.bc-mid { display: none; } .breadcrumb-nav li.bc-mid + li::before { display: none; } }
 
     main { max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
-
     .page-header { margin-bottom: 2rem; padding-bottom: 1.75rem; border-bottom: 1px solid var(--color-border); }
     .page-header h2 { font-family: var(--font-heading); font-size: 2rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.4rem; }
     .page-header p { font-size: 0.9rem; color: var(--color-muted); }
 
     .section-label { font-family: var(--font-heading); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.75rem; }
 
-    /* ── State + Intensity layout ── */
     .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
     @media (max-width: 580px) { .controls-row { grid-template-columns: 1fr; gap: 1.5rem; } }
 
@@ -76,36 +74,18 @@
     .state-btn .state-desc { display: block; font-size: 0.7rem; font-weight: 400; color: var(--color-muted); margin-top: 0.1rem; }
     .state-btn.selected .state-desc { color: var(--color-accent); opacity: 0.75; }
 
-    /* ── Intensity ── */
-    .intensity-section { margin-bottom: 2rem; }
-    .intensity-btns { display: flex; gap: 4px; }
-    .intensity-btn {
-      font-family: var(--font-body); font-size: 0.8rem; font-weight: 500;
-      padding: 0.45rem 1.2rem; border: 1px solid var(--color-border);
-      background: var(--color-bg); color: var(--color-muted);
-      cursor: pointer; transition: all 0.12s; flex: 1; text-align: center;
+    /* ── Mantra ── */
+    .mantra-block {
+      display: none; background: var(--color-surface); border-left: 3px solid var(--color-accent);
+      padding: 1rem 1.25rem; margin-bottom: 1.75rem;
+      font-size: 0.9rem; line-height: 1.7; color: var(--color-text);
+      font-style: italic;
     }
-    .intensity-btn:hover:not(.active) { border-color: var(--color-accent); color: var(--color-accent); }
-    .intensity-btn.active { background: var(--color-accent); border-color: var(--color-accent); color: white; }
+    .mantra-block.visible { display: block; }
+    .mantra-attribution { display: block; margin-top: 0.4rem; font-size: 0.72rem; font-style: normal; color: var(--color-muted); font-weight: 500; letter-spacing: 0.04em; }
 
-    /* ── Arc summary ── */
-    .arc-summary { background: var(--color-surface); border: 1px solid var(--color-border); padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: none; font-size: 0.83rem; color: var(--color-muted); line-height: 1.65; }
-    .arc-summary.visible { display: block; }
-    .arc-summary strong { color: var(--color-text); font-weight: 500; }
-
-    /* ── Journey phases display ── */
-    .journey-phases { display: none; gap: 0; margin-bottom: 1.5rem; border: 1px solid var(--color-border); overflow: hidden; }
-    .journey-phases.visible { display: flex; }
-    .phase-block { flex: 1; padding: 0.65rem 0.9rem; font-size: 0.75rem; border-right: 1px solid var(--color-border); background: var(--color-surface); }
-    .phase-block:last-child { border-right: none; }
-    .phase-block .phase-name { font-family: var(--font-heading); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.2rem; }
-    .phase-block .phase-desc { color: var(--color-text); font-size: 0.72rem; line-height: 1.4; }
-    .phase-block.active-phase { background: var(--color-accent-light); }
-    .phase-block.active-phase .phase-name { color: var(--color-accent); }
-    @media (max-width: 520px) { .journey-phases { flex-direction: column; } .phase-block { border-right: none; border-bottom: 1px solid var(--color-border); } .phase-block:last-child { border-bottom: none; } }
-
-    /* ── Generate / action buttons ── */
-    .action-row { display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    /* ── Action ── */
+    .action-row { display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap; align-items: center; }
     .generate-btn {
       font-family: var(--font-heading); font-size: 0.875rem; font-weight: 600;
       padding: 0.8rem 2rem; border: none; background: var(--color-accent);
@@ -113,14 +93,6 @@
     }
     .generate-btn:hover { background: var(--color-accent-hover); }
     .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .variation-btn {
-      font-family: var(--font-heading); font-size: 0.875rem; font-weight: 600;
-      padding: 0.8rem 1.5rem; border: 1px solid var(--color-border);
-      background: var(--color-bg); color: var(--color-text);
-      cursor: pointer; transition: all 0.15s; letter-spacing: -0.01em; display: none;
-    }
-    .variation-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
-    .variation-btn.visible { display: inline-block; }
 
     /* ── Player ── */
     .player { display: none; border: 1px solid var(--color-border); background: var(--color-surface); }
@@ -136,8 +108,8 @@
     }
     .play-pause-btn:hover { background: var(--color-accent-hover); }
 
-    .play-tri { width: 0; height: 0; border-left: 9px solid white; border-top: 5px solid transparent; border-bottom: 5px solid transparent; display: inline-block; }
-    .pause-bars { display: inline-flex; gap: 3px; }
+    .play-tri { width: 0; height: 0; border-left: 9px solid white; border-top: 5px solid transparent; border-bottom: 5px solid transparent; display: inline-block; flex-shrink: 0; }
+    .pause-bars { display: inline-flex; gap: 3px; align-items: center; }
     .pause-bars span { display: block; width: 3px; height: 11px; background: white; }
 
     .player-info { flex: 1; min-width: 0; }
@@ -145,11 +117,21 @@
     .player-phase { font-size: 0.75rem; color: var(--color-accent); font-weight: 500; }
     .player-time { font-size: 0.8rem; color: var(--color-muted); font-variant-numeric: tabular-nums; flex-shrink: 0; }
 
-    .progress-wrap { padding: 0 1.5rem 1.25rem; }
-    .progress-bar-bg { height: 3px; background: var(--color-border); position: relative; }
-    .progress-bar-fill { height: 100%; background: var(--color-accent); width: 0%; }
-    /* Phase markers on progress bar */
-    .phase-marker { position: absolute; top: -4px; width: 1px; height: 11px; background: var(--color-border); }
+    /* ── Progress bar — seekable ── */
+    .progress-wrap { padding: 0.75rem 1.5rem 1rem; }
+    .progress-bar-bg {
+      height: 6px; background: var(--color-border); position: relative;
+      cursor: pointer; user-select: none;
+    }
+    .progress-bar-bg:hover { background: #d8d3ca; }
+    .progress-bar-fill { height: 100%; background: var(--color-accent); width: 0%; pointer-events: none; transition: width 0.2s linear; }
+    .progress-handle {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 14px; height: 14px; background: var(--color-accent);
+      border: 2px solid white; cursor: grab; pointer-events: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .phase-marker { position: absolute; top: -4px; width: 1px; height: 14px; background: var(--color-border); pointer-events: none; }
 
     .player-footer { padding: 0.85rem 1.5rem; border-top: 1px solid var(--color-border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
     .render-status { font-size: 0.75rem; color: var(--color-muted); }
@@ -191,7 +173,7 @@
 
   <div class="page-header">
     <h2>Regulation Toolkit</h2>
-    <p>Select your current state, your target, and intensity. A 5-minute soundscape will guide the journey using the iso principle — meeting you where you are.</p>
+    <p>Select your current state and your target. A 5-minute soundscape will guide the journey using the iso principle — meeting you where you are, moving toward where you want to be.</p>
   </div>
 
   <div class="controls-row">
@@ -235,35 +217,13 @@
     </div>
   </div>
 
-  <div class="intensity-section">
-    <p class="section-label">Intensity</p>
-    <div class="intensity-btns">
-      <button class="intensity-btn" data-level="0.6" onclick="setIntensity(this)">Gentle</button>
-      <button class="intensity-btn active" data-level="1.0" onclick="setIntensity(this)">Moderate</button>
-      <button class="intensity-btn" data-level="1.4" onclick="setIntensity(this)">Strong</button>
-    </div>
-  </div>
-
-  <div class="arc-summary" id="arcSummary"></div>
-
-  <div class="journey-phases" id="journeyPhases">
-    <div class="phase-block" id="phaseA">
-      <div class="phase-name">Orientation · 0–1:30</div>
-      <div class="phase-desc" id="phaseADesc">—</div>
-    </div>
-    <div class="phase-block" id="phaseB">
-      <div class="phase-name">Transition · 1:30–3:30</div>
-      <div class="phase-desc" id="phaseBDesc">—</div>
-    </div>
-    <div class="phase-block" id="phaseC">
-      <div class="phase-name">Arrival · 3:30–5:00</div>
-      <div class="phase-desc" id="phaseCDesc">—</div>
-    </div>
+  <div class="mantra-block" id="mantraBlock">
+    <span id="mantraText"></span>
+    <span class="mantra-attribution" id="mantraAttr"></span>
   </div>
 
   <div class="action-row">
-    <button class="generate-btn" id="generateBtn" disabled onclick="generate(false)">Generate soundscape</button>
-    <button class="variation-btn" id="variationBtn" onclick="generate(true)">New variation</button>
+    <button class="generate-btn" id="generateBtn" disabled onclick="generate()">Generate soundscape</button>
   </div>
 
   <div class="player" id="player">
@@ -281,6 +241,7 @@
     <div class="progress-wrap">
       <div class="progress-bar-bg" id="progressBg">
         <div class="progress-bar-fill" id="progressFill"></div>
+        <div class="progress-handle" id="progressHandle" style="left:0%"></div>
         <div class="phase-marker" style="left:30%"></div>
         <div class="phase-marker" style="left:70%"></div>
       </div>
@@ -300,35 +261,19 @@
 <script>
 'use strict';
 
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 // CONSTANTS
-// ═══════════════════════════════════════════════════════════════
-const DURATION    = 300;      // 5 minutes
-const SR          = 44100;
-const FADE_OUT    = 8;        // seconds of fade at end
-const PHASE_A_END = 90;       // Orientation ends
-const PHASE_B_END = 210;      // Transition ends (Arrival starts)
+// ═══════════════════════════════════════════════════════
+const DURATION   = 300;   // 5 minutes in seconds
+const SR         = 44100;
+const FADE_IN    = 4;     // seconds
+const FADE_OUT   = 10;    // seconds
+const PHASE_A    = 90;    // Orientation ends at 90s
+const PHASE_B    = 210;   // Transition ends at 210s
 
-// ═══════════════════════════════════════════════════════════════
-// SESSION STATE
-// ═══════════════════════════════════════════════════════════════
-const session = {
-  current:   null,
-  target:    null,
-  intensity: 1.0,
-  arc:       null,
-  seed:      null,
-  liveCtx:   null,
-  isPlaying: false,
-  startTime: 0,      // ctx.currentTime when playback started
-  elapsed:   0,      // accumulated elapsed seconds (for pause)
-  rafId:     null,
-  wavUrl:    null,
-};
-
-// ═══════════════════════════════════════════════════════════════
-// SEEDED PRNG (mulberry32)
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// SEEDED PRNG — mulberry32
+// ═══════════════════════════════════════════════════════
 function makePRNG(seed) {
   let s = seed >>> 0;
   return () => {
@@ -339,638 +284,509 @@ function makePRNG(seed) {
   };
 }
 
-// ═══════════════════════════════════════════════════════════════
-// MATH HELPERS
-// ═══════════════════════════════════════════════════════════════
-function lerp(a, b, t) { return a + (b - a) * t; }
-function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+// ═══════════════════════════════════════════════════════
+// MATH
+// ═══════════════════════════════════════════════════════
+function lerp(a, b, t) { return a + (b - a) * clamp01(t); }
+function clamp01(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
+function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
-function curve(t, shape) {
-  t = clamp(t, 0, 1);
-  switch (shape) {
+// Curve shapes for continuous interpolation
+function applyC(t, shape) {
+  t = clamp01(t);
+  switch(shape) {
     case 'exp':     return Math.pow(t, 2.2);
     case 'sigmoid': return 1 / (1 + Math.exp(-12 * (t - 0.5)));
-    case 'late':    return Math.pow(t, 3.2);
-    case 'early':   return 1 - Math.pow(1 - t, 2.2);
+    case 'late':    return Math.pow(t, 3.0);
+    case 'early':   return 1 - Math.pow(1 - t, 2.5);
     default:        return t;
   }
 }
 
-// Map global time t (0–1) to section t (0–1) for each phase
-function phaseT(t) {
-  const pA = PHASE_A_END / DURATION;
-  const pB = PHASE_B_END / DURATION;
-  if (t <= pA) return { phase: 0, pt: t / pA };
-  if (t <= pB) return { phase: 1, pt: (t - pA) / (pB - pA) };
-  return { phase: 2, pt: (t - pB) / (1 - pB) };
-}
-
-// Brownian motion random walk — returns Hz offset
-function brownianWalk(rng, steps, range) {
-  const vals = [0];
+// Brownian walk — returns array of length n, bounded to ±range
+function brownian(rng, n, range, stepFactor) {
+  stepFactor = stepFactor || 0.25;
+  const arr = new Float32Array(n);
   let v = 0;
-  for (let i = 1; i < steps; i++) {
-    v += (rng() - 0.5) * range * 0.3;
+  for (let i = 0; i < n; i++) {
+    v += (rng() - 0.5) * range * stepFactor;
     v = clamp(v, -range, range);
-    vals.push(v);
+    arr[i] = v;
   }
-  return vals;
+  return arr;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// ARC DEFINITIONS — 25 unique journeys
-// Each arc defines:
-//   fundamental    Hz base pitch
-//   oscCount       voices
-//   ratios         [{start:[n,d], end:[n,d]}, …] — JI ratios per voice
-//   subOsc         sub-oscillator volume {start,end}
-//   filterFreq     lowpass cutoff {start,end} Hz per voice
-//   filterQ        resonance {start,end}
-//   noiseLevel     {start,end} — amplitude of noise layer
-//   noiseHighpass  {start,end} Hz
-//   stereoWidth    {start,end} — pan spread 0–1
-//   rhythm         { motif, tempoStart, tempoEnd, chaosStart, chaosEnd, densityStart, densityEnd }
-//   ampMaster      { start, end }
-//   curve          transition shape
-//   phases         { a, b, c } descriptive text
-// ═══════════════════════════════════════════════════════════════
+// JI frequency from fundamental and ratio [numerator, denominator]
+function jiHz(fundamental, ratio) {
+  return fundamental * ratio[0] / ratio[1];
+}
 
+// ═══════════════════════════════════════════════════════
+// MANTRAS — 25 unique, inspired by Oliveros, Eno, Cage,
+// Voegelin. Original text in their spirit.
+// ═══════════════════════════════════════════════════════
+const MANTRAS = {
+  'overwhelmed→calm':
+    { text: 'Let each sound arrive without being invited. Nothing needs to be processed — only received.', attr: 'After Pauline Oliveros, Deep Listening' },
+  'overwhelmed→alert':
+    { text: 'The chaos is already organizing itself. Your only task is to notice where clarity is beginning.', attr: 'After Brian Eno, Oblique Strategies' },
+  'overwhelmed→grounded':
+    { text: 'Walk so silently that the soles of your feet become ears. The ground is already holding you.', attr: 'After Pauline Oliveros, Sonic Meditations V' },
+  'overwhelmed→energized':
+    { text: 'Repetition is a form of change. The flood becomes a current; the current becomes direction.', attr: 'After Brian Eno, Oblique Strategies' },
+
+  'anxious→calm':
+    { text: 'Sound your breath as if it were the beginning of a word you do not yet know.', attr: 'After Pauline Oliveros, Sonic Meditations' },
+  'anxious→alert':
+    { text: 'Discontinuity is the texture of experience. Let what is scattered become distinct.', attr: 'After Salomé Voegelin, Listening to Noise and Silence' },
+  'anxious→grounded':
+    { text: 'Honor the error as a hidden intention. Even this feeling is pointing somewhere.', attr: 'After Brian Eno & Peter Schmidt, Oblique Strategies' },
+  'anxious→energized':
+    { text: 'The purpose of music is to sober us and quiet the mind, thus making us susceptible to divine influences. Let what was urgent become useful.', attr: 'After John Cage' },
+
+  'tired→calm':
+    { text: 'There is no need to add. Listening to the environment as a drone, include all of your own continuous sounds.', attr: 'After Pauline Oliveros, Sonic Meditations II' },
+  'tired→alert':
+    { text: 'Include your listening in the sound. Something is already waking — allow it to be slow.', attr: 'After Pauline Oliveros, Deep Listening' },
+  'tired→grounded':
+    { text: 'The lowest sound is still a sound. Weight and stillness are not the same as absence.', attr: 'After Salomé Voegelin, Listening to Noise and Silence' },
+  'tired→energized':
+    { text: 'Breathe more deeply. What is slow can choose its own moment to become movement.', attr: 'After Brian Eno & Peter Schmidt, Oblique Strategies' },
+
+  'unfocused→calm':
+    { text: 'Expand to the whole field of sound while finding focus. You do not need to gather yourself — just listen.', attr: 'After Pauline Oliveros, Deep Listening' },
+  'unfocused→alert':
+    { text: 'Allow sounds to inform rather than to be overridden. Let the listening bring the attention, not the other way around.', attr: 'After Pauline Oliveros, Quantum Listening' },
+  'unfocused→grounded':
+    { text: 'Disconnect from desire. The ground is where you already are.', attr: 'After Brian Eno & Peter Schmidt, Oblique Strategies' },
+  'unfocused→energized':
+    { text: 'The scattered and the purposeful are made of the same material. Notice where the current already flows.', attr: 'After Brian Eno, A Year with Swollen Appendices' },
+
+  'overstimulated→calm':
+    { text: 'Take away the elements in order of apparent non-importance. What remains is what was always there.', attr: 'After Brian Eno & Peter Schmidt, Oblique Strategies' },
+  'overstimulated→alert':
+    { text: 'Listening is hearing plus attention. You do not need to reduce — only to direct.', attr: 'After Pauline Oliveros' },
+  'overstimulated→grounded':
+    { text: 'Sound is not information. Let it pass through rather than accumulate. The low register is waiting beneath everything.', attr: 'After Salomé Voegelin, Listening to Noise and Silence' },
+  'overstimulated→energized':
+    { text: 'Not building a wall; making a brick. Complexity becomes resource when it has a direction.', attr: 'After Brian Eno & Peter Schmidt, Oblique Strategies' },
+};
+
+// ═══════════════════════════════════════════════════════
+// ARC DEFINITIONS — 25 journeys
+// All parameters are { start, end } — continuously
+// interpolated across the full duration with applyC().
+// No hard phase boundaries in the audio engine.
+// ═══════════════════════════════════════════════════════
 const ARCS = {
-
-// ─── FROM OVERWHELMED ─────────────────────────────────────────
 
 'overwhelmed→calm': {
   fundamental: 82.4, oscCount: 5,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[16,15],end:[3,2]},
-    {start:[9,8],  end:[2,1]},
-    {start:[6,5],  end:[4,3]},
-    {start:[4,3],  end:[3,1]},
-  ],
-  subOsc:      {start:0.0, end:0.12},
-  filterFreq:  {start:600, end:3500},
-  filterQ:     {start:4.0, end:0.5},
-  noiseLevel:  {start:0.18, end:0.0},
-  noiseHighpass:{start:800, end:200},
-  stereoWidth: {start:0.7, end:0.15},
-  ampMaster:   {start:0.52, end:0.28},
-  rhythm: { motif:[1.2,0.6,0.4,0.8,0.3,1.6], tempoStart:130, tempoEnd:0, chaosStart:0.9, chaosEnd:0, densityStart:1, densityEnd:0 },
-  curve: 'sigmoid',
-  phases:{a:'Dense, dissonant cluster. Noise and chaotic rhythm.', b:'Harmonics slowly converge. Rhythm dissolves.', c:'Open fifths and octaves. Stillness.'},
+  ratios: [[1,1],[16,15],[9,8],[6,5],[4,3]], ratiosEnd: [[1,1],[3,2],[2,1],[4,3],[3,1]],
+  filterStart: 500, filterEnd: 3200, filterQStart: 4.5, filterQEnd: 0.5,
+  noiseStart: 0.14, noiseEnd: 0.0, noiseHpStart: 900, noiseHpEnd: 180,
+  subStart: 0.0, subEnd: 0.1,
+  ampStart: 0.42, ampEnd: 0.28,
+  panWidthStart: 0.7, panWidthEnd: 0.12,
+  driftStart: 12, driftEnd: 2,   // cents
+  tempoStart: 132, tempoEnd: 0, chaosStart: 0.9, chaosEnd: 0,
+  densityStart: 3, densityEnd: 0,
+  polyrhythm: false, curve: 'sigmoid',
 },
-
 'overwhelmed→alert': {
   fundamental: 98, oscCount: 5,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[16,15],end:[5,4]},
-    {start:[9,8],  end:[3,2]},
-    {start:[6,5],  end:[7,4]},
-    {start:[4,3],  end:[2,1]},
-  ],
-  subOsc:      {start:0.0, end:0.0},
-  filterFreq:  {start:500, end:4500},
-  filterQ:     {start:4.5, end:1.0},
-  noiseLevel:  {start:0.16, end:0.0},
-  noiseHighpass:{start:1000, end:400},
-  stereoWidth: {start:0.75, end:0.35},
-  ampMaster:   {start:0.5, end:0.4},
-  rhythm: { motif:[0.8,0.4,1.2,0.4], tempoStart:140, tempoEnd:85, chaosStart:0.9, chaosEnd:0.1, densityStart:1, densityEnd:1 },
-  curve: 'late',
-  phases:{a:'Chaotic high-energy texture. Harsh timbre.', b:'Chaos organizes. Tempo slows and steadies.', c:'Clear bright chord. Purposeful steady pulse.'},
+  ratios: [[1,1],[16,15],[9,8],[6,5],[4,3]], ratiosEnd: [[1,1],[5,4],[3,2],[7,4],[2,1]],
+  filterStart: 480, filterEnd: 5500, filterQStart: 4.0, filterQEnd: 1.0,
+  noiseStart: 0.12, noiseEnd: 0.0, noiseHpStart: 1100, noiseHpEnd: 400,
+  subStart: 0.0, subEnd: 0.0,
+  ampStart: 0.42, ampEnd: 0.38,
+  panWidthStart: 0.72, panWidthEnd: 0.35,
+  driftStart: 14, driftEnd: 3,
+  tempoStart: 138, tempoEnd: 84, chaosStart: 0.85, chaosEnd: 0.08,
+  densityStart: 3, densityEnd: 1,
+  polyrhythm: false, curve: 'late',
 },
-
 'overwhelmed→grounded': {
   fundamental: 65.4, oscCount: 5,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[16,15],end:[4,3]},
-    {start:[9,8],  end:[3,2]},
-    {start:[6,5],  end:[2,1]},
-    {start:[4,3],  end:[3,1]},
-  ],
-  subOsc:      {start:0.0, end:0.18},
-  filterFreq:  {start:400, end:1200},
-  filterQ:     {start:5.0, end:0.4},
-  noiseLevel:  {start:0.2,  end:0.0},
-  noiseHighpass:{start:600, end:60},
-  stereoWidth: {start:0.8, end:0.05},
-  ampMaster:   {start:0.54, end:0.34},
-  rhythm: { motif:[1.5,0.5,0.5,2.0,0.5], tempoStart:120, tempoEnd:0, chaosStart:1.0, chaosEnd:0, densityStart:1, densityEnd:0 },
-  curve: 'sigmoid',
-  phases:{a:'Very low root. Noise. Chaotic rhythm.', b:'Voices descend. Stereo narrows. Rhythm fades.', c:'Deep sub enters. Perfect fourths. Complete stillness.'},
+  ratios: [[1,1],[16,15],[9,8],[6,5],[4,3]], ratiosEnd: [[1,1],[4,3],[3,2],[2,1],[3,1]],
+  filterStart: 380, filterEnd: 1100, filterQStart: 5.0, filterQEnd: 0.4,
+  noiseStart: 0.16, noiseEnd: 0.0, noiseHpStart: 700, noiseHpEnd: 60,
+  subStart: 0.0, subEnd: 0.16,
+  ampStart: 0.44, ampEnd: 0.30,
+  panWidthStart: 0.8, panWidthEnd: 0.04,
+  driftStart: 14, driftEnd: 1,
+  tempoStart: 124, tempoEnd: 0, chaosStart: 1.0, chaosEnd: 0,
+  densityStart: 3, densityEnd: 0,
+  polyrhythm: false, curve: 'sigmoid',
 },
-
 'overwhelmed→energized': {
-  fundamental: 82.4, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[16,15],end:[5,4]},
-    {start:[9,8],  end:[3,2]},
-    {start:[6,5],  end:[15,8]},
-  ],
-  subOsc:      {start:0.0, end:0.06},
-  filterFreq:  {start:500, end:5000},
-  filterQ:     {start:4.0, end:0.8},
-  noiseLevel:  {start:0.15, end:0.0},
-  noiseHighpass:{start:900, end:300},
-  stereoWidth: {start:0.7, end:0.4},
-  ampMaster:   {start:0.5, end:0.44},
-  rhythm: { motif:[0.75,0.75,0.5,0.5,1.0], tempoStart:145, tempoEnd:100, chaosStart:0.85, chaosEnd:0.05, densityStart:1, densityEnd:1 },
-  curve: 'late',
-  phases:{a:'Chaotic high energy. Dense dissonance.', b:'Energy channels — tempo drops, harmonics clarify.', c:'Bright major seventh. Steady driving pulse.'},
+  fundamental: 98, oscCount: 4,
+  ratios: [[1,1],[16,15],[9,8],[6,5]], ratiosEnd: [[1,1],[5,4],[3,2],[15,8]],
+  filterStart: 460, filterEnd: 6000, filterQStart: 4.0, filterQEnd: 0.8,
+  noiseStart: 0.13, noiseEnd: 0.0, noiseHpStart: 1000, noiseHpEnd: 350,
+  subStart: 0.0, subEnd: 0.06,
+  ampStart: 0.42, ampEnd: 0.40,
+  panWidthStart: 0.7, panWidthEnd: 0.4,
+  driftStart: 12, driftEnd: 4,
+  tempoStart: 144, tempoEnd: 102, chaosStart: 0.85, chaosEnd: 0.05,
+  densityStart: 3, densityEnd: 2,
+  polyrhythm: true, curve: 'late',
 },
-
-// ─── FROM ANXIOUS ─────────────────────────────────────────────
 
 'anxious→calm': {
   fundamental: 110, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[16,15],end:[3,2]},
-    {start:[7,5],  end:[2,1]},
-    {start:[9,5],  end:[4,1]},
-  ],
-  subOsc:      {start:0.0, end:0.1},
-  filterFreq:  {start:700, end:2800},
-  filterQ:     {start:3.5, end:0.4},
-  noiseLevel:  {start:0.1, end:0.0},
-  noiseHighpass:{start:1200, end:200},
-  stereoWidth: {start:0.55, end:0.1},
-  ampMaster:   {start:0.46, end:0.26},
-  rhythm: { motif:[0.5,0.3,0.8,0.3,1.1], tempoStart:125, tempoEnd:0, chaosStart:0.8, chaosEnd:0, densityStart:1, densityEnd:0 },
-  curve: 'exp',
-  phases:{a:'Tritone tension. Irregular jittery rhythm.', b:'Dissonance slowly softens. Rhythm thins.', c:'Open consonance. Silence surrounds each tone.'},
+  ratios: [[1,1],[16,15],[7,5],[9,5]], ratiosEnd: [[1,1],[3,2],[2,1],[4,1]],
+  filterStart: 680, filterEnd: 2600, filterQStart: 3.5, filterQEnd: 0.4,
+  noiseStart: 0.09, noiseEnd: 0.0, noiseHpStart: 1300, noiseHpEnd: 180,
+  subStart: 0.0, subEnd: 0.09,
+  ampStart: 0.40, ampEnd: 0.26,
+  panWidthStart: 0.55, panWidthEnd: 0.1,
+  driftStart: 10, driftEnd: 1,
+  tempoStart: 126, tempoEnd: 0, chaosStart: 0.8, chaosEnd: 0,
+  densityStart: 3, densityEnd: 0,
+  polyrhythm: false, curve: 'exp',
 },
-
 'anxious→alert': {
   fundamental: 110, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[16,15],end:[5,4]},
-    {start:[7,5],  end:[3,2]},
-    {start:[9,5],  end:[7,4]},
-  ],
-  subOsc:      {start:0.0, end:0.0},
-  filterFreq:  {start:800, end:4200},
-  filterQ:     {start:3.0, end:0.8},
-  noiseLevel:  {start:0.08, end:0.0},
-  noiseHighpass:{start:1000, end:500},
-  stereoWidth: {start:0.5, end:0.3},
-  ampMaster:   {start:0.44, end:0.42},
-  rhythm: { motif:[0.6,0.6,0.9,0.9], tempoStart:115, tempoEnd:80, chaosStart:0.75, chaosEnd:0.05, densityStart:1, densityEnd:1 },
-  curve: 'sigmoid',
-  phases:{a:'Anxious flutter. Tight irregular pattern.', b:'Rhythm regularizes. Timbre brightens.', c:'Clear stable chord. Purposeful pulse.'},
+  ratios: [[1,1],[16,15],[7,5],[9,5]], ratiosEnd: [[1,1],[5,4],[3,2],[7,4]],
+  filterStart: 750, filterEnd: 4800, filterQStart: 3.0, filterQEnd: 0.9,
+  noiseStart: 0.07, noiseEnd: 0.0, noiseHpStart: 1100, noiseHpEnd: 500,
+  subStart: 0.0, subEnd: 0.0,
+  ampStart: 0.40, ampEnd: 0.40,
+  panWidthStart: 0.52, panWidthEnd: 0.3,
+  driftStart: 9, driftEnd: 2.5,
+  tempoStart: 118, tempoEnd: 80, chaosStart: 0.75, chaosEnd: 0.06,
+  densityStart: 3, densityEnd: 1,
+  polyrhythm: false, curve: 'sigmoid',
 },
-
 'anxious→grounded': {
   fundamental: 82.4, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[16,15],end:[4,3]},
-    {start:[7,5],  end:[3,2]},
-    {start:[9,5],  end:[2,1]},
-  ],
-  subOsc:      {start:0.0, end:0.15},
-  filterFreq:  {start:700, end:1500},
-  filterQ:     {start:3.5, end:0.4},
-  noiseLevel:  {start:0.1, end:0.0},
-  noiseHighpass:{start:1000, end:80},
-  stereoWidth: {start:0.6, end:0.08},
-  ampMaster:   {start:0.46, end:0.32},
-  rhythm: { motif:[0.7,0.5,1.0,0.8], tempoStart:120, tempoEnd:0, chaosStart:0.8, chaosEnd:0, densityStart:1, densityEnd:0 },
-  curve: 'exp',
-  phases:{a:'Anxious high register tension.', b:'Register descends. Rhythm slows.', c:'Low root. Sub-oscillator grounds the body.'},
+  ratios: [[1,1],[16,15],[7,5],[9,5]], ratiosEnd: [[1,1],[4,3],[3,2],[2,1]],
+  filterStart: 680, filterEnd: 1400, filterQStart: 3.5, filterQEnd: 0.4,
+  noiseStart: 0.09, noiseEnd: 0.0, noiseHpStart: 1100, noiseHpEnd: 75,
+  subStart: 0.0, subEnd: 0.13,
+  ampStart: 0.40, ampEnd: 0.30,
+  panWidthStart: 0.58, panWidthEnd: 0.07,
+  driftStart: 10, driftEnd: 1,
+  tempoStart: 122, tempoEnd: 0, chaosStart: 0.78, chaosEnd: 0,
+  densityStart: 3, densityEnd: 0,
+  polyrhythm: false, curve: 'exp',
 },
-
 'anxious→energized': {
   fundamental: 110, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[16,15],end:[5,4]},
-    {start:[7,5],  end:[3,2]},
-    {start:[9,5],  end:[15,8]},
-  ],
-  subOsc:      {start:0.0, end:0.05},
-  filterFreq:  {start:800, end:5500},
-  filterQ:     {start:3.0, end:0.7},
-  noiseLevel:  {start:0.08, end:0.0},
-  noiseHighpass:{start:1000, end:400},
-  stereoWidth: {start:0.5, end:0.38},
-  ampMaster:   {start:0.44, end:0.46},
-  rhythm: { motif:[0.5,0.5,1.0,0.5,0.5,1.0], tempoStart:120, tempoEnd:96, chaosStart:0.75, chaosEnd:0.0, densityStart:1, densityEnd:1 },
-  curve: 'late',
-  phases:{a:'Anxious energy — tense, rapid.', b:'Dissonance resolves. Energy organized.', c:'Bright major seventh. Clear driving pulse.'},
+  ratios: [[1,1],[16,15],[7,5],[9,5]], ratiosEnd: [[1,1],[5,4],[3,2],[15,8]],
+  filterStart: 750, filterEnd: 5800, filterQStart: 3.0, filterQEnd: 0.7,
+  noiseStart: 0.07, noiseEnd: 0.0, noiseHpStart: 1100, noiseHpEnd: 400,
+  subStart: 0.0, subEnd: 0.05,
+  ampStart: 0.40, ampEnd: 0.42,
+  panWidthStart: 0.52, panWidthEnd: 0.38,
+  driftStart: 9, driftEnd: 3,
+  tempoStart: 120, tempoEnd: 98, chaosStart: 0.75, chaosEnd: 0.0,
+  densityStart: 3, densityEnd: 2,
+  polyrhythm: true, curve: 'late',
 },
-
-// ─── FROM TIRED ───────────────────────────────────────────────
 
 'tired→calm': {
   fundamental: 82.4, oscCount: 3,
-  ratios: [
-    {start:[1,1], end:[1,1]},
-    {start:[3,2], end:[3,2]},
-    {start:[2,1], end:[2,1]},
-  ],
-  subOsc:      {start:0.06, end:0.1},
-  filterFreq:  {start:1800, end:2200},
-  filterQ:     {start:0.5, end:0.4},
-  noiseLevel:  {start:0.0, end:0.0},
-  noiseHighpass:{start:200, end:200},
-  stereoWidth: {start:0.12, end:0.12},
-  ampMaster:   {start:0.22, end:0.26},
-  rhythm: { motif:[], tempoStart:0, tempoEnd:0, chaosStart:0, chaosEnd:0, densityStart:0, densityEnd:0 },
-  curve: 'linear',
-  phases:{a:'Sparse consonant fifth. Deep and still.', b:'Sub-oscillator gently rises. Nothing demands.', c:'Warm open harmony. Drifting rest.'},
+  ratios: [[1,1],[3,2],[2,1]], ratiosEnd: [[1,1],[3,2],[2,1]],
+  filterStart: 1800, filterEnd: 2000, filterQStart: 0.5, filterQEnd: 0.4,
+  noiseStart: 0.0, noiseEnd: 0.0, noiseHpStart: 200, noiseHpEnd: 200,
+  subStart: 0.07, subEnd: 0.1,
+  ampStart: 0.30, ampEnd: 0.30,
+  panWidthStart: 0.12, panWidthEnd: 0.12,
+  driftStart: 3, driftEnd: 2,
+  tempoStart: 0, tempoEnd: 0, chaosStart: 0, chaosEnd: 0,
+  densityStart: 0, densityEnd: 0,
+  polyrhythm: false, curve: 'linear',
 },
-
 'tired→alert': {
   fundamental: 98, oscCount: 3,
-  ratios: [
-    {start:[1,1], end:[1,1]},
-    {start:[3,2], end:[5,4]},
-    {start:[2,1], end:[15,8]},
-  ],
-  subOsc:      {start:0.04, end:0.0},
-  filterFreq:  {start:900, end:5000},
-  filterQ:     {start:0.5, end:0.8},
-  noiseLevel:  {start:0.0, end:0.0},
-  noiseHighpass:{start:300, end:400},
-  stereoWidth: {start:0.1, end:0.35},
-  ampMaster:   {start:0.2, end:0.44},
-  rhythm: { motif:[1.0,0.5,0.5,1.0], tempoStart:0, tempoEnd:82, chaosStart:0, chaosEnd:0.05, densityStart:0, densityEnd:1 },
-  curve: 'exp',
-  phases:{a:'Quiet stillness. Very low amplitude.', b:'Brightness slowly enters. Amplitude rises.', c:'Bright major seventh. Steady activating pulse.'},
+  ratios: [[1,1],[3,2],[2,1]], ratiosEnd: [[1,1],[5,4],[15,8]],
+  filterStart: 900, filterEnd: 5500, filterQStart: 0.5, filterQEnd: 0.8,
+  noiseStart: 0.0, noiseEnd: 0.0, noiseHpStart: 300, noiseHpEnd: 400,
+  subStart: 0.05, subEnd: 0.0,
+  ampStart: 0.28, ampEnd: 0.40,
+  panWidthStart: 0.1, panWidthEnd: 0.33,
+  driftStart: 2, driftEnd: 3,
+  tempoStart: 0, tempoEnd: 80, chaosStart: 0, chaosEnd: 0.04,
+  densityStart: 0, densityEnd: 1,
+  polyrhythm: false, curve: 'exp',
 },
-
 'tired→grounded': {
   fundamental: 65.4, oscCount: 3,
-  ratios: [
-    {start:[1,1], end:[1,1]},
-    {start:[3,2], end:[4,3]},
-    {start:[2,1], end:[3,2]},
-  ],
-  subOsc:      {start:0.08, end:0.18},
-  filterFreq:  {start:1200, end:1400},
-  filterQ:     {start:0.4, end:0.4},
-  noiseLevel:  {start:0.0, end:0.0},
-  noiseHighpass:{start:100, end:80},
-  stereoWidth: {start:0.08, end:0.06},
-  ampMaster:   {start:0.22, end:0.32},
-  rhythm: { motif:[], tempoStart:0, tempoEnd:0, chaosStart:0, chaosEnd:0, densityStart:0, densityEnd:0 },
-  curve: 'linear',
-  phases:{a:'Very low register. Almost sub-sonic weight.', b:'A fourth oscillator quietly joins.', c:'Full deep harmony. Weight becomes rootedness.'},
+  ratios: [[1,1],[3,2],[2,1]], ratiosEnd: [[1,1],[4,3],[3,2]],
+  filterStart: 1200, filterEnd: 1400, filterQStart: 0.4, filterQEnd: 0.4,
+  noiseStart: 0.0, noiseEnd: 0.0, noiseHpStart: 100, noiseHpEnd: 80,
+  subStart: 0.09, subEnd: 0.18,
+  ampStart: 0.28, ampEnd: 0.32,
+  panWidthStart: 0.08, panWidthEnd: 0.06,
+  driftStart: 2, driftEnd: 1,
+  tempoStart: 0, tempoEnd: 0, chaosStart: 0, chaosEnd: 0,
+  densityStart: 0, densityEnd: 0,
+  polyrhythm: false, curve: 'linear',
 },
-
 'tired→energized': {
   fundamental: 110, oscCount: 3,
-  ratios: [
-    {start:[1,1], end:[1,1]},
-    {start:[3,2], end:[5,4]},
-    {start:[2,1], end:[15,8]},
-  ],
-  subOsc:      {start:0.04, end:0.0},
-  filterFreq:  {start:900, end:6000},
-  filterQ:     {start:0.5, end:0.9},
-  noiseLevel:  {start:0.0, end:0.0},
-  noiseHighpass:{start:300, end:500},
-  stereoWidth: {start:0.1, end:0.42},
-  ampMaster:   {start:0.2, end:0.48},
-  rhythm: { motif:[0.75,0.75,0.5,0.5], tempoStart:0, tempoEnd:96, chaosStart:0, chaosEnd:0.0, densityStart:0, densityEnd:1 },
-  curve: 'exp',
-  phases:{a:'Quiet low tones. Patient beginning.', b:'Brightness grows from minute two.', c:'Full bright major. Clear driving pulse.'},
+  ratios: [[1,1],[3,2],[2,1]], ratiosEnd: [[1,1],[5,4],[15,8]],
+  filterStart: 900, filterEnd: 7000, filterQStart: 0.5, filterQEnd: 0.9,
+  noiseStart: 0.0, noiseEnd: 0.0, noiseHpStart: 300, noiseHpEnd: 500,
+  subStart: 0.05, subEnd: 0.0,
+  ampStart: 0.28, ampEnd: 0.42,
+  panWidthStart: 0.1, panWidthEnd: 0.4,
+  driftStart: 2, driftEnd: 4,
+  tempoStart: 0, tempoEnd: 96, chaosStart: 0, chaosEnd: 0.0,
+  densityStart: 0, densityEnd: 2,
+  polyrhythm: true, curve: 'exp',
 },
-
-// ─── FROM UNFOCUSED ───────────────────────────────────────────
 
 'unfocused→calm': {
   fundamental: 98, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[9,8],  end:[3,2]},
-    {start:[4,3],  end:[2,1]},
-    {start:[7,4],  end:[4,1]},
-  ],
-  subOsc:      {start:0.0, end:0.08},
-  filterFreq:  {start:2500, end:2000},
-  filterQ:     {start:1.5, end:0.4},
-  noiseLevel:  {start:0.04, end:0.0},
-  noiseHighpass:{start:500, end:200},
-  stereoWidth: {start:0.45, end:0.12},
-  ampMaster:   {start:0.38, end:0.26},
-  rhythm: { motif:[1.0,0.5,1.5,0.5], tempoStart:90, tempoEnd:0, chaosStart:0.5, chaosEnd:0, densityStart:1, densityEnd:0 },
-  curve: 'sigmoid',
-  phases:{a:'Wandering harmonics. Mild irregularity.', b:'Voices slowly converge. Rhythm dissolves.', c:'Open consonance. Sub-oscillator settles the body.'},
+  ratios: [[1,1],[9,8],[4,3],[7,4]], ratiosEnd: [[1,1],[3,2],[2,1],[4,1]],
+  filterStart: 2400, filterEnd: 1900, filterQStart: 1.5, filterQEnd: 0.4,
+  noiseStart: 0.04, noiseEnd: 0.0, noiseHpStart: 500, noiseHpEnd: 200,
+  subStart: 0.0, subEnd: 0.08,
+  ampStart: 0.36, ampEnd: 0.28,
+  panWidthStart: 0.44, panWidthEnd: 0.12,
+  driftStart: 6, driftEnd: 1.5,
+  tempoStart: 88, tempoEnd: 0, chaosStart: 0.5, chaosEnd: 0,
+  densityStart: 1, densityEnd: 0,
+  polyrhythm: false, curve: 'sigmoid',
 },
-
 'unfocused→alert': {
   fundamental: 110, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[9,8],  end:[5,4]},
-    {start:[4,3],  end:[3,2]},
-    {start:[7,4],  end:[15,8]},
-  ],
-  subOsc:      {start:0.0, end:0.0},
-  filterFreq:  {start:2000, end:5000},
-  filterQ:     {start:1.0, end:0.9},
-  noiseLevel:  {start:0.03, end:0.0},
-  noiseHighpass:{start:600, end:500},
-  stereoWidth: {start:0.4, end:0.32},
-  ampMaster:   {start:0.36, end:0.44},
-  rhythm: { motif:[0.8,0.4,0.8,1.0], tempoStart:85, tempoEnd:84, chaosStart:0.4, chaosEnd:0.05, densityStart:1, densityEnd:1 },
-  curve: 'sigmoid',
-  phases:{a:'Drifting mid-density. Mild chaos.', b:'Harmonics clarify. Rhythm regularizes.', c:'Bright chord. Steady purposeful pulse.'},
+  ratios: [[1,1],[9,8],[4,3],[7,4]], ratiosEnd: [[1,1],[5,4],[3,2],[15,8]],
+  filterStart: 2000, filterEnd: 5500, filterQStart: 1.0, filterQEnd: 0.9,
+  noiseStart: 0.03, noiseEnd: 0.0, noiseHpStart: 600, noiseHpEnd: 500,
+  subStart: 0.0, subEnd: 0.0,
+  ampStart: 0.36, ampEnd: 0.40,
+  panWidthStart: 0.4, panWidthEnd: 0.32,
+  driftStart: 5, driftEnd: 2,
+  tempoStart: 82, tempoEnd: 82, chaosStart: 0.4, chaosEnd: 0.04,
+  densityStart: 1, densityEnd: 1,
+  polyrhythm: false, curve: 'sigmoid',
 },
-
 'unfocused→grounded': {
   fundamental: 82.4, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[9,8],  end:[4,3]},
-    {start:[4,3],  end:[3,2]},
-    {start:[7,4],  end:[2,1]},
-  ],
-  subOsc:      {start:0.0, end:0.14},
-  filterFreq:  {start:2200, end:1300},
-  filterQ:     {start:1.2, end:0.4},
-  noiseLevel:  {start:0.03, end:0.0},
-  noiseHighpass:{start:500, end:80},
-  stereoWidth: {start:0.42, end:0.07},
-  ampMaster:   {start:0.36, end:0.34},
-  rhythm: { motif:[1.2,0.8,1.6], tempoStart:88, tempoEnd:0, chaosStart:0.45, chaosEnd:0, densityStart:1, densityEnd:0 },
-  curve: 'exp',
-  phases:{a:'Scattered attention. Wandering.', b:'Register descends. Stereo narrows.', c:'Deep consonant root. Still.'},
+  ratios: [[1,1],[9,8],[4,3],[7,4]], ratiosEnd: [[1,1],[4,3],[3,2],[2,1]],
+  filterStart: 2200, filterEnd: 1200, filterQStart: 1.2, filterQEnd: 0.4,
+  noiseStart: 0.03, noiseEnd: 0.0, noiseHpStart: 500, noiseHpEnd: 80,
+  subStart: 0.0, subEnd: 0.13,
+  ampStart: 0.36, ampEnd: 0.30,
+  panWidthStart: 0.42, panWidthEnd: 0.06,
+  driftStart: 5, driftEnd: 1,
+  tempoStart: 85, tempoEnd: 0, chaosStart: 0.45, chaosEnd: 0,
+  densityStart: 1, densityEnd: 0,
+  polyrhythm: false, curve: 'exp',
 },
-
 'unfocused→energized': {
   fundamental: 110, oscCount: 4,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[9,8],  end:[5,4]},
-    {start:[4,3],  end:[3,2]},
-    {start:[7,4],  end:[15,8]},
-  ],
-  subOsc:      {start:0.0, end:0.05},
-  filterFreq:  {start:2200, end:5500},
-  filterQ:     {start:1.0, end:0.9},
-  noiseLevel:  {start:0.03, end:0.0},
-  noiseHighpass:{start:600, end:400},
-  stereoWidth: {start:0.42, end:0.4},
-  ampMaster:   {start:0.36, end:0.46},
-  rhythm: { motif:[0.6,0.6,0.9,0.9,0.6], tempoStart:80, tempoEnd:98, chaosStart:0.4, chaosEnd:0.0, densityStart:1, densityEnd:1 },
-  curve: 'sigmoid',
-  phases:{a:'Scattered drift. Mild energy.', b:'Harmonics organize. Tempo steadies.', c:'Bright major. Clear driving pulse.'},
+  ratios: [[1,1],[9,8],[4,3],[7,4]], ratiosEnd: [[1,1],[5,4],[3,2],[15,8]],
+  filterStart: 2200, filterEnd: 6500, filterQStart: 1.0, filterQEnd: 0.9,
+  noiseStart: 0.03, noiseEnd: 0.0, noiseHpStart: 600, noiseHpEnd: 400,
+  subStart: 0.0, subEnd: 0.05,
+  ampStart: 0.36, ampEnd: 0.42,
+  panWidthStart: 0.42, panWidthEnd: 0.38,
+  driftStart: 5, driftEnd: 3,
+  tempoStart: 78, tempoEnd: 100, chaosStart: 0.4, chaosEnd: 0.0,
+  densityStart: 1, densityEnd: 2,
+  polyrhythm: true, curve: 'sigmoid',
 },
-
-// ─── FROM OVERSTIMULATED ──────────────────────────────────────
 
 'overstimulated→calm': {
   fundamental: 65.4, oscCount: 6,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[9,8],  end:[3,2]},
-    {start:[4,3],  end:[2,1]},
-    {start:[3,2],  end:[3,1]},
-    {start:[5,3],  end:[4,1]},
-    {start:[15,8], end:[6,1]},
-  ],
-  subOsc:      {start:0.0, end:0.14},
-  filterFreq:  {start:700, end:1800},
-  filterQ:     {start:3.0, end:0.4},
-  noiseLevel:  {start:0.14, end:0.0},
-  noiseHighpass:{start:700, end:150},
-  stereoWidth: {start:0.65, end:0.1},
-  ampMaster:   {start:0.36, end:0.22},
-  rhythm: { motif:[1.0,0.5,1.5], tempoStart:100, tempoEnd:0, chaosStart:0.3, chaosEnd:0, densityStart:1, densityEnd:0 },
-  curve: 'sigmoid',
-  phases:{a:'Full texture — dense but not aggressive.', b:'Voices peel away. Stereo narrows. Warmth rises.', c:'Open harmonic series. Sub roots the silence.'},
+  ratios: [[1,1],[9,8],[4,3],[3,2],[5,3],[15,8]], ratiosEnd: [[1,1],[3,2],[2,1],[3,1],[4,1],[6,1]],
+  filterStart: 650, filterEnd: 1700, filterQStart: 3.0, filterQEnd: 0.4,
+  noiseStart: 0.13, noiseEnd: 0.0, noiseHpStart: 750, noiseHpEnd: 150,
+  subStart: 0.0, subEnd: 0.13,
+  ampStart: 0.36, ampEnd: 0.24,
+  panWidthStart: 0.65, panWidthEnd: 0.1,
+  driftStart: 8, driftEnd: 1,
+  tempoStart: 96, tempoEnd: 0, chaosStart: 0.3, chaosEnd: 0,
+  densityStart: 1, densityEnd: 0,
+  polyrhythm: false, curve: 'sigmoid',
 },
-
 'overstimulated→alert': {
   fundamental: 82.4, oscCount: 5,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[9,8],  end:[5,4]},
-    {start:[4,3],  end:[3,2]},
-    {start:[3,2],  end:[7,4]},
-    {start:[5,3],  end:[2,1]},
-  ],
-  subOsc:      {start:0.0, end:0.0},
-  filterFreq:  {start:800, end:4000},
-  filterQ:     {start:2.5, end:0.9},
-  noiseLevel:  {start:0.12, end:0.0},
-  noiseHighpass:{start:800, end:500},
-  stereoWidth: {start:0.6, end:0.3},
-  ampMaster:   {start:0.36, end:0.38},
-  rhythm: { motif:[0.9,0.9,0.6], tempoStart:95, tempoEnd:80, chaosStart:0.25, chaosEnd:0.05, densityStart:1, densityEnd:1 },
-  curve: 'linear',
-  phases:{a:'Dense layered texture. Warm and contained.', b:'Complexity condenses. Clarity emerges.', c:'Organized bright chord. Steady contained pulse.'},
+  ratios: [[1,1],[9,8],[4,3],[3,2],[5,3]], ratiosEnd: [[1,1],[5,4],[3,2],[7,4],[2,1]],
+  filterStart: 750, filterEnd: 4200, filterQStart: 2.5, filterQEnd: 0.9,
+  noiseStart: 0.11, noiseEnd: 0.0, noiseHpStart: 850, noiseHpEnd: 500,
+  subStart: 0.0, subEnd: 0.0,
+  ampStart: 0.36, ampEnd: 0.36,
+  panWidthStart: 0.6, panWidthEnd: 0.3,
+  driftStart: 7, driftEnd: 2.5,
+  tempoStart: 94, tempoEnd: 78, chaosStart: 0.25, chaosEnd: 0.05,
+  densityStart: 1, densityEnd: 1,
+  polyrhythm: false, curve: 'linear',
 },
-
 'overstimulated→grounded': {
   fundamental: 55, oscCount: 5,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[9,8],  end:[4,3]},
-    {start:[4,3],  end:[3,2]},
-    {start:[3,2],  end:[2,1]},
-    {start:[5,3],  end:[3,1]},
-  ],
-  subOsc:      {start:0.0, end:0.2},
-  filterFreq:  {start:600, end:900},
-  filterQ:     {start:3.0, end:0.4},
-  noiseLevel:  {start:0.14, end:0.0},
-  noiseHighpass:{start:600, end:60},
-  stereoWidth: {start:0.65, end:0.04},
-  ampMaster:   {start:0.36, end:0.3},
-  rhythm: { motif:[1.5,1.0,2.0], tempoStart:88, tempoEnd:0, chaosStart:0.3, chaosEnd:0, densityStart:1, densityEnd:0 },
-  curve: 'exp',
-  phases:{a:'Full texture. Lowest fundamental.', b:'All frequencies descend. Mono narrows.', c:'Deep sub anchor. Perfect consonance. Settled.'},
+  ratios: [[1,1],[9,8],[4,3],[3,2],[5,3]], ratiosEnd: [[1,1],[4,3],[3,2],[2,1],[3,1]],
+  filterStart: 580, filterEnd: 900, filterQStart: 3.0, filterQEnd: 0.4,
+  noiseStart: 0.13, noiseEnd: 0.0, noiseHpStart: 650, noiseHpEnd: 60,
+  subStart: 0.0, subEnd: 0.19,
+  ampStart: 0.36, ampEnd: 0.28,
+  panWidthStart: 0.65, panWidthEnd: 0.04,
+  driftStart: 8, driftEnd: 1,
+  tempoStart: 88, tempoEnd: 0, chaosStart: 0.28, chaosEnd: 0,
+  densityStart: 1, densityEnd: 0,
+  polyrhythm: false, curve: 'exp',
 },
-
 'overstimulated→energized': {
   fundamental: 82.4, oscCount: 5,
-  ratios: [
-    {start:[1,1],  end:[1,1]},
-    {start:[9,8],  end:[5,4]},
-    {start:[4,3],  end:[3,2]},
-    {start:[3,2],  end:[15,8]},
-    {start:[5,3],  end:[2,1]},
-  ],
-  subOsc:      {start:0.0, end:0.06},
-  filterFreq:  {start:700, end:5000},
-  filterQ:     {start:2.5, end:0.8},
-  noiseLevel:  {start:0.12, end:0.0},
-  noiseHighpass:{start:800, end:400},
-  stereoWidth: {start:0.6, end:0.38},
-  ampMaster:   {start:0.36, end:0.44},
-  rhythm: { motif:[0.75,0.75,0.5,1.0], tempoStart:100, tempoEnd:96, chaosStart:0.25, chaosEnd:0.0, densityStart:1, densityEnd:1 },
-  curve: 'late',
-  phases:{a:'Dense overstimulated texture. Contained start.', b:'Complexity refines. Energy organizes.', c:'Bright refined chord. Steady moderate pulse.'},
+  ratios: [[1,1],[9,8],[4,3],[3,2],[5,3]], ratiosEnd: [[1,1],[5,4],[3,2],[15,8],[2,1]],
+  filterStart: 700, filterEnd: 5500, filterQStart: 2.5, filterQEnd: 0.8,
+  noiseStart: 0.11, noiseEnd: 0.0, noiseHpStart: 800, noiseHpEnd: 400,
+  subStart: 0.0, subEnd: 0.06,
+  ampStart: 0.36, ampEnd: 0.40,
+  panWidthStart: 0.6, panWidthEnd: 0.38,
+  driftStart: 7, driftEnd: 3,
+  tempoStart: 100, tempoEnd: 98, chaosStart: 0.25, chaosEnd: 0.0,
+  densityStart: 1, densityEnd: 2,
+  polyrhythm: true, curve: 'late',
 },
 
+}; // end ARCS
+
+// ═══════════════════════════════════════════════════════
+// RHYTHM MOTIFS
+// ═══════════════════════════════════════════════════════
+const MOTIFS = {
+  sparse:   [[2.0,1.5,3.0],[1.5,2.5,2.0],[3.0,1.0,2.0]],
+  moderate: [[1.0,0.5,0.5,1.0],[0.75,0.75,1.5],[1.0,1.0,0.5,0.5]],
+  dense:    [[0.5,0.5,0.5,1.0],[0.75,0.25,0.5,1.0],[0.5,0.25,0.25,0.5,1.0]],
+  chaotic:  [[0.3,0.5,0.2,0.8],[0.25,0.4,0.15,0.6,0.5],[0.35,0.2,0.55,0.3,0.4]],
 };
 
-// Phase UI text by arc key
-const ARC_META = {
-  overwhelmed:'overwhelmed', anxious:'anxious', tired:'tired',
-  unfocused:'unfocused', overstimulated:'overstimulated',
-  calm:'calm', alert:'alert', grounded:'grounded', energized:'energized',
-};
+// Polyrhythm layers: pairs of (N against M) patterns
+const POLY_PAIRS = [[3,2],[4,3],[5,3],[5,4],[7,4]];
 
-const STATE_LABELS = {
-  overwhelmed:'Overwhelmed', anxious:'Anxious', tired:'Tired',
-  unfocused:'Unfocused', overstimulated:'Overstimulated',
-  calm:'Calm', alert:'Alert', grounded:'Grounded', energized:'Energized',
-};
+// ═══════════════════════════════════════════════════════
+// AUDIO ENGINE
+// Builds a Web Audio graph on any AudioContext (live or offline)
+// All transitions are fully continuous — no hard section jumps
+// ═══════════════════════════════════════════════════════
 
-// ═══════════════════════════════════════════════════════════════
-// UI SELECTION
-// ═══════════════════════════════════════════════════════════════
-
-function selectState(group, state, btn) {
-  document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  session[group] = state;
-  refreshUI();
-}
-
-function setIntensity(btn) {
-  document.querySelectorAll('.intensity-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  session.intensity = parseFloat(btn.dataset.level);
-}
-
-function refreshUI() {
-  const genBtn = document.getElementById('generateBtn');
-  const ok = session.current && session.target;
-  genBtn.disabled = !ok;
-  if (!ok) { document.getElementById('arcSummary').classList.remove('visible'); document.getElementById('journeyPhases').classList.remove('visible'); return; }
-
-  const key = `${session.current}→${session.target}`;
-  const arc = ARCS[key];
-  if (!arc) return;
-
-  const from = STATE_LABELS[session.current];
-  const to   = STATE_LABELS[session.target];
-  document.getElementById('arcSummary').innerHTML = `<strong>${from} → ${to}</strong><br>${arc.phases.a} Then: ${arc.phases.b} Finally: ${arc.phases.c}`;
-  document.getElementById('arcSummary').classList.add('visible');
-
-  document.getElementById('phaseADesc').textContent = arc.phases.a;
-  document.getElementById('phaseBDesc').textContent = arc.phases.b;
-  document.getElementById('phaseCDesc').textContent = arc.phases.c;
-  document.getElementById('journeyPhases').classList.add('visible');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// AUDIO GRAPH BUILDER
-// ═══════════════════════════════════════════════════════════════
-
-function scheduleAudioGraph(ctx, arc, rng, intensity) {
+function buildGraph(ctx, arc, rng) {
   const now = ctx.currentTime;
   const dur = DURATION;
+  const STEPS = 200; // automation resolution
 
-  // Master gain with fade-in and fade-out
+  // ── Master gain with gentle fade in/out ──
   const master = ctx.createGain();
   master.connect(ctx.destination);
   master.gain.setValueAtTime(0, now);
-  master.gain.linearRampToValueAtTime(1.0, now + 3);
+  master.gain.linearRampToValueAtTime(1.0, now + FADE_IN);
   master.gain.setValueAtTime(1.0, now + dur - FADE_OUT);
   master.gain.linearRampToValueAtTime(0, now + dur);
 
-  const STEPS = 150; // automation resolution
+  // Target RMS normalization — all arcs converge to ~same perceived loudness
+  // by scaling ampStart/ampEnd so their average hits ~0.32 RMS proxy
+  const targetAmp = 0.32;
+  const arcAvgAmp = (arc.ampStart + arc.ampEnd) / 2;
+  const normScale  = arcAvgAmp > 0 ? targetAmp / arcAvgAmp : 1;
+  const aS = arc.ampStart * normScale;
+  const aE = arc.ampEnd   * normScale;
 
-  // ── Voice oscillators ──
+  // ── Voice oscillators (additive: fundamental + 2nd + 3rd partial) ──
   const nVoices = arc.oscCount;
 
   for (let v = 0; v < nVoices; v++) {
-    const rStart = arc.ratios[v].start;
-    const rEnd   = arc.ratios[v].end;
-    const fStart = arc.fundamental * rStart[0] / rStart[1];
-    const fEnd   = arc.fundamental * rEnd[0]   / rEnd[1];
+    const rStart = arc.ratios[v] || arc.ratios[arc.ratios.length - 1];
+    const rEnd   = arc.ratiosEnd[v] || arc.ratiosEnd[arc.ratiosEnd.length - 1];
+    const fS = jiHz(arc.fundamental, rStart);
+    const fE = jiHz(arc.fundamental, rEnd);
 
-    // Additive synthesis: fundamental + 2nd + 3rd partial with decay
-    const partials = [
-      { harmonic: 1, ampFactor: 1.0,  decayExp: 0.0  },
-      { harmonic: 2, ampFactor: 0.35, decayExp: 0.4  },
-      { harmonic: 3, ampFactor: 0.15, decayExp: 0.7  },
+    // Brownian frequency drift (in Hz, derived from cents range)
+    const centsToDriftHz = c => fS * (Math.pow(2, c / 1200) - 1);
+    const driftArrS = brownian(rng, STEPS + 1, centsToDriftHz(arc.driftStart), 0.2);
+    const driftArrE = brownian(rng, STEPS + 1, centsToDriftHz(arc.driftEnd), 0.2);
+
+    // Partials: 1st, 2nd, 3rd with decay
+    const PARTIALS = [
+      { h: 1, af: 1.0,  decay: 0.0  },
+      { h: 2, af: 0.28, decay: 0.5  },
+      { h: 3, af: 0.12, decay: 0.75 },
     ];
 
-    // Brownian drift values for this voice
-    const drift = brownianWalk(rng, STEPS + 1, lerp(arc.filterFreq.start * 0.002, 0.05, 0));
-
-    for (const p of partials) {
+    for (const p of PARTIALS) {
       const osc    = ctx.createOscillator();
-      const filter = ctx.createBiquadFilter();
-      const panner = ctx.createStereoPanner();
-      const gain   = ctx.createGain();
+      const filt   = ctx.createBiquadFilter();
+      const lshelf = ctx.createBiquadFilter(); // spectral tilt — warmth
+      const pan    = ctx.createStereoPanner();
+      const ampEnv = ctx.createGain();
+      const lfoGain= ctx.createGain();
 
-      osc.connect(filter);
-      filter.connect(panner);
-      panner.connect(gain);
-      gain.connect(master);
+      osc.connect(filt);
+      filt.connect(lshelf);
+      lshelf.connect(pan);
+      pan.connect(ampEnv);
+      ampEnv.connect(master);
 
       osc.type = 'sine';
-      filter.type = 'lowpass';
+      filt.type = 'lowpass';
+      lshelf.type = 'lowshelf';
+      lshelf.frequency.value = 200;
 
-      // Per-partial voice amplitude
-      const voiceBase = intensity * arc.ampMaster.start / nVoices;
-      gain.gain.value = voiceBase * p.ampFactor;
-
-      // Pan position — slow sine unique per voice
-      const panPhase = rng() * Math.PI * 2;
-      const widthStart = arc.stereoWidth.start;
-      const widthEnd   = arc.stereoWidth.end;
-
-      // Frequency, filter, pan automation
-      const driftBrown = brownianWalk(rng, STEPS + 1, 0.8);
-
-      for (let i = 0; i <= STEPS; i++) {
-        const tGlobal = i / STEPS;
-        const ct = curve(tGlobal, arc.curve);
-        const t  = now + tGlobal * dur;
-
-        // Frequency: interpolate base + brownian drift
-        const baseFreq = lerp(fStart, fEnd, ct) * p.harmonic;
-        const driftHz  = lerp(
-          brownianWalk(rng, 1, lerp(0.8, 0.05, ct))[0],
-          0, ct
-        );
-        const freq = baseFreq + driftBrown[i] * lerp(0.8, 0.05, ct);
-        if (i === 0) osc.frequency.setValueAtTime(freq, t);
-        else osc.frequency.linearRampToValueAtTime(freq, t);
-
-        // Filter cutoff: start dark/bright per arc, open over time
-        const fCut = lerp(arc.filterFreq.start, arc.filterFreq.end, ct);
-        const fQ   = lerp(arc.filterQ.start,   arc.filterQ.end,   ct);
-        if (i === 0) { filter.frequency.setValueAtTime(fCut, t); filter.Q.setValueAtTime(fQ, t); }
-        else { filter.frequency.linearRampToValueAtTime(fCut, t); filter.Q.linearRampToValueAtTime(fQ, t); }
-
-        // Stereo pan: slow sine oscillation, width narrows
-        const width  = lerp(widthStart, widthEnd, ct);
-        const panVal = Math.sin(panPhase + tGlobal * Math.PI * (0.4 + v * 0.15)) * width * (v % 2 === 0 ? 1 : -1);
-        if (i === 0) panner.pan.setValueAtTime(panVal, t);
-        else panner.pan.linearRampToValueAtTime(panVal, t);
-
-        // Amplitude: fade arc + partial decay over time
-        const ampBase = lerp(arc.ampMaster.start, arc.ampMaster.end, ct) * intensity / nVoices;
-        const partialAmp = ampBase * p.ampFactor * Math.pow(1 - tGlobal * p.decayExp, 2);
-        if (i === 0) gain.gain.setValueAtTime(partialAmp, t);
-        else gain.gain.linearRampToValueAtTime(partialAmp, t);
-      }
-
-      // LFO on filter for living texture (0.02–0.08 Hz)
+      // Slow amplitude LFO — voice "breathes"
       const lfo = ctx.createOscillator();
-      const lfoGain = ctx.createGain();
       lfo.type = 'sine';
-      lfo.frequency.value = 0.02 + rng() * 0.06;
-      lfoGain.gain.value  = 150 + rng() * 300;
+      lfo.frequency.value = 0.025 + rng() * 0.04 + v * 0.008;
+      lfoGain.gain.value = 0.06;
       lfo.connect(lfoGain);
-      lfoGain.connect(filter.frequency);
+      lfoGain.connect(ampEnv.gain);
       lfo.start(now);
       lfo.stop(now + dur + 0.1);
+
+      // Filter LFO — subtle cutoff sway
+      const filtLfo = ctx.createOscillator();
+      const filtLfoG = ctx.createGain();
+      filtLfo.type = 'sine';
+      filtLfo.frequency.value = 0.015 + rng() * 0.03 + v * 0.005;
+      filtLfoG.gain.value = 80 + rng() * 120;
+      filtLfo.connect(filtLfoG);
+      filtLfoG.connect(filt.frequency);
+      filtLfo.start(now);
+      filtLfo.stop(now + dur + 0.1);
+
+      // Automation — fully continuous
+      const panPhase = (v % 2 === 0 ? 1 : -1) * (0.3 + rng() * 0.3);
+      const panSpeed = 0.008 + v * 0.004;
+
+      for (let i = 0; i <= STEPS; i++) {
+        const tNorm = i / STEPS;
+        const ct    = applyC(tNorm, arc.curve);
+        const tAbs  = now + tNorm * dur;
+
+        // Frequency: interpolate base ratio + brownian drift
+        const baseF  = lerp(fS, fE, ct);
+        const driftHz = lerp(driftArrS[i], driftArrE[i], ct);
+        const freq    = (baseF + driftHz) * p.h;
+        if (i === 0) osc.frequency.setValueAtTime(freq, tAbs);
+        else         osc.frequency.linearRampToValueAtTime(freq, tAbs);
+
+        // Filter — smooth transition
+        const fc = lerp(arc.filterStart, arc.filterEnd, ct);
+        const fq = lerp(arc.filterQStart, arc.filterQEnd, ct);
+        if (i === 0) { filt.frequency.setValueAtTime(fc, tAbs); filt.Q.setValueAtTime(fq, tAbs); }
+        else         { filt.frequency.linearRampToValueAtTime(fc, tAbs); filt.Q.linearRampToValueAtTime(fq, tAbs); }
+
+        // Spectral tilt: low shelf boost → warmth at end
+        const shelfGain = lerp(-2, 3, ct);
+        if (i === 0) lshelf.gain.setValueAtTime(shelfGain, tAbs);
+        else         lshelf.gain.linearRampToValueAtTime(shelfGain, tAbs);
+
+        // Pan — very slow sine drift, width narrows
+        const width  = lerp(arc.panWidthStart, arc.panWidthEnd, ct);
+        const panVal = Math.sin(panPhase * Math.PI + tNorm * Math.PI * 2 * panSpeed * dur) * width;
+        if (i === 0) pan.pan.setValueAtTime(panVal, tAbs);
+        else         pan.pan.linearRampToValueAtTime(panVal, tAbs);
+
+        // Amplitude: arc + partial decay
+        const voiceAmp = lerp(aS, aE, ct) / nVoices;
+        const partAmp  = voiceAmp * p.af * (1 - tNorm * p.decay * 0.6);
+        if (i === 0) ampEnv.gain.setValueAtTime(partAmp, tAbs);
+        else         ampEnv.gain.linearRampToValueAtTime(partAmp, tAbs);
+      }
 
       osc.start(now);
       osc.stop(now + dur + 0.1);
@@ -978,319 +794,412 @@ function scheduleAudioGraph(ctx, arc, rng, intensity) {
   }
 
   // ── Sub-oscillator ──
-  if (arc.subOsc.end > 0.01 || arc.subOsc.start > 0.01) {
-    const subOsc  = ctx.createOscillator();
-    const subFilter = ctx.createBiquadFilter();
-    const subGain = ctx.createGain();
-    subOsc.connect(subFilter);
-    subFilter.connect(subGain);
-    subGain.connect(master);
-    subOsc.type = 'sine';
-    subOsc.frequency.value = arc.fundamental * 0.5;
-    subFilter.type = 'lowpass';
-    subFilter.frequency.value = 180;
-    subFilter.Q.value = 0.5;
-    subGain.gain.setValueAtTime(arc.subOsc.start * intensity, now);
-    subGain.gain.linearRampToValueAtTime(arc.subOsc.end * intensity, now + dur - FADE_OUT);
-    subOsc.start(now);
-    subOsc.stop(now + dur + 0.1);
+  if (arc.subEnd > 0.005 || arc.subStart > 0.005) {
+    const sub   = ctx.createOscillator();
+    const subF  = ctx.createBiquadFilter();
+    const subG  = ctx.createGain();
+    sub.connect(subF); subF.connect(subG); subG.connect(master);
+    sub.type = 'sine';
+    sub.frequency.value = arc.fundamental * 0.5;
+    subF.type = 'lowpass'; subF.frequency.value = 160; subF.Q.value = 0.5;
+    subG.gain.setValueAtTime(arc.subStart * normScale, now);
+    subG.gain.linearRampToValueAtTime(arc.subEnd * normScale, now + dur - FADE_OUT);
+    sub.start(now); sub.stop(now + dur + 0.1);
   }
 
-  // ── Noise layer ──
-  if (arc.noiseLevel.start > 0.001) {
-    const bufLen = ctx.sampleRate * Math.min(dur, 10); // loop short buffer
-    const noiseBuf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
-    const nd = noiseBuf.getChannelData(0);
-    // Pink-ish noise via simple filtering
+  // ── Pink noise layer ──
+  if (arc.noiseStart > 0.005) {
+    const nLen = Math.min(ctx.sampleRate * 8, ctx.sampleRate * dur);
+    const nBuf = ctx.createBuffer(1, nLen, ctx.sampleRate);
+    const nd   = nBuf.getChannelData(0);
     let b0=0,b1=0,b2=0,b3=0,b4=0;
-    for (let i = 0; i < bufLen; i++) {
-      const white = rng() * 2 - 1;
-      b0 = 0.99886*b0 + white*0.0555179; b1 = 0.99332*b1 + white*0.0750759;
-      b2 = 0.96900*b2 + white*0.1538520; b3 = 0.86650*b3 + white*0.3104856;
-      b4 = 0.55000*b4 + white*0.5329522;
-      nd[i] = (b0+b1+b2+b3+b4 + white*0.1) * 0.11;
+    for (let i = 0; i < nLen; i++) {
+      const w = rng() * 2 - 1;
+      b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+      b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+      b4=0.55000*b4+w*0.5329522;
+      nd[i] = (b0+b1+b2+b3+b4+w*0.1)*0.11;
     }
-    const noiseSource = ctx.createBufferSource();
-    noiseSource.buffer = noiseBuf;
-    noiseSource.loop   = true;
+    const nSrc = ctx.createBufferSource();
+    nSrc.buffer = nBuf; nSrc.loop = true;
+    const nHp  = ctx.createBiquadFilter();
+    nHp.type = 'highpass';
+    const nLp  = ctx.createBiquadFilter();
+    nLp.type = 'lowpass'; nLp.frequency.value = 9000;
+    const nG   = ctx.createGain();
+    nSrc.connect(nHp); nHp.connect(nLp); nLp.connect(nG); nG.connect(master);
 
-    const noiseHp = ctx.createBiquadFilter();
-    noiseHp.type = 'highpass';
-
-    const noiseLp = ctx.createBiquadFilter();
-    noiseLp.type = 'lowpass';
-    noiseLp.frequency.value = 8000;
-
-    const noiseGain = ctx.createGain();
-
-    noiseSource.connect(noiseHp);
-    noiseHp.connect(noiseLp);
-    noiseLp.connect(noiseGain);
-    noiseGain.connect(master);
-
-    // Automate noise
-    noiseGain.gain.setValueAtTime(arc.noiseLevel.start * intensity, now);
-    noiseGain.gain.linearRampToValueAtTime(arc.noiseLevel.end * intensity, now + dur - FADE_OUT);
-    noiseHp.frequency.setValueAtTime(arc.noiseHighpass.start, now);
-    noiseHp.frequency.linearRampToValueAtTime(arc.noiseHighpass.end, now + dur - FADE_OUT);
-
-    noiseSource.start(now);
-    noiseSource.stop(now + dur + 0.1);
+    const nSteps = 80;
+    for (let i = 0; i <= nSteps; i++) {
+      const tNorm = i / nSteps;
+      const ct    = applyC(tNorm, arc.curve);
+      const t     = now + tNorm * dur;
+      const nAmp  = lerp(arc.noiseStart * normScale, arc.noiseEnd * normScale, ct);
+      const nHpF  = lerp(arc.noiseHpStart, arc.noiseHpEnd, ct);
+      if (i === 0) { nG.gain.setValueAtTime(nAmp, t); nHp.frequency.setValueAtTime(nHpF, t); }
+      else         { nG.gain.linearRampToValueAtTime(nAmp, t); nHp.frequency.linearRampToValueAtTime(nHpF, t); }
+    }
+    nSrc.start(now); nSrc.stop(now + dur + 0.1);
   }
 
   // ── Rhythm layer ──
-  scheduleRhythm(ctx, arc, rng, master, now, dur, intensity);
-
-  // ── Silence pockets (45–90s intervals) ──
-  scheduleSilencePockets(ctx, master, rng, now, dur);
+  buildRhythm(ctx, arc, rng, master, now, dur, normScale);
 
   return master;
 }
 
-// ── Motif-based rhythm ──
-const RHYTHM_MOTIFS = {
-  sparse:   [[1.0, 2.0, 1.5, 3.0], [2.0, 1.0, 2.5]],
-  moderate: [[0.8, 0.4, 0.8, 1.0], [1.0, 0.5, 0.5, 1.0], [0.75, 0.75, 1.5]],
-  dense:    [[0.4, 0.4, 0.8, 0.4, 0.4, 0.8], [0.5, 0.5, 0.5, 1.5], [0.6, 0.3, 0.3, 0.6, 0.6]],
-  chaotic:  [[0.3, 0.5, 0.2, 0.8, 0.4], [0.25, 0.25, 0.5, 0.25, 0.75], [0.4, 0.2, 0.6, 0.3, 0.5]],
-};
+function buildRhythm(ctx, arc, rng, master, startAt, dur, normScale) {
+  if (arc.densityStart === 0 && arc.densityEnd === 0) return;
 
-function densityToMotifClass(d) {
-  if (d === 0) return null;
-  if (d <= 1)  return 'sparse';
-  if (d <= 2)  return 'moderate';
-  if (d <= 3)  return 'dense';
-  return 'chaotic';
-}
+  const bpmToInterval = bpm => bpm > 1 ? 60 / bpm : 9999;
 
-function scheduleRhythm(ctx, arc, rng, master, startAt, dur, intensity) {
-  const r = arc.rhythm;
-  if (r.densityStart === 0 && r.densityEnd === 0) return;
+  // Choose motifs
+  function getMotif(density, chaos) {
+    const cls = density < 0.5 ? null : density < 1.5 ? 'sparse' : density < 2.5 ? 'moderate' : density < 3.5 ? 'dense' : 'chaotic';
+    if (!cls) return null;
+    const pool = MOTIFS[cls];
+    return pool[Math.floor(rng() * pool.length)];
+  }
 
-  const tempoToInterval = bpm => bpm > 0 ? 60 / bpm : 99999;
-
+  // Main rhythm stream
   let t = 0;
-  let motif = null;
-  let motifIdx = 0;
-  let motifClass = null;
+  let motif = null, motifIdx = 0;
+  let lastDensity = -1;
   let hitCount = 0;
 
-  while (t < dur - 1 && hitCount < 800) {
-    const progress = t / dur;
-    const ct = curve(progress, arc.curve);
+  while (t < dur - 2 && hitCount < 1200) {
+    const prog = t / dur;
+    const ct   = applyC(prog, arc.curve);
 
-    const density = lerp(r.densityStart, r.densityEnd, ct);
-    if (density < 0.05) { t += 0.5 + rng() * 1.0; continue; }
+    const density = lerp(arc.densityStart, arc.densityEnd, ct);
+    const chaos   = lerp(arc.chaosStart,   arc.chaosEnd,   ct);
+    const bpm     = lerp(arc.tempoStart,   arc.tempoEnd,   ct);
+    const baseInt = bpmToInterval(bpm);
 
-    const chaos = lerp(r.chaosStart, r.chaosEnd, ct);
-    const baseInterval = tempoToInterval(lerp(r.tempoStart, r.tempoEnd, ct));
+    if (density < 0.1) { t += 0.8 + rng() * 1.2; continue; }
 
-    // Pick motif if needed
-    const newClass = densityToMotifClass(Math.round(density));
-    if (newClass !== motifClass || motif === null) {
-      motifClass = newClass;
-      if (motifClass && RHYTHM_MOTIFS[motifClass]) {
-        const pool = RHYTHM_MOTIFS[motifClass];
-        motif = pool[Math.floor(rng() * pool.length)];
-        motifIdx = 0;
-      } else { motif = null; }
+    // Refresh motif when density class changes
+    const dClass = Math.round(density);
+    if (dClass !== lastDensity || motif === null) {
+      motif = getMotif(density, chaos);
+      motifIdx = 0;
+      lastDensity = dClass;
     }
 
-    let step;
+    let stepLen;
     if (motif) {
-      step = motif[motifIdx % motif.length] * baseInterval;
+      stepLen = motif[motifIdx % motif.length] * baseInt;
       motifIdx++;
     } else {
-      step = baseInterval;
+      stepLen = baseInt;
     }
 
-    // Apply chaos jitter
-    const jitter = (rng() - 0.5) * 2 * chaos * step * 0.8;
-    const interval = Math.max(0.1, step + jitter);
+    // Chaos jitter on step
+    const jitter = (rng() - 0.5) * 2 * chaos * stepLen * 0.7;
+    const interval = Math.max(0.08, stepLen + jitter);
 
     // Schedule ping
-    const pingTime = startAt + t;
-    if (pingTime < startAt + dur - 2) {
-      const pingFreq = arc.fundamental * (rng() > 0.7 ? 2 : 1);
-      const pingDur  = 0.04 + rng() * 0.1;
-      const pingAmp  = 0.035 * intensity * (1 - chaos * 0.4) * lerp(arc.ampMaster.start, arc.ampMaster.end, curve(progress, arc.curve));
-
-      const po  = ctx.createOscillator();
-      const pg  = ctx.createGain();
-      po.connect(pg);
-      pg.connect(master);
-      po.type = 'sine';
-      po.frequency.value = pingFreq;
-      pg.gain.setValueAtTime(0, pingTime);
-      pg.gain.linearRampToValueAtTime(pingAmp, pingTime + 0.006);
-      pg.gain.linearRampToValueAtTime(0, pingTime + pingDur);
-      po.start(pingTime);
-      po.stop(pingTime + pingDur + 0.03);
+    const pt = startAt + t;
+    if (pt < startAt + dur - 1.5) {
+      const freq = arc.fundamental * (rng() > 0.65 ? 2 : 1);
+      const pDur = 0.04 + rng() * 0.09;
+      const amp  = 0.028 * normScale * lerp(arc.ampStart, arc.ampEnd, ct) * (1 - chaos * 0.35);
+      const po   = ctx.createOscillator();
+      const pg   = ctx.createGain();
+      po.connect(pg); pg.connect(master);
+      po.type = 'sine'; po.frequency.value = freq;
+      pg.gain.setValueAtTime(0, pt);
+      pg.gain.linearRampToValueAtTime(amp, pt + 0.006);
+      pg.gain.linearRampToValueAtTime(0, pt + pDur);
+      po.start(pt); po.stop(pt + pDur + 0.03);
     }
 
     t += interval;
     hitCount++;
   }
+
+  // ── Polyrhythm layers ──
+  if (arc.polyrhythm) {
+    const pair = POLY_PAIRS[Math.floor(rng() * POLY_PAIRS.length)];
+    const N = pair[0], M = pair[1];
+
+    // Layer A: N beats per cycle
+    const cycleLen = 2.5; // cycle length in seconds (at moderate density)
+    let t2 = PHASE_A; // polyrhythm begins at 90s
+    let hitCount2 = 0;
+    while (t2 < dur - 2 && hitCount2 < 500) {
+      const prog = t2 / dur;
+      const ct   = applyC(prog, arc.curve);
+      const density = lerp(arc.densityStart, arc.densityEnd, ct);
+      if (density < 1.0) { t2 += 1; continue; }
+      const step = cycleLen / N;
+      const pt = startAt + t2;
+      if (pt < startAt + dur - 1.5) {
+        const freq = arc.fundamental * 3;
+        const amp  = 0.018 * normScale * lerp(arc.ampStart, arc.ampEnd, ct);
+        const pDur = 0.035;
+        const po = ctx.createOscillator();
+        const pg = ctx.createGain();
+        po.connect(pg); pg.connect(master);
+        po.type = 'sine'; po.frequency.value = freq;
+        pg.gain.setValueAtTime(0, pt);
+        pg.gain.linearRampToValueAtTime(amp, pt + 0.005);
+        pg.gain.linearRampToValueAtTime(0, pt + pDur);
+        po.start(pt); po.stop(pt + pDur + 0.02);
+      }
+      t2 += step; hitCount2++;
+    }
+
+    // Layer B: M beats per cycle (different freq)
+    let t3 = PHASE_A;
+    let hitCount3 = 0;
+    while (t3 < dur - 2 && hitCount3 < 500) {
+      const prog = t3 / dur;
+      const ct   = applyC(prog, arc.curve);
+      const density = lerp(arc.densityStart, arc.densityEnd, ct);
+      if (density < 1.0) { t3 += 1; continue; }
+      const step = cycleLen / M;
+      const pt = startAt + t3;
+      if (pt < startAt + dur - 1.5) {
+        const freq = arc.fundamental * 2;
+        const amp  = 0.015 * normScale * lerp(arc.ampStart, arc.ampEnd, ct);
+        const pDur = 0.035;
+        const po = ctx.createOscillator();
+        const pg = ctx.createGain();
+        po.connect(pg); pg.connect(master);
+        po.type = 'sine'; po.frequency.value = freq;
+        pg.gain.setValueAtTime(0, pt);
+        pg.gain.linearRampToValueAtTime(amp, pt + 0.005);
+        pg.gain.linearRampToValueAtTime(0, pt + pDur);
+        po.start(pt); po.stop(pt + pDur + 0.02);
+      }
+      t3 += step; hitCount3++;
+    }
+  }
 }
 
-// ── Silence pockets ──
-function scheduleSilencePockets(ctx, masterGain, rng, startAt, dur) {
-  // Insert 2–3 brief silence moments, not in first 60s or last 30s
-  const count = 2 + Math.floor(rng() * 2);
-  const usable = dur - 90; // window 60s → dur-30s
-  const positions = [];
-  for (let i = 0; i < count; i++) {
-    positions.push(60 + rng() * usable);
-  }
-  positions.sort((a, b) => a - b);
+// ═══════════════════════════════════════════════════════
+// SESSION STATE
+// ═══════════════════════════════════════════════════════
+const S = {
+  current: null, target: null,
+  arc: null, seed: null,
+  liveCtx: null, isPlaying: false,
+  startTime: 0, elapsed: 0,
+  rafId: null, wavUrl: null,
+  isDragging: false,
+};
 
-  for (const pos of positions) {
-    const silLen  = 0.8 + rng() * 1.6;
-    const fadeLen = 0.4;
-    const t0 = startAt + pos;
-    masterGain.gain.linearRampToValueAtTime(0.05, t0);
-    masterGain.gain.setValueAtTime(0.05, t0 + silLen);
-    masterGain.gain.linearRampToValueAtTime(1.0, t0 + silLen + fadeLen);
+// ═══════════════════════════════════════════════════════
+// UI
+// ═══════════════════════════════════════════════════════
+const STATE_LABELS = { overwhelmed:'Overwhelmed', anxious:'Anxious', tired:'Tired', unfocused:'Unfocused', overstimulated:'Overstimulated', calm:'Calm', alert:'Alert', grounded:'Grounded', energized:'Energized' };
+
+function selectState(group, state, btn) {
+  document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  S[group] = state;
+  refreshUI();
+}
+
+function refreshUI() {
+  const ok = S.current && S.target;
+  document.getElementById('generateBtn').disabled = !ok;
+  const mb = document.getElementById('mantraBlock');
+  if (!ok) { mb.classList.remove('visible'); return; }
+  const key = `${S.current}→${S.target}`;
+  const m = MANTRAS[key];
+  if (m) {
+    document.getElementById('mantraText').textContent = m.text;
+    document.getElementById('mantraAttr').textContent = '— ' + m.attr;
+    mb.classList.add('visible');
   }
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 // PLAYER
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+function fmt(s) { s=Math.max(0,Math.floor(s)); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
 
-function formatTime(s) {
-  s = Math.max(0, Math.floor(s));
-  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
-}
-
-function getPhaseName(elapsed) {
-  if (elapsed < PHASE_A_END) return 'Orientation';
-  if (elapsed < PHASE_B_END) return 'Transition';
+function phaseName(e) {
+  if (e < PHASE_A) return 'Orientation';
+  if (e < PHASE_B) return 'Transition';
   return 'Arrival';
 }
 
-function updateProgress() {
-  if (!session.liveCtx || !session.isPlaying) return;
-  const elapsed = session.elapsed + (session.liveCtx.currentTime - session.startTime);
+function tick() {
+  if (!S.liveCtx || !S.isPlaying) return;
+  const elapsed = S.elapsed + (S.liveCtx.currentTime - S.startTime);
   const capped  = Math.min(elapsed, DURATION);
   const pct     = (capped / DURATION) * 100;
-
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('playerTime').textContent   = `${formatTime(capped)} / 5:00`;
-  document.getElementById('playerPhase').textContent  = getPhaseName(capped);
-
-  // Phase highlight
-  const phase = getPhaseName(capped);
-  ['phaseA','phaseB','phaseC'].forEach((id,i) => {
-    const names = ['Orientation','Transition','Arrival'];
-    document.getElementById(id).classList.toggle('active-phase', names[i] === phase);
-  });
-
-  if (capped >= DURATION) {
-    ended();
-    return;
-  }
-  session.rafId = requestAnimationFrame(updateProgress);
+  document.getElementById('progressHandle').style.left = pct + '%';
+  document.getElementById('playerTime').textContent  = `${fmt(capped)} / 5:00`;
+  document.getElementById('playerPhase').textContent = phaseName(capped);
+  if (capped >= DURATION) { onEnded(); return; }
+  S.rafId = requestAnimationFrame(tick);
 }
 
-function ended() {
-  session.isPlaying = false;
-  cancelAnimationFrame(session.rafId);
-  setPlayIcon(false);
+function onEnded() {
+  S.isPlaying = false;
+  cancelAnimationFrame(S.rafId);
+  setIcon(false);
   document.getElementById('playLabel').textContent = 'Play again';
-  document.getElementById('progressFill').style.width = '100%';
-  session.elapsed = 0;
+  document.getElementById('progressFill').style.width  = '100%';
+  document.getElementById('progressHandle').style.left = '100%';
+  S.elapsed = 0;
 }
 
 function togglePlay() {
-  if (!session.liveCtx) return;
-
-  if (session.isPlaying) {
-    // Pause
-    session.elapsed += session.liveCtx.currentTime - session.startTime;
-    session.liveCtx.suspend();
-    session.isPlaying = false;
-    cancelAnimationFrame(session.rafId);
-    setPlayIcon(false);
+  if (!S.liveCtx) return;
+  if (S.isPlaying) {
+    S.elapsed += S.liveCtx.currentTime - S.startTime;
+    S.liveCtx.suspend();
+    S.isPlaying = false;
+    cancelAnimationFrame(S.rafId);
+    setIcon(false);
   } else {
-    // Play / replay
-    if (session.elapsed >= DURATION - 0.5) {
-      // Restart
-      restartFromBeginning();
-      return;
-    }
-    session.liveCtx.resume().then(() => {
-      session.startTime = session.liveCtx.currentTime;
-      session.isPlaying = true;
-      setPlayIcon(true);
-      session.rafId = requestAnimationFrame(updateProgress);
+    if (S.elapsed >= DURATION - 0.5) { restartFromBeginning(); return; }
+    S.liveCtx.resume().then(() => {
+      S.startTime = S.liveCtx.currentTime;
+      S.isPlaying = true;
+      setIcon(true);
+      S.rafId = requestAnimationFrame(tick);
     });
   }
 }
 
-function restartFromBeginning() {
-  if (session.liveCtx) { session.liveCtx.close(); session.liveCtx = null; }
-  session.elapsed   = 0;
-  session.isPlaying = false;
-  buildLiveContext();
-}
-
-function setPlayIcon(playing) {
-  const icon = document.getElementById('playIcon');
-  const lbl  = document.getElementById('playLabel');
+function setIcon(playing) {
+  const ic = document.getElementById('playIcon');
+  const lb = document.getElementById('playLabel');
   if (playing) {
-    icon.className = '';
-    icon.innerHTML = '<span class="pause-bars"><span></span><span></span></span>';
-    lbl.textContent = 'Pause';
+    ic.className = '';
+    ic.innerHTML = '<span class="pause-bars"><span></span><span></span></span>';
+    lb.textContent = 'Pause';
   } else {
-    icon.className = 'play-tri';
-    icon.innerHTML = '';
-    lbl.textContent = session.elapsed > 0 ? 'Resume' : 'Play';
+    ic.className = 'play-tri';
+    ic.innerHTML = '';
+    lb.textContent = S.elapsed > 0 ? 'Resume' : 'Play';
   }
 }
 
-// ═══════════════════════════════════════════════════════════════
+function restartFromBeginning() {
+  if (S.liveCtx) { S.liveCtx.close(); S.liveCtx = null; }
+  S.elapsed = 0; S.isPlaying = false;
+  buildLive();
+}
+
+// ── Seekable progress bar ──
+function seekToFraction(frac) {
+  frac = clamp01(frac);
+  const targetSec = frac * DURATION;
+  // Rebuild graph from scratch (Web Audio has no true seek)
+  // We store the target offset and rebuild immediately
+  const wasPlaying = S.isPlaying;
+  if (S.liveCtx) { S.liveCtx.close(); S.liveCtx = null; }
+  cancelAnimationFrame(S.rafId);
+  S.elapsed = targetSec;
+  S.isPlaying = false;
+
+  // Update display immediately
+  const pct = frac * 100;
+  document.getElementById('progressFill').style.width  = pct + '%';
+  document.getElementById('progressHandle').style.left = pct + '%';
+  document.getElementById('playerTime').textContent     = `${fmt(targetSec)} / 5:00`;
+  document.getElementById('playerPhase').textContent    = phaseName(targetSec);
+  setIcon(false);
+
+  if (targetSec >= DURATION - 0.5) { onEnded(); return; }
+
+  // Rebuild and start
+  buildLive();
+  // If they sought while paused, immediately pause again
+  if (!wasPlaying) {
+    S.liveCtx.suspend();
+    S.isPlaying = false;
+    cancelAnimationFrame(S.rafId);
+    setIcon(false);
+  }
+}
+
+// Progress bar mouse/touch events
+document.addEventListener('DOMContentLoaded', () => {
+  const bg = document.getElementById('progressBg');
+  if (!bg) return;
+
+  function fracFromEvent(e) {
+    const r = bg.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    return clamp01(x / r.width);
+  }
+
+  bg.addEventListener('mousedown', e => {
+    if (!S.liveCtx) return;
+    S.isDragging = true;
+    seekToFraction(fracFromEvent(e));
+  });
+
+  bg.addEventListener('touchstart', e => {
+    if (!S.liveCtx) return;
+    e.preventDefault();
+    S.isDragging = true;
+    seekToFraction(fracFromEvent(e));
+  }, { passive: false });
+
+  document.addEventListener('mousemove', e => {
+    if (!S.isDragging) return;
+    seekToFraction(fracFromEvent(e));
+  });
+
+  document.addEventListener('touchmove', e => {
+    if (!S.isDragging) return;
+    e.preventDefault();
+    seekToFraction(fracFromEvent(e));
+  }, { passive: false });
+
+  document.addEventListener('mouseup',  () => { S.isDragging = false; });
+  document.addEventListener('touchend', () => { S.isDragging = false; });
+});
+
+// ═══════════════════════════════════════════════════════
 // GENERATE
-// ═══════════════════════════════════════════════════════════════
-
-async function generate(variation) {
-  if (!session.current || !session.target) return;
-  const key = `${session.current}→${session.target}`;
+// ═══════════════════════════════════════════════════════
+async function generate() {
+  if (!S.current || !S.target) return;
+  const key = `${S.current}→${S.target}`;
   const arc = ARCS[key];
-  if (!arc) return;
+  if (!arc) { alert('Arc not found: ' + key); return; }
 
-  // Stop existing
-  if (session.liveCtx) { await session.liveCtx.close(); session.liveCtx = null; }
-  cancelAnimationFrame(session.rafId);
-  if (session.wavUrl) { URL.revokeObjectURL(session.wavUrl); session.wavUrl = null; }
+  if (S.liveCtx) { await S.liveCtx.close(); S.liveCtx = null; }
+  cancelAnimationFrame(S.rafId);
+  if (S.wavUrl) { URL.revokeObjectURL(S.wavUrl); S.wavUrl = null; }
 
-  session.arc  = arc;
-  session.seed = variation && session.seed ? session.seed + 1 : (Math.random() * 0xFFFFFF | 0);
-  session.elapsed = 0;
-  session.isPlaying = false;
+  S.arc    = arc;
+  S.seed   = (Math.random() * 0xFFFFFF | 0);
+  S.elapsed = 0;
+  S.isPlaying = false;
 
-  // UI
   document.getElementById('generateBtn').textContent = 'Regenerate';
-  document.getElementById('variationBtn').classList.add('visible');
   document.getElementById('player').classList.add('visible');
   document.getElementById('playerTitle').textContent =
-    `${STATE_LABELS[session.current]} → ${STATE_LABELS[session.target]}`;
+    `${STATE_LABELS[S.current]} → ${STATE_LABELS[S.target]}`;
   document.getElementById('playerPhase').textContent = 'Orientation';
-  document.getElementById('progressFill').style.width = '0%';
-  document.getElementById('playerTime').textContent   = '0:00 / 5:00';
+  document.getElementById('progressFill').style.width  = '0%';
+  document.getElementById('progressHandle').style.left = '0%';
+  document.getElementById('playerTime').textContent    = '0:00 / 5:00';
   document.getElementById('downloadBtn').disabled = true;
   document.getElementById('renderStatus').textContent = 'Rendering WAV…';
 
-  buildLiveContext();
+  buildLive();
 
-  // Background WAV render
+  // Background WAV render — same seed
   try {
-    const rng2 = makePRNG(session.seed);
+    const rng2   = makePRNG(S.seed);
     const offCtx = new OfflineAudioContext(1, DURATION * SR, SR);
-    scheduleAudioGraph(offCtx, arc, rng2, session.intensity);
-    const buf = await offCtx.startRendering();
+    buildGraph(offCtx, arc, rng2);
+    const buf  = await offCtx.startRendering();
     const blob = bufToWav(buf);
-    session.wavUrl = URL.createObjectURL(blob);
+    S.wavUrl   = URL.createObjectURL(blob);
     document.getElementById('downloadBtn').disabled = false;
     document.getElementById('renderStatus').textContent = 'WAV ready';
   } catch(e) {
@@ -1299,1028 +1208,57 @@ async function generate(variation) {
   }
 }
 
-function buildLiveContext() {
-  const rng = makePRNG(session.seed);
-  session.liveCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: SR });
-  scheduleAudioGraph(session.liveCtx, session.arc, rng, session.intensity);
-  session.startTime = session.liveCtx.currentTime;
-  session.isPlaying = true;
-  setPlayIcon(true);
-  document.getElementById('playLabel').textContent = 'Pause';
-  session.rafId = requestAnimationFrame(updateProgress);
+function buildLive() {
+  const rng = makePRNG(S.seed);
+  S.liveCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: SR });
+
+  // If seeking: build full graph but immediately seek by suspending
+  // and using ctx.currentTime offset note — Web Audio has no real seek,
+  // so we rebuild from 0 and display elapsed time correctly via S.elapsed
+  buildGraph(S.liveCtx, S.arc, rng);
+
+  // If S.elapsed > 0 we can't actually skip the audio, but we track display offset
+  S.startTime = S.liveCtx.currentTime;
+  S.isPlaying = true;
+  setIcon(true);
+  S.rafId = requestAnimationFrame(tick);
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 // WAV EXPORT
-// ═══════════════════════════════════════════════════════════════
-
+// ═══════════════════════════════════════════════════════
 function bufToWav(buf) {
-  const ch   = buf.numberOfChannels;
-  const sr   = buf.sampleRate;
-  const len  = buf.length;
-  const bps  = 16;
-  const bpsa = bps / 8;
-  const ba   = ch * bpsa;
-  const ds   = len * ba;
-  const ab   = new ArrayBuffer(44 + ds);
-  const v    = new DataView(ab);
-  const ws   = (o, s) => { for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
-  ws(0,'RIFF'); v.setUint32(4, 36+ds, true); ws(8,'WAVE');
+  const ch=buf.numberOfChannels, sr=buf.sampleRate, len=buf.length;
+  const bps=16, bpsa=bps/8, ba=ch*bpsa, ds=len*ba;
+  const ab=new ArrayBuffer(44+ds), v=new DataView(ab);
+  const ws=(o,s)=>{ for(let i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i)); };
+  ws(0,'RIFF'); v.setUint32(4,36+ds,true); ws(8,'WAVE');
   ws(12,'fmt '); v.setUint32(16,16,true); v.setUint16(20,1,true);
   v.setUint16(22,ch,true); v.setUint32(24,sr,true); v.setUint32(28,sr*ba,true);
   v.setUint16(32,ba,true); v.setUint16(34,bps,true);
   ws(36,'data'); v.setUint32(40,ds,true);
-  const d = buf.getChannelData(0);
-  let o = 44;
-  for (let i=0; i<len; i++) {
-    const s = Math.max(-1, Math.min(1, d[i]));
-    v.setInt16(o, s<0 ? s*0x8000 : s*0x7FFF, true);
-    o += 2;
-  }
-  return new Blob([ab], {type:'audio/wav'});
+  const d=buf.getChannelData(0); let o=44;
+  for(let i=0;i<len;i++){ const s=Math.max(-1,Math.min(1,d[i])); v.setInt16(o,s<0?s*0x8000:s*0x7FFF,true); o+=2; }
+  return new Blob([ab],{type:'audio/wav'});
 }
 
 function downloadWav() {
-  if (!session.wavUrl) return;
+  if (!S.wavUrl) return;
   const a = document.createElement('a');
-  a.href     = session.wavUrl;
-  a.download = `regulation-${session.current}-${session.target}-${session.seed}.wav`;
+  a.href = S.wavUrl;
+  a.download = `regulation-${S.current}-${S.target}-${S.seed}.wav`;
   a.click();
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 // KEYBOARD
-// ═══════════════════════════════════════════════════════════════
-
+// ═══════════════════════════════════════════════════════
 document.addEventListener('keydown', e => {
-  if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+  if (e.code === 'Space' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
     e.preventDefault();
-    if (session.liveCtx) togglePlay();
+    if (S.liveCtx) togglePlay();
   }
 });
 </script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Regulation Toolkit — Sensory Intelligence Lab</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --font-body: 'Inter', sans-serif;
-      --font-heading: 'Space Grotesk', sans-serif;
-      --color-bg: #ffffff;
-      --color-surface: #f9f9f7;
-      --color-border: #e5e5e0;
-      --color-text: #1a1a1a;
-      --color-muted: #6b6b6b;
-      --color-accent: #2a5c45;
-      --color-accent-light: #edf4f0;
-      --color-accent-hover: #1e4433;
-      --header-height: 56px;
-    }
-
-    html { font-size: 16px; }
-    body { font-family: var(--font-body); color: var(--color-text); background: var(--color-bg); line-height: 1.6; min-height: 100vh; }
-    a { color: var(--color-text); text-decoration: underline; text-underline-offset: 3px; }
-    a:hover { color: var(--color-accent); }
-
-    /* ── Header ── */
-    header {
-      border-bottom: 1px solid var(--color-border);
-      padding: 0 1.5rem;
-      height: var(--header-height);
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; background: var(--color-bg); z-index: 10; gap: 1rem;
-    }
-    header h1 { font-family: var(--font-heading); font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; flex-shrink: 0; }
-    header nav { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
-    header nav a { font-size: 0.8rem; font-weight: 500; text-decoration: none; color: var(--color-muted); transition: color 0.15s; white-space: nowrap; }
-    header nav a:hover { color: var(--color-text); }
-
-    @media (max-width: 680px) {
-      header { height: auto; padding: 0.75rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
-      header h1 { font-size: 0.875rem; }
-      header nav { gap: 0.75rem; width: 100%; }
-      header nav a { font-size: 0.75rem; }
-    }
-
-    /* ── Breadcrumb ── */
-    .breadcrumb-nav { padding: 0.75rem 1.5rem 0; max-width: 860px; margin: 0 auto; }
-    .breadcrumb-nav ol { list-style: none; display: flex; gap: 0.3rem; align-items: center; font-size: 0.75rem; color: var(--color-muted); flex-wrap: wrap; }
-    .breadcrumb-nav li + li::before { content: '/'; margin-right: 0.3rem; color: var(--color-border); }
-    .breadcrumb-nav a { color: var(--color-muted); text-decoration: none; }
-    .breadcrumb-nav a:hover { color: var(--color-accent); text-decoration: underline; }
-    @media (max-width: 400px) { .breadcrumb-nav li.bc-mid { display: none; } .breadcrumb-nav li.bc-mid + li::before { display: none; } }
-
-    /* ── Main ── */
-    main { max-width: 860px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
-
-    .page-header { margin-bottom: 2rem; padding-bottom: 1.75rem; border-bottom: 1px solid var(--color-border); }
-    .page-header h2 { font-family: var(--font-heading); font-size: 2rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.4rem; }
-    .page-header p { font-size: 0.9rem; color: var(--color-muted); }
-
-    .section-label {
-      font-family: var(--font-heading); font-size: 0.65rem; font-weight: 600;
-      letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.75rem;
-    }
-
-    /* ── State selection ── */
-    .state-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-bottom: 2.5rem;
-    }
-
-    @media (max-width: 560px) { .state-grid { grid-template-columns: 1fr; gap: 1.5rem; } }
-
-    .state-group { display: flex; flex-direction: column; gap: 0.75rem; }
-
-    .state-group-heading {
-      font-family: var(--font-heading); font-size: 0.7rem; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted);
-    }
-
-    .state-btns { display: flex; flex-direction: column; gap: 5px; }
-
-    .state-btn {
-      font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
-      padding: 0.65rem 1rem; border: 1px solid var(--color-border);
-      background: var(--color-bg); color: var(--color-text);
-      cursor: pointer; transition: all 0.12s; text-align: left;
-    }
-    .state-btn:hover:not(.selected) { border-color: var(--color-accent); color: var(--color-accent); }
-    .state-btn.selected { background: var(--color-accent-light); border-color: var(--color-accent); color: var(--color-accent); font-weight: 600; }
-    .state-btn .state-desc { display: block; font-size: 0.72rem; font-weight: 400; color: var(--color-muted); margin-top: 0.1rem; }
-    .state-btn.selected .state-desc { color: var(--color-accent); opacity: 0.8; }
-
-    /* ── Arc summary ── */
-    .arc-summary {
-      background: var(--color-surface); border: 1px solid var(--color-border);
-      padding: 1rem 1.25rem; margin-bottom: 2rem; display: none;
-      font-size: 0.85rem; color: var(--color-muted); line-height: 1.6;
-    }
-    .arc-summary.visible { display: block; }
-    .arc-summary strong { color: var(--color-text); font-weight: 500; }
-
-    /* ── Generate button ── */
-    .generate-btn {
-      font-family: var(--font-heading); font-size: 0.9rem; font-weight: 600;
-      padding: 0.85rem 2.5rem; border: none; background: var(--color-accent);
-      color: white; cursor: pointer; transition: background 0.15s; letter-spacing: -0.01em;
-      display: block; margin-bottom: 2rem;
-    }
-    .generate-btn:hover { background: var(--color-accent-hover); }
-    .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    /* ── Player ── */
-    .player { display: none; border: 1px solid var(--color-border); background: var(--color-surface); }
-    .player.visible { display: block; }
-
-    .player-top {
-      display: flex; align-items: center; gap: 1.5rem;
-      padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border);
-      flex-wrap: wrap; gap: 1rem;
-    }
-
-    .play-pause-btn {
-      font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600;
-      padding: 0.6rem 1.4rem; border: none; background: var(--color-accent);
-      color: white; cursor: pointer; transition: background 0.15s;
-      display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;
-    }
-    .play-pause-btn:hover { background: var(--color-accent-hover); }
-
-    .play-icon-tri {
-      width: 0; height: 0;
-      border-left: 9px solid white;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      display: inline-block; flex-shrink: 0;
-    }
-    .pause-icon {
-      display: inline-flex; gap: 3px; flex-shrink: 0;
-    }
-    .pause-icon span { display: block; width: 3px; height: 11px; background: white; }
-
-    .player-info { flex: 1; min-width: 0; }
-    .player-title { font-size: 0.875rem; font-weight: 500; color: var(--color-text); margin-bottom: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .player-sub { font-size: 0.75rem; color: var(--color-muted); }
-
-    .player-time { font-size: 0.8rem; color: var(--color-muted); font-variant-numeric: tabular-nums; flex-shrink: 0; }
-
-    /* Progress bar */
-    .progress-wrap { padding: 0 1.5rem 1.25rem; }
-    .progress-bar-bg {
-      height: 3px; background: var(--color-border); cursor: pointer; position: relative;
-    }
-    .progress-bar-fill { height: 100%; background: var(--color-accent); width: 0%; transition: width 0.5s linear; pointer-events: none; }
-
-    /* Download */
-    .player-footer {
-      padding: 0.85rem 1.5rem; border-top: 1px solid var(--color-border);
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;
-    }
-
-    .download-btn {
-      font-family: var(--font-body); font-size: 0.8rem; font-weight: 500;
-      padding: 0.45rem 1.1rem; border: 1px solid var(--color-border);
-      background: var(--color-bg); color: var(--color-text);
-      cursor: pointer; transition: all 0.12s; text-decoration: none; display: inline-block;
-    }
-    .download-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
-    .download-btn:disabled, .download-btn.pending { opacity: 0.5; cursor: not-allowed; }
-
-    .render-status { font-size: 0.75rem; color: var(--color-muted); }
-
-    /* ── Footer ── */
-    footer { border-top: 1px solid var(--color-border); padding: 1.5rem 2rem; text-align: center; font-size: 0.8rem; color: var(--color-muted); }
-
-    @media (max-width: 600px) { main { padding: 1.5rem 1rem 3rem; } }
-  </style>
-</head>
-<body>
-
-<header>
-  <h1>Sensory Intelligence Lab</h1>
-  <nav>
-    <a href="/sensory-intelligence-lab/dashboard/">Home</a>
-    <a href="/sensory-intelligence-lab/dashboard/">Dashboard</a>
-    <a href="/sensory-intelligence-lab/account/">Account</a>
-    <a href="/sensory-intelligence-lab/sessions/">Sessions</a>
-    <a href="/blog/">Blog</a>
-  </nav>
-</header>
-
-<nav aria-label="Breadcrumb" class="breadcrumb-nav">
-  <ol>
-    <li><a href="/sensory-intelligence-lab/dashboard/">Home</a></li>
-    <li class="bc-mid"><a href="/sensory-intelligence-lab/dashboard/">Dashboard</a></li>
-    <li>Regulation Toolkit</li>
-  </ol>
-</nav>
-
-<main>
-
-  <div class="page-header">
-    <h2>Regulation Toolkit</h2>
-    <p>Select where you are and where you want to be. A 5-minute soundscape will guide the journey using the iso principle.</p>
-  </div>
-
-  <div class="state-grid">
-    <div class="state-group">
-      <p class="state-group-heading">Current state</p>
-      <div class="state-btns" id="currentBtns">
-        <button class="state-btn" data-group="current" data-state="overwhelmed" onclick="selectState('current','overwhelmed',this)">
-          Overwhelmed <span class="state-desc">Too much input, flooded, can't process</span>
-        </button>
-        <button class="state-btn" data-group="current" data-state="anxious" onclick="selectState('current','anxious',this)">
-          Anxious <span class="state-desc">Unsettled, racing thoughts, tension</span>
-        </button>
-        <button class="state-btn" data-group="current" data-state="tired" onclick="selectState('current','tired',this)">
-          Tired <span class="state-desc">Low energy, heavy, withdrawn</span>
-        </button>
-        <button class="state-btn" data-group="current" data-state="unfocused" onclick="selectState('current','unfocused',this)">
-          Unfocused <span class="state-desc">Scattered, drifting, can't settle</span>
-        </button>
-        <button class="state-btn" data-group="current" data-state="overstimulated" onclick="selectState('current','overstimulated',this)">
-          Overstimulated <span class="state-desc">Sensory overload, frayed, sharp edges</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="state-group">
-      <p class="state-group-heading">Target state</p>
-      <div class="state-btns" id="targetBtns">
-        <button class="state-btn" data-group="target" data-state="calm" onclick="selectState('target','calm',this)">
-          Calm <span class="state-desc">Settled, quiet, at ease</span>
-        </button>
-        <button class="state-btn" data-group="target" data-state="alert" onclick="selectState('target','alert',this)">
-          Alert <span class="state-desc">Awake, present, ready</span>
-        </button>
-        <button class="state-btn" data-group="target" data-state="grounded" onclick="selectState('target','grounded',this)">
-          Grounded <span class="state-desc">Stable, embodied, centred</span>
-        </button>
-        <button class="state-btn" data-group="target" data-state="energized" onclick="selectState('target','energized',this)">
-          Energized <span class="state-desc">Clear, motivated, vital</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div class="arc-summary" id="arcSummary"></div>
-
-  <button class="generate-btn" id="generateBtn" disabled onclick="generate()">Generate soundscape</button>
-
-  <div class="player" id="player">
-    <div class="player-top">
-      <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()">
-        <span class="play-icon-tri" id="playIcon"></span>
-        <span id="playLabel">Play</span>
-      </button>
-      <div class="player-info">
-        <div class="player-title" id="playerTitle">—</div>
-        <div class="player-sub">5:00 · Generative soundscape</div>
-      </div>
-      <div class="player-time" id="playerTime">0:00 / 5:00</div>
-    </div>
-    <div class="progress-wrap">
-      <div class="progress-bar-bg" id="progressBg" onclick="seekTo(event)">
-        <div class="progress-bar-fill" id="progressFill"></div>
-      </div>
-    </div>
-    <div class="player-footer">
-      <span class="render-status" id="renderStatus">Rendering WAV for download…</span>
-      <button class="download-btn pending" id="downloadBtn" disabled onclick="downloadWav()">Download WAV</button>
-    </div>
-  </div>
-
-</main>
-
-<footer>
-  <p>Jordan Elias Music Therapy · Berlin · <a href="/contact/">Contact</a></p>
-</footer>
-
-<script>
-// ════════════════════════════════════════════════════════════
-// STATE SELECTION
-// ════════════════════════════════════════════════════════════
-
-const selected = { current: null, target: null };
-
-function selectState(group, state, btn) {
-  document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selected[group] = state;
-  updateArcSummary();
-  document.getElementById('generateBtn').disabled = !(selected.current && selected.target);
-}
-
-// ════════════════════════════════════════════════════════════
-// 25 ARC DEFINITIONS
-// Each arc: from → to, with musical parameters describing
-// the journey. All values interpolate from start → end
-// over the 5-minute duration using the arc's curve shape.
-//
-// Parameters:
-//  fundamental      Hz — base pitch (just intonation built from this)
-//  oscCount         number of oscillators (3–6)
-//  ratiosStart      JI ratio pairs [num,den] — starting harmonic cluster
-//  ratiosEnd        JI ratio pairs — ending harmonic cluster
-//  driftStart       Hz — max random frequency drift per oscillator (beating)
-//  driftEnd         Hz — ending drift
-//  ampStart         master amplitude 0–1
-//  ampEnd           master amplitude
-//  rhythmStart      rhythmic pulse density: 0=none, 1=sparse, 2=moderate, 3=dense, 4=chaotic
-//  rhythmEnd        ending rhythm density
-//  rhythmChaosStart irregularity of rhythm 0–1 (0=metronomic, 1=chaotic)
-//  rhythmChaosEnd
-//  curve            'linear'|'exp'|'sigmoid'|'late' — transition shape
-//  desc             short description shown in UI
-// ════════════════════════════════════════════════════════════
-
-const ARCS = {
-
-  // ── FROM: OVERWHELMED ──
-  'overwhelmed→calm': {
-    fundamental: 82.4, oscCount: 5,
-    ratiosStart: [[1,1],[16,15],[9,8],[4,3],[3,2]],
-    ratiosEnd:   [[1,1],[3,2],[2,1],[3,1],[4,1]],
-    driftStart: 1.8, driftEnd: 0.05,
-    ampStart: 0.55, ampEnd: 0.32,
-    rhythmStart: 3, rhythmEnd: 0,
-    rhythmChaosStart: 0.85, rhythmChaosEnd: 0,
-    curve: 'sigmoid',
-    desc: 'Dense, dissonant cluster dissolves into open fifths and octaves. Rhythm fades completely. Space opens gradually.'
-  },
-  'overwhelmed→alert': {
-    fundamental: 98, oscCount: 4,
-    ratiosStart: [[1,1],[16,15],[9,8],[6,5]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[7,4]],
-    driftStart: 1.6, driftEnd: 0.15,
-    ampStart: 0.5, ampEnd: 0.38,
-    rhythmStart: 3, rhythmEnd: 1,
-    rhythmChaosStart: 0.9, rhythmChaosEnd: 0.1,
-    curve: 'late',
-    desc: 'Chaos subsides slowly. A steady, clear pulse emerges in the final third — alert but not agitated.'
-  },
-  'overwhelmed→grounded': {
-    fundamental: 65.4, oscCount: 5,
-    ratiosStart: [[1,1],[16,15],[9,8],[5,4],[4,3]],
-    ratiosEnd:   [[1,1],[4,3],[3,2],[2,1],[3,1]],
-    driftStart: 2.0, driftEnd: 0.04,
-    ampStart: 0.52, ampEnd: 0.38,
-    rhythmStart: 4, rhythmEnd: 0,
-    rhythmChaosStart: 1.0, rhythmChaosEnd: 0,
-    curve: 'sigmoid',
-    desc: 'Very low fundamental. Noise and dissonance gradually resolve into a deep, still perfect fourth and fifth — rooted.'
-  },
-  'overwhelmed→energized': {
-    fundamental: 82.4, oscCount: 4,
-    ratiosStart: [[1,1],[16,15],[9,8],[6,5]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[15,8]],
-    driftStart: 1.8, driftEnd: 0.2,
-    ampStart: 0.5, ampEnd: 0.42,
-    rhythmStart: 4, rhythmEnd: 2,
-    rhythmChaosStart: 0.9, rhythmChaosEnd: 0.05,
-    curve: 'late',
-    desc: 'Chaos condenses into a clear major chord. A steady moderate rhythm arrives at the end — energized but resolved.'
-  },
-
-  // ── FROM: ANXIOUS ──
-  'anxious→calm': {
-    fundamental: 110, oscCount: 4,
-    ratiosStart: [[1,1],[16,15],[7,5],[9,5]],
-    ratiosEnd:   [[1,1],[3,2],[2,1],[4,1]],
-    driftStart: 1.2, driftEnd: 0.04,
-    ampStart: 0.48, ampEnd: 0.28,
-    rhythmStart: 3, rhythmEnd: 0,
-    rhythmChaosStart: 0.8, rhythmChaosEnd: 0,
-    curve: 'exp',
-    desc: 'Tritone tension and irregular rhythm gradually soften. Consonant intervals replace dissonance. Silence surrounds the tones.'
-  },
-  'anxious→alert': {
-    fundamental: 110, oscCount: 4,
-    ratiosStart: [[1,1],[16,15],[7,5],[9,5]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[7,4]],
-    driftStart: 1.0, driftEnd: 0.12,
-    ampStart: 0.46, ampEnd: 0.4,
-    rhythmStart: 3, rhythmEnd: 1,
-    rhythmChaosStart: 0.75, rhythmChaosEnd: 0.05,
-    curve: 'sigmoid',
-    desc: 'Anxious flutter resolves into focused clarity. Rhythm becomes regular and purposeful.'
-  },
-  'anxious→grounded': {
-    fundamental: 82.4, oscCount: 5,
-    ratiosStart: [[1,1],[16,15],[7,5],[9,5],[9,8]],
-    ratiosEnd:   [[1,1],[4,3],[3,2],[2,1],[3,1]],
-    driftStart: 1.4, driftEnd: 0.05,
-    ampStart: 0.5, ampEnd: 0.36,
-    rhythmStart: 3, rhythmEnd: 0,
-    rhythmChaosStart: 0.8, rhythmChaosEnd: 0,
-    curve: 'exp',
-    desc: 'Anxious upper-register tension descends. Fundamental lowers. Perfect fourths and fifths anchor the body.'
-  },
-  'anxious→energized': {
-    fundamental: 110, oscCount: 4,
-    ratiosStart: [[1,1],[16,15],[7,5],[9,5]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[15,8]],
-    driftStart: 1.0, driftEnd: 0.18,
-    ampStart: 0.46, ampEnd: 0.44,
-    rhythmStart: 3, rhythmEnd: 2,
-    rhythmChaosStart: 0.75, rhythmChaosEnd: 0.0,
-    curve: 'late',
-    desc: 'Anxious energy is retained but reorganized. Dissonance resolves to a bright major seventh. Rhythm steadies and lifts.'
-  },
-
-  // ── FROM: TIRED ──
-  'tired→calm': {
-    fundamental: 82.4, oscCount: 3,
-    ratiosStart: [[1,1],[3,2],[2,1]],
-    ratiosEnd:   [[1,1],[3,2],[2,1]],
-    driftStart: 0.06, driftEnd: 0.03,
-    ampStart: 0.22, ampEnd: 0.28,
-    rhythmStart: 0, rhythmEnd: 0,
-    rhythmChaosStart: 0, rhythmChaosEnd: 0,
-    curve: 'linear',
-    desc: 'Tired and calm share a similar quiet. This piece deepens stillness gently — a restful drift that asks nothing.'
-  },
-  'tired→alert': {
-    fundamental: 98, oscCount: 3,
-    ratiosStart: [[1,1],[3,2],[2,1]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[15,8]],
-    driftStart: 0.04, driftEnd: 0.2,
-    ampStart: 0.2, ampEnd: 0.44,
-    rhythmStart: 0, rhythmEnd: 2,
-    rhythmChaosStart: 0, rhythmChaosEnd: 0.05,
-    curve: 'exp',
-    desc: 'From stillness, brightness slowly enters. Amplitude rises. A steady pulse appears in the second half — gentle activation.'
-  },
-  'tired→grounded': {
-    fundamental: 65.4, oscCount: 3,
-    ratiosStart: [[1,1],[3,2],[2,1]],
-    ratiosEnd:   [[1,1],[4,3],[3,2],[2,1]],
-    driftStart: 0.05, driftEnd: 0.04,
-    ampStart: 0.24, ampEnd: 0.34,
-    rhythmStart: 0, rhythmEnd: 0,
-    rhythmChaosStart: 0, rhythmChaosEnd: 0,
-    curve: 'linear',
-    desc: 'Very low register. A fourth oscillator joins slowly, filling out the harmonic space. Weight becomes groundedness.'
-  },
-  'tired→energized': {
-    fundamental: 110, oscCount: 3,
-    ratiosStart: [[1,1],[3,2],[2,1]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[15,8]],
-    driftStart: 0.04, driftEnd: 0.22,
-    ampStart: 0.2, ampEnd: 0.48,
-    rhythmStart: 0, rhythmEnd: 3,
-    rhythmChaosStart: 0, rhythmChaosEnd: 0.05,
-    curve: 'exp',
-    desc: 'Slow activation. Brightness grows from the second minute. A clear, driving pulse arrives — careful not to rush the body.'
-  },
-
-  // ── FROM: UNFOCUSED ──
-  'unfocused→calm': {
-    fundamental: 98, oscCount: 4,
-    ratiosStart: [[1,1],[9,8],[4,3],[7,4]],
-    ratiosEnd:   [[1,1],[3,2],[2,1],[3,1]],
-    driftStart: 0.6, driftEnd: 0.04,
-    ampStart: 0.4, ampEnd: 0.28,
-    rhythmStart: 2, rhythmEnd: 0,
-    rhythmChaosStart: 0.5, rhythmChaosEnd: 0,
-    curve: 'sigmoid',
-    desc: 'Wandering harmonics slowly converge. Rhythm dissolves. The piece models settling without forcing it.'
-  },
-  'unfocused→alert': {
-    fundamental: 110, oscCount: 4,
-    ratiosStart: [[1,1],[9,8],[4,3],[7,4]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[15,8]],
-    driftStart: 0.5, driftEnd: 0.14,
-    ampStart: 0.38, ampEnd: 0.44,
-    rhythmStart: 1, rhythmEnd: 2,
-    rhythmChaosStart: 0.4, rhythmChaosEnd: 0.05,
-    curve: 'sigmoid',
-    desc: 'Unfocused drift given direction. Harmonics clarify toward a bright chord. Pulse becomes steady and purposeful.'
-  },
-  'unfocused→grounded': {
-    fundamental: 82.4, oscCount: 4,
-    ratiosStart: [[1,1],[9,8],[4,3],[7,4]],
-    ratiosEnd:   [[1,1],[4,3],[3,2],[2,1]],
-    driftStart: 0.6, driftEnd: 0.04,
-    ampStart: 0.38, ampEnd: 0.36,
-    rhythmStart: 1, rhythmEnd: 0,
-    rhythmChaosStart: 0.45, rhythmChaosEnd: 0,
-    curve: 'exp',
-    desc: 'Scattered attention drawn downward. Lower register harmonics stabilize. The ground is found without effort.'
-  },
-  'unfocused→energized': {
-    fundamental: 110, oscCount: 4,
-    ratiosStart: [[1,1],[9,8],[4,3],[7,4]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[15,8]],
-    driftStart: 0.5, driftEnd: 0.2,
-    ampStart: 0.38, ampEnd: 0.46,
-    rhythmStart: 1, rhythmEnd: 3,
-    rhythmChaosStart: 0.4, rhythmChaosEnd: 0.0,
-    curve: 'sigmoid',
-    desc: 'Scattered energy organized into clarity. Bright harmonics and a steady driving rhythm arrive together.'
-  },
-
-  // ── FROM: OVERSTIMULATED ──
-  'overstimulated→calm': {
-    fundamental: 65.4, oscCount: 6,
-    ratiosStart: [[1,1],[9,8],[4,3],[3,2],[5,3],[15,8]],
-    ratiosEnd:   [[1,1],[3,2],[2,1],[3,1],[4,1],[6,1]],
-    driftStart: 0.8, driftEnd: 0.03,
-    ampStart: 0.38, ampEnd: 0.22,
-    rhythmStart: 1, rhythmEnd: 0,
-    rhythmChaosStart: 0.3, rhythmChaosEnd: 0,
-    curve: 'sigmoid',
-    desc: 'Gentle start — density present but not aggressive. Oscillators peel away one by one. Wide open consonance arrives quietly.'
-  },
-  'overstimulated→alert': {
-    fundamental: 82.4, oscCount: 5,
-    ratiosStart: [[1,1],[9,8],[4,3],[3,2],[5,3]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[15,8],[2,1]],
-    driftStart: 0.7, driftEnd: 0.14,
-    ampStart: 0.36, ampEnd: 0.38,
-    rhythmStart: 1, rhythmEnd: 1,
-    rhythmChaosStart: 0.25, rhythmChaosEnd: 0.05,
-    curve: 'linear',
-    desc: 'Density condenses toward clarity rather than emptiness. A clear, contained alertness — not quiet, but organized.'
-  },
-  'overstimulated→grounded': {
-    fundamental: 55, oscCount: 5,
-    ratiosStart: [[1,1],[9,8],[4,3],[3,2],[5,3]],
-    ratiosEnd:   [[1,1],[4,3],[3,2],[2,1],[3,1]],
-    driftStart: 0.8, driftEnd: 0.04,
-    ampStart: 0.36, ampEnd: 0.3,
-    rhythmStart: 1, rhythmEnd: 0,
-    rhythmChaosStart: 0.3, rhythmChaosEnd: 0,
-    curve: 'exp',
-    desc: 'Lowest fundamental. Overstimulation meets the floor. All frequencies descend and consolidate into a deep root.'
-  },
-  'overstimulated→energized': {
-    fundamental: 82.4, oscCount: 5,
-    ratiosStart: [[1,1],[9,8],[4,3],[3,2],[5,3]],
-    ratiosEnd:   [[1,1],[5,4],[3,2],[15,8],[2,1]],
-    driftStart: 0.7, driftEnd: 0.18,
-    ampStart: 0.38, ampEnd: 0.42,
-    rhythmStart: 1, rhythmEnd: 2,
-    rhythmChaosStart: 0.25, rhythmChaosEnd: 0.0,
-    curve: 'late',
-    desc: 'Complexity retained but refined. Overstimulation is channeled rather than suppressed — a bright, steady arrival.'
-  },
-};
-
-// Arc descriptions for UI
-const ARC_NARRATIVE = {
-  overwhelmed: { label: 'Overwhelmed', quality: 'dense, dissonant, chaotic' },
-  anxious:     { label: 'Anxious',     quality: 'tense, irregular, unsettled' },
-  tired:       { label: 'Tired',       quality: 'sparse, slow, low amplitude' },
-  unfocused:   { label: 'Unfocused',   quality: 'drifting, mid-density, wandering' },
-  overstimulated: { label: 'Overstimulated', quality: 'full, layered, gentle start' },
-  calm:      { label: 'Calm',      quality: 'open consonance, no rhythm, spacious' },
-  alert:     { label: 'Alert',     quality: 'bright harmonics, steady pulse' },
-  grounded:  { label: 'Grounded',  quality: 'low register, perfect intervals, still' },
-  energized: { label: 'Energized', quality: 'major seventh, moderate pulse, clear' },
-};
-
-function updateArcSummary() {
-  const el = document.getElementById('arcSummary');
-  if (!selected.current || !selected.target) { el.classList.remove('visible'); return; }
-  const key = `${selected.current}→${selected.target}`;
-  const arc = ARCS[key];
-  const from = ARC_NARRATIVE[selected.current];
-  const to   = ARC_NARRATIVE[selected.target];
-  if (!arc) { el.classList.remove('visible'); return; }
-  el.innerHTML = `<strong>${from.label} → ${to.label}</strong><br>${arc.desc}`;
-  el.classList.add('visible');
-}
-
-// ════════════════════════════════════════════════════════════
-// AUDIO ENGINE
-// ════════════════════════════════════════════════════════════
-
-const DURATION = 300; // 5 minutes in seconds
-const SAMPLE_RATE = 44100;
-
-let liveCtx = null;
-let isPlaying = false;
-let startTime = 0;
-let pauseOffset = 0;
-let progressInterval = null;
-let wavBuffer = null;
-let wavUrl = null;
-let currentSeed = null;
-let currentArc = null;
-
-// Seeded PRNG — mulberry32
-function mulberry32(seed) {
-  return function() {
-    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
-}
-
-// Curve interpolation: t = 0..1
-function curveT(t, shape) {
-  switch(shape) {
-    case 'exp':     return t < 0 ? 0 : Math.pow(t, 2.2);
-    case 'sigmoid': { const s = 12*(t-0.5); return 1/(1+Math.exp(-s)); }
-    case 'late':    return Math.pow(t, 3.5);
-    default:        return t; // linear
-  }
-}
-
-function lerp(a, b, t) { return a + (b - a) * t; }
-
-// JI ratio to Hz from fundamental
-function ratioHz(fundamental, num, den) { return fundamental * num / den; }
-
-// ── Live playback ──
-
-function buildLiveGraph(arc, seed) {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: SAMPLE_RATE });
-  const rng  = mulberry32(seed);
-  const master = ctx.createGain();
-  master.connect(ctx.destination);
-  master.gain.value = 0;
-
-  scheduleArc(ctx, arc, rng, master, 0, DURATION);
-  return ctx;
-}
-
-function scheduleArc(ctx, arc, rng, master, startAt, duration) {
-  const now = ctx.currentTime + startAt;
-
-  // Fade in/out master
-  master.gain.setValueAtTime(0, now);
-  master.gain.linearRampToValueAtTime(arc.ampStart, now + 2);
-  master.gain.setValueAtTime(arc.ampStart, now + 2);
-
-  // Schedule amplitude transition
-  const steps = 60; // one automation point per 5s
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps;
-    const ct = curveT(t, arc.curve);
-    const amp = lerp(arc.ampStart, arc.ampEnd, ct);
-    master.gain.setValueAtTime(amp, now + t * duration);
-  }
-  master.gain.linearRampToValueAtTime(0, now + duration);
-
-  // Oscillator voices
-  const oscCount = arc.oscCount;
-  for (let v = 0; v < oscCount; v++) {
-    const ratio = arc.ratiosStart[v] || arc.ratiosStart[arc.ratiosStart.length - 1];
-    const ratioEnd = arc.ratiosEnd[v] || arc.ratiosEnd[arc.ratiosEnd.length - 1];
-    const freqStart = ratioHz(arc.fundamental, ratio[0], ratio[1]);
-    const freqEnd   = ratioHz(arc.fundamental, ratioEnd[0], ratioEnd[1]);
-
-    // Individual voice drift (slow LFO-like variation via small random offset per step)
-    const driftPhase = rng() * Math.PI * 2;
-
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(master);
-    osc.type = 'sine';
-
-    // Per-voice amplitude — slightly varied
-    const voiceAmp = 0.7 + rng() * 0.3;
-    gain.gain.value = voiceAmp / oscCount;
-
-    // Schedule frequency automation
-    const freqSteps = 120;
-    for (let i = 0; i <= freqSteps; i++) {
-      const t  = i / freqSteps;
-      const ct = curveT(t, arc.curve);
-      const baseFreq = lerp(freqStart, freqEnd, ct);
-      const driftRange = lerp(arc.driftStart, arc.driftEnd, ct);
-      // Slow sine drift per voice, unique phase
-      const drift = Math.sin(driftPhase + t * Math.PI * (2 + v * 0.7)) * driftRange * (0.5 + rng() * 0.5);
-      osc.frequency.setValueAtTime(baseFreq + drift, now + t * duration);
-    }
-
-    osc.start(now);
-    osc.stop(now + duration + 0.1);
-  }
-
-  // Rhythm layer
-  scheduleRhythm(ctx, arc, rng, master, now, duration);
-}
-
-function scheduleRhythm(ctx, arc, rng, masterGain, startAt, duration) {
-  if (arc.rhythmStart === 0 && arc.rhythmEnd === 0) return;
-
-  // Rhythm: soft sine pings at a fundamental harmonic
-  const pingFreq = arc.fundamental * 2;
-
-  // Generate hit times across the duration
-  // Density: 0=none, 1=sparse(~0.3/s), 2=moderate(~1/s), 3=dense(~2/s), 4=chaotic(~3/s)
-  const densityToRate = [0, 0.28, 0.9, 1.8, 3.0];
-  let t = 0;
-  let hitCount = 0;
-  const maxHits = 500;
-
-  while (t < duration && hitCount < maxHits) {
-    const progress = t / duration;
-    const ct = curveT(progress, arc.curve);
-
-    const densStart = arc.rhythmStart;
-    const densEnd   = arc.rhythmEnd;
-    const density   = lerp(densStart, densEnd, ct);
-    const rate      = lerp(
-      densityToRate[Math.floor(densStart)] || 0,
-      densityToRate[Math.floor(densEnd)]   || 0,
-      ct
-    );
-
-    if (rate < 0.01) { t += 0.5 + rng() * 1.5; continue; }
-
-    const chaos = lerp(arc.rhythmChaosStart, arc.rhythmChaosEnd, ct);
-    const baseInterval = 1 / rate;
-    // Chaos = jitter applied to interval
-    const jitter = (rng() - 0.5) * 2 * chaos * baseInterval * 1.8;
-    const interval = Math.max(0.08, baseInterval + jitter);
-
-    // Schedule a ping
-    const pingTime = startAt + t;
-    const pingDur  = 0.06 + rng() * 0.08;
-    const pingAmp  = (0.04 + rng() * 0.05) * (1 - chaos * 0.5);
-
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(masterGain);
-    osc.type = 'sine';
-    osc.frequency.value = pingFreq * (1 + Math.floor(rng() * 2));
-    gain.gain.setValueAtTime(0, pingTime);
-    gain.gain.linearRampToValueAtTime(pingAmp, pingTime + 0.005);
-    gain.gain.linearRampToValueAtTime(0, pingTime + pingDur);
-    osc.start(pingTime);
-    osc.stop(pingTime + pingDur + 0.02);
-
-    t += interval;
-    hitCount++;
-  }
-}
-
-// ── Offline render for WAV ──
-
-async function renderOffline(arc, seed) {
-  const frameCount = DURATION * SAMPLE_RATE;
-  const offCtx = new OfflineAudioContext(1, frameCount, SAMPLE_RATE);
-  const rng2   = mulberry32(seed); // same seed = same result
-  const master = offCtx.createGain();
-  master.connect(offCtx.destination);
-  master.gain.value = 0;
-
-  scheduleArc(offCtx, arc, rng2, master, 0, DURATION);
-
-  const rendered = await offCtx.startRendering();
-  return rendered;
-}
-
-function audioBufferToWav(buffer) {
-  const numChannels = buffer.numberOfChannels;
-  const sampleRate  = buffer.sampleRate;
-  const length      = buffer.length;
-  const bitsPerSample = 16;
-  const bytesPerSample = bitsPerSample / 8;
-  const blockAlign  = numChannels * bytesPerSample;
-  const byteRate    = sampleRate * blockAlign;
-  const dataSize    = length * blockAlign;
-  const headerSize  = 44;
-  const totalSize   = headerSize + dataSize;
-
-  const ab  = new ArrayBuffer(totalSize);
-  const view = new DataView(ab);
-
-  function writeString(offset, s) {
-    for (let i = 0; i < s.length; i++) view.setUint8(offset + i, s.charCodeAt(i));
-  }
-  function writeUint16(offset, v) { view.setUint16(offset, v, true); }
-  function writeUint32(offset, v) { view.setUint32(offset, v, true); }
-
-  writeString(0, 'RIFF');
-  writeUint32(4, totalSize - 8);
-  writeString(8, 'WAVE');
-  writeString(12, 'fmt ');
-  writeUint32(16, 16);
-  writeUint16(20, 1); // PCM
-  writeUint16(22, numChannels);
-  writeUint32(24, sampleRate);
-  writeUint32(28, byteRate);
-  writeUint16(32, blockAlign);
-  writeUint16(34, bitsPerSample);
-  writeString(36, 'data');
-  writeUint32(40, dataSize);
-
-  const channelData = buffer.getChannelData(0);
-  let offset = 44;
-  for (let i = 0; i < length; i++) {
-    const s = Math.max(-1, Math.min(1, channelData[i]));
-    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-    offset += 2;
-  }
-
-  return new Blob([ab], { type: 'audio/wav' });
-}
-
-// ════════════════════════════════════════════════════════════
-// PLAYER CONTROLS
-// ════════════════════════════════════════════════════════════
-
-function formatTime(s) {
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60);
-  return `${m}:${sec.toString().padStart(2,'0')}`;
-}
-
-function updateProgress() {
-  if (!liveCtx || !isPlaying) return;
-  const elapsed = liveCtx.currentTime - startTime + pauseOffset;
-  const capped  = Math.min(elapsed, DURATION);
-  const pct     = (capped / DURATION) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('playerTime').textContent   = `${formatTime(capped)} / ${formatTime(DURATION)}`;
-  if (capped >= DURATION) stopPlayback();
-}
-
-function togglePlay() {
-  if (isPlaying) pausePlayback();
-  else resumePlayback();
-}
-
-function pausePlayback() {
-  if (!liveCtx) return;
-  pauseOffset += liveCtx.currentTime - startTime;
-  liveCtx.suspend();
-  isPlaying = false;
-  clearInterval(progressInterval);
-  setPlayIcon(false);
-}
-
-function resumePlayback() {
-  if (!liveCtx) return;
-  liveCtx.resume();
-  startTime = liveCtx.currentTime;
-  isPlaying = true;
-  progressInterval = setInterval(updateProgress, 500);
-  setPlayIcon(true);
-}
-
-function stopPlayback() {
-  isPlaying = false;
-  clearInterval(progressInterval);
-  if (liveCtx) { liveCtx.close(); liveCtx = null; }
-  setPlayIcon(false);
-  pauseOffset = 0;
-}
-
-function setPlayIcon(playing) {
-  const btn = document.getElementById('playPauseBtn');
-  document.getElementById('playLabel').textContent = playing ? 'Pause' : 'Play';
-  const icon = document.getElementById('playIcon');
-  if (playing) {
-    icon.outerHTML = `<span class="pause-icon" id="playIcon"><span></span><span></span></span>`;
-  } else {
-    icon.outerHTML = `<span class="play-icon-tri" id="playIcon"></span>`;
-  }
-}
-
-function seekTo(e) {
-  if (!liveCtx) return;
-  const bg = document.getElementById('progressBg');
-  const rect = bg.getBoundingClientRect();
-  const frac = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-  // Rebuild audio from that point — simplest approach: restart with offset
-  // (OfflineAudioContext doesn't support seeking; restart live graph)
-  const seekSec = frac * DURATION;
-  stopPlayback();
-  liveCtx = buildLiveGraph(currentArc, currentSeed);
-  // Suspend immediately, skip to offset
-  liveCtx.suspend().then(() => {
-    pauseOffset = seekSec;
-    // We can't truly seek a Web Audio graph, so we note the offset for display
-    // and resume — sound restarts from beginning but time display shows correct pos
-    // Full seeking would require sample-accurate scheduling; this is a UX approximation
-    resumePlayback();
-  });
-}
-
-function downloadWav() {
-  if (!wavUrl) return;
-  const a = document.createElement('a');
-  a.href     = wavUrl;
-  a.download = `regulation-${selected.current}-to-${selected.target}-${currentSeed}.wav`;
-  a.click();
-}
-
-// ════════════════════════════════════════════════════════════
-// GENERATE
-// ════════════════════════════════════════════════════════════
-
-async function generate() {
-  const key = `${selected.current}→${selected.target}`;
-  const arc = ARCS[key];
-  if (!arc) return;
-
-  currentArc  = arc;
-  currentSeed = Math.floor(Math.random() * 0xFFFFFF);
-
-  // Stop any existing playback
-  stopPlayback();
-  if (wavUrl) { URL.revokeObjectURL(wavUrl); wavUrl = null; }
-
-  // Update UI
-  document.getElementById('generateBtn').disabled = true;
-  document.getElementById('generateBtn').textContent = 'Generating…';
-  document.getElementById('player').classList.add('visible');
-  document.getElementById('playerTitle').textContent =
-    `${ARC_NARRATIVE[selected.current].label} → ${ARC_NARRATIVE[selected.target].label}`;
-  document.getElementById('progressFill').style.width = '0%';
-  document.getElementById('playerTime').textContent   = `0:00 / 5:00`;
-
-  const dlBtn = document.getElementById('downloadBtn');
-  dlBtn.disabled = true;
-  dlBtn.className = 'download-btn pending';
-  document.getElementById('renderStatus').textContent = 'Rendering WAV for download…';
-
-  // Build live context
-  pauseOffset = 0;
-  liveCtx  = buildLiveGraph(arc, currentSeed);
-  startTime = liveCtx.currentTime;
-  isPlaying = true;
-  setPlayIcon(true);
-  progressInterval = setInterval(updateProgress, 500);
-
-  document.getElementById('generateBtn').disabled = false;
-  document.getElementById('generateBtn').textContent = 'Generate new version';
-
-  // Offline render in background
-  try {
-    const audioBuffer = await renderOffline(arc, currentSeed);
-    const blob = audioBufferToWav(audioBuffer);
-    wavUrl = URL.createObjectURL(blob);
-    dlBtn.disabled = false;
-    dlBtn.className = 'download-btn';
-    document.getElementById('renderStatus').textContent = 'WAV ready to download';
-  } catch(e) {
-    document.getElementById('renderStatus').textContent = 'Render failed — try again';
-    console.error(e);
-  }
-}
-</script>
-
 </body>
 </html>
