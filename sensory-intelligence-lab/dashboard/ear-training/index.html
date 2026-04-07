@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ear Training | Sensory Intelligence Lab</title>
+  <title>Ear Training — Sensory Intelligence Lab</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
 
   <style>
@@ -15,11 +15,11 @@
       --color-bg: #ffffff;
       --color-surface: #f9f9f7;
       --color-border: #e5e5e0;
-      --color-text: #20269D;
+      --color-text: #1a1a1a;
       --color-muted: #6b6b6b;
-      --color-accent: #FF6F91;
-      --color-accent-light: #fff0f3;
-      --color-accent-hover: #e05070;
+      --color-accent: #2a5c45;
+      --color-accent-light: #edf4f0;
+      --color-accent-hover: #1e4433;
       --color-correct: #2a5c45;
       --color-correct-bg: #edf4f0;
       --color-correct-border: #b8d9c8;
@@ -45,7 +45,7 @@
     /* ── Header ── */
     header {
       border-bottom: 1px solid var(--color-border);
-      padding: 0 2rem;
+      padding: 0 1.5rem;
       height: var(--header-height);
       display: flex;
       align-items: center;
@@ -54,6 +54,7 @@
       top: 0;
       background: var(--color-bg);
       z-index: 10;
+      gap: 1rem;
     }
 
     header h1 {
@@ -61,27 +62,38 @@
       font-size: 1rem;
       font-weight: 600;
       letter-spacing: -0.01em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     header nav {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.25rem;
       align-items: center;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     header nav a {
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       font-weight: 500;
       text-decoration: none;
       color: var(--color-muted);
       transition: color 0.15s;
+      white-space: nowrap;
     }
     header nav a:hover { color: var(--color-text); }
 
+    @media (max-width: 680px) {
+      header { height: auto; padding: 0.75rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
+      header h1 { font-size: 0.875rem; }
+      header nav { gap: 0.75rem; width: 100%; }
+      header nav a { font-size: 0.75rem; }
+    }
+
     /* ── Breadcrumb ── */
     .breadcrumb-nav {
-      padding: 1rem 2rem 0;
+      padding: 0.75rem 1.5rem 0;
       max-width: 860px;
       margin: 0 auto;
     }
@@ -89,20 +101,27 @@
     .breadcrumb-nav ol {
       list-style: none;
       display: flex;
-      gap: 0.4rem;
+      gap: 0.3rem;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--color-muted);
+      flex-wrap: wrap;
     }
 
     .breadcrumb-nav li + li::before {
       content: '/';
-      margin-right: 0.4rem;
+      margin-right: 0.3rem;
       color: var(--color-border);
     }
 
     .breadcrumb-nav a { color: var(--color-muted); text-decoration: none; }
     .breadcrumb-nav a:hover { color: var(--color-accent); text-decoration: underline; }
+
+    /* Hide intermediate breadcrumb steps on very small screens, keep first + last */
+    @media (max-width: 400px) {
+      .breadcrumb-nav li.bc-mid { display: none; }
+      .breadcrumb-nav li.bc-mid + li::before { display: none; }
+    }
 
     /* ── Main ── */
     main {
@@ -422,30 +441,30 @@
     }
 
     @media (max-width: 600px) {
-      header nav { gap: 1rem; }
+      main { padding: 1.5rem 1rem 3rem; }
       .settings-row { flex-direction: column; gap: 1rem; }
       .chord-row-label { width: auto; padding-top: 0; }
+      .listen-zone { flex-direction: column; align-items: flex-start; gap: 1rem; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Ear Training | SIL</h1>
+  <h1>Sensory Intelligence Lab</h1>
   <nav>
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/music-therapy/">Music Therapy</a>
+    <a href="/sensory-intelligence-lab/dashboard/">Home</a>
+    <a href="/sensory-intelligence-lab/dashboard/">Dashboard</a>
+    <a href="/sensory-intelligence-lab/account/">Account</a>
+    <a href="/sensory-intelligence-lab/sessions/">Sessions</a>
     <a href="/blog/">Blog</a>
-    <a href="/sensory-intelligence-lab/dashboard/">← Lab</a>
   </nav>
 </header>
 
 <nav aria-label="Breadcrumb" class="breadcrumb-nav">
   <ol>
-    <li><a href="/">Home</a></li>
-    <li><a href="/sensory-intelligence-lab/">Sensory Intelligence Lab</a></li>
-    <li><a href="/sensory-intelligence-lab/dashboard/">Dashboard</a></li>
+    <li><a href="/sensory-intelligence-lab/dashboard/">Home</a></li>
+    <li class="bc-mid"><a href="/sensory-intelligence-lab/dashboard/">Dashboard</a></li>
     <li>Ear Training</li>
   </ol>
 </nav>
@@ -989,18 +1008,23 @@ function playCurrentSound() {
 function chordToComponents(chord) {
   const n   = chord.name;
   const ivs = chord.intervals;
+  const set = state.chordSet;
   const c   = { quality: null, seventh: 'none', ninth: 'none', eleventh: 'none', thirteenth: 'none' };
 
-  // Triad quality
+  // Triad quality from intervals
   if      (ivs[1] === 4 && ivs[2] === 7) c.quality = 'major';
   else if (ivs[1] === 3 && ivs[2] === 7) c.quality = 'minor';
   else if (ivs[1] === 4 && ivs[2] === 8) c.quality = 'aug';
   else if (ivs[1] === 3 && ivs[2] === 6) c.quality = n.includes('Half') ? 'halfdim' : 'dim';
 
-  // Extended set overrides
-  if (n.startsWith('Dom'))       c.quality = 'dom';
-  if (n.startsWith('Major'))     c.quality = 'major';
-  if (n.startsWith('Minor'))     c.quality = 'minor';
+  // In the extended set, the answer UI has "Dominant" as a quality button.
+  // Dominant 7th/9th/11th/13th chords all use a major triad + ♭7, so they
+  // would otherwise map to 'major'. Override to 'dom' only in extended set.
+  if (set === 'extended' && (n.startsWith('Dom') || n.startsWith('Dominant'))) {
+    c.quality = 'dom';
+  }
+  // In sevenths set, "Dominant 7th" has no separate 'dom' button — user picks
+  // Major quality + ♭7. So keep c.quality = 'major' for that chord.
 
   // 7th
   if (ivs.length >= 4) {
