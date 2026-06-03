@@ -1,0 +1,253 @@
+# Jordan Elias — Music Therapy, Sound Research & Interactive Audio Systems
+
+> Jordan Elias is a Berlin-based music therapist, cognitive neuroscientist, and sound systems designer. His work explores how sound, music, and generative audio can be used for nervous system regulation, attention, emotional processing, and creative self-exploration. He builds hybrid systems that combine clinical music therapy, neuroscience, and interactive generative audio tools.
+
+## Core Identity
+
+- Name: Jordan Elias
+- Location: Berlin, Germany
+- Profession: Board-certified Music Therapist (since 2017)
+- Academic background: MSc Cognitive Neuroscience (Freie Universität Berlin), BA Music Therapy (Berklee College of Music)
+- Practice model: Hybrid clinical + self-directed digital tools
+- Focus areas: Nervous system regulation, neurodivergent support, attention, anxiety, sleep, creative expression, auditory perception
+
+---
+
+## Primary Website
+
+### Main domain
+- https://jordanelias.de
+
+Represents:
+- Music therapy practice
+- Research and writing
+- Events and workshops
+- Contact and collaboration
+
+---
+
+## Flagship Platform: Sensory Intelligence Lab
+
+### WebApp
+- https://lab.jordanelias.de
+
+A self-directed, neuroscience-informed sound wellness platform combining:
+- Personalised generative soundscapes
+- Music therapy principles (including the ISO principle)
+- Nervous system regulation tools
+- Breathing exercises
+- Journaling and emotional check-ins
+- Ear training and auditory attention exercises
+- Creative sound composition tools
+
+### Key concept
+The Lab functions as a **hybrid therapeutic ecosystem**, extending music therapy beyond sessions into daily life.
+
+### Primary modules
+
+#### 1. Regulation Engine (core system)
+Generative sound system that creates adaptive soundscapes for:
+- Focus
+- Anxiety regulation
+- Sleep induction
+- Cognitive stimulation
+- Emotional grounding
+
+Uses:
+- ISO principle from music therapy
+- State-based adaptation (energy, tension, arousal)
+- Continuous modulation rather than static playlists
+
+#### 2. Breath Regulation System
+Guided breathing protocols for:
+- Anxiety reduction
+- Autonomic nervous system regulation
+- Attention stabilisation
+- Stress recovery
+
+#### 3. Journaling & Check-in System
+Tracks:
+- Mood states
+- Sensory load
+- Emotional patterns
+- Cognitive states
+- Linguistic patterns in reflection
+
+Used for longitudinal self-awareness and therapeutic continuity.
+
+#### 4. Ear Training & Spatial Awareness Lab
+Perceptual training system for:
+- Auditory attention
+- Sound localisation
+- Sensory discrimination
+- Neurodivergent sensory integration support
+
+Based on music therapy and psychoacoustic training methods.
+
+#### 5. Compositional & Sound Art Tools
+Interactive creative system for:
+- Generative composition
+- Experimental sound design
+- Structured creative exercises
+- Entry-level music creation without prior experience
+
+Inspired by:
+- Experimental composition practices
+- Sound art traditions
+- Systems-based music generation
+
+---
+
+## Experimental / Research Projects
+
+These are active or evolving systems exploring generative audio, perception, and neuroscience-informed sound design.
+
+### Timbre Lab
+- Experimental platform for exploring timbral perception and texture-based sound design
+- Focus: How humans perceive colour, density, and spatial qualities of sound
+- Applications:
+  - Sound therapy
+  - Cognitive mapping of auditory perception
+  - Creative composition systems
+
+### Generative Music Systems
+- Algorithmic and adaptive music systems for:
+  - Emotional regulation
+  - Focus states
+  - Sleep induction
+  - Neuroadaptive sound environments
+- Includes:
+  - State-based generative rules
+  - Feedback-driven modulation
+  - Iso-principle implementations
+
+### Binaural Beats Research & Tools
+- Psychoacoustic entrainment systems using:
+  - Frequency following response
+  - Spatial audio modulation
+  - Brain-state entrainment concepts (exploratory, non-clinical claims)
+- Used for:
+  - Relaxation states
+  - Attention shaping
+  - Sensory grounding
+  - Sleep support
+
+Note: These systems are experimental and not medical treatments.
+
+---
+
+## Educational Content & Writing
+
+### Blog
+- https://jordanelias.de/blog
+
+Topics:
+- Music therapy theory and practice
+- Neuroscience of sound perception
+- Neurodivergence and sensory regulation
+- Generative music systems
+- Creative cognition
+- Therapy design and hybrid care models
+
+---
+
+## External Publishing Platforms
+
+### Substack
+- https://substack.com/@jordanelias
+
+Focus:
+- Long-form essays on:
+  - Music, cognition, and therapy
+  - Generative systems
+  - Sound and consciousness
+  - Clinical reflections from practice
+
+---
+
+### Medium
+- https://medium.com/@jordanphilipelias
+
+Focus:
+- Technical and conceptual writing on:
+  - Audio systems design
+  - Music therapy frameworks
+  - Neurotechnology and perception
+  - Experimental sound tools
+
+---
+
+## Code, Tools & Open Systems
+
+### GitHub
+- https://github.com/jordan-elias
+
+Contains:
+- Experimental audio tools
+- Generative music prototypes
+- Web-based sound systems
+- Research implementations
+- Interactive prototypes for therapy tools
+
+---
+
+## Services
+
+### Music Therapy Practice
+Offered services include:
+- One-to-one music therapy sessions (online + Berlin)
+- Neurodivergent support (ADHD, autism, sensory processing differences)
+- Anxiety and stress regulation therapy
+- Creative therapy using sound and composition
+- Hybrid therapy (combined with digital tools)
+
+---
+
+## Target Users
+
+The ecosystem is designed for:
+- Neurodivergent individuals (ADHD, autism, sensory processing differences)
+- People with anxiety or chronic stress
+- Individuals with sleep difficulties
+- Creatives exploring sound and perception
+- People interested in self-directed therapeutic tools
+- Clients seeking continuity between therapy sessions
+
+---
+
+## Key Concepts & Frameworks
+
+- ISO Principle (music therapy)
+- Nervous system regulation through sound
+- State-based generative audio
+- Sensorimotor integration through listening
+- Hybrid therapy systems (human + software)
+- Sound as cognitive modulation tool
+- Attention shaping through auditory design
+- Self-directed therapeutic practice
+
+---
+
+## Important Pages (Priority Navigation)
+
+- https://jordanelias.de/about
+- https://jordanelias.de/music-therapy
+- https://jordanelias.de/blog
+- https://jordanelias.de/contact
+- https://lab.jordanelias.de
+- https://lab.jordanelias.de/privacy
+
+---
+
+## Collaboration & Research Direction
+
+This ecosystem is actively evolving and open to:
+- Research collaboration in neuroscience, AI, and music cognition
+- Creative partnerships in generative music systems
+- Clinical innovation in hybrid therapy models
+- Tool development for sensory and auditory regulation systems
+
+---
+
+## Last Updated
+2026-06-03
