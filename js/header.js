@@ -1,21 +1,22 @@
 // header.js — hamburger menu + dropdown toggle
-// Place in /js/header.js and add <script src="/js/header.js"></script>
-// before </body> on every page (or in your Jekyll layout)
 
 (function () {
-  // Hamburger toggle
   const toggle = document.querySelector('.nav-toggle');
   const nav = document.querySelector('.main-nav');
 
   if (toggle && nav) {
+    // Hamburger open/close
     toggle.addEventListener('click', function () {
       const isOpen = nav.classList.toggle('is-open');
       toggle.setAttribute('aria-expanded', isOpen);
       toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
     });
 
-    // Close mobile nav when a link is clicked
+    // Close mobile nav when a non-dropdown link is clicked
     nav.querySelectorAll('a').forEach(function (link) {
+      // Skip the dropdown toggle — it should open the submenu, not close the nav
+      if (link.classList.contains('nav-dropdown-toggle')) return;
+
       link.addEventListener('click', function () {
         nav.classList.remove('is-open');
         toggle.setAttribute('aria-expanded', 'false');
@@ -24,27 +25,24 @@
     });
   }
 
-  // Dropdown toggle (touch/keyboard — hover handles desktop mouse)
+  // Dropdown toggle
   const dropdowns = document.querySelectorAll('.nav-dropdown');
 
   dropdowns.forEach(function (dropdown) {
     const dropToggle = dropdown.querySelector('.nav-dropdown-toggle');
+    const menu = dropdown.querySelector('.nav-dropdown-menu');
 
-    // On mobile, tap the toggle to open/close
+    // Mobile: tap to toggle
     dropToggle.addEventListener('click', function (e) {
-      // Only intercept click on mobile (hamburger nav visible)
       if (window.innerWidth <= 800) {
         e.preventDefault();
+        e.stopPropagation(); // prevent triggering the outside-click handler
         const isOpen = dropdown.classList.toggle('is-open');
         dropToggle.setAttribute('aria-expanded', isOpen);
-        const menu = dropdown.querySelector('.nav-dropdown-menu');
-        if (menu) {
-          menu.style.display = isOpen ? 'block' : 'none';
-        }
       }
     });
 
-    // Keyboard: open on Enter/Space, close on Escape
+    // Keyboard support
     dropToggle.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -59,7 +57,7 @@
     });
   });
 
-  // Close dropdowns when clicking outside
+  // Close dropdowns when clicking outside (desktop)
   document.addEventListener('click', function (e) {
     if (!e.target.closest('.nav-dropdown')) {
       dropdowns.forEach(function (dropdown) {
