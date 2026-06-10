@@ -1,3 +1,6 @@
+---
+---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -216,21 +219,12 @@ content="
 </head>
 
 <body>
-<header>
-  <h1>Music Therapy Events in Berlin</h1>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/music-therapy/">Music Therapy</a>
-    <a href="/online-sessions/">Online Sessions</a>
-    <a href="/events/">Events</a>
-    <a href="/contact/">Contact</a>
-    <a href="/blog/">Blog</a>
-    <a href="https://lab.jordanelias.de/" target="_blank" rel="noopener">Lab</a>
-  </nav>
-</header>
+
+  {% include header.html %}
 
 <main class="events-container">
+
+  <h1>Music Therapy Events in Berlin</h1>
  
   <nav aria-label="Breadcrumb" class="breadcrumb-nav">
   <ol>
@@ -263,6 +257,10 @@ content="
   <p>© 2025-2026 Jordan Elias</p>
 </footer>
 
+  
+<script src="/js/header.js"></script>
+
 <script src="/events/events.js"></script>
+  
 </body>
 </html>
