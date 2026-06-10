@@ -71,42 +71,42 @@ frame-ancestors 'none';
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.jordanelias.de/#website",
-      "url": "https://www.jordanelias.de/",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
       "name": "Jordan Elias Music Therapy",
       "description": "A creative, music-based approach to therapy for anyone navigating life's complexities. No music experience needed. Online and in Berlin.",
       "publisher": {
-        "@id": "https://www.jordanelias.de/#person"
+        "@id": "https://jordanelias.de/#person"
       }
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.jordanelias.de/#webpage",
-      "url": "https://www.jordanelias.de/",
+      "@id": "https://jordanelias.de/#webpage",
+      "url": "https://jordanelias.de/",
       "name": "Jordan Elias — Board-Certified Music Therapist in Berlin",
       "description": "A creative, music-based approach to therapy for anyone navigating life's complexities. No music experience needed. Online and in Berlin.",
       "isPartOf": {
-        "@id": "https://www.jordanelias.de/#website"
+        "@id": "https://jordanelias.de/#website"
       },
       "about": {
-        "@id": "https://www.jordanelias.de/#person"
+        "@id": "https://jordanelias.de/#person"
       },
       "author": {
-        "@id": "https://www.jordanelias.de/#person"
+        "@id": "https://jordanelias.de/#person"
       },
       "primaryImageOfPage": {
         "@type": "ImageObject",
-        "url": "https://www.jordanelias.de/images/hero.jpg"
+        "url": "https://jordanelias.de/images/hero.jpg"
       }
     },
     {
       "@type": "Person",
-      "@id": "https://www.jordanelias.de/#person",
+      "@id": "https://jordanelias.de/#person",
       "name": "Jordan Elias",
       "honorificSuffix": "MT-BC",
       "jobTitle": "Board-Certified Music Therapist",
-      "url": "https://www.jordanelias.de/",
-      "image": "https://www.jordanelias.de/images/headshot.jpg",
+      "url": "https://jordanelias.de/",
+      "image": "https://jordanelias.de/images/headshot.jpg",
       "email": "jordanelias@proton.me",
       "address": {
         "@type": "PostalAddress",
@@ -115,7 +115,7 @@ frame-ancestors 'none';
         "addressCountry": "DE"
       },
       "worksFor": {
-        "@id": "https://www.jordanelias.de/#service"
+        "@id": "https://jordanelias.de/#service"
       },
       "alumniOf": [
         {
@@ -159,15 +159,15 @@ frame-ancestors 'none';
     },
     {
       "@type": "ProfessionalService",
-      "@id": "https://www.jordanelias.de/#service",
+      "@id": "https://jordanelias.de/#service",
       "name": "Jordan Elias Music Therapy",
-      "url": "https://www.jordanelias.de/",
-      "logo": "https://www.jordanelias.de/images/favicon.png",
-      "image": "https://www.jordanelias.de/images/hero.jpg",
+      "url": "https://jordanelias.de/",
+      "logo": "https://jordanelias.de/images/favicon.png",
+      "image": "https://jordanelias.de/images/hero.jpg",
       "description": "A creative, music-based approach to therapy for anyone navigating life's complexities. No music experience needed. Online and in Berlin.",
       "priceRange": "€€",
       "founder": {
-        "@id": "https://www.jordanelias.de/#person"
+        "@id": "https://jordanelias.de/#person"
       },
       "areaServed": [
         {
@@ -183,8 +183,8 @@ frame-ancestors 'none';
       "availableChannel": {
         "@type": "ServiceChannel",
         "name": "Online Sessions",
-        "availableLanguage": ["English", "German"],
-        "serviceUrl": "https://www.jordanelias.de/online-sessions/"
+        "availableLanguage": ["English"],
+        "serviceUrl": "https://jordanelias.de/online-sessions/"
       },
       "audience": {
         "@type": "Audience",
@@ -201,7 +201,7 @@ frame-ancestors 'none';
           "name": "Individual Music Therapy Sessions",
           "description": "Personalized weekly or bi-weekly therapy sessions combining talking, music-making, and creative projects for emotional wellbeing.",
           "provider": {
-            "@id": "https://www.jordanelias.de/#person"
+            "@id": "https://jordanelias.de/#person"
           }
         },
         {
@@ -209,7 +209,7 @@ frame-ancestors 'none';
           "name": "Community Music Therapy Groups",
           "description": "Ongoing group sessions focused on song sharing, emotional exploration, and creative connection for anyone in Berlin.",
           "provider": {
-            "@id": "https://www.jordanelias.de/#person"
+            "@id": "https://jordanelias.de/#person"
           }
         },
         {
@@ -217,7 +217,7 @@ frame-ancestors 'none';
           "name": "Music Lessons",
           "description": "Guitar lessons and small group ensembles tailored for neurodivergent individuals to build skills and express creativity.",
           "provider": {
-            "@id": "https://www.jordanelias.de/#person"
+            "@id": "https://jordanelias.de/#person"
           }
         }
       ]
@@ -307,19 +307,7 @@ frame-ancestors 'none';
 
 <body>
 
-<header>
-  <h1>Jordan Elias</h1>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/music-therapy/">Music Therapy</a>
-    <a href="/online-sessions/">Online Sessions</a>
-    <a href="/events/">Events</a>
-    <a href="/contact/">Contact</a>
-    <a href="/blog/">Blog</a>
-    <a href="https://lab.jordanelias.de/" target="_blank" rel="noopener">Lab</a>
-  </nav>
-</header>
+{% include header.html %}
 
 <main>
 
