@@ -8,14 +8,6 @@
   --accent-hover: #FF6F91;
 }
 
-/* old: 
-
---bg: #F1C6D3;
-  --text: #20269D;
-  --accent: #6A1E78;
-  --accent-hover: #FF6F91;
-*/
-
 /* ============================
    Global Styles
 ============================ */
@@ -25,6 +17,7 @@ body {
   color: var(--text);
   margin: 0;
   padding: 0;
+  padding-top: 64px; /* offset for fixed header */
   line-height: 1.6;
 }
 
@@ -39,31 +32,196 @@ main {
 }
 
 /* ============================
-   Header & Footer
+   Sticky Header
 ============================ */
-header,
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: var(--bg);
+  border-bottom: 1px solid var(--text);
+  height: 64px;
+}
+
+.header-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1em;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Site title / wordmark */
+.site-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+
+.site-title:hover {
+  color: var(--accent-hover);
+}
+
+/* ============================
+   Desktop Nav
+============================ */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.main-nav > a,
+.nav-dropdown-toggle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.4em 0.65em;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.main-nav > a:hover,
+.nav-dropdown-toggle:hover {
+  color: var(--accent-hover);
+}
+
+/* Book a call CTA in nav */
+.main-nav .nav-cta {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  border: 2px solid var(--text);
+  padding: 0.35em 0.9em;
+  margin-left: 0.5rem;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.main-nav .nav-cta:hover {
+  background-color: var(--accent-hover);
+  color: var(--bg);
+  border-color: var(--accent-hover);
+}
+
+/* ============================
+   Dropdown
+============================ */
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-chevron {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.nav-dropdown:hover .dropdown-chevron,
+.nav-dropdown.is-open .dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 210px;
+  background-color: var(--bg);
+  border: 1px solid var(--text);
+  list-style: none;
+  margin: 0;
+  padding: 0.5em 0;
+  z-index: 101;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown.is-open .nav-dropdown-menu {
+  display: block;
+}
+
+.nav-dropdown-menu li a {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  display: block;
+  padding: 0.6em 1.1em;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.nav-dropdown-menu li a:hover {
+  color: var(--bg);
+  background-color: var(--accent-hover);
+}
+
+/* ============================
+   Hamburger Button (mobile only)
+============================ */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 26px;
+  height: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  background-color: var(--text);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
+}
+
+/* Animate to X when open */
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ============================
+   Footer
+============================ */
 footer {
   text-align: center;
   padding: 1.5em 1em;
   background-color: var(--bg);
-}
-
-/* ============================
-   Navigation
-============================ */
-nav a {
-  font-family: 'Space Grotesk', sans-serif;
-  color: var(--text);
-  text-decoration: none;
-  margin: 0 22px;
-  letter-spacing: 0.05em;
-  display: inline-block;
-  transition: transform 0.15s ease, color 0.15s ease;
-}
-
-nav a:hover {
-  transform: translateY(-1px);
-  color: var(--accent-hover);
 }
 
 /* ============================
@@ -166,6 +324,7 @@ h2::after {
 h3 {
   font-size: 1.6rem;
 }
+
 /* ============================
    Links
 ============================ */
@@ -196,7 +355,6 @@ main a:hover {
   width: 100%;
   max-height: 420px;
   object-fit: cover;
-  
 }
 
 .inline-img {
@@ -204,7 +362,6 @@ main a:hover {
   width: 300px;
   height: auto;
   margin: 0 15px 15px 0;
-  
 }
 
 /* ============================
@@ -219,7 +376,6 @@ main a:hover {
 
 .service-section img {
   width: 260px;
-  
   object-fit: cover;
 }
 
@@ -355,6 +511,7 @@ section[aria-label="Frequently Asked Questions"] {
   text-align: center;
   margin: 3em 0;
 }
+
 .toggle-past button {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.85rem;
@@ -368,68 +525,16 @@ section[aria-label="Frequently Asked Questions"] {
   border-radius: 0;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
+
 .toggle-past button:hover {
   background-color: var(--accent-hover);
   color: var(--bg);
   border-color: var(--accent-hover);
 }
 
-
 /* ============================
-   Responsive
+   CTA Button
 ============================ */
-@media (max-width: 800px) {
-  h1 { font-size: 2.2rem; }
-  h2 { font-size: 1.8rem; }
-  h3 { font-size: 1.4rem; }
-
-  nav a {
-    margin: 0 12px;
-  }
-
-  .service-section {
-    flex-direction: column;
-  }
-
-  .service-section img {
-    width: 100%;
-  }
-}
-
-/* ============================
-   Ordered List Spacing
-============================ */
-#my-olist li {
-  margin-bottom: 1em;
-}
-
-@media (max-width: 768px) {
-  #my-olist {
-    padding-left: 1.5rem;
-  }
-
-  #my-olist li {
-    margin-bottom: 1.2em;
-  }
-}
-
-
-
-/* ============================
-   Blog images
-============================ */
-.blog-img {
-  width: 100%;
-  max-width: 700px;
-  height: auto;
-  display: block;
-  margin: 1.5em auto;
-}
-
-/* ============================
-   Link button to book consult
-============================ */
-
 .cta-btn {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.85rem;
@@ -445,10 +550,116 @@ section[aria-label="Frequently Asked Questions"] {
   border-radius: 0;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
+
 .cta-btn:hover {
   background-color: var(--accent-hover);
   color: var(--bg);
   border-color: var(--accent-hover);
 }
 
-  
+/* ============================
+   Blog Images
+============================ */
+.blog-img {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  display: block;
+  margin: 1.5em auto;
+}
+
+/* ============================
+   Ordered List Spacing
+============================ */
+#my-olist li {
+  margin-bottom: 1em;
+}
+
+/* ============================
+   Responsive
+============================ */
+@media (max-width: 800px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.8rem; }
+  h3 { font-size: 1.4rem; }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .main-nav {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--text);
+    padding: 0.75em 1em 1em;
+  }
+
+  .main-nav.is-open {
+    display: flex;
+  }
+
+  .main-nav > a,
+  .nav-dropdown-toggle {
+    font-size: 1rem;
+    padding: 0.6em 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(32, 38, 157, 0.12);
+  }
+
+  /* Dropdown becomes inline accordion on mobile */
+  .nav-dropdown {
+    width: 100%;
+  }
+
+  .nav-dropdown-toggle {
+    justify-content: space-between;
+  }
+
+  .nav-dropdown-menu {
+    position: static;
+    border: none;
+    border-left: 2px solid var(--text);
+    padding: 0.25em 0 0.25em 1em;
+    margin: 0.25em 0 0.5em;
+    min-width: unset;
+    width: 100%;
+  }
+
+  .nav-dropdown-menu li a {
+    padding: 0.45em 0;
+    font-size: 0.92rem;
+  }
+
+  .nav-dropdown-menu li a:hover {
+    background-color: transparent;
+    color: var(--accent-hover);
+  }
+
+  .main-nav .nav-cta {
+    margin: 0.75em 0 0;
+    align-self: flex-start;
+  }
+
+  .service-section {
+    flex-direction: column;
+  }
+
+  .service-section img {
+    width: 100%;
+  }
+
+  #my-olist {
+    padding-left: 1.5rem;
+  }
+
+  #my-olist li {
+    margin-bottom: 1.2em;
+  }
+}
