@@ -198,8 +198,11 @@ main {
 
 .nav-toggle span {
   display: block;
+  width: 100%;
   height: 2px;
-  background-color: var(--text);
+  background-color: #20269D; /* explicit colour — var(--text) can fail in some mobile contexts */
+  border-radius: 0;
+  flex-shrink: 0;
   transition: transform 0.25s ease, opacity 0.25s ease;
   transform-origin: center;
 }
@@ -663,9 +666,10 @@ section[aria-label="Frequently Asked Questions"] {
     text-align: center;
   }
 
-  /* Ensure hamburger lines are visible */
+  /* Hamburger lines — explicit colour for mobile rendering */
   .nav-toggle span {
-    background-color: var(--text) !important;
+    background-color: #20269D;
+    width: 100%;
   }
 
   .service-section {
