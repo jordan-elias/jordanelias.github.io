@@ -560,11 +560,13 @@ section[aria-label="Frequently Asked Questions"] {
   border-color: var(--accent-hover);
 }
 
-   /* Centered CTA */
-    .cta-wrap {
-      text-align: center;
-      margin: 2em 0 1em;
-    }
+/* ============================
+   CTA Wrap
+============================ */
+.cta-wrap {
+  text-align: center;
+  margin: 2em 0;
+}
 
 /* ============================
    Blog Images
@@ -664,12 +666,15 @@ section[aria-label="Frequently Asked Questions"] {
     color: var(--accent-hover);
   }
 
-  /* Book a call: full width, contained */
+  /* Book a call: plain list item on mobile, no box */
   .main-nav .nav-cta {
-    margin: 0.75em 0 0;
+    margin: 0;
     width: 100%;
     box-sizing: border-box;
-    text-align: center;
+    text-align: left;
+    border: none;
+    padding: 0.6em 0;
+    border-bottom: 1px solid var(--text);
   }
 
   /* Hamburger lines — explicit colour for mobile rendering */
