@@ -557,6 +557,14 @@ section[aria-label="Frequently Asked Questions"] {
   border-color: var(--accent-hover);
 }
 
+ /* Centered CTA */
+    .cta-wrap {
+      text-align: center;
+      margin: 2em 0 1em;
+    }
+
+
+
 /* ============================
    Blog Images
 ============================ */
