@@ -148,14 +148,14 @@ main {
 .nav-dropdown-menu {
   display: none;
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%; /* flush with trigger — no gap */
   left: 0;
   min-width: 210px;
   background-color: var(--bg);
   border: 1px solid var(--text);
   list-style: none;
   margin: 0;
-  padding: 0.5em 0;
+  padding: 0.75em 0 0.5em; /* extra top padding bridges any sub-pixel gap */
   z-index: 101;
 }
 
@@ -557,14 +557,6 @@ section[aria-label="Frequently Asked Questions"] {
   border-color: var(--accent-hover);
 }
 
- /* Centered CTA */
-    .cta-wrap {
-      text-align: center;
-      margin: 2em 0 1em;
-    }
-
-
-
 /* ============================
    Blog Images
 ============================ */
@@ -618,7 +610,8 @@ section[aria-label="Frequently Asked Questions"] {
     font-size: 1rem;
     padding: 0.6em 0;
     width: 100%;
-    border-bottom: 1px solid rgba(32, 38, 157, 0.12);
+    border-bottom: 1px solid var(--text);
+    opacity: 1;
   }
 
   /* Dropdown becomes inline accordion on mobile */
@@ -630,7 +623,10 @@ section[aria-label="Frequently Asked Questions"] {
     justify-content: space-between;
   }
 
+  /* On mobile, dropdown menu is hidden by default via CSS,
+     toggled by .is-open class added by JS */
   .nav-dropdown-menu {
+    display: none;
     position: static;
     border: none;
     border-left: 2px solid var(--text);
@@ -638,6 +634,15 @@ section[aria-label="Frequently Asked Questions"] {
     margin: 0.25em 0 0.5em;
     min-width: unset;
     width: 100%;
+  }
+
+  /* Override desktop hover rule on mobile — only .is-open controls visibility */
+  .nav-dropdown:hover .nav-dropdown-menu {
+    display: none;
+  }
+
+  .nav-dropdown.is-open .nav-dropdown-menu {
+    display: block;
   }
 
   .nav-dropdown-menu li a {
@@ -650,9 +655,17 @@ section[aria-label="Frequently Asked Questions"] {
     color: var(--accent-hover);
   }
 
+  /* Book a call: full width, contained */
   .main-nav .nav-cta {
     margin: 0.75em 0 0;
-    align-self: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  /* Ensure hamburger lines are visible */
+  .nav-toggle span {
+    background-color: var(--text) !important;
   }
 
   .service-section {
