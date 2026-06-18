@@ -1,0 +1,1409 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="b465c3e2-0fb1-4c36-b5db-6eaf0fe05cb7"></script>
+
+  <title>Knitting machines as musical instruments: punch card scores</title>
+  <meta name="description" content="An interactive punch card editor for knitting machines that doubles as a musical score: draw holes, hear the pattern as sound, and print a card your machine can actually read.">
+  <meta name="author" content="Jordan Elias">
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <link rel="canonical" href="https://jordanelias.de/blog/punch-card-music/">
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jordan Elias Music Therapy">
+  <meta property="og:locale" content="en_DE">
+  <meta property="og:url" content="https://jordanelias.de/blog/punch-card-music/">
+  <meta property="og:title" content="Knitting machines as musical instruments: punch card scores">
+  <meta property="og:description" content="An interactive punch card editor for knitting machines that doubles as a musical score: draw holes, hear the pattern as sound, and print a card your machine can actually read.">
+  <meta property="og:image" content="https://jordanelias.de/images/hero.jpg">
+  <meta property="og:image:alt" content="Jordan Elias, music therapist">
+  <meta property="article:published_time" content="2026-06-18">
+  <meta property="article:author" content="https://jordanelias.de/about/">
+  <meta property="article:section" content="Music Therapy">
+  <meta property="article:tag" content="Textile arts">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Knitting machines as musical instruments: punch card scores">
+  <meta name="twitter:description" content="Draw holes, hear the pattern as sound, print a card your machine can actually read.">
+  <meta name="twitter:image" content="https://jordanelias.de/images/hero.jpg">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+    /* ── Shared lab primitives (matches generative-music.html) ── */
+    .lab-section {
+      border: 1px solid var(--text);
+      padding: 1.5em;
+      margin: 0 0 2em;
+    }
+
+    .lab-section > h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin: 0 0 1.5em;
+    }
+
+    .gen-module { margin-bottom: 1.75em; }
+
+    .gen-module-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin: 0 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--text);
+    }
+
+    .gen-separator {
+      border: none;
+      border-top: 1px solid var(--text);
+      margin: 1.75em 0;
+      opacity: 0.3;
+    }
+
+    /* Buttons */
+    .lab-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background-color: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 0.5em 1.2em;
+      cursor: pointer;
+      white-space: nowrap;
+      min-width: 90px;
+      text-align: center;
+      display: inline-block;
+      border-radius: 0;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .lab-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .lab-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+    .lab-preset-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 12px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .lab-preset-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .lab-preset-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .lab-preset-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+
+    /* Rows */
+    .gen-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1em;
+      flex-wrap: wrap;
+    }
+
+    .gen-row-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      margin-right: 4px;
+      white-space: nowrap;
+    }
+
+    /* Selects */
+    .gen-select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 8px;
+      border-radius: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    /* Sliders */
+    .lab-transport-sliders {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      margin-bottom: 1.25em;
+    }
+    .lab-ctrl { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .lab-ctrl input[type=range] {
+      width: 100%; -webkit-appearance: none; appearance: none;
+      height: 2px; background: var(--text); outline: none; cursor: pointer; opacity: 0.5;
+    }
+    .lab-ctrl input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--text); cursor: pointer;
+    }
+    .lab-ctrl input[type=range]::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
+    }
+    .lab-ctrl-bottom { display: flex; justify-content: space-between; align-items: baseline; }
+    .lab-ctrl-label {
+      font-family: 'Inter', sans-serif; font-size: 0.68rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text); opacity: 0.5;
+    }
+    .lab-ctrl-val { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text); opacity: 0.7; }
+
+    .lab-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      opacity: 0.5;
+      margin-top: 1em;
+      text-align: center;
+    }
+
+    /* Download row */
+    .download-row {
+      border-top: 1px solid var(--text);
+      padding-top: 1em;
+      margin-top: 0.5em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .download-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: var(--text);
+      opacity: 0.4;
+    }
+
+    /* ── Punch card grid ── */
+    .pc-status-bar {
+      border: 1px solid var(--text);
+      padding: 0.6em 1em;
+      margin-bottom: 1em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5em;
+    }
+    .pc-status-left { display: flex; gap: 1.5em; align-items: baseline; }
+    .pc-status-val {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .pc-status-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+    }
+    .pc-playhead-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      color: var(--text);
+      opacity: 0.5;
+      font-style: italic;
+    }
+
+    /* Grid wrapper scrolls horizontally on small screens */
+    .pc-grid-wrap {
+      overflow-x: auto;
+      margin-bottom: 1em;
+      position: relative;
+    }
+
+    .pc-grid-container {
+      display: inline-block;
+      position: relative;
+    }
+
+    /* Column numbers above the grid */
+    .pc-col-numbers {
+      display: flex;
+      margin-bottom: 3px;
+      padding-left: 28px; /* aligns with grid (row-label width) */
+    }
+    .pc-col-num {
+      font-family: 'Courier New', monospace;
+      font-size: 0.58rem;
+      color: var(--text);
+      opacity: 0.35;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .pc-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      user-select: none;
+    }
+
+    .pc-row {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .pc-row-label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.6rem;
+      color: var(--text);
+      opacity: 0.35;
+      width: 24px;
+      text-align: right;
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+
+    .pc-cell {
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--text);
+      opacity: 0.35;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.06s ease, background-color 0.06s ease;
+      box-sizing: border-box;
+      border-radius: 50%;
+      position: relative;
+    }
+    .pc-cell:hover { opacity: 0.6; }
+    .pc-cell.punched {
+      background-color: var(--text);
+      opacity: 1;
+    }
+    /* Playhead highlight */
+    .pc-cell.playing-col {
+      outline: 2px solid var(--accent-hover, #888);
+      outline-offset: 1px;
+      opacity: 0.5;
+    }
+    .pc-cell.punched.playing-col {
+      outline: 2px solid var(--accent-hover, #888);
+      outline-offset: 1px;
+      opacity: 1;
+    }
+
+    /* Article */
+    .lab-exercise { border-left: 3px solid var(--text); padding: 1em 1.25em; margin: 1.5em 0; }
+    .lab-exercise h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 0.5em; }
+    .lab-exercise p { margin-bottom: 0.6em; }
+    .lab-exercise p:last-child { margin-bottom: 0; }
+
+    blockquote { border-left: 3px solid var(--text); margin: 1.5em 0; padding: 0.75em 1.25em; opacity: 0.75; }
+    blockquote p { margin-bottom: 0.4em; }
+    blockquote p:last-child { margin-bottom: 0; }
+    blockquote cite { font-family: 'Inter', sans-serif; font-size: 0.8rem; font-style: normal; opacity: 0.6; }
+
+    .cta-wrap { text-align: center; margin: 2em 0 1em; }
+    .cta-btn {
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 500;
+      display: inline-block; background-color: transparent; color: var(--text);
+      border: 2px solid var(--text); padding: 0.6em 1.6em; border-radius: 0;
+      text-decoration: none; transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .cta-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); text-decoration: none; }
+
+    /* Print styles — outputs the punch card as a printable template */
+    @media print {
+      body > *:not(#pc-print-target) { display: none !important; }
+      #pc-print-target {
+        display: block !important;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        padding: 12mm;
+        box-sizing: border-box;
+      }
+    }
+    #pc-print-target { display: none; }
+
+    @media (max-width: 600px) {
+      .lab-transport-sliders { flex-direction: column; gap: 16px; }
+      .pc-cell { width: 15px; height: 15px; }
+      .pc-col-num { width: 15px; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Board-Certified Music Therapist",
+        "url": "https://jordanelias.de/",
+        "image": "https://jordanelias.de/images/headshot.jpg",
+        "email": "jordanelias@proton.me",
+        "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+        "worksFor": { "@id": "https://jordanelias.de/#service" },
+        "alumniOf": [
+          { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+          { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+        ],
+        "hasCredential": {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Board Certified Music Therapist (MT-BC)",
+          "credentialCategory": "Professional Certification",
+          "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
+        },
+        "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+        "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://jordanelias.de/#service",
+        "name": "Jordan Elias Music Therapy",
+        "url": "https://jordanelias.de/",
+        "founder": { "@id": "https://jordanelias.de/#person" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://jordanelias.de/blog/punch-card-music/#post",
+        "headline": "Knitting machines as musical instruments: punch card scores",
+        "description": "An interactive punch card editor for knitting machines that doubles as a musical score: draw holes, hear the pattern as sound, and print a card your machine can actually read.",
+        "url": "https://jordanelias.de/blog/punch-card-music/",
+        "datePublished": "2026-06-18",
+        "dateModified": "2026-06-18",
+        "inLanguage": "en",
+        "author": { "@id": "https://jordanelias.de/#person" },
+        "publisher": { "@id": "https://jordanelias.de/#service" },
+        "image": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+        "isPartOf": { "@type": "Blog", "@id": "https://jordanelias.de/blog/#blog" },
+        "mainEntityOfPage": { "@id": "https://jordanelias.de/blog/punch-card-music/#webpage" },
+        "about": [
+          { "@type": "Thing", "name": "Knitting machine", "sameAs": "https://en.wikipedia.org/wiki/Knitting_machine" },
+          { "@type": "Thing", "name": "Textile arts", "sameAs": "https://en.wikipedia.org/wiki/Textile_arts" },
+          { "@type": "Thing", "name": "Music therapy", "sameAs": "https://en.wikipedia.org/wiki/Music_therapy" }
+        ],
+        "keywords": "knitting machine, punch card, music therapy, textile arts, WebAudio, generative music, knitting pattern, score"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://jordanelias.de/blog/punch-card-music/#webpage",
+        "url": "https://jordanelias.de/blog/punch-card-music/",
+        "name": "Knitting machines as musical instruments: punch card scores | Jordan Elias",
+        "description": "An interactive punch card editor for knitting machines that doubles as a musical score.",
+        "author": { "@id": "https://jordanelias.de/#person" },
+        "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+        "isPartOf": { "@type": "WebSite", "@id": "https://jordanelias.de/#website" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://jordanelias.de/blog/punch-card-music/#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" },
+          { "@type": "ListItem", "position": 3, "name": "Punch card music", "item": "https://jordanelias.de/blog/punch-card-music/" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+{% include header.html %}
+
+<main>
+
+  <h1>Punch Card Scores</h1>
+
+  <div class="lab-section">
+
+    <!-- ── GRID EDITOR MODULE ── -->
+    <div class="gen-module">
+      <p class="gen-module-label">punch card editor</p>
+
+      <div class="pc-status-bar">
+        <div class="pc-status-left">
+          <div>
+            <div class="pc-status-val" id="pc-holes-count">0 holes</div>
+            <div class="pc-status-label">punched</div>
+          </div>
+          <div>
+            <div class="pc-status-val" id="pc-dim-display">24 × 16</div>
+            <div class="pc-status-label">columns × rows</div>
+          </div>
+          <div>
+            <div class="pc-status-val" id="pc-playhead-display">col —</div>
+            <div class="pc-status-label">playhead</div>
+          </div>
+        </div>
+        <div class="pc-playhead-label" id="pc-playing-note-label">ready</div>
+      </div>
+
+      <!-- Pattern presets -->
+      <div class="gen-row">
+        <span class="gen-row-label">preset →</span>
+        <button class="lab-preset-btn" id="preset-blank">blank</button>
+        <button class="lab-preset-btn" id="preset-diamonds">diamonds</button>
+        <button class="lab-preset-btn" id="preset-stripes">stripes</button>
+        <button class="lab-preset-btn" id="preset-checkers">checkers</button>
+        <button class="lab-preset-btn" id="preset-wave">wave</button>
+        <button class="lab-preset-btn" id="preset-random">random</button>
+      </div>
+
+      <!-- Symmetry tools -->
+      <div class="gen-row">
+        <span class="gen-row-label">symmetry →</span>
+        <button class="lab-preset-btn" id="sym-none on" data-sym="none">none</button>
+        <button class="lab-preset-btn" data-sym="horizontal">horizontal</button>
+        <button class="lab-preset-btn" data-sym="vertical">vertical</button>
+        <button class="lab-preset-btn" data-sym="both">both</button>
+      </div>
+
+      <!-- Row count -->
+      <div class="gen-row">
+        <span class="gen-row-label">rows →</span>
+        <button class="lab-preset-btn" data-rows="8">8</button>
+        <button class="lab-preset-btn on" data-rows="16">16</button>
+        <button class="lab-preset-btn" data-rows="24">24</button>
+        <button class="lab-preset-btn" data-rows="32">32</button>
+        <button class="lab-preset-btn" data-rows="40">40</button>
+        <button class="lab-preset-btn" data-rows="60">60</button>
+      </div>
+
+      <!-- The grid -->
+      <div class="pc-grid-wrap">
+        <div class="pc-grid-container">
+          <div class="pc-col-numbers" id="pc-col-numbers"></div>
+          <div class="pc-grid" id="pc-grid"></div>
+        </div>
+      </div>
+
+      <p class="lab-hint">click or drag to punch holes · columns play left to right like a player piano</p>
+    </div>
+
+    <hr class="gen-separator">
+
+    <!-- ── PLAYBACK MODULE ── -->
+    <div class="gen-module">
+      <p class="gen-module-label">play as music</p>
+
+      <!-- Scale and voice -->
+      <div class="gen-row">
+        <span class="gen-row-label">scale →</span>
+        <button class="lab-preset-btn on" data-scale="pentatonic-major">pentatonic</button>
+        <button class="lab-preset-btn" data-scale="major">major</button>
+        <button class="lab-preset-btn" data-scale="minor">minor</button>
+        <button class="lab-preset-btn" data-scale="chromatic">chromatic</button>
+        <button class="lab-preset-btn" data-scale="blues">blues</button>
+      </div>
+
+      <div class="gen-row">
+        <span class="gen-row-label">voice →</span>
+        <button class="lab-preset-btn on" data-timbre="marimba">marimba</button>
+        <button class="lab-preset-btn" data-timbre="pluck">pluck</button>
+        <button class="lab-preset-btn" data-timbre="sine">sine</button>
+        <button class="lab-preset-btn" data-timbre="bell">bell</button>
+      </div>
+
+      <!-- Root note -->
+      <div class="gen-row">
+        <span class="gen-row-label">root →</span>
+        <select class="gen-select" id="pc-root">
+          <option value="C4">C4</option>
+          <option value="D4">D4</option>
+          <option value="E4">E4</option>
+          <option value="F4">F4</option>
+          <option value="G4" selected>G4</option>
+          <option value="A4">A4</option>
+          <option value="B4">B4</option>
+          <option value="C5">C5</option>
+        </select>
+      </div>
+
+      <!-- Tempo and volume sliders -->
+      <div class="lab-transport-sliders">
+        <div class="lab-ctrl">
+          <input type="range" id="pc-tempo" min="40" max="240" value="90" step="1">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">tempo</span>
+            <span class="lab-ctrl-val" id="pc-tempo-val">90 bpm</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="pc-volume" min="0" max="1" value="0.7" step="0.01">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">volume</span>
+            <span class="lab-ctrl-val" id="pc-volume-val">70%</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="pc-reverb" min="0" max="1" value="0.3" step="0.01">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">reverb</span>
+            <span class="lab-ctrl-val" id="pc-reverb-val">30%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transport -->
+      <div class="gen-row">
+        <button class="lab-btn" id="pc-play" style="min-width:80px">&#9654;&#xFE0E; play</button>
+        <button class="lab-btn" id="pc-loop">loop</button>
+        <button class="lab-btn" id="pc-stop" disabled>&#9632;&#xFE0E; stop</button>
+      </div>
+
+      <p class="lab-hint">each column is a beat · each row maps to a pitch in the chosen scale</p>
+    </div>
+
+    <hr class="gen-separator">
+
+    <!-- ── EXPORT MODULE ── -->
+    <div class="gen-module">
+      <p class="gen-module-label">export</p>
+
+      <div class="gen-row">
+        <span class="gen-row-label">format →</span>
+        <button class="lab-preset-btn on" id="export-print">print-ready card</button>
+        <button class="lab-preset-btn" id="export-svg">svg file</button>
+        <button class="lab-preset-btn" id="export-png">png image</button>
+      </div>
+
+      <!-- Print options -->
+      <div class="gen-row" id="print-options-row">
+        <span class="gen-row-label">hole size →</span>
+        <button class="lab-preset-btn on" data-holesize="standard">standard (4 mm)</button>
+        <button class="lab-preset-btn" data-holesize="large">large (5 mm)</button>
+      </div>
+
+      <div class="download-row">
+        <span class="gen-row-label">export →</span>
+        <button class="lab-btn" id="pc-export-btn">print / save</button>
+        <span class="download-note" id="pc-export-note">outputs a 1:1 scale card sized for Brother / Silver Reed 24-stitch machines</span>
+      </div>
+
+      <p class="lab-hint">print at 100% scale (no fit-to-page) · hole centres are spaced 5 mm apart</p>
+    </div>
+
+  </div>
+
+  <p>Mobile users — you might not hear anything if your phone is on silent.</p>
+
+  <article>
+
+    <section>
+      <h2>Knitting machines as musical instruments</h2>
+      <p class="post-meta"><time datetime="2026-06-18">June 18, 2026</time></p>
+      <p>Written by Jordan Elias, MT-BC</p>
+      <p class="post-intro">A knitting machine punch card is a binary grid. Each hole is either punched or not. Each column is read in sequence. The machine uses this information to decide which needles to select and in which order, producing a pattern in the fabric. A MIDI file is also a binary grid. Each event is either on or off. Each column is a moment in time. A sequencer uses this to decide which notes to play and in which order, producing a pattern in sound. The structural identity between these two systems is not a coincidence. Both are forms of notation. Both encode instructions for a process that unfolds through time. This tool lets you edit one and hear the other.</p>
+    </section>
+
+    <section>
+      <h2>What is a punch card?</h2>
+
+      <p>Domestic knitting machines — most famously those made by Brother, Silver Reed, and Toyota from the 1960s onwards — use a mechanism called a patterning carriage that reads a card as it passes through. The card is a strip of stiff paper or mylar with holes punched at specific positions across a fixed width, typically 24 stitches for standard-gauge machines. As the carriage moves across the needle bed, a row of pins reads the card: a hole allows the pin to drop, selecting the needle for pattern colour or stitch variation; a solid position holds the pin up, leaving the needle in its default position.</p>
+
+      <p>The 24-column constraint is not arbitrary. It derives from the physical width of the needle bed and the requirement that patterns repeat evenly across it. Because most knitting machine needle beds are multiples of 24, a 24-stitch card tiles perfectly across the full width. This constraint produces a characteristic visual grammar: patterns tend toward geometric forms, symmetrical repeats, and regular intervals. The limitation is generative in the same way a sonnet's 14-line constraint is generative — it does not restrict what can be said, it shapes the vocabulary in which it gets said.</p>
+
+      <p>Each row of the card advances when the carriage completes one pass across the fabric. Rows on a punch card correspond to rows of knitting, accumulating downward into the finished fabric. A pattern that takes 16 rows to complete will repeat throughout the length of the garment each time the card cycles.</p>
+    </section>
+
+    <section>
+      <h2>The grid as score</h2>
+
+      <p>Musical notation, like punch cards, is a system for encoding instructions that will be read sequentially by a performer or machine. Western staff notation encodes pitch on the vertical axis (position on the staff) and time on the horizontal axis (position in the measure). Piano roll notation, which became the visual language of MIDI sequencers and digital audio workstations, uses exactly the same convention: vertical position indicates pitch, horizontal position indicates when a note occurs.</p>
+
+      <p>A punch card read as a piano roll assigns pitch to each row and time to each column. A hole in row 1, column 3 means: on the third beat, play the pitch assigned to row 1. Rows near the top of the card produce higher pitches; rows near the bottom produce lower ones. The overall distribution of holes across the card — how dense, how sparse, how clustered — translates into the rhythmic and harmonic texture of the music.</p>
+
+      <p>This mapping produces results that are genuinely surprising. Patterns designed for their visual properties in fabric — diamonds, chevrons, geometric allover prints — often produce unexpectedly coherent musical phrases. Conversely, starting from musical ideas and working backwards to their punch card representation can generate knitting patterns unlike anything you would design directly. The translation is lossless in the sense that no information is discarded; it is creative in the sense that meaning is radically transformed.</p>
+    </section>
+
+    <section>
+      <h2>How the tool works</h2>
+
+      <p>The grid editor above shows a 24-column, 16-row punch card. Clicking a cell toggles it between punched (filled) and unpunched (empty). Dragging across the grid allows you to draw or erase multiple holes in a single gesture. The pattern presets generate starting configurations: diamonds and chevrons produce the symmetric repeats typical of traditional machine knitting; random generates a distribution that tends toward atonal clusters; stripes and checkers produce repetitive rhythmic patterns when played back.</p>
+
+      <p>The symmetry tools mirror whatever you draw in real time. Horizontal symmetry reflects across the vertical centre axis of the card, producing patterns that look the same from left to right — useful for allover patterns. Vertical symmetry reflects across the horizontal centre, producing patterns that reverse as they travel down the fabric. Both axes active produces four-way symmetry, which corresponds to the most classically geometric punch card patterns.</p>
+
+      <p>During playback, the card is read left to right like a player piano. Each column represents one beat at the chosen tempo. The 24 rows map to 24 pitches in the chosen scale, ascending from bottom to top. All holes in a column that is currently being read trigger simultaneously, so a column with many holes produces a chord, a column with one hole produces a single note, and a column with no holes produces silence. The playhead position is indicated on the grid in real time.</p>
+
+      <p>The export function produces a print-ready version of the card at 1:1 scale, with holes spaced 5 mm centre-to-centre to match the standard Brother and Silver Reed pin spacing. Print at 100% scale with no fit-to-page scaling, cut along the border, and the card is ready to use with a compatible machine.</p>
+    </section>
+
+    <section>
+      <h2>Pattern, time, and attention</h2>
+
+      <p>There is something worth attending to in what happens when you listen to a punch card played back. The 24-column repeat means the musical phrase is short — at 90 BPM it lasts about 16 seconds before cycling. But within that cycle, small changes in the distribution of holes produce large changes in the texture of the music. A single hole moved one row changes the chord voiced on that beat. A single hole moved one column changes the rhythm of a melodic line.</p>
+
+      <p>This sensitivity to small changes is a property of complex systems generally, and it is one reason both musical and textile notation are interesting to study. The instructions are simple and discrete; the outputs are complex and continuous. A punch card that looks sparse on paper can produce surprisingly dense harmonic material when played. One that looks visually complex can produce something rhythmically very sparse if the holes cluster on one axis.</p>
+
+      <p>The knitting group context adds another dimension. When several people are working from the same card — or from cards that encode the same musical phrase — they produce different fabric depending on yarn, tension, and gauge, just as different musicians playing from the same score produce different performances. The score is shared; the interpretation is individual. This balance between constraint and freedom is something both improvising musicians and hand knitters navigate constantly.</p>
+    </section>
+
+    <section>
+      <h2>Practical notes for the workshop</h2>
+
+      <p>For a workshop context, the most generative starting point is usually a pattern designed for its visual properties, played back before participants have seen the grid. The question of what something sounds like before you see where the holes are, and then whether you would have guessed from looking at the grid, tends to produce good conversation about the relationship between visual and sonic pattern, and about what we mean when we say a pattern is complex or simple.</p>
+
+      <p>A few patterns that work particularly well as both fabric and music: diamonds (produces a clear melodic arch that rises and falls symmetrically), checkers (produces an alternating two-note rhythm that recalls minimalist tape music), and the wave preset (produces a stepwise melodic line that moves slowly up and down the scale). The random preset is worth using to demonstrate how atonal distributions produce music that is neither rhythmically nor melodically predictable, even when the fabric it would produce has a perfectly even density.</p>
+
+      <p>For participants who want to design from the musical side: starting from a simple folk melody or a memorable phrase from a song, transcribing its rhythm and approximate pitch contour into holes on the grid, and then knitting the resulting card, produces a garment that is literally a song made into fabric. The challenge is mapping the melody's pitch range onto the 24 available rows, which requires some compromise — a useful constraint that focuses attention on which aspects of the melodic line are essential.</p>
+    </section>
+
+    <section>
+      <h2>Experiments</h2>
+
+      <div class="lab-exercise">
+        <h3>Sound before sight</h3>
+        <p>Load a preset without looking at the grid. Play the pattern on loop for a minute with eyes closed. Form an impression of its musical character — dense or sparse, rhythmically even or syncopated, high or low in register. Then open your eyes and look at where the holes are. Does the visual distribution of the holes match your impression? Can you see the musical character in the card now?</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>One change at a time</h3>
+        <p>Start with the diamonds preset and enable loop. While it plays, click a single hole to add or remove it. Listen to what changes. Then click it again to restore the original. Try this with holes in different positions — a hole in the centre of the card, a hole on the edge, a hole that completes a chord versus one that creates a dissonance. The aim is to develop a feel for how grid position translates into sonic consequence.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>Write a melody into fabric</h3>
+        <p>Think of a short melody — four to eight notes — that you know well. It could be a folk tune, a childhood song, a phrase you find yourself humming. Map each note to a row: the lowest note in the melody goes near the bottom of the grid, the highest near the top. Map each beat to a column. Punch the grid accordingly. Play it back. You now have a knitting pattern that encodes a melody. Export the card and consider what it would mean to wear music you know.</p>
+      </div>
+
+      <div class="lab-exercise">
+        <h3>Group score</h3>
+        <p>In a workshop setting: each participant designs a four-column section of the card and keeps it secret. The facilitator assembles them in sequence to produce a 24-column card. Play the result before anyone has seen the complete grid. The music is a composition made by the group without any single person knowing the whole. Then reveal the assembled card. Discussion: which section did you recognise as yours? Did anyone's section change meaning when you heard it in the context of others?</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>If this resonates</h2>
+
+      <p>This post grew out of a workshop I've been developing with a Berlin knitting group, combining experimental music and textile arts. The ideas here connect to earlier posts about <a href="/blog/generative-music/">generative music systems</a>, <a href="/blog/indeterminacy-in-music-and-life/">indeterminate music</a>, and the therapeutic uses of pattern and repetition.</p>
+
+      <p>If you're interested in bringing this workshop to your group — knitting circles, craft communities, music therapy contexts, or experimental arts spaces — or in working with these ideas individually, feel free to reach out via the <a href="/contact/">contact page</a>.</p>
+
+      <p>I offer a free 30-minute consultation to explore whether working together might be a fit.</p>
+
+      <div class="cta-wrap">
+        <a href="https://cal.com/jordan-elias/intro" target="_blank" rel="noopener noreferrer" class="cta-btn">Book an intro call</a>
+      </div>
+
+      <p>Further reading:</p>
+      <ul>
+        <li><em>The Jacquard Loom and the Origins of Programming</em> — James Essinger</li>
+        <li><em>Pattern and Loom</em> — John Becker</li>
+        <li><em>How Music Works</em> — David Byrne</li>
+      </ul>
+    </section>
+
+  </article>
+
+</main>
+
+<!-- Hidden print target -->
+<div id="pc-print-target"></div>
+
+<footer>
+  <p>© 2025-2026 Jordan Elias</p>
+</footer>
+
+<script src="/js/header.js"></script>
+
+<script>
+/* ============================================================
+   punch-card-music.js  —  inline for self-contained delivery
+   ============================================================ */
+
+(function () {
+  'use strict';
+
+  // ── Constants ──────────────────────────────────────────────
+  const COLS = 24;
+  const HOLE_SPACING_MM = 5;   // centre-to-centre, Brother/Silver Reed spec
+
+  const SCALES = {
+    'pentatonic-major': [0, 2, 4, 7, 9],
+    'major':            [0, 2, 4, 5, 7, 9, 11],
+    'minor':            [0, 2, 3, 5, 7, 8, 10],
+    'chromatic':        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'blues':            [0, 3, 5, 6, 7, 10]
+  };
+
+  const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+  const ROOT_MIDI = {
+    'C4': 60, 'D4': 62, 'E4': 64, 'F4': 65,
+    'G4': 67, 'A4': 69, 'B4': 71, 'C5': 72
+  };
+
+  // ── State ───────────────────────────────────────────────────
+  let ROWS = 16;
+  let grid = [];           // grid[row][col] = bool
+  let currentScale = 'pentatonic-major';
+  let currentTimbre = 'marimba';
+  let currentSymmetry = 'none';
+  let currentHoleSize = 'standard';
+  let isPlaying = false;
+  let isLooping = false;
+  let playingCol = -1;
+  let playIntervalId = null;
+  let isMouseDown = false;
+  let drawMode = null;      // 'punch' | 'erase'
+
+  // ── AudioContext ────────────────────────────────────────────
+  let audioCtx = null;
+  let masterGain = null;
+  let reverbNode = null;
+  let reverbGain = null;
+  let dryGain = null;
+
+  function ensureAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = parseFloat(document.getElementById('pc-volume').value);
+
+    // Reverb via convolver (impulse response synthesised)
+    reverbNode = audioCtx.createConvolver();
+    buildImpulse(1.8);
+
+    reverbGain = audioCtx.createGain();
+    reverbGain.gain.value = parseFloat(document.getElementById('pc-reverb').value);
+
+    dryGain = audioCtx.createGain();
+    dryGain.gain.value = 1 - reverbGain.gain.value;
+
+    masterGain.connect(dryGain);
+    masterGain.connect(reverbNode);
+    reverbNode.connect(reverbGain);
+    dryGain.connect(audioCtx.destination);
+    reverbGain.connect(audioCtx.destination);
+  }
+
+  function buildImpulse(duration) {
+    if (!audioCtx) return;
+    const rate = audioCtx.sampleRate;
+    const len = Math.floor(rate * duration);
+    const buf = audioCtx.createBuffer(2, len, rate);
+    for (let ch = 0; ch < 2; ch++) {
+      const data = buf.getChannelData(ch);
+      for (let i = 0; i < len; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+      }
+    }
+    reverbNode.buffer = buf;
+  }
+
+  // ── Pitch helpers ───────────────────────────────────────────
+  function midiToFreq(midi) {
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+
+  function rowToMidi(row) {
+    // row 0 = bottom (lowest pitch), row ROWS-1 = top (highest)
+    const rootMidi = ROOT_MIDI[document.getElementById('pc-root').value] || 67;
+    const scale = SCALES[currentScale];
+    // Distribute ROWS pitches through scale, allowing octave wrapping
+    const scaleIdx = (ROWS - 1 - row);
+    const octave = Math.floor(scaleIdx / scale.length);
+    const degree = scaleIdx % scale.length;
+    return rootMidi + octave * 12 + scale[degree];
+  }
+
+  function midiToName(midi) {
+    const note = NOTE_NAMES[midi % 12];
+    const octave = Math.floor(midi / 12) - 1;
+    return note + octave;
+  }
+
+  // ── Sound synthesis ─────────────────────────────────────────
+  function playNote(midi) {
+    if (!audioCtx) return;
+    const freq = midiToFreq(midi);
+    const now = audioCtx.currentTime;
+
+    if (currentTimbre === 'sine') {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.5, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+      osc.connect(gain); gain.connect(masterGain);
+      osc.start(now); osc.stop(now + 0.8);
+
+    } else if (currentTimbre === 'pluck') {
+      // Karplus-Strong approximation
+      const bufSize = Math.round(audioCtx.sampleRate / freq);
+      const noiseBuf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+      const noiseData = noiseBuf.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) noiseData[i] = Math.random() * 2 - 1;
+      const src = audioCtx.createBufferSource();
+      src.buffer = noiseBuf;
+      src.loop = true;
+      const filt = audioCtx.createBiquadFilter();
+      filt.type = 'lowpass';
+      filt.frequency.value = freq * 1.5;
+      const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.6, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      src.connect(filt); filt.connect(gain); gain.connect(masterGain);
+      src.start(now); src.stop(now + 1.2);
+
+    } else if (currentTimbre === 'marimba') {
+      // Two partials: fundamental + octave (bright attack, fast decay)
+      [[1, 0.7, 0.25], [4.09, 0.3, 0.08]].forEach(([ratio, amp, decay]) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq * ratio;
+        gain.gain.setValueAtTime(amp, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + decay + 0.5);
+        osc.connect(gain); gain.connect(masterGain);
+        osc.start(now); osc.stop(now + decay + 0.5);
+      });
+
+    } else if (currentTimbre === 'bell') {
+      // Bell-like: inharmonic partials
+      [[1, 0.6, 2.5], [2.76, 0.25, 1.8], [5.4, 0.1, 1.0]].forEach(([ratio, amp, decay]) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq * ratio;
+        gain.gain.setValueAtTime(amp, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+        osc.connect(gain); gain.connect(masterGain);
+        osc.start(now); osc.stop(now + decay);
+      });
+    }
+  }
+
+  // ── Grid init ───────────────────────────────────────────────
+  function initGrid(rows) {
+    ROWS = rows;
+    grid = Array.from({ length: ROWS }, () => new Array(COLS).fill(false));
+    renderGrid();
+    updateStatusBar();
+  }
+
+  function renderGrid() {
+    const gridEl = document.getElementById('pc-grid');
+    const colNumsEl = document.getElementById('pc-col-numbers');
+    gridEl.innerHTML = '';
+    colNumsEl.innerHTML = '';
+
+    // Column numbers
+    colNumsEl.innerHTML = '<div style="width:28px;flex-shrink:0"></div>' +
+      Array.from({ length: COLS }, (_, c) =>
+        `<div class="pc-col-num">${c + 1}</div>`
+      ).join('');
+
+    for (let r = 0; r < ROWS; r++) {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'pc-row';
+
+      const labelEl = document.createElement('div');
+      labelEl.className = 'pc-row-label';
+      labelEl.textContent = ROWS - r;
+      rowEl.appendChild(labelEl);
+
+      for (let c = 0; c < COLS; c++) {
+        const cell = document.createElement('div');
+        cell.className = 'pc-cell' + (grid[r][c] ? ' punched' : '');
+        cell.dataset.row = r;
+        cell.dataset.col = c;
+
+        cell.addEventListener('mousedown', onCellMouseDown);
+        cell.addEventListener('mouseover', onCellMouseOver);
+        cell.addEventListener('touchstart', onCellTouch, { passive: false });
+        cell.addEventListener('touchmove', onCellTouchMove, { passive: false });
+
+        rowEl.appendChild(cell);
+      }
+      gridEl.appendChild(rowEl);
+    }
+  }
+
+  function getCellEl(r, c) {
+    return document.querySelector(`.pc-cell[data-row="${r}"][data-col="${c}"]`);
+  }
+
+  function setCell(r, c, val) {
+    grid[r][c] = val;
+    const el = getCellEl(r, c);
+    if (el) el.classList.toggle('punched', val);
+  }
+
+  function applySymmetry(r, c, val) {
+    const mirrorC = COLS - 1 - c;
+    const mirrorR = ROWS - 1 - r;
+    setCell(r, c, val);
+    if (currentSymmetry === 'horizontal' || currentSymmetry === 'both') setCell(r, mirrorC, val);
+    if (currentSymmetry === 'vertical' || currentSymmetry === 'both') setCell(mirrorR, c, val);
+    if (currentSymmetry === 'both') setCell(mirrorR, mirrorC, val);
+    updateStatusBar();
+  }
+
+  // ── Mouse / touch interaction ───────────────────────────────
+  document.addEventListener('mousedown', () => { isMouseDown = true; });
+  document.addEventListener('mouseup', () => { isMouseDown = false; drawMode = null; });
+
+  function onCellMouseDown(e) {
+    e.preventDefault();
+    const r = parseInt(this.dataset.row);
+    const c = parseInt(this.dataset.col);
+    drawMode = grid[r][c] ? 'erase' : 'punch';
+    applySymmetry(r, c, drawMode === 'punch');
+  }
+
+  function onCellMouseOver(e) {
+    if (!isMouseDown || drawMode === null) return;
+    const r = parseInt(this.dataset.row);
+    const c = parseInt(this.dataset.col);
+    applySymmetry(r, c, drawMode === 'punch');
+  }
+
+  function onCellTouch(e) {
+    e.preventDefault();
+    const touch = e.changedTouches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (el && el.classList.contains('pc-cell')) {
+      const r = parseInt(el.dataset.row);
+      const c = parseInt(el.dataset.col);
+      drawMode = grid[r][c] ? 'erase' : 'punch';
+      applySymmetry(r, c, drawMode === 'punch');
+    }
+  }
+
+  function onCellTouchMove(e) {
+    e.preventDefault();
+    const touch = e.changedTouches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (el && el.classList.contains('pc-cell') && drawMode !== null) {
+      const r = parseInt(el.dataset.row);
+      const c = parseInt(el.dataset.col);
+      applySymmetry(r, c, drawMode === 'punch');
+    }
+  }
+
+  // ── Status bar ──────────────────────────────────────────────
+  function updateStatusBar() {
+    let count = 0;
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (grid[r][c]) count++;
+    document.getElementById('pc-holes-count').textContent = count + (count === 1 ? ' hole' : ' holes');
+    document.getElementById('pc-dim-display').textContent = COLS + ' × ' + ROWS;
+  }
+
+  function updatePlayhead(col) {
+    // Clear old
+    document.querySelectorAll('.pc-cell.playing-col').forEach(el => el.classList.remove('playing-col'));
+    if (col < 0) {
+      document.getElementById('pc-playhead-display').textContent = 'col —';
+      document.getElementById('pc-playing-note-label').textContent = isPlaying ? '' : 'ready';
+      return;
+    }
+    document.getElementById('pc-playhead-display').textContent = 'col ' + (col + 1);
+    // Highlight column cells
+    for (let r = 0; r < ROWS; r++) {
+      const el = getCellEl(r, col);
+      if (el) el.classList.add('playing-col');
+    }
+    // Show notes being played
+    const notes = [];
+    for (let r = 0; r < ROWS; r++) {
+      if (grid[r][col]) notes.push(midiToName(rowToMidi(r)));
+    }
+    document.getElementById('pc-playing-note-label').textContent =
+      notes.length ? notes.join('  ') : '—';
+  }
+
+  // ── Playback ────────────────────────────────────────────────
+  function startPlayback() {
+    if (isPlaying) return;
+    ensureAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    isPlaying = true;
+    playingCol = 0;
+
+    const bpm = parseInt(document.getElementById('pc-tempo').value);
+    const msPerBeat = (60 / bpm) * 1000;
+
+    document.getElementById('pc-play').classList.add('on');
+    document.getElementById('pc-stop').disabled = false;
+    document.getElementById('pc-play').disabled = true;
+
+    function tick() {
+      updatePlayhead(playingCol);
+      // Trigger notes for this column
+      for (let r = 0; r < ROWS; r++) {
+        if (grid[r][playingCol]) playNote(rowToMidi(r));
+      }
+      playingCol++;
+      if (playingCol >= COLS) {
+        if (isLooping) {
+          playingCol = 0;
+        } else {
+          stopPlayback();
+          return;
+        }
+      }
+    }
+
+    tick(); // immediate first tick
+    playIntervalId = setInterval(tick, msPerBeat);
+  }
+
+  function stopPlayback() {
+    isPlaying = false;
+    if (playIntervalId) { clearInterval(playIntervalId); playIntervalId = null; }
+    playingCol = -1;
+    updatePlayhead(-1);
+    document.getElementById('pc-play').classList.remove('on');
+    document.getElementById('pc-play').disabled = false;
+    document.getElementById('pc-stop').disabled = true;
+  }
+
+  // ── Presets ─────────────────────────────────────────────────
+  const PRESETS = {
+    blank: () => Array.from({ length: ROWS }, () => new Array(COLS).fill(false)),
+
+    diamonds: () => {
+      const g = Array.from({ length: ROWS }, () => new Array(COLS).fill(false));
+      const cx = Math.floor(COLS / 2);
+      const cy = Math.floor(ROWS / 2);
+      const r = Math.min(cx, cy) - 1;
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+          const dx = Math.min(Math.abs(col - cx), Math.abs(col - cx - COLS), Math.abs(col - cx + COLS));
+          const dy = Math.abs(row - cy);
+          if (dx + dy === r || dx + dy === r - 2) g[row][col] = true;
+        }
+      }
+      return g;
+    },
+
+    stripes: () => Array.from({ length: ROWS }, (_, r) =>
+      Array.from({ length: COLS }, (_, c) => c % 4 === 0)
+    ),
+
+    checkers: () => Array.from({ length: ROWS }, (_, r) =>
+      Array.from({ length: COLS }, (_, c) => (r + c) % 2 === 0)
+    ),
+
+    wave: () => {
+      const g = Array.from({ length: ROWS }, () => new Array(COLS).fill(false));
+      for (let c = 0; c < COLS; c++) {
+        const rowF = (ROWS - 1) * (0.5 + 0.4 * Math.sin((c / COLS) * Math.PI * 2));
+        const row = Math.round(rowF);
+        if (row >= 0 && row < ROWS) g[row][c] = true;
+        if (row + 1 < ROWS) g[row + 1][c] = true;
+      }
+      return g;
+    },
+
+    random: () => Array.from({ length: ROWS }, () =>
+      Array.from({ length: COLS }, () => Math.random() < 0.3)
+    )
+  };
+
+  function applyPreset(name) {
+    grid = PRESETS[name]();
+    renderGrid();
+    updateStatusBar();
+  }
+
+  // ── Export / Print ──────────────────────────────────────────
+  function buildPunchCardSVG(forExport) {
+    const holeSizeMm = currentHoleSize === 'large' ? 5 : 4;
+    const spacingMm = HOLE_SPACING_MM;
+    const marginMm = 8;
+    const borderRadMm = 2;
+
+    const totalW = (COLS - 1) * spacingMm + 2 * marginMm;
+    const totalH = (ROWS - 1) * spacingMm + 2 * marginMm;
+
+    // Convert to viewBox units (1 unit = 1mm at print)
+    const W = totalW;
+    const H = totalH;
+
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">`;
+    svg += `<style>
+      .card-bg { fill: #f5f0e0; stroke: #222; stroke-width: 0.4; }
+      .hole { fill: #222; }
+      .unpunched { fill: none; stroke: #999; stroke-width: 0.3; }
+      .col-label { font-family: monospace; font-size: 2px; fill: #999; text-anchor: middle; }
+      .row-label { font-family: monospace; font-size: 2px; fill: #999; text-anchor: end; }
+      .title-text { font-family: sans-serif; font-size: 2.5px; fill: #555; }
+      .col-stripe { fill: #e8e0c8; opacity: 0.5; }
+    </style>`;
+
+    // Card background
+    svg += `<rect class="card-bg" x="0.2" y="0.2" width="${W - 0.4}" height="${H - 0.4}" rx="${borderRadMm}"/>`;
+
+    // Column stripes (every 6 columns — standard visual aid on punch cards)
+    for (let c = 0; c < COLS; c += 12) {
+      const x = marginMm + c * spacingMm - spacingMm / 2;
+      const w = Math.min(6 * spacingMm, W - x - marginMm / 2);
+      svg += `<rect class="col-stripe" x="${x}" y="${marginMm / 2}" width="${w}" height="${H - marginMm}"/>`;
+    }
+
+    // Column numbers
+    for (let c = 0; c < COLS; c++) {
+      const x = marginMm + c * spacingMm;
+      svg += `<text class="col-label" x="${x}" y="${marginMm - 2}">${c + 1}</text>`;
+    }
+
+    // Row labels and holes
+    for (let r = 0; r < ROWS; r++) {
+      const y = marginMm + r * spacingMm;
+      svg += `<text class="row-label" x="${marginMm - 2}" y="${y + 0.7}">${ROWS - r}</text>`;
+
+      for (let c = 0; c < COLS; c++) {
+        const x = marginMm + c * spacingMm;
+        const radius = holeSizeMm / 2;
+        if (grid[r][c]) {
+          svg += `<circle class="hole" cx="${x}" cy="${y}" r="${radius}"/>`;
+        } else {
+          svg += `<circle class="unpunched" cx="${x}" cy="${y}" r="${radius - 0.3}"/>`;
+        }
+      }
+    }
+
+    // Footer info
+    svg += `<text class="title-text" x="${marginMm}" y="${H - 1.5}">
+      jordanelias.de · ${COLS}st × ${ROWS}r · ${currentScale} · hole spacing ${spacingMm}mm
+    </text>`;
+
+    svg += `</svg>`;
+    return svg;
+  }
+
+  function exportSVG() {
+    const svg = buildPunchCardSVG(true);
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'punch-card.svg';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportPNG() {
+    const svg = buildPunchCardSVG(true);
+    const SCALE = 8; // 8px per mm → ~200dpi
+    const spacingMm = HOLE_SPACING_MM;
+    const marginMm = 8;
+    const totalW = (COLS - 1) * spacingMm + 2 * marginMm;
+    const totalH = (ROWS - 1) * spacingMm + 2 * marginMm;
+    const W = totalW * SCALE;
+    const H = totalH * SCALE;
+
+    const img = new Image();
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, W, H);
+      URL.revokeObjectURL(url);
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = 'punch-card.png';
+      a.click();
+    };
+    img.src = url;
+  }
+
+  function exportPrint() {
+    const svg = buildPunchCardSVG(true);
+    const printWin = window.open('', '_blank');
+    printWin.document.write(`<!DOCTYPE html>
+<html><head><title>Punch Card — jordanelias.de</title>
+<style>
+  body { margin: 0; background: white; }
+  .print-wrap { padding: 10mm; }
+  .instructions {
+    font-family: sans-serif; font-size: 10px; color: #666;
+    margin-bottom: 4mm; line-height: 1.5;
+  }
+  svg { display: block; }
+  @media print {
+    @page { margin: 10mm; size: auto; }
+    body { margin: 0; }
+  }
+</style>
+</head><body>
+<div class="print-wrap">
+  <div class="instructions">
+    <strong>Printing instructions:</strong>
+    Set printer scaling to <strong>100%</strong> (do not fit to page).
+    Hole spacing: ${HOLE_SPACING_MM} mm centre-to-centre · Compatible with Brother / Silver Reed 24-stitch standard gauge machines.
+    Cut along the card border and tape into a loop if needed for your machine's card reader.
+  </div>
+  ${svg}
+</div>
+<script>window.onload = function() { window.print(); }<\/script>
+</body></html>`);
+    printWin.document.close();
+  }
+
+  // ── Button wiring ────────────────────────────────────────────
+  function wirePresetBtns(selector, attr, callback, stateObj) {
+    document.querySelectorAll(selector).forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll(selector).forEach(b => b.classList.remove('on'));
+        this.classList.add('on');
+        callback(this.dataset[attr]);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initGrid(16);
+
+    // ── Pattern presets
+    ['blank','diamonds','stripes','checkers','wave','random'].forEach(name => {
+      document.getElementById('preset-' + name).addEventListener('click', () => applyPreset(name));
+    });
+
+    // ── Symmetry
+    document.querySelectorAll('[data-sym]').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-sym]').forEach(b => b.classList.remove('on'));
+        this.classList.add('on');
+        currentSymmetry = this.dataset.sym;
+      });
+    });
+    // Default symmetry
+    document.querySelector('[data-sym="none"]').classList.add('on');
+
+    // ── Row count
+    document.querySelectorAll('[data-rows]').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-rows]').forEach(b => b.classList.remove('on'));
+        this.classList.add('on');
+        initGrid(parseInt(this.dataset.rows));
+      });
+    });
+
+    // ── Scale
+    document.querySelectorAll('[data-scale]').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-scale]').forEach(b => b.classList.remove('on'));
+        this.classList.add('on');
+        currentScale = this.dataset.scale;
+      });
+    });
+
+    // ── Timbre
+    document.querySelectorAll('[data-timbre]').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-timbre]').forEach(b => b.classList.remove('on'));
+        this.classList.add('on');
+        currentTimbre = this.dataset.timbre;
+      });
+    });
+
+    // ── Hole size
+    document.querySelectorAll('[data-holesize]').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-holesize]').forEach(b => b.classList.remove('on'));
+        this.classList.add('on');
+        currentHoleSize = this.dataset.holesize;
+      });
+    });
+
+    // ── Transport
+    document.getElementById('pc-play').addEventListener('click', startPlayback);
+    document.getElementById('pc-stop').addEventListener('click', stopPlayback);
+    document.getElementById('pc-loop').addEventListener('click', function () {
+      isLooping = !isLooping;
+      this.classList.toggle('on', isLooping);
+    });
+
+    // ── Sliders
+    document.getElementById('pc-tempo').addEventListener('input', function () {
+      document.getElementById('pc-tempo-val').textContent = this.value + ' bpm';
+      if (isPlaying) { stopPlayback(); startPlayback(); }
+    });
+    document.getElementById('pc-volume').addEventListener('input', function () {
+      document.getElementById('pc-volume-val').textContent = Math.round(this.value * 100) + '%';
+      if (masterGain) masterGain.gain.value = parseFloat(this.value);
+    });
+    document.getElementById('pc-reverb').addEventListener('input', function () {
+      document.getElementById('pc-reverb-val').textContent = Math.round(this.value * 100) + '%';
+      if (reverbGain) {
+        reverbGain.gain.value = parseFloat(this.value);
+        dryGain.gain.value = 1 - parseFloat(this.value);
+      }
+    });
+
+    // ── Export buttons
+    document.getElementById('export-print').addEventListener('click', function () {
+      document.querySelectorAll('#export-print, #export-svg, #export-png').forEach(b => b.classList.remove('on'));
+      this.classList.add('on');
+      document.getElementById('print-options-row').style.display = '';
+      document.getElementById('pc-export-note').textContent = 'outputs a 1:1 scale card sized for Brother / Silver Reed 24-stitch machines';
+    });
+    document.getElementById('export-svg').addEventListener('click', function () {
+      document.querySelectorAll('#export-print, #export-svg, #export-png').forEach(b => b.classList.remove('on'));
+      this.classList.add('on');
+      document.getElementById('print-options-row').style.display = 'none';
+      document.getElementById('pc-export-note').textContent = 'scalable vector file, opens in Illustrator, Inkscape, or browser';
+    });
+    document.getElementById('export-png').addEventListener('click', function () {
+      document.querySelectorAll('#export-print, #export-svg, #export-png').forEach(b => b.classList.remove('on'));
+      this.classList.add('on');
+      document.getElementById('print-options-row').style.display = 'none';
+      document.getElementById('pc-export-note').textContent = '200 dpi raster image, suitable for printing from any image viewer';
+    });
+
+    document.getElementById('pc-export-btn').addEventListener('click', function () {
+      const active = document.querySelector('#export-print.on, #export-svg.on, #export-png.on');
+      if (!active) { exportPrint(); return; }
+      if (active.id === 'export-svg') exportSVG();
+      else if (active.id === 'export-png') exportPNG();
+      else exportPrint();
+    });
+
+    // ── Root note change — re-render status
+    document.getElementById('pc-root').addEventListener('change', updateStatusBar);
+  });
+
+})();
+</script>
+
+</body>
+</html>
