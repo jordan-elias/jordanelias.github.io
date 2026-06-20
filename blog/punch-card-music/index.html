@@ -325,101 +325,87 @@
 
     <hr class="gen-separator">
 
-    <!-- MODULE 2: TRANSFORMATIONS -->
-    <div class="gen-module">
-      <p class="gen-module-label">transformations</p>
-
-      <div class="gen-row">
-        <span class="gen-row-label">apply &rarr;</span>
-        <button class="lab-btn on" data-xform="P">P &mdash; prime</button>
-        <button class="lab-btn" data-xform="R">R &mdash; retrograde</button>
-        <button class="lab-btn" data-xform="I">I &mdash; inversion</button>
-        <button class="lab-btn" data-xform="RI">RI &mdash; retro-inv</button>
-      </div>
-
-      <div class="gen-row">
-        <span class="gen-row-label">hear all &rarr;</span>
-        <button class="lab-btn" id="play-sequence">P &rarr; R &rarr; I &rarr; RI</button>
-        <span class="gen-hint">plays each in sequence with a pause between</span>
-      </div>
-
-      <p class="lab-hint">P = original &middot; R = columns reversed &middot; I = rows flipped &middot; RI = both &middot; whole tone and diminished scales are self-inverting under I</p>
-    </div>
 
     <hr class="gen-separator">
 
-    <!-- MODULE 3: PLAYBACK -->
+    <!-- MODULE 2: LISTEN AS TEXTURE -->
     <div class="gen-module">
-      <p class="gen-module-label">play as music</p>
+      <p class="gen-module-label">listen</p>
 
-      <div class="gen-row">
-        <span class="gen-row-label">scale &rarr;</span>
-        <button class="lab-preset-btn on" data-scale="pentatonic">pentatonic</button>
-        <button class="lab-preset-btn" data-scale="major">major</button>
-        <button class="lab-preset-btn" data-scale="minor">minor</button>
-        <button class="lab-preset-btn" data-scale="wholetone">whole tone</button>
-        <button class="lab-preset-btn" data-scale="diminished">diminished</button>
-        <button class="lab-preset-btn" data-scale="blues">blues</button>
+      <div class="pc-status-bar">
+        <div class="pc-status-left">
+          <div class="pc-status-item">
+            <span class="pc-status-val" id="tx-col-display">&mdash;</span>
+            <span class="pc-status-label">column</span>
+          </div>
+          <div class="pc-status-item">
+            <span class="pc-status-val" id="tx-density-display">&mdash;</span>
+            <span class="pc-status-label">density</span>
+          </div>
+          <div class="pc-status-item">
+            <span class="pc-status-val" id="tx-filter-display">&mdash;</span>
+            <span class="pc-status-label">brightness</span>
+          </div>
+          <div class="pc-status-item">
+            <span class="pc-status-val" id="tx-pitch-display">&mdash;</span>
+            <span class="pc-status-label">pitch bias</span>
+          </div>
+        </div>
+        <div class="pc-playing-notes" id="tx-status-note">ready</div>
       </div>
 
       <div class="gen-row">
-        <span class="gen-row-label">voice &rarr;</span>
-        <button class="lab-preset-btn on" data-timbre="marimba">marimba</button>
-        <button class="lab-preset-btn" data-timbre="pluck">pluck</button>
-        <button class="lab-preset-btn" data-timbre="sine">sine</button>
-        <button class="lab-preset-btn" data-timbre="bell">bell</button>
-      </div>
-
-      <div class="gen-row">
-        <span class="gen-row-label">root &rarr;</span>
-        <select class="gen-select" id="pc-root">
-          <option value="48">C3</option>
-          <option value="50">D3</option>
-          <option value="52">E3</option>
-          <option value="53">F3</option>
-          <option value="55" selected>G3</option>
-          <option value="57">A3</option>
-          <option value="60">C4</option>
-          <option value="62">D4</option>
-        </select>
+        <span class="gen-row-label">base pitch &rarr;</span>
+        <button class="lab-preset-btn" data-txroot="36">C2</button>
+        <button class="lab-preset-btn on" data-txroot="43">G2</button>
+        <button class="lab-preset-btn" data-txroot="48">C3</button>
+        <button class="lab-preset-btn" data-txroot="55">G3</button>
+        <button class="lab-preset-btn" data-txroot="60">C4</button>
       </div>
 
       <div class="lab-sliders">
         <div class="lab-ctrl">
-          <input type="range" id="pc-tempo" min="40" max="240" value="90" step="1">
+          <input type="range" id="tx-speed" min="4" max="60" value="20" step="1">
           <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">tempo</span>
-            <span class="lab-ctrl-val" id="pc-tempo-val">90 bpm</span>
+            <span class="lab-ctrl-label">cycle</span>
+            <span class="lab-ctrl-val" id="tx-speed-val">20s</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="pc-volume" min="0" max="1" value="0.7" step="0.01">
+          <input type="range" id="tx-volume" min="0" max="1" value="0.65" step="0.01">
           <div class="lab-ctrl-bottom">
             <span class="lab-ctrl-label">volume</span>
-            <span class="lab-ctrl-val" id="pc-volume-val">70%</span>
+            <span class="lab-ctrl-val" id="tx-volume-val">65%</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="pc-reverb" min="0" max="1" value="0.3" step="0.01">
+          <input type="range" id="tx-resonance" min="0.5" max="20" value="7" step="0.5">
           <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">reverb</span>
-            <span class="lab-ctrl-val" id="pc-reverb-val">30%</span>
+            <span class="lab-ctrl-label">resonance</span>
+            <span class="lab-ctrl-val" id="tx-resonance-val">7</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="tx-drift" min="0" max="1" value="0.4" step="0.01">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">pitch drift</span>
+            <span class="lab-ctrl-val" id="tx-drift-val">40%</span>
           </div>
         </div>
       </div>
 
       <div class="gen-row">
-        <button class="lab-btn" id="pc-play">&#9654;&#xFE0E; play</button>
-        <button class="lab-btn" id="pc-loop">loop</button>
-        <button class="lab-btn" id="pc-stop" disabled>&#9632;&#xFE0E; stop</button>
+        <button class="lab-btn" id="tx-play">&#9654;&#xFE0E; play</button>
+        <button class="lab-btn" id="tx-loop">loop</button>
+        <button class="lab-btn" id="tx-stop" disabled>&#9632;&#xFE0E; stop</button>
       </div>
 
-      <p class="lab-hint">each column = one beat &middot; rows map to scale pitches bottom (low) to top (high)</p>
+      <p class="lab-hint">hole density &rarr; filter brightness &middot; vertical centre of mass &rarr; pitch drift &middot; the card sculpts a continuous drone</p>
     </div>
 
     <hr class="gen-separator">
 
-    <!-- MODULE 4: EXPORT -->
+    <!-- MODULE 3: EXPORT -->
     <div class="gen-module">
       <p class="gen-module-label">export</p>
 
@@ -433,7 +419,7 @@
       <div class="gen-row">
         <span class="gen-row-label">include &rarr;</span>
         <button class="lab-preset-btn on" id="export-motif-toggle">motif reference</button>
-        <span class="gen-hint">&mdash; adds a small diagram of your motif cell</span>
+        <span class="gen-hint">&mdash; adds a small diagram of your motif cell to the sheet</span>
       </div>
 
       <div class="download-row">
@@ -446,7 +432,6 @@
     </div>
 
   </div>
-
   <p>Mobile users &mdash; you might not hear anything if your phone is on silent.</p>
 
   <article>
@@ -511,19 +496,6 @@
     </section>
 
     <section>
-    <p>
-    If you're interested in diving deeper, the sensory intelligence lab is a web app for custom soundscapes, music composition tools, ear training exercises, journaling, and playlist building. Music therapy tools I use in my practice and sound experiments to try yourself. 
-    
-  </p>
-
-  <div class="cta-wrap">
-    <a href="https://lab.jordanelias.de" target="_blank" rel="noopener noreferrer" class="cta-btn">Explore the lab</a>
-  </div>
-
-      </section>
-
-
-    <section>
       <h2>Working with the tool</h2>
 
       <p>The workflow moves between textile and musical thinking without privileging either. Start by choosing a motif size: 8&times;8 is a good default, large enough to contain interesting patterns, small enough that the tiling produces genuine repetition within the 24-column card. Draw in the motif cell on the left; the full card updates in real time on the right. Choose a tile mode and listen immediately &mdash; the same motif tiled in different ways produces very different music, and the difference is audible before you can articulate it.</p>
@@ -579,9 +551,9 @@
     <section>
       <h2>If this resonates</h2>
 
-      <p>This post grew out of a workshop collaboration combining experimental music and textile arts. The ideas here connect to earlier posts about <a href="/blog/generative-music/">generative music systems</a>, <a href="/blog/indeterminacy-in-music-and-life/">indeterminate music</a>, and the therapeutic uses of pattern and repetition.</p>
+      <p>This post grew out of a workshop I have been developing with a Berlin knitting group, bringing experimental music and textile arts into the same space. It connects to earlier posts on <a href="/blog/generative-music/">generative music systems</a> and <a href="/blog/indeterminacy-in-music-and-life/">indeterminate music</a>, and to ongoing work on how pattern, repetition, and constraint function as both artistic and therapeutic tools.</p>
 
-      <p>If you're interested in bringing this workshop to your knitting circles, craft communities, or experimental arts spaces, feel free to reach out via the <a href="/contact/">contact page</a>.</p>
+      <p>If you are interested in bringing this workshop to your group &mdash; knitting circles, craft communities, music therapy contexts, experimental arts spaces &mdash; or in exploring these ideas individually, feel free to reach out via the <a href="/contact/">contact page</a>.</p>
 
       <p>I offer a free 30-minute consultation to explore whether working together might be a fit.</p>
 
@@ -609,8 +581,8 @@
 <script src="/js/header.js"></script>
 <script>
 /* ================================================================
-   Punch Card Music — inline JS
-   Motif engine · Tile engine · Transform engine · Audio · Export
+   Punch Card Music
+   Motif engine · Tile engine · Texture audio · Export
    ================================================================ */
 (function(){
 'use strict';
@@ -618,99 +590,231 @@
 const CARD_COLS = 24;
 const HOLE_SPACING_MM = 5;
 
-const SCALES = {
-  pentatonic:  [0,2,4,7,9],
-  major:       [0,2,4,5,7,9,11],
-  minor:       [0,2,3,5,7,8,10],
-  wholetone:   [0,2,4,6,8,10],
-  diminished:  [0,2,3,5,6,8,9,11],
-  blues:       [0,3,5,6,7,10]
-};
-const NOTE_NAMES = ['C','C#','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
-
-// State
+// ── State ────────────────────────────────────────────────────────
 let motifSize = 8, cardRows = 24;
 let motifGrid = [], cardGrid = [];
-let tileMode = 'straight', currentXform = 'P';
-let currentScale = 'pentatonic', currentTimbre = 'marimba';
-let rootMidi = 55;
+let tileMode = 'straight';
 let showComplement = false, includeMotifRef = true, exportFormat = 'print';
+let txRootMidi = 43;
+
+// Playback
 let isPlaying = false, isLooping = false;
-let playIntervalId = null, sequenceTimer = null, playingCol = -1;
+let txAnimFrame = null, txStartTime = null, txLastCol = -1;
+
+// Pointer drawing
 let isPointerDown = false, drawMode = null;
 
-// Audio
-let audioCtx = null, masterGain, reverbNode, reverbGain, dryGain;
+// ── Audio ────────────────────────────────────────────────────────
+let audioCtx    = null;
+let txOscs      = [];      // [{osc, gn}] — three detuned oscillators
+let txFilter    = null;    // resonant lowpass — shaped by hole density
+let txDroneGain = null;    // amplitude shaped by density
+let txMasterGain= null;
+let txReverbNode= null;
+let txReverbGain= null;
+let txDryGain   = null;
+let txNoiseGain = null;    // subtle noise floor for materiality
 
 function ensureAudio(){
   if(audioCtx) return;
-  audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-  masterGain = audioCtx.createGain();
-  masterGain.gain.value = parseFloat(document.getElementById('pc-volume').value);
-  reverbNode = audioCtx.createConvolver();
-  buildIR(2.0);
-  reverbGain = audioCtx.createGain();
-  dryGain = audioCtx.createGain();
-  const rv = parseFloat(document.getElementById('pc-reverb').value);
-  reverbGain.gain.value = rv; dryGain.gain.value = 1-rv;
-  masterGain.connect(dryGain); dryGain.connect(audioCtx.destination);
-  masterGain.connect(reverbNode); reverbNode.connect(reverbGain); reverbGain.connect(audioCtx.destination);
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Master
+  txMasterGain = audioCtx.createGain();
+  txMasterGain.gain.value = parseFloat(document.getElementById('tx-volume').value);
+
+  // Reverb — long, diffuse
+  txReverbNode = audioCtx.createConvolver();
+  buildIR(4.0);
+  txReverbGain = audioCtx.createGain(); txReverbGain.gain.value = 0.5;
+  txDryGain    = audioCtx.createGain(); txDryGain.gain.value    = 0.65;
+
+  // Resonant lowpass — the card's density controls this
+  txFilter = audioCtx.createBiquadFilter();
+  txFilter.type = 'lowpass';
+  txFilter.frequency.value = 200;
+  txFilter.Q.value = parseFloat(document.getElementById('tx-resonance').value);
+
+  // Drone amplitude envelope (density controls this)
+  txDroneGain = audioCtx.createGain();
+  txDroneGain.gain.value = 0.0;
+
+  // Noise source — very quiet, gives the drone body and warmth
+  const noiseLen = audioCtx.sampleRate * 3;
+  const nBuf = audioCtx.createBuffer(1, noiseLen, audioCtx.sampleRate);
+  const nData = nBuf.getChannelData(0);
+  for(let i=0;i<noiseLen;i++) nData[i] = (Math.random()*2-1) * 0.12;
+  const nSrc = audioCtx.createBufferSource();
+  nSrc.buffer = nBuf; nSrc.loop = true;
+  txNoiseGain = audioCtx.createGain(); txNoiseGain.gain.value = 0.0;
+  nSrc.connect(txNoiseGain);
+  nSrc.start();
+
+  // Three oscillators: sawtooth + sine + triangle, slight detuning
+  // Detuning in cents — produces slow beating between voices
+  const configs = [
+    {type:'sawtooth', detune:0,   gainVal:0.45},
+    {type:'sine',     detune:5,   gainVal:0.3},
+    {type:'triangle', detune:-4,  gainVal:0.25},
+  ];
+  txOscs = configs.map(({type,detune,gainVal}) => {
+    const osc = audioCtx.createOscillator();
+    const gn  = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = midiFreq(txRootMidi);
+    osc.detune.value = detune;
+    gn.gain.value = gainVal;
+    osc.connect(gn);
+    gn.connect(txDroneGain);
+    osc.start();
+    return {osc, gn};
+  });
+
+  // Graph: drones+noise → txDroneGain → txFilter → txMasterGain → dry+reverb → dest
+  txDroneGain.connect(txFilter);
+  txNoiseGain.connect(txFilter);
+  txFilter.connect(txMasterGain);
+  txMasterGain.connect(txDryGain);     txDryGain.connect(audioCtx.destination);
+  txMasterGain.connect(txReverbNode);  txReverbNode.connect(txReverbGain); txReverbGain.connect(audioCtx.destination);
 }
+
 function buildIR(dur){
   if(!audioCtx) return;
   const sr=audioCtx.sampleRate, len=Math.floor(sr*dur);
   const buf=audioCtx.createBuffer(2,len,sr);
-  for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.5);}
-  reverbNode.buffer=buf;
-}
-function midiFreq(m){return 440*Math.pow(2,(m-69)/12);}
-function rowToMidi(r,rows){
-  const scale=SCALES[currentScale];
-  const idx=(rows-1-r);
-  return rootMidi + Math.floor(idx/scale.length)*12 + scale[idx%scale.length];
-}
-function midiName(m){return NOTE_NAMES[((m%12)+12)%12]+(Math.floor(m/12)-1);}
-
-function playNote(midi){
-  if(!audioCtx) return;
-  const f=midiFreq(midi), now=audioCtx.currentTime;
-  if(currentTimbre==='sine'){
-    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-    o.type='sine';o.frequency.value=f;
-    g.gain.setValueAtTime(0.4,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.9);
-    o.connect(g);g.connect(masterGain);o.start(now);o.stop(now+0.9);
-  } else if(currentTimbre==='pluck'){
-    const bs=Math.max(2,Math.round(audioCtx.sampleRate/f));
-    const nb=audioCtx.createBuffer(1,bs,audioCtx.sampleRate);
-    const nd=nb.getChannelData(0); for(let i=0;i<bs;i++) nd[i]=Math.random()*2-1;
-    const s=audioCtx.createBufferSource();s.buffer=nb;s.loop=true;
-    const fl=audioCtx.createBiquadFilter();fl.type='lowpass';fl.frequency.value=f*2;
-    const g=audioCtx.createGain();g.gain.setValueAtTime(0.5,now);g.gain.exponentialRampToValueAtTime(0.001,now+1.3);
-    s.connect(fl);fl.connect(g);g.connect(masterGain);s.start(now);s.stop(now+1.3);
-  } else if(currentTimbre==='marimba'){
-    [[1,0.65,0.35],[4.09,0.22,0.1]].forEach(([r,a,d])=>{
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-      o.type='sine';o.frequency.value=f*r;
-      g.gain.setValueAtTime(a,now);g.gain.exponentialRampToValueAtTime(0.001,now+d+0.4);
-      o.connect(g);g.connect(masterGain);o.start(now);o.stop(now+d+0.4);
-    });
-  } else if(currentTimbre==='bell'){
-    [[1,0.55,3.0],[2.76,0.2,1.8],[5.4,0.08,1.0]].forEach(([r,a,d])=>{
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-      o.type='sine';o.frequency.value=f*r;
-      g.gain.setValueAtTime(a,now);g.gain.exponentialRampToValueAtTime(0.001,now+d);
-      o.connect(g);g.connect(masterGain);o.start(now);o.stop(now+d);
-    });
+  for(let ch=0;ch<2;ch++){
+    const d=buf.getChannelData(ch);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,1.6);
   }
+  txReverbNode.buffer=buf;
 }
 
-// Motif
+function midiFreq(m){ return 440*Math.pow(2,(m-69)/12); }
+
+// ── Column analysis ───────────────────────────────────────────────
+// Returns three values that map directly to audio parameters:
+//   density    [0..1]  — fraction of holes punched → amplitude + brightness
+//   brightness [0..1]  — density mapped to filter cutoff (log curve)
+//   pitchBias  [-1..1] — vertical centre of mass: +1=all top, -1=all bottom → pitch drift
+function analyseCol(ag, col){
+  let count=0, wsum=0;
+  for(let r=0;r<cardRows;r++){
+    if(ag[r][col]){
+      count++;
+      wsum += 1 - (2*r / (cardRows-1)); // top rows = +1, bottom = -1
+    }
+  }
+  const density    = count / cardRows;
+  const brightness = density; // applied log-curve in audio section
+  const pitchBias  = count > 0 ? wsum / count : 0;
+  return {density, brightness, pitchBias};
+}
+
+// ── Apply one column's analysis to audio parameters (smoothed) ───
+function applyCol(ag, col){
+  if(!audioCtx||!txFilter) return;
+  const {density, brightness, pitchBias} = analyseCol(ag, col);
+  const drift = parseFloat(document.getElementById('tx-drift').value);
+  const now   = audioCtx.currentTime;
+  const tau   = 0.18; // smoothing — prevents zipper noise
+
+  // Filter cutoff: density 0→1 maps to 80Hz→5000Hz (log)
+  const cutoff = 80 * Math.pow(5000/80, brightness);
+  txFilter.frequency.setTargetAtTime(cutoff, now, tau);
+  txFilter.Q.setTargetAtTime(
+    parseFloat(document.getElementById('tx-resonance').value), now, tau
+  );
+
+  // Pitch: base + pitchBias * drift * ±200 cents (±2 semitones max)
+  const driftCents = pitchBias * drift * 200;
+  const targetFreq = midiFreq(txRootMidi) * Math.pow(2, driftCents/1200);
+  txOscs.forEach(({osc}) => osc.frequency.setTargetAtTime(targetFreq, now, tau*2));
+
+  // Amplitude: never fully silent — min 0.04 so drone is always present
+  txDroneGain.gain.setTargetAtTime(0.04 + density*0.96, now, tau);
+
+  // Noise follows density: denser columns feel richer
+  txNoiseGain.gain.setTargetAtTime(density*0.08, now, tau);
+
+  // Update status bar
+  const bPct = Math.round(brightness*100);
+  const biasStr = pitchBias >= 0 ? '+' + pitchBias.toFixed(2) : pitchBias.toFixed(2);
+  document.getElementById('tx-col-display').textContent = col+1;
+  document.getElementById('tx-density-display').textContent = Math.round(density*100)+'%';
+  document.getElementById('tx-filter-display').textContent = Math.round(cutoff)+'Hz';
+  document.getElementById('tx-pitch-display').textContent = biasStr;
+
+  // Playhead on card grid
+  updatePlayhead(col);
+}
+
+// ── Playback ──────────────────────────────────────────────────────
+function startPlay(){
+  if(isPlaying) stopPlay();
+  ensureAudio();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  isPlaying=true;
+  txStartTime=audioCtx.currentTime;
+  txLastCol=-1;
+
+  // Fade in
+  const now=audioCtx.currentTime;
+  txMasterGain.gain.cancelScheduledValues(now);
+  txMasterGain.gain.setTargetAtTime(
+    parseFloat(document.getElementById('tx-volume').value), now, 0.25
+  );
+
+  document.getElementById('tx-play').classList.add('on');
+  document.getElementById('tx-stop').disabled=false;
+  document.getElementById('tx-play').disabled=true;
+  document.getElementById('tx-status-note').textContent='playing';
+
+  const ag = activeGrid();
+
+  function frame(){
+    if(!isPlaying) return;
+    const cycleSec = parseFloat(document.getElementById('tx-speed').value);
+    const elapsed  = audioCtx.currentTime - txStartTime;
+    const looped   = elapsed % cycleSec;
+    const col      = Math.floor((looped / cycleSec) * CARD_COLS);
+
+    if(col !== txLastCol){
+      txLastCol = col;
+      applyCol(ag, col);
+    }
+
+    if(!isLooping && elapsed >= cycleSec){ stopPlay(); return; }
+    txAnimFrame = requestAnimationFrame(frame);
+  }
+  txAnimFrame = requestAnimationFrame(frame);
+}
+
+function stopPlay(){
+  isPlaying=false;
+  if(txAnimFrame){ cancelAnimationFrame(txAnimFrame); txAnimFrame=null; }
+  if(audioCtx&&txDroneGain){
+    const now=audioCtx.currentTime;
+    txDroneGain.gain.cancelScheduledValues(now);
+    txDroneGain.gain.setTargetAtTime(0.0, now, 0.5);
+    if(txNoiseGain) txNoiseGain.gain.setTargetAtTime(0.0, now, 0.5);
+  }
+  updatePlayhead(-1);
+  document.getElementById('tx-play').classList.remove('on');
+  document.getElementById('tx-play').disabled=false;
+  document.getElementById('tx-stop').disabled=true;
+  document.getElementById('tx-status-note').textContent='ready';
+  document.getElementById('tx-col-display').textContent='—';
+  document.getElementById('tx-density-display').textContent='—';
+  document.getElementById('tx-filter-display').textContent='—';
+  document.getElementById('tx-pitch-display').textContent='—';
+}
+
+// ── Grid engine ───────────────────────────────────────────────────
 function initMotif(s){
   motifSize=s;
   motifGrid=Array.from({length:s},()=>new Array(s).fill(false));
 }
 
-// Tiling
 function tileCard(){
   cardGrid=Array.from({length:cardRows},()=>new Array(CARD_COLS).fill(false));
   for(let cr=0;cr<cardRows;cr++) for(let cc=0;cc<CARD_COLS;cc++){
@@ -718,44 +822,30 @@ function tileCard(){
     if(mr>=0&&mr<motifSize&&mc>=0&&mc<motifSize) cardGrid[cr][cc]=motifGrid[mr][mc];
   }
 }
+
 function cardToMotif(cr,cc){
   const colRep=Math.floor(cc/motifSize), colPh=cc%motifSize;
   let rowOff=0;
   if(tileMode==='brick') rowOff=(colRep%2)*Math.floor(motifSize/2);
   const rowRep=Math.floor((cr+rowOff)/motifSize);
   const rowPh=((cr+rowOff)%motifSize+motifSize)%motifSize;
-  let mC=(tileMode==='mirror-x'||tileMode==='mirror-xy')&&(colRep%2===1) ? motifSize-1-colPh : colPh;
-  let mR=(tileMode==='mirror-y'||tileMode==='mirror-xy')&&(rowRep%2===1) ? motifSize-1-rowPh : rowPh;
+  const mC=(tileMode==='mirror-x'||tileMode==='mirror-xy')&&(colRep%2===1) ? motifSize-1-colPh : colPh;
+  const mR=(tileMode==='mirror-y'||tileMode==='mirror-xy')&&(rowRep%2===1) ? motifSize-1-rowPh : rowPh;
   return{mr:mR,mc:mC};
 }
 
-// Transform
-function applyXform(g,t,rows,cols){
-  if(t==='P') return g;
-  const out=Array.from({length:rows},()=>new Array(cols).fill(false));
-  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
-    let sr=r,sc=c;
-    if(t==='R') sc=cols-1-c;
-    else if(t==='I') sr=rows-1-r;
-    else if(t==='RI'){sc=cols-1-c;sr=rows-1-r;}
-    out[r][c]=g[sr][sc];
-  }
-  return out;
-}
-function activeGrid(){return applyXform(cardGrid,currentXform,cardRows,CARD_COLS);}
+function activeGrid(){ return cardGrid; }
 
-// Render
-function cellSize(){return window.innerWidth<=400?12:window.innerWidth<=680?15:20;}
+// ── Rendering ─────────────────────────────────────────────────────
+function cellSize(){ return window.innerWidth<=400?12:window.innerWidth<=680?15:20; }
 
 function renderGrid(containerId,colNumsId,rows,cols,data,editable){
   const cs=cellSize();
   const numEl=document.getElementById(colNumsId);
   const gridEl=document.getElementById(containerId);
   if(!numEl||!gridEl) return;
-
-  numEl.innerHTML=`<div style="width:${23}px;flex-shrink:0"></div>`+
+  numEl.innerHTML=`<div style="width:23px;flex-shrink:0"></div>`+
     Array.from({length:cols},(_,c)=>`<div class="pc-col-num" style="width:${cs}px">${c+1}</div>`).join('');
-
   gridEl.innerHTML='';
   for(let r=0;r<rows;r++){
     const row=document.createElement('div'); row.className='pc-row';
@@ -766,7 +856,8 @@ function renderGrid(containerId,colNumsId,rows,cols,data,editable){
       cell.className='pc-cell'+(editable?'':' tiled');
       cell.style.width=cell.style.height=cs+'px';
       if(data[r][c]) cell.classList.add('punched');
-      if(editable){cell.dataset.r=r;cell.dataset.c=c;
+      if(editable){
+        cell.dataset.r=r; cell.dataset.c=c;
         cell.addEventListener('pointerdown',onPD);
         cell.addEventListener('pointerenter',onPE);
       }
@@ -776,12 +867,10 @@ function renderGrid(containerId,colNumsId,rows,cols,data,editable){
   }
 }
 
-function renderMotif(){renderGrid('motif-grid','motif-col-nums',motifSize,motifSize,motifGrid,true);updateGhosts();}
-function renderCard(){renderGrid('card-grid','card-col-nums',cardRows,CARD_COLS,activeGrid(),false);}
+function renderMotif(){ renderGrid('motif-grid','motif-col-nums',motifSize,motifSize,motifGrid,true); updateGhosts(); }
+function renderCard(){  renderGrid('card-grid','card-col-nums',cardRows,CARD_COLS,cardGrid,false); }
+function refreshAll(){  tileCard(); renderMotif(); renderCard(); updateStatus(); }
 
-function refreshAll(){tileCard();renderMotif();renderCard();updateStatus();}
-
-// Complement ghosts
 function updateGhosts(){
   document.querySelectorAll('#motif-grid .pc-cell').forEach(el=>el.classList.remove('ghost'));
   if(!showComplement) return;
@@ -796,38 +885,37 @@ function updateGhosts(){
   }
 }
 
-// Status
 function updateStatus(){
   let h=0;
   for(let r=0;r<motifSize;r++) for(let c=0;c<motifSize;c++) if(motifGrid[r][c]) h++;
   document.getElementById('stat-holes').textContent=h;
-  document.getElementById('stat-motif-dim').textContent=motifSize+'\u00d7'+motifSize;
-  document.getElementById('stat-card-dim').textContent=CARD_COLS+'\u00d7'+cardRows;
-}
-function updatePlayhead(col){
-  document.querySelectorAll('#card-grid .pc-cell.playhead').forEach(el=>el.classList.remove('playhead'));
-  if(col<0){document.getElementById('stat-playhead').textContent='\u2014';document.getElementById('stat-notes').textContent=isPlaying?'':'ready';return;}
-  document.getElementById('stat-playhead').textContent=col+1;
-  const ag=activeGrid();
-  const rows=document.querySelectorAll('#card-grid .pc-row');
-  for(let r=0;r<cardRows;r++){const cells=rows[r]?.querySelectorAll('.pc-cell');if(cells&&cells[col])cells[col].classList.add('playhead');}
-  const notes=[];
-  for(let r=0;r<cardRows;r++) if(ag[r][col]) notes.push(midiName(rowToMidi(r,cardRows)));
-  document.getElementById('stat-notes').textContent=notes.length?notes.join('  '):'\u2014';
+  document.getElementById('stat-motif-dim').textContent=motifSize+'×'+motifSize;
+  document.getElementById('stat-card-dim').textContent=CARD_COLS+'×'+cardRows;
 }
 
-// Pointer events
-document.addEventListener('pointerup',()=>{isPointerDown=false;drawMode=null;});
+function updatePlayhead(col){
+  document.querySelectorAll('#card-grid .pc-cell.playhead').forEach(el=>el.classList.remove('playhead'));
+  if(col<0){ document.getElementById('stat-playhead').textContent='—'; return; }
+  document.getElementById('stat-playhead').textContent=col+1;
+  const rows=document.querySelectorAll('#card-grid .pc-row');
+  for(let r=0;r<cardRows;r++){
+    const cells=rows[r]?.querySelectorAll('.pc-cell');
+    if(cells&&cells[col]) cells[col].classList.add('playhead');
+  }
+}
+
+// ── Pointer drawing ───────────────────────────────────────────────
+document.addEventListener('pointerup',()=>{ isPointerDown=false; drawMode=null; });
+
 function onPD(e){
-  e.preventDefault();
-  isPointerDown=true;
-  const r=+this.dataset.r,c=+this.dataset.c;
+  e.preventDefault(); isPointerDown=true;
+  const r=+this.dataset.r, c=+this.dataset.c;
   drawMode=motifGrid[r][c]?'erase':'punch';
   toggle(r,c); this.setPointerCapture(e.pointerId);
 }
 function onPE(){
   if(!isPointerDown||!drawMode) return;
-  const r=+this.dataset.r,c=+this.dataset.c;
+  const r=+this.dataset.r, c=+this.dataset.c;
   if(motifGrid[r][c]!==(drawMode==='punch')) toggle(r,c);
 }
 function toggle(r,c){
@@ -837,151 +925,121 @@ function toggle(r,c){
   tileCard(); renderCard(); updateStatus(); updateGhosts();
 }
 
-// Playback
-function startPlay(gridOverride){
-  if(isPlaying) stopPlay();
-  ensureAudio();
-  if(audioCtx.state==='suspended') audioCtx.resume();
-  isPlaying=true; playingCol=0;
-  const ag=gridOverride||activeGrid();
-  const bpm=+document.getElementById('pc-tempo').value;
-  const ms=(60/bpm)*1000;
-  document.getElementById('pc-play').classList.add('on');
-  document.getElementById('pc-stop').disabled=false;
-  document.getElementById('pc-play').disabled=true;
-  function tick(){
-    updatePlayhead(playingCol);
-    for(let r=0;r<cardRows;r++) if(ag[r][playingCol]) playNote(rowToMidi(r,cardRows));
-    playingCol++;
-    if(playingCol>=CARD_COLS){if(isLooping) playingCol=0; else{stopPlay();return;}}
-  }
-  tick(); playIntervalId=setInterval(tick,ms);
-}
-function stopPlay(){
-  isPlaying=false;
-  if(playIntervalId){clearInterval(playIntervalId);playIntervalId=null;}
-  if(sequenceTimer){clearTimeout(sequenceTimer);sequenceTimer=null;}
-  playingCol=-1; updatePlayhead(-1);
-  document.getElementById('pc-play').classList.remove('on');
-  document.getElementById('pc-play').disabled=false;
-  document.getElementById('pc-stop').disabled=true;
-}
-function playSequence(){
-  if(isPlaying) stopPlay();
-  ensureAudio();
-  if(audioCtx.state==='suspended') audioCtx.resume();
-  const bpm=+document.getElementById('pc-tempo').value;
-  const cardMs=CARD_COLS*(60/bpm)*1000+700;
-  const xforms=['P','R','I','RI']; let i=0;
-  function next(){
-    if(i>=xforms.length) return;
-    const t=xforms[i++];
-    document.querySelectorAll('[data-xform]').forEach(b=>b.classList.remove('on'));
-    document.querySelector(`[data-xform="${t}"]`)?.classList.add('on');
-    currentXform=t; renderCard();
-    startPlay(activeGrid());
-    sequenceTimer=setTimeout(()=>{stopPlay();sequenceTimer=setTimeout(next,500);},cardMs);
-  }
-  next();
-}
-
-// Presets
-const PRESETS={
-  blank:s=>Array.from({length:s},()=>new Array(s).fill(false)),
-  diamond:s=>{
+// ── Presets ───────────────────────────────────────────────────────
+const PRESETS = {
+  blank:    s=>Array.from({length:s},()=>new Array(s).fill(false)),
+  diamond:  s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
-    const cx=(s-1)/2,cy=(s-1)/2,r=Math.floor(s/2)-1;
+    const cx=(s-1)/2, cy=(s-1)/2, r=Math.floor(s/2)-1;
     for(let row=0;row<s;row++) for(let col=0;col<s;col++)
       if(Math.abs(row-cy)+Math.abs(col-cx)===r) g[row][col]=true;
     return g;
   },
-  chevron:s=>{
+  chevron:  s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
     const h=Math.floor(s/2);
-    for(let col=0;col<s;col++){const d=Math.abs(col-h)%s;g[d][col]=true;if(s-1-d!==d)g[s-1-d][col]=true;}
+    for(let col=0;col<s;col++){
+      const d=Math.abs(col-h)%s;
+      g[d][col]=true;
+      if(s-1-d!==d) g[s-1-d][col]=true;
+    }
     return g;
   },
-  cross:s=>{
+  cross:    s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
     const m=Math.floor(s/2);
-    for(let i=0;i<s;i++){g[m][i]=true;g[i][m]=true;}
+    for(let i=0;i<s;i++){ g[m][i]=true; g[i][m]=true; }
     return g;
   },
-  diagonal:s=>{
+  diagonal: s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
-    for(let i=0;i<s;i++){g[i][i]=true;g[i][(i+2)%s]=true;}
+    for(let i=0;i<s;i++){ g[i][i]=true; g[i][(i+2)%s]=true; }
     return g;
   },
-  random:s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.28))
+  random:   s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.28))
 };
-function applyPreset(name){motifGrid=PRESETS[name](motifSize);refreshAll();}
+function applyPreset(name){ motifGrid=PRESETS[name](motifSize); refreshAll(); }
 
-// SVG export
+// ── SVG export ────────────────────────────────────────────────────
 function buildSVG(){
-  const ag=activeGrid();
+  const ag=cardGrid;
   const sp=HOLE_SPACING_MM, mg=10;
   const W=(CARD_COLS-1)*sp+2*mg, H=(cardRows-1)*sp+2*mg;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">`;
   s+=`<rect x=".3" y=".3" width="${W-.6}" height="${H-.6}" fill="#f4f0e2" stroke="#222" stroke-width=".5" rx="2"/>`;
+  // Column guide bands every 6
   for(let c=0;c<CARD_COLS;c+=6){
     const x=mg+c*sp-sp/2;
     s+=`<rect x="${x}" y="${mg/2}" width="${6*sp}" height="${H-mg}" fill="#e8e0c5" opacity=".4"/>`;
   }
-  for(let c=0;c<CARD_COLS;c++) s+=`<text x="${mg+c*sp}" y="${mg-2.5}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="middle">${c+1}</text>`;
+  // Column numbers
+  for(let c=0;c<CARD_COLS;c++)
+    s+=`<text x="${mg+c*sp}" y="${mg-2.5}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="middle">${c+1}</text>`;
+  // Rows
   for(let r=0;r<cardRows;r++){
     const y=mg+r*sp;
     s+=`<text x="${mg-2.5}" y="${y+.7}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="end">${cardRows-r}</text>`;
     for(let c=0;c<CARD_COLS;c++){
       const x=mg+c*sp;
-      s+=ag[r][c]?`<circle cx="${x}" cy="${y}" r="2" fill="#111"/>`:`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
+      s+=ag[r][c]
+        ?`<circle cx="${x}" cy="${y}" r="2" fill="#111"/>`
+        :`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
     }
   }
-  s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de \u00b7 24st\u00d7${cardRows}r \u00b7 ${currentScale} \u00b7 ${currentXform} \u00b7 ${sp}mm</text>`;
+  s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de · 24st×${cardRows}r · ${sp}mm spacing</text>`;
+  // Motif reference (small, bottom-right)
   if(includeMotifRef){
-    const ms=2.5,mx=W-mg-motifSize*ms,my=H-mg-motifSize*ms-2;
+    const ms=2.5, mx=W-mg-motifSize*ms, my=H-mg-motifSize*ms-2;
     s+=`<rect x="${mx-1}" y="${my-1}" width="${motifSize*ms+2}" height="${motifSize*ms+2}" fill="none" stroke="#ccc" stroke-width=".3"/>`;
     s+=`<text x="${mx}" y="${my-2.5}" font-family="sans-serif" font-size="1.8" fill="#bbb">motif</text>`;
     for(let r=0;r<motifSize;r++) for(let c=0;c<motifSize;c++)
-      if(motifGrid[r][c]) s+=`<rect x="${mx+c*ms}" y="${my+r*ms}" width="${ms-.3}" height="${ms-.3}" fill="#888"/>`;
+      if(motifGrid[r][c])
+        s+=`<rect x="${mx+c*ms}" y="${my+r*ms}" width="${ms-.3}" height="${ms-.3}" fill="#888"/>`;
   }
   return s+'</svg>';
 }
+
 function doExport(){
   const svg=buildSVG();
   if(exportFormat==='svg'){
     const a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
-    a.download='punch-card.svg';a.click();return;
+    a.download='punch-card.svg'; a.click(); return;
   }
   if(exportFormat==='png'){
-    const sp=HOLE_SPACING_MM,mg=10,SC=8;
+    const sp=HOLE_SPACING_MM, mg=10, SC=8;
     const W=((CARD_COLS-1)*sp+2*mg)*SC, H=((cardRows-1)*sp+2*mg)*SC;
     const img=new Image();
     const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
     img.onload=()=>{
-      const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+      const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
       cv.getContext('2d').drawImage(img,0,0,W,H);
-      const a=document.createElement('a');a.href=cv.toDataURL('image/png');
-      a.download='punch-card.png';a.click();URL.revokeObjectURL(url);
+      const a=document.createElement('a'); a.href=cv.toDataURL('image/png');
+      a.download='punch-card.png'; a.click(); URL.revokeObjectURL(url);
     };
-    img.src=url;return;
+    img.src=url; return;
   }
+  // Print
   const win=window.open('','_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>Punch Card \u00b7 jordanelias.de</title>
+  win.document.write(`<!DOCTYPE html><html><head><title>Punch Card · jordanelias.de</title>
 <style>body{margin:0;background:#fff;}.w{padding:8mm;}.n{font-family:sans-serif;font-size:9px;color:#777;margin-bottom:5mm;line-height:1.6;}
 @media print{@page{margin:8mm;size:auto;}}</style></head><body>
-<div class="w"><div class="n"><strong>Print at 100% \u2014 do not scale to fit page.</strong><br>
-Hole spacing: ${HOLE_SPACING_MM}mm \u00b7 Brother / Silver Reed 24-stitch standard gauge \u00b7 Scale: ${currentScale} \u00b7 Transform: ${currentXform}</div>
-${svg}</div><script>window.onload=function(){window.print();}<\/script></body></html>`);
+<div class="w">
+<div class="n"><strong>Print at 100% — do not scale to fit page.</strong><br>
+Hole spacing: ${HOLE_SPACING_MM}mm centre-to-centre · Brother / Silver Reed 24-stitch standard gauge · Motif: ${motifSize}×${motifSize} · Tile: ${tileMode}</div>
+${svg}
+</div>
+<script>window.onload=function(){window.print();}<\/script>
+</body></html>`);
   win.document.close();
 }
 
-// Wire everything up
+// ── Wiring ────────────────────────────────────────────────────────
 function wireGroup(sel,attr,cb){
   document.querySelectorAll(sel).forEach(b=>{
     b.addEventListener('click',function(){
       document.querySelectorAll(sel).forEach(x=>x.classList.remove('on'));
-      this.classList.add('on');cb(this.dataset[attr]);
+      this.classList.add('on'); cb(this.dataset[attr]);
     });
   });
 }
@@ -989,51 +1047,49 @@ function wireGroup(sel,attr,cb){
 document.addEventListener('DOMContentLoaded',()=>{
   initMotif(8); applyPreset('diamond');
 
-  wireGroup('[data-preset]','preset',applyPreset);
-  wireGroup('[data-msize]','msize',v=>{initMotif(+v);refreshAll();});
-  wireGroup('[data-tile]','tile',v=>{tileMode=v;refreshAll();});
-  wireGroup('[data-cardrows]','cardrows',v=>{cardRows=+v;refreshAll();});
-  wireGroup('[data-scale]','scale',v=>{currentScale=v;});
-  wireGroup('[data-timbre]','timbre',v=>{currentTimbre=v;});
-  wireGroup('[data-export]','export',v=>{exportFormat=v;});
-
-  document.querySelectorAll('[data-xform]').forEach(b=>{
-    b.addEventListener('click',function(){
-      document.querySelectorAll('[data-xform]').forEach(x=>x.classList.remove('on'));
-      this.classList.add('on');currentXform=this.dataset.xform;
-      renderCard();if(isPlaying){stopPlay();startPlay();}
-    });
-  });
+  wireGroup('[data-preset]','preset', applyPreset);
+  wireGroup('[data-msize]','msize',  v=>{ initMotif(+v); refreshAll(); });
+  wireGroup('[data-tile]','tile',    v=>{ tileMode=v; refreshAll(); });
+  wireGroup('[data-cardrows]','cardrows', v=>{ cardRows=+v; refreshAll(); });
+  wireGroup('[data-txroot]','txroot', v=>{ txRootMidi=+v; });
+  wireGroup('[data-export]','export', v=>{ exportFormat=v; });
 
   document.getElementById('toggle-complement').addEventListener('click',function(){
-    showComplement=!showComplement;this.classList.toggle('on',showComplement);updateGhosts();
+    showComplement=!showComplement; this.classList.toggle('on',showComplement); updateGhosts();
   });
   document.getElementById('export-motif-toggle').addEventListener('click',function(){
-    includeMotifRef=!includeMotifRef;this.classList.toggle('on',includeMotifRef);
+    includeMotifRef=!includeMotifRef; this.classList.toggle('on',includeMotifRef);
   });
 
-  document.getElementById('pc-root').addEventListener('change',function(){rootMidi=+this.value;});
-  document.getElementById('pc-play').addEventListener('click',()=>startPlay());
-  document.getElementById('pc-stop').addEventListener('click',stopPlay);
-  document.getElementById('pc-loop').addEventListener('click',function(){isLooping=!isLooping;this.classList.toggle('on',isLooping);});
-  document.getElementById('play-sequence').addEventListener('click',playSequence);
-  document.getElementById('pc-export-btn').addEventListener('click',doExport);
-
-  document.getElementById('pc-tempo').addEventListener('input',function(){
-    document.getElementById('pc-tempo-val').textContent=this.value+' bpm';
-    if(isPlaying){stopPlay();startPlay();}
-  });
-  document.getElementById('pc-volume').addEventListener('input',function(){
-    document.getElementById('pc-volume-val').textContent=Math.round(this.value*100)+'%';
-    if(masterGain) masterGain.gain.value=parseFloat(this.value);
-  });
-  document.getElementById('pc-reverb').addEventListener('input',function(){
-    document.getElementById('pc-reverb-val').textContent=Math.round(this.value*100)+'%';
-    if(reverbGain){reverbGain.gain.value=parseFloat(this.value);dryGain.gain.value=1-parseFloat(this.value);}
+  // Transport
+  document.getElementById('tx-play').addEventListener('click', startPlay);
+  document.getElementById('tx-stop').addEventListener('click', stopPlay);
+  document.getElementById('tx-loop').addEventListener('click',function(){
+    isLooping=!isLooping; this.classList.toggle('on',isLooping);
   });
 
+  // Sliders — live update labels; audio nodes updated inside applyCol on next frame
+  document.getElementById('tx-speed').addEventListener('input',function(){
+    document.getElementById('tx-speed-val').textContent=this.value+'s';
+  });
+  document.getElementById('tx-volume').addEventListener('input',function(){
+    document.getElementById('tx-volume-val').textContent=Math.round(this.value*100)+'%';
+    if(txMasterGain) txMasterGain.gain.setTargetAtTime(parseFloat(this.value), audioCtx.currentTime, 0.05);
+  });
+  document.getElementById('tx-resonance').addEventListener('input',function(){
+    document.getElementById('tx-resonance-val').textContent=this.value;
+    if(txFilter) txFilter.Q.setTargetAtTime(parseFloat(this.value), audioCtx.currentTime, 0.05);
+  });
+  document.getElementById('tx-drift').addEventListener('input',function(){
+    document.getElementById('tx-drift-val').textContent=Math.round(this.value*100)+'%';
+  });
+
+  // Export
+  document.getElementById('pc-export-btn').addEventListener('click', doExport);
+
+  // Responsive re-render
   let resizeT;
-  window.addEventListener('resize',()=>{clearTimeout(resizeT);resizeT=setTimeout(refreshAll,150);});
+  window.addEventListener('resize',()=>{ clearTimeout(resizeT); resizeT=setTimeout(refreshAll,150); });
 });
 
 })();
