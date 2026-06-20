@@ -328,79 +328,81 @@
 
     <hr class="gen-separator">
 
-    <!-- MODULE 2: LISTEN AS TEXTURE -->
+
+    <hr class="gen-separator">
+
+    <!-- MODULE 2: LISTEN -->
     <div class="gen-module">
       <p class="gen-module-label">listen</p>
 
       <div class="pc-status-bar">
         <div class="pc-status-left">
           <div class="pc-status-item">
-            <span class="pc-status-val" id="tx-col-display">&mdash;</span>
-            <span class="pc-status-label">column</span>
+            <span class="pc-status-val" id="tx-voices">0</span>
+            <span class="pc-status-label">voices</span>
           </div>
           <div class="pc-status-item">
-            <span class="pc-status-val" id="tx-density-display">&mdash;</span>
-            <span class="pc-status-label">density</span>
+            <span class="pc-status-val" id="tx-spectral">—</span>
+            <span class="pc-status-label">spectral centre</span>
           </div>
           <div class="pc-status-item">
-            <span class="pc-status-val" id="tx-filter-display">&mdash;</span>
-            <span class="pc-status-label">brightness</span>
+            <span class="pc-status-val" id="tx-phase">—</span>
+            <span class="pc-status-label">phase spread</span>
           </div>
           <div class="pc-status-item">
-            <span class="pc-status-val" id="tx-pitch-display">&mdash;</span>
-            <span class="pc-status-label">pitch bias</span>
+            <span class="pc-status-val" id="tx-fm">—</span>
+            <span class="pc-status-label">FM index</span>
           </div>
         </div>
-        <div class="pc-playing-notes" id="tx-status-note">ready</div>
+        <div class="pc-playing-notes" id="tx-status">ready</div>
       </div>
 
       <div class="gen-row">
-        <span class="gen-row-label">base pitch &rarr;</span>
-        <button class="lab-preset-btn" data-txroot="36">C2</button>
-        <button class="lab-preset-btn on" data-txroot="43">G2</button>
-        <button class="lab-preset-btn" data-txroot="48">C3</button>
-        <button class="lab-preset-btn" data-txroot="55">G3</button>
-        <button class="lab-preset-btn" data-txroot="60">C4</button>
+        <span class="gen-row-label">fundamental &rarr;</span>
+        <button class="lab-preset-btn" data-fund="55">A1</button>
+        <button class="lab-preset-btn on" data-fund="82">E2</button>
+        <button class="lab-preset-btn" data-fund="110">A2</button>
+        <button class="lab-preset-btn" data-fund="165">E3</button>
+        <button class="lab-preset-btn" data-fund="220">A3</button>
       </div>
 
       <div class="lab-sliders">
         <div class="lab-ctrl">
-          <input type="range" id="tx-speed" min="4" max="60" value="20" step="1">
-          <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">cycle</span>
-            <span class="lab-ctrl-val" id="tx-speed-val">20s</span>
-          </div>
-        </div>
-        <div class="lab-ctrl">
-          <input type="range" id="tx-volume" min="0" max="1" value="0.65" step="0.01">
+          <input type="range" id="tx-volume" min="0" max="1" value="0.6" step="0.01">
           <div class="lab-ctrl-bottom">
             <span class="lab-ctrl-label">volume</span>
-            <span class="lab-ctrl-val" id="tx-volume-val">65%</span>
+            <span class="lab-ctrl-val" id="tx-volume-val">60%</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="tx-resonance" min="0.5" max="20" value="7" step="0.5">
+          <input type="range" id="tx-fm-depth" min="0" max="1" value="0.5" step="0.01">
           <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">resonance</span>
-            <span class="lab-ctrl-val" id="tx-resonance-val">7</span>
+            <span class="lab-ctrl-label">FM depth</span>
+            <span class="lab-ctrl-val" id="tx-fm-val">50%</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="tx-drift" min="0" max="1" value="0.4" step="0.01">
+          <input type="range" id="tx-reverb" min="0" max="1" value="0.45" step="0.01">
           <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">pitch drift</span>
-            <span class="lab-ctrl-val" id="tx-drift-val">40%</span>
+            <span class="lab-ctrl-label">space</span>
+            <span class="lab-ctrl-val" id="tx-reverb-val">45%</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="tx-phase-spread" min="0" max="1" value="0.6" step="0.01">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">phase spread</span>
+            <span class="lab-ctrl-val" id="tx-phase-val">60%</span>
           </div>
         </div>
       </div>
 
       <div class="gen-row">
         <button class="lab-btn" id="tx-play">&#9654;&#xFE0E; play</button>
-        <button class="lab-btn" id="tx-loop">loop</button>
         <button class="lab-btn" id="tx-stop" disabled>&#9632;&#xFE0E; stop</button>
       </div>
 
-      <p class="lab-hint">hole density &rarr; filter brightness &middot; vertical centre of mass &rarr; pitch drift &middot; the card sculpts a continuous drone</p>
+      <p class="lab-hint">each hole is a voice &middot; Y position = harmonic partial &middot; X position = phase offset &middot; punch and erase while playing</p>
     </div>
 
     <hr class="gen-separator">
@@ -581,8 +583,10 @@
 <script src="/js/header.js"></script>
 <script>
 /* ================================================================
-   Punch Card Music
-   Motif engine · Tile engine · Texture audio · Export
+   Punch Card Music — Spatial Harmonic Synthesiser
+   Each hole = one voice.  Y = harmonic partial.  X = phase offset.
+   Spatial distribution of all holes determines the total timbre.
+   Punch and erase in real time while the drone plays.
    ================================================================ */
 (function(){
 'use strict';
@@ -590,223 +594,314 @@
 const CARD_COLS = 24;
 const HOLE_SPACING_MM = 5;
 
-// ── State ────────────────────────────────────────────────────────
+// ── State ─────────────────────────────────────────────────────────
 let motifSize = 8, cardRows = 24;
 let motifGrid = [], cardGrid = [];
 let tileMode = 'straight';
 let showComplement = false, includeMotifRef = true, exportFormat = 'print';
-let txRootMidi = 43;
-
-// Playback
-let isPlaying = false, isLooping = false;
-let txAnimFrame = null, txStartTime = null, txLastCol = -1;
 
 // Pointer drawing
 let isPointerDown = false, drawMode = null;
 
-// ── Audio ────────────────────────────────────────────────────────
-let audioCtx    = null;
-let txOscs      = [];      // [{osc, gn}] — three detuned oscillators
-let txFilter    = null;    // resonant lowpass — shaped by hole density
-let txDroneGain = null;    // amplitude shaped by density
-let txMasterGain= null;
-let txReverbNode= null;
-let txReverbGain= null;
-let txDryGain   = null;
-let txNoiseGain = null;    // subtle noise floor for materiality
+// ── Audio ─────────────────────────────────────────────────────────
+let audioCtx     = null;
+let masterGain   = null;
+let reverbNode   = null;
+let reverbGain   = null;
+let dryGain      = null;
+
+// Active voice map:  key = "r,c"  value = { carrier, modulator, modGain, vGain, panner }
+const voices = new Map();
+
+// Current fundamental frequency (Hz)
+let fundamentalHz = 82;
 
 function ensureAudio(){
   if(audioCtx) return;
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-  // Master
-  txMasterGain = audioCtx.createGain();
-  txMasterGain.gain.value = parseFloat(document.getElementById('tx-volume').value);
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = parseFloat(document.getElementById('tx-volume').value);
 
-  // Reverb — long, diffuse
-  txReverbNode = audioCtx.createConvolver();
-  buildIR(4.0);
-  txReverbGain = audioCtx.createGain(); txReverbGain.gain.value = 0.5;
-  txDryGain    = audioCtx.createGain(); txDryGain.gain.value    = 0.65;
+  // Long, lush reverb
+  reverbNode = audioCtx.createConvolver();
+  buildIR(3.5);
+  reverbGain = audioCtx.createGain();
+  reverbGain.gain.value = parseFloat(document.getElementById('tx-reverb').value);
+  dryGain = audioCtx.createGain();
+  dryGain.gain.value = 1 - reverbGain.gain.value;
 
-  // Resonant lowpass — the card's density controls this
-  txFilter = audioCtx.createBiquadFilter();
-  txFilter.type = 'lowpass';
-  txFilter.frequency.value = 200;
-  txFilter.Q.value = parseFloat(document.getElementById('tx-resonance').value);
-
-  // Drone amplitude envelope (density controls this)
-  txDroneGain = audioCtx.createGain();
-  txDroneGain.gain.value = 0.0;
-
-  // Noise source — very quiet, gives the drone body and warmth
-  const noiseLen = audioCtx.sampleRate * 3;
-  const nBuf = audioCtx.createBuffer(1, noiseLen, audioCtx.sampleRate);
-  const nData = nBuf.getChannelData(0);
-  for(let i=0;i<noiseLen;i++) nData[i] = (Math.random()*2-1) * 0.12;
-  const nSrc = audioCtx.createBufferSource();
-  nSrc.buffer = nBuf; nSrc.loop = true;
-  txNoiseGain = audioCtx.createGain(); txNoiseGain.gain.value = 0.0;
-  nSrc.connect(txNoiseGain);
-  nSrc.start();
-
-  // Three oscillators: sawtooth + sine + triangle, slight detuning
-  // Detuning in cents — produces slow beating between voices
-  const configs = [
-    {type:'sawtooth', detune:0,   gainVal:0.45},
-    {type:'sine',     detune:5,   gainVal:0.3},
-    {type:'triangle', detune:-4,  gainVal:0.25},
-  ];
-  txOscs = configs.map(({type,detune,gainVal}) => {
-    const osc = audioCtx.createOscillator();
-    const gn  = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.value = midiFreq(txRootMidi);
-    osc.detune.value = detune;
-    gn.gain.value = gainVal;
-    osc.connect(gn);
-    gn.connect(txDroneGain);
-    osc.start();
-    return {osc, gn};
-  });
-
-  // Graph: drones+noise → txDroneGain → txFilter → txMasterGain → dry+reverb → dest
-  txDroneGain.connect(txFilter);
-  txNoiseGain.connect(txFilter);
-  txFilter.connect(txMasterGain);
-  txMasterGain.connect(txDryGain);     txDryGain.connect(audioCtx.destination);
-  txMasterGain.connect(txReverbNode);  txReverbNode.connect(txReverbGain); txReverbGain.connect(audioCtx.destination);
+  masterGain.connect(dryGain);     dryGain.connect(audioCtx.destination);
+  masterGain.connect(reverbNode);  reverbNode.connect(reverbGain);
+  reverbGain.connect(audioCtx.destination);
 }
 
 function buildIR(dur){
-  if(!audioCtx) return;
-  const sr=audioCtx.sampleRate, len=Math.floor(sr*dur);
-  const buf=audioCtx.createBuffer(2,len,sr);
-  for(let ch=0;ch<2;ch++){
-    const d=buf.getChannelData(ch);
-    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,1.6);
+  const sr  = audioCtx.sampleRate;
+  const len = Math.floor(sr * dur);
+  const buf = audioCtx.createBuffer(2, len, sr);
+  for(let ch=0; ch<2; ch++){
+    const d = buf.getChannelData(ch);
+    for(let i=0; i<len; i++)
+      d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 1.4);
   }
-  txReverbNode.buffer=buf;
+  reverbNode.buffer = buf;
 }
 
-function midiFreq(m){ return 440*Math.pow(2,(m-69)/12); }
+// ── Voice model ───────────────────────────────────────────────────
+// Each punched hole at grid position (row, col) creates a voice with:
+//
+//   carrier frequency  = fundamental × harmonicRatio(row)
+//   FM modulator freq  = carrier × modulatorRatio(col)
+//   FM index           = fmDepth × distanceFromCentre(row, col)
+//   stereo pan         = xNorm(col) mapped to [-0.8, +0.8]
+//   phase offset       = col/CARD_COLS × phaseSpread × 2π
+//     — implemented as a tiny delay line per voice
+//
+// harmonicRatio(row): maps row to a position in the harmonic series.
+//   row 0 (top)    → high harmonic (bright, metallic)
+//   row ROWS-1     → fundamental or low partial (warm, dark)
+//   Uses the actual harmonic series: 1, 2, 3, 4, 5, 6, 8, 9, 12, 16 …
+//   so each row genuinely feels different from its neighbours.
 
-// ── Column analysis ───────────────────────────────────────────────
-// Returns three values that map directly to audio parameters:
-//   density    [0..1]  — fraction of holes punched → amplitude + brightness
-//   brightness [0..1]  — density mapped to filter cutoff (log curve)
-//   pitchBias  [-1..1] — vertical centre of mass: +1=all top, -1=all bottom → pitch drift
-function analyseCol(ag, col){
-  let count=0, wsum=0;
-  for(let r=0;r<cardRows;r++){
-    if(ag[r][col]){
-      count++;
-      wsum += 1 - (2*r / (cardRows-1)); // top rows = +1, bottom = -1
+function harmonicRatio(row){
+  // Row 0 = top = high harmonic; row cardRows-1 = bottom = fundamental
+  // Map row index to harmonic series position
+  // Series: [1,1.5,2,2.5,3,4,5,6,7,8,9,10,12,14,16,18,20,24,28,32,36,40,48,56]
+  const series = [1,1.5,2,2.5,3,4,5,6,7,8,9,10,12,14,16,18,20,24,28,32,36,40,48,56];
+  const n = Math.min(series.length-1, cardRows-1);
+  // Invert: row 0 = highest series entry, row ROWS-1 = series[0]
+  const idx = Math.round((1 - row/(cardRows-1)) * n);
+  return series[Math.min(idx, series.length-1)];
+}
+
+function modulatorRatio(col){
+  // X position → modulator frequency ratio
+  // Left columns = near-unison modulation (subtle beating)
+  // Right columns = higher ratio (harmonic FM, bell-like)
+  // Non-integer ratios in the middle = inharmonic FM (metallic, complex)
+  const ratios = [0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,3,
+                  3.5,4,4.5,5,5.5,6,7,8,9,10,11,12,14,16];
+  return ratios[Math.min(col, ratios.length-1)];
+}
+
+function distanceFromCentre(row, col){
+  // Normalised [0..1] distance from grid centre
+  const cx = (CARD_COLS-1)/2, cy = (cardRows-1)/2;
+  const dx = (col-cx)/cx, dy = (row-cy)/cy;
+  return Math.min(1, Math.sqrt(dx*dx + dy*dy));
+}
+
+function addVoice(row, col){
+  const key = row+','+col;
+  if(voices.has(key)) return;
+  if(!audioCtx) return;
+
+  const now    = audioCtx.currentTime;
+  const fmDepth = parseFloat(document.getElementById('tx-fm-depth').value);
+  const phSpread = parseFloat(document.getElementById('tx-phase-spread').value);
+
+  const hRatio  = harmonicRatio(row);
+  const mRatio  = modulatorRatio(col);
+  const carrierFreq  = fundamentalHz * hRatio;
+  const modulatorFreq= carrierFreq * mRatio;
+  const fmIndex = fmDepth * distanceFromCentre(row,col) * carrierFreq * 3;
+  const pan = ((col / (CARD_COLS-1)) * 2 - 1) * 0.8;
+
+  // Phase offset via tiny delay: col/CARD_COLS * phaseSpread * (1/carrierFreq)
+  const delayTime = (col/CARD_COLS) * phSpread * (1/Math.max(carrierFreq,1));
+
+  // Build: modulator → modGain → carrier.frequency (FM)
+  //        carrier → delay → vGain → panner → masterGain
+  const modulator = audioCtx.createOscillator();
+  modulator.type = 'sine';
+  modulator.frequency.value = modulatorFreq;
+
+  const modGain = audioCtx.createGain();
+  modGain.gain.value = 0;  // attack below
+
+  const carrier = audioCtx.createOscillator();
+  // Waveform chosen by harmonic position:
+  // Low harmonics (warm) = triangle, mid = sine, high (bright) = sawtooth
+  carrier.type = hRatio <= 2 ? 'triangle' : hRatio <= 8 ? 'sine' : 'sawtooth';
+  carrier.frequency.value = carrierFreq;
+
+  // Sub-oscillator one octave below for body (only on low harmonics)
+  let subOsc = null, subGain = null;
+  if(hRatio <= 2){
+    subOsc  = audioCtx.createOscillator();
+    subGain = audioCtx.createGain();
+    subOsc.type = 'sine';
+    subOsc.frequency.value = carrierFreq * 0.5;
+    subGain.gain.value = 0;
+    subOsc.start(now);
+  }
+
+  const delayNode = audioCtx.createDelay(0.5);
+  delayNode.delayTime.value = Math.min(delayTime, 0.5);
+
+  const vGain = audioCtx.createGain();
+  vGain.gain.value = 0;
+
+  const panner = audioCtx.createStereoPanner();
+  panner.pan.value = pan;
+
+  // Connect FM
+  modulator.connect(modGain);
+  modGain.connect(carrier.frequency);
+
+  // Connect audio path
+  carrier.connect(delayNode);
+  delayNode.connect(vGain);
+  if(subOsc) subOsc.connect(subGain), subGain.connect(vGain);
+  vGain.connect(panner);
+  panner.connect(masterGain);
+
+  // Start oscillators
+  modulator.start(now);
+  carrier.start(now);
+
+  // Attack envelope — punching a hole is an EVENT, not a fade
+  // Short sharp attack so the voice "arrives"
+  const attackTime = 0.04;
+  const targetVoiceGain = 0.18 / Math.sqrt(Math.max(voices.size+1, 1));
+
+  vGain.gain.setValueAtTime(0, now);
+  vGain.gain.linearRampToValueAtTime(targetVoiceGain, now + attackTime);
+
+  modGain.gain.setValueAtTime(0, now);
+  modGain.gain.linearRampToValueAtTime(fmIndex, now + attackTime * 2);
+
+  if(subGain){
+    subGain.gain.setValueAtTime(0, now);
+    subGain.gain.linearRampToValueAtTime(targetVoiceGain * 0.4, now + attackTime);
+  }
+
+  voices.set(key, {carrier, modulator, modGain, vGain, panner, subOsc, subGain, delayNode});
+  rebalanceGains();
+  updateStatus();
+}
+
+function removeVoice(row, col){
+  const key = row+','+col;
+  const v   = voices.get(key);
+  if(!v||!audioCtx) return;
+
+  const now      = audioCtx.currentTime;
+  const releaseT = 0.35;
+
+  // Decay envelope — erasing is also an event
+  v.vGain.gain.cancelScheduledValues(now);
+  v.vGain.gain.setTargetAtTime(0, now, releaseT*0.3);
+  v.modGain.gain.setTargetAtTime(0, now, releaseT*0.2);
+  if(v.subGain) v.subGain.gain.setTargetAtTime(0, now, releaseT*0.3);
+
+  const stopTime = now + releaseT + 0.1;
+  v.carrier.stop(stopTime);
+  v.modulator.stop(stopTime);
+  if(v.subOsc) v.subOsc.stop(stopTime);
+
+  voices.delete(key);
+  rebalanceGains();
+  updateStatus();
+}
+
+function rebalanceGains(){
+  // As holes are added/removed, rebalance all voice gains so total
+  // loudness stays constant — prevents clipping but also means
+  // sparse patterns still have presence
+  const count = Math.max(voices.size, 1);
+  const target = 0.18 / Math.sqrt(count);
+  const now    = audioCtx.currentTime;
+  voices.forEach(v => {
+    v.vGain.gain.setTargetAtTime(target, now, 0.08);
+    if(v.subGain) v.subGain.gain.setTargetAtTime(target*0.4, now, 0.08);
+  });
+}
+
+function rebuildAllVoices(){
+  // Called when tile/motif changes while playing —
+  // remove voices whose holes no longer exist, add new ones
+  if(!audioCtx) return;
+
+  const currentKeys = new Set();
+  for(let r=0;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++){
+    if(cardGrid[r][c]) currentKeys.add(r+','+c);
+  }
+
+  // Remove stale
+  voices.forEach((_,key)=>{ if(!currentKeys.has(key)) removeVoice(...key.split(',').map(Number)); });
+  // Add new
+  currentKeys.forEach(key=>{
+    const [r,c]=key.split(',').map(Number);
+    if(!voices.has(key)) addVoice(r,c);
+  });
+}
+
+function stopAllVoices(){
+  voices.forEach((_,key)=>{
+    const [r,c]=key.split(',').map(Number);
+    removeVoice(r,c);
+  });
+}
+
+// ── Status display ────────────────────────────────────────────────
+function updateStatus(){
+  if(!audioCtx){ document.getElementById('tx-voices').textContent='0'; return; }
+
+  const count = voices.size;
+  document.getElementById('tx-voices').textContent = count;
+
+  if(count===0){
+    document.getElementById('tx-spectral').textContent='—';
+    document.getElementById('tx-phase').textContent='—';
+    document.getElementById('tx-fm').textContent='—';
+    document.getElementById('tx-status').textContent='no holes punched';
+    return;
+  }
+
+  // Spectral centre: average harmonic ratio of all voices
+  let hSum=0, phSum=0, fmSum=0, n=0;
+  for(let r=0;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++){
+    if(cardGrid[r][c]){
+      hSum  += harmonicRatio(r);
+      phSum += c/CARD_COLS;
+      fmSum += distanceFromCentre(r,c);
+      n++;
     }
   }
-  const density    = count / cardRows;
-  const brightness = density; // applied log-curve in audio section
-  const pitchBias  = count > 0 ? wsum / count : 0;
-  return {density, brightness, pitchBias};
+  const hAvg  = (hSum/n).toFixed(1);
+  const phAvg = Math.round(phSum/n*100)+'%';
+  const fmAvg = (fmSum/n).toFixed(2);
+
+  document.getElementById('tx-spectral').textContent = hAvg+'×';
+  document.getElementById('tx-phase').textContent    = phAvg;
+  document.getElementById('tx-fm').textContent       = fmAvg;
+  document.getElementById('tx-status').textContent   = count===1?'1 voice':count+' voices';
 }
 
-// ── Apply one column's analysis to audio parameters (smoothed) ───
-function applyCol(ag, col){
-  if(!audioCtx||!txFilter) return;
-  const {density, brightness, pitchBias} = analyseCol(ag, col);
-  const drift = parseFloat(document.getElementById('tx-drift').value);
-  const now   = audioCtx.currentTime;
-  const tau   = 0.18; // smoothing — prevents zipper noise
+// ── Playing state ─────────────────────────────────────────────────
+let isPlaying = false;
 
-  // Filter cutoff: density 0→1 maps to 80Hz→5000Hz (log)
-  const cutoff = 80 * Math.pow(5000/80, brightness);
-  txFilter.frequency.setTargetAtTime(cutoff, now, tau);
-  txFilter.Q.setTargetAtTime(
-    parseFloat(document.getElementById('tx-resonance').value), now, tau
-  );
-
-  // Pitch: base + pitchBias * drift * ±200 cents (±2 semitones max)
-  const driftCents = pitchBias * drift * 200;
-  const targetFreq = midiFreq(txRootMidi) * Math.pow(2, driftCents/1200);
-  txOscs.forEach(({osc}) => osc.frequency.setTargetAtTime(targetFreq, now, tau*2));
-
-  // Amplitude: never fully silent — min 0.04 so drone is always present
-  txDroneGain.gain.setTargetAtTime(0.04 + density*0.96, now, tau);
-
-  // Noise follows density: denser columns feel richer
-  txNoiseGain.gain.setTargetAtTime(density*0.08, now, tau);
-
-  // Update status bar
-  const bPct = Math.round(brightness*100);
-  const biasStr = pitchBias >= 0 ? '+' + pitchBias.toFixed(2) : pitchBias.toFixed(2);
-  document.getElementById('tx-col-display').textContent = col+1;
-  document.getElementById('tx-density-display').textContent = Math.round(density*100)+'%';
-  document.getElementById('tx-filter-display').textContent = Math.round(cutoff)+'Hz';
-  document.getElementById('tx-pitch-display').textContent = biasStr;
-
-  // Playhead on card grid
-  updatePlayhead(col);
-}
-
-// ── Playback ──────────────────────────────────────────────────────
 function startPlay(){
-  if(isPlaying) stopPlay();
   ensureAudio();
   if(audioCtx.state==='suspended') audioCtx.resume();
   isPlaying=true;
-  txStartTime=audioCtx.currentTime;
-  txLastCol=-1;
-
-  // Fade in
-  const now=audioCtx.currentTime;
-  txMasterGain.gain.cancelScheduledValues(now);
-  txMasterGain.gain.setTargetAtTime(
-    parseFloat(document.getElementById('tx-volume').value), now, 0.25
-  );
-
   document.getElementById('tx-play').classList.add('on');
   document.getElementById('tx-stop').disabled=false;
   document.getElementById('tx-play').disabled=true;
-  document.getElementById('tx-status-note').textContent='playing';
-
-  const ag = activeGrid();
-
-  function frame(){
-    if(!isPlaying) return;
-    const cycleSec = parseFloat(document.getElementById('tx-speed').value);
-    const elapsed  = audioCtx.currentTime - txStartTime;
-    const looped   = elapsed % cycleSec;
-    const col      = Math.floor((looped / cycleSec) * CARD_COLS);
-
-    if(col !== txLastCol){
-      txLastCol = col;
-      applyCol(ag, col);
-    }
-
-    if(!isLooping && elapsed >= cycleSec){ stopPlay(); return; }
-    txAnimFrame = requestAnimationFrame(frame);
-  }
-  txAnimFrame = requestAnimationFrame(frame);
+  document.getElementById('tx-status').textContent='listening…';
+  // Build all voices from current card
+  rebuildAllVoices();
 }
 
 function stopPlay(){
   isPlaying=false;
-  if(txAnimFrame){ cancelAnimationFrame(txAnimFrame); txAnimFrame=null; }
-  if(audioCtx&&txDroneGain){
-    const now=audioCtx.currentTime;
-    txDroneGain.gain.cancelScheduledValues(now);
-    txDroneGain.gain.setTargetAtTime(0.0, now, 0.5);
-    if(txNoiseGain) txNoiseGain.gain.setTargetAtTime(0.0, now, 0.5);
-  }
-  updatePlayhead(-1);
+  stopAllVoices();
   document.getElementById('tx-play').classList.remove('on');
   document.getElementById('tx-play').disabled=false;
   document.getElementById('tx-stop').disabled=true;
-  document.getElementById('tx-status-note').textContent='ready';
-  document.getElementById('tx-col-display').textContent='—';
-  document.getElementById('tx-density-display').textContent='—';
-  document.getElementById('tx-filter-display').textContent='—';
-  document.getElementById('tx-pitch-display').textContent='—';
+  document.getElementById('tx-status').textContent='ready';
 }
 
 // ── Grid engine ───────────────────────────────────────────────────
@@ -829,12 +924,10 @@ function cardToMotif(cr,cc){
   if(tileMode==='brick') rowOff=(colRep%2)*Math.floor(motifSize/2);
   const rowRep=Math.floor((cr+rowOff)/motifSize);
   const rowPh=((cr+rowOff)%motifSize+motifSize)%motifSize;
-  const mC=(tileMode==='mirror-x'||tileMode==='mirror-xy')&&(colRep%2===1) ? motifSize-1-colPh : colPh;
-  const mR=(tileMode==='mirror-y'||tileMode==='mirror-xy')&&(rowRep%2===1) ? motifSize-1-rowPh : rowPh;
+  const mC=(tileMode==='mirror-x'||tileMode==='mirror-xy')&&(colRep%2===1)?motifSize-1-colPh:colPh;
+  const mR=(tileMode==='mirror-y'||tileMode==='mirror-xy')&&(rowRep%2===1)?motifSize-1-rowPh:rowPh;
   return{mr:mR,mc:mC};
 }
-
-function activeGrid(){ return cardGrid; }
 
 // ── Rendering ─────────────────────────────────────────────────────
 function cellSize(){ return window.innerWidth<=400?12:window.innerWidth<=680?15:20; }
@@ -869,7 +962,10 @@ function renderGrid(containerId,colNumsId,rows,cols,data,editable){
 
 function renderMotif(){ renderGrid('motif-grid','motif-col-nums',motifSize,motifSize,motifGrid,true); updateGhosts(); }
 function renderCard(){  renderGrid('card-grid','card-col-nums',cardRows,CARD_COLS,cardGrid,false); }
-function refreshAll(){  tileCard(); renderMotif(); renderCard(); updateStatus(); }
+function refreshAll(){
+  tileCard(); renderMotif(); renderCard(); updateStatusBar();
+  if(isPlaying) rebuildAllVoices();
+}
 
 function updateGhosts(){
   document.querySelectorAll('#motif-grid .pc-cell').forEach(el=>el.classList.remove('ghost'));
@@ -885,23 +981,12 @@ function updateGhosts(){
   }
 }
 
-function updateStatus(){
+function updateStatusBar(){
   let h=0;
   for(let r=0;r<motifSize;r++) for(let c=0;c<motifSize;c++) if(motifGrid[r][c]) h++;
   document.getElementById('stat-holes').textContent=h;
-  document.getElementById('stat-motif-dim').textContent=motifSize+'×'+motifSize;
-  document.getElementById('stat-card-dim').textContent=CARD_COLS+'×'+cardRows;
-}
-
-function updatePlayhead(col){
-  document.querySelectorAll('#card-grid .pc-cell.playhead').forEach(el=>el.classList.remove('playhead'));
-  if(col<0){ document.getElementById('stat-playhead').textContent='—'; return; }
-  document.getElementById('stat-playhead').textContent=col+1;
-  const rows=document.querySelectorAll('#card-grid .pc-row');
-  for(let r=0;r<cardRows;r++){
-    const cells=rows[r]?.querySelectorAll('.pc-cell');
-    if(cells&&cells[col]) cells[col].classList.add('playhead');
-  }
+  document.getElementById('stat-motif-dim').textContent=motifSize+'\u00d7'+motifSize;
+  document.getElementById('stat-card-dim').textContent=CARD_COLS+'\u00d7'+cardRows;
 }
 
 // ── Pointer drawing ───────────────────────────────────────────────
@@ -922,7 +1007,20 @@ function toggle(r,c){
   motifGrid[r][c]=!motifGrid[r][c];
   const el=document.querySelector(`#motif-grid .pc-cell[data-r="${r}"][data-c="${c}"]`);
   if(el) el.classList.toggle('punched',motifGrid[r][c]);
-  tileCard(); renderCard(); updateStatus(); updateGhosts();
+  tileCard();
+  renderCard();
+  updateStatusBar();
+  updateGhosts();
+  // Live audio: add/remove only the tiled voices affected by this motif cell
+  if(isPlaying){
+    for(let cr=0;cr<cardRows;cr++) for(let cc=0;cc<CARD_COLS;cc++){
+      const {mr,mc}=cardToMotif(cr,cc);
+      if(mr===r&&mc===c){
+        if(cardGrid[cr][cc]) addVoice(cr,cc);
+        else                  removeVoice(cr,cc);
+      }
+    }
+  }
 }
 
 // ── Presets ───────────────────────────────────────────────────────
@@ -940,8 +1038,7 @@ const PRESETS = {
     const h=Math.floor(s/2);
     for(let col=0;col<s;col++){
       const d=Math.abs(col-h)%s;
-      g[d][col]=true;
-      if(s-1-d!==d) g[s-1-d][col]=true;
+      g[d][col]=true; if(s-1-d!==d) g[s-1-d][col]=true;
     }
     return g;
   },
@@ -956,7 +1053,7 @@ const PRESETS = {
     for(let i=0;i<s;i++){ g[i][i]=true; g[i][(i+2)%s]=true; }
     return g;
   },
-  random:   s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.28))
+  random:   s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.25))
 };
 function applyPreset(name){ motifGrid=PRESETS[name](motifSize); refreshAll(); }
 
@@ -967,15 +1064,12 @@ function buildSVG(){
   const W=(CARD_COLS-1)*sp+2*mg, H=(cardRows-1)*sp+2*mg;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">`;
   s+=`<rect x=".3" y=".3" width="${W-.6}" height="${H-.6}" fill="#f4f0e2" stroke="#222" stroke-width=".5" rx="2"/>`;
-  // Column guide bands every 6
   for(let c=0;c<CARD_COLS;c+=6){
     const x=mg+c*sp-sp/2;
     s+=`<rect x="${x}" y="${mg/2}" width="${6*sp}" height="${H-mg}" fill="#e8e0c5" opacity=".4"/>`;
   }
-  // Column numbers
   for(let c=0;c<CARD_COLS;c++)
     s+=`<text x="${mg+c*sp}" y="${mg-2.5}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="middle">${c+1}</text>`;
-  // Rows
   for(let r=0;r<cardRows;r++){
     const y=mg+r*sp;
     s+=`<text x="${mg-2.5}" y="${y+.7}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="end">${cardRows-r}</text>`;
@@ -986,8 +1080,7 @@ function buildSVG(){
         :`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
     }
   }
-  s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de · 24st×${cardRows}r · ${sp}mm spacing</text>`;
-  // Motif reference (small, bottom-right)
+  s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de \u00b7 24st\u00d7${cardRows}r \u00b7 ${sp}mm spacing</text>`;
   if(includeMotifRef){
     const ms=2.5, mx=W-mg-motifSize*ms, my=H-mg-motifSize*ms-2;
     s+=`<rect x="${mx-1}" y="${my-1}" width="${motifSize*ms+2}" height="${motifSize*ms+2}" fill="none" stroke="#ccc" stroke-width=".3"/>`;
@@ -1019,14 +1112,13 @@ function doExport(){
     };
     img.src=url; return;
   }
-  // Print
   const win=window.open('','_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>Punch Card · jordanelias.de</title>
+  win.document.write(`<!DOCTYPE html><html><head><title>Punch Card \u00b7 jordanelias.de</title>
 <style>body{margin:0;background:#fff;}.w{padding:8mm;}.n{font-family:sans-serif;font-size:9px;color:#777;margin-bottom:5mm;line-height:1.6;}
 @media print{@page{margin:8mm;size:auto;}}</style></head><body>
 <div class="w">
-<div class="n"><strong>Print at 100% — do not scale to fit page.</strong><br>
-Hole spacing: ${HOLE_SPACING_MM}mm centre-to-centre · Brother / Silver Reed 24-stitch standard gauge · Motif: ${motifSize}×${motifSize} · Tile: ${tileMode}</div>
+<div class="n"><strong>Print at 100% \u2014 do not scale to fit page.</strong><br>
+Hole spacing: ${HOLE_SPACING_MM}mm \u00b7 Brother / Silver Reed 24-stitch standard gauge \u00b7 Motif: ${motifSize}\u00d7${motifSize} \u00b7 Tile: ${tileMode}</div>
 ${svg}
 </div>
 <script>window.onload=function(){window.print();}<\/script>
@@ -1048,10 +1140,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   initMotif(8); applyPreset('diamond');
 
   wireGroup('[data-preset]','preset', applyPreset);
-  wireGroup('[data-msize]','msize',  v=>{ initMotif(+v); refreshAll(); });
-  wireGroup('[data-tile]','tile',    v=>{ tileMode=v; refreshAll(); });
+  wireGroup('[data-msize]','msize',   v=>{ initMotif(+v); refreshAll(); });
+  wireGroup('[data-tile]','tile',     v=>{ tileMode=v; refreshAll(); });
   wireGroup('[data-cardrows]','cardrows', v=>{ cardRows=+v; refreshAll(); });
-  wireGroup('[data-txroot]','txroot', v=>{ txRootMidi=+v; });
+  wireGroup('[data-fund]','fund',     v=>{ fundamentalHz=+v; if(isPlaying){ stopPlay(); startPlay(); } });
   wireGroup('[data-export]','export', v=>{ exportFormat=v; });
 
   document.getElementById('toggle-complement').addEventListener('click',function(){
@@ -1061,33 +1153,30 @@ document.addEventListener('DOMContentLoaded',()=>{
     includeMotifRef=!includeMotifRef; this.classList.toggle('on',includeMotifRef);
   });
 
-  // Transport
   document.getElementById('tx-play').addEventListener('click', startPlay);
   document.getElementById('tx-stop').addEventListener('click', stopPlay);
-  document.getElementById('tx-loop').addEventListener('click',function(){
-    isLooping=!isLooping; this.classList.toggle('on',isLooping);
-  });
 
-  // Sliders — live update labels; audio nodes updated inside applyCol on next frame
-  document.getElementById('tx-speed').addEventListener('input',function(){
-    document.getElementById('tx-speed-val').textContent=this.value+'s';
-  });
+  // Sliders
   document.getElementById('tx-volume').addEventListener('input',function(){
     document.getElementById('tx-volume-val').textContent=Math.round(this.value*100)+'%';
-    if(txMasterGain) txMasterGain.gain.setTargetAtTime(parseFloat(this.value), audioCtx.currentTime, 0.05);
+    if(masterGain) masterGain.gain.setTargetAtTime(parseFloat(this.value), audioCtx.currentTime, 0.05);
   });
-  document.getElementById('tx-resonance').addEventListener('input',function(){
-    document.getElementById('tx-resonance-val').textContent=this.value;
-    if(txFilter) txFilter.Q.setTargetAtTime(parseFloat(this.value), audioCtx.currentTime, 0.05);
+  document.getElementById('tx-fm-depth').addEventListener('input',function(){
+    document.getElementById('tx-fm-val').textContent=Math.round(this.value*100)+'%';
   });
-  document.getElementById('tx-drift').addEventListener('input',function(){
-    document.getElementById('tx-drift-val').textContent=Math.round(this.value*100)+'%';
+  document.getElementById('tx-reverb').addEventListener('input',function(){
+    document.getElementById('tx-reverb-val').textContent=Math.round(this.value*100)+'%';
+    if(reverbGain){
+      reverbGain.gain.setTargetAtTime(parseFloat(this.value), audioCtx.currentTime, 0.05);
+      dryGain.gain.setTargetAtTime(1-parseFloat(this.value), audioCtx.currentTime, 0.05);
+    }
+  });
+  document.getElementById('tx-phase-spread').addEventListener('input',function(){
+    document.getElementById('tx-phase-val').textContent=Math.round(this.value*100)+'%';
   });
 
-  // Export
   document.getElementById('pc-export-btn').addEventListener('click', doExport);
 
-  // Responsive re-render
   let resizeT;
   window.addEventListener('resize',()=>{ clearTimeout(resizeT); resizeT=setTimeout(refreshAll,150); });
 });
