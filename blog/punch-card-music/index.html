@@ -116,6 +116,7 @@
 
     /* Dual grid layout */
     .pc-dual-grid { display: grid; grid-template-columns: auto 1fr; gap: 1.5em; align-items: start; margin-bottom: 0.75em; }
+    .pc-card-solo { margin-bottom: 0.75em; overflow-x: auto; }
     .pc-panel-title { font-family: 'Inter', sans-serif; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); opacity: 0.45; margin-bottom: 5px; }
     .pc-grid-scroll { overflow-x: auto; }
 
@@ -144,6 +145,13 @@
     .pc-cell.tiled.punched:hover { opacity: 1; }
     .pc-cell.playhead { box-shadow: 0 0 0 2px var(--accent-hover, #888); opacity: 0.5; }
     .pc-cell.punched.playhead { opacity: 1; }
+    /* Region tints on full card */
+    .pc-cell.region-top    { border-color: var(--text); opacity: 0.22; }
+    .pc-cell.region-mid    { border-color: var(--text); opacity: 0.28; }
+    .pc-cell.region-bot    { border-color: var(--text); opacity: 0.22; }
+    .pc-cell.region-top.punched { opacity: 0.85; }
+    .pc-cell.region-mid.punched { opacity: 1; }
+    .pc-cell.region-bot.punched { opacity: 0.9; }
 
     /* Article */
     .lab-exercise { border-left: 3px solid var(--text); padding: 1em 1.25em; margin: 1.5em 0; }
@@ -165,11 +173,9 @@
 
     @media (max-width: 680px) {
       .pc-dual-grid { grid-template-columns: 1fr; }
-      .pc-cell { width: 15px; height: 15px; }
-      .pc-col-num { font-size: 0.46rem; }
     }
     @media (max-width: 400px) {
-      .pc-cell { width: 12px; height: 12px; }
+      .pc-col-num { font-size: 0.42rem; }
     }
   </style>
 
@@ -312,7 +318,7 @@
           </div>
         </div>
         <div>
-          <div class="pc-panel-title">full card &mdash; 24-stitch repeat</div>
+          <div class="pc-panel-title">full card &mdash; 24-stitch repeat &mdash; draw here too</div>
           <div class="pc-grid-scroll">
             <div id="card-col-nums" class="pc-col-numbers"></div>
             <div id="card-grid" class="pc-grid"></div>
@@ -322,6 +328,9 @@
 
       <p class="lab-hint">draw in the motif cell &middot; the card tiles automatically &middot; click or drag to punch holes</p>
     </div>
+
+    <hr class="gen-separator">
+
 
     <hr class="gen-separator">
 
@@ -350,10 +359,10 @@
           </div>
           <div class="pc-status-item">
             <span class="pc-status-val" id="s-region">&mdash;</span>
-            <span class="pc-status-label">region</span>
+            <span class="pc-status-label">engines</span>
           </div>
           <div class="pc-status-item">
-            <span class="pc-status-val" id="s-roughness">&mdash;</span>
+            <span class="pc-status-val" id="s-rough">&mdash;</span>
             <span class="pc-status-label">roughness</span>
           </div>
         </div>
@@ -371,31 +380,31 @@
 
       <div class="lab-sliders">
         <div class="lab-ctrl">
-          <input type="range" id="s-vol" min="0" max="1" value="0.55" step="0.01">
+          <input type="range" id="s-vol" min="0" max="1" value="0.6" step="0.01">
           <div class="lab-ctrl-bottom">
             <span class="lab-ctrl-label">volume</span>
-            <span class="lab-ctrl-val" id="s-vol-val">55%</span>
+            <span class="lab-ctrl-val" id="s-vol-val">60%</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="s-space" min="0" max="1" value="0.5" step="0.01">
+          <input type="range" id="s-space" min="0" max="1" value="0.45" step="0.01">
           <div class="lab-ctrl-bottom">
             <span class="lab-ctrl-label">space</span>
-            <span class="lab-ctrl-val" id="s-space-val">50%</span>
+            <span class="lab-ctrl-val" id="s-space-val">45%</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="s-distort" min="0" max="1" value="0.3" step="0.01">
+          <input type="range" id="s-drive" min="0" max="1" value="0.3" step="0.01">
           <div class="lab-ctrl-bottom">
             <span class="lab-ctrl-label">saturation</span>
-            <span class="lab-ctrl-val" id="s-distort-val">30%</span>
+            <span class="lab-ctrl-val" id="s-drive-val">30%</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="s-width" min="0" max="1" value="0.7" step="0.01">
+          <input type="range" id="s-width" min="0" max="1" value="0.65" step="0.01">
           <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">width</span>
-            <span class="lab-ctrl-val" id="s-width-val">70%</span>
+            <span class="lab-ctrl-label">stereo width</span>
+            <span class="lab-ctrl-val" id="s-width-val">65%</span>
           </div>
         </div>
       </div>
@@ -405,7 +414,7 @@
         <button class="lab-btn" id="s-stop" disabled>&#9632;&#xFE0E; stop</button>
       </div>
 
-      <p class="lab-hint">top rows &rarr; spectral shimmer &middot; middle rows &rarr; vowel formants &middot; bottom rows &rarr; resonant strings &middot; draw while playing</p>
+      <p class="lab-hint">top rows &rarr; additive shimmer &middot; middle rows &rarr; vowel formants &middot; bottom rows &rarr; resonant strings &middot; draw on either grid while playing</p>
     </div>
 
     <hr class="gen-separator">
@@ -586,191 +595,143 @@
 <script src="/js/header.js"></script>
 <script>
 /* ================================================================
-   PUNCH CARD SPATIAL SYNTHESISER
-   Three-engine architecture mapping grid position to timbre:
+   PUNCH CARD SPATIAL SYNTHESISER  v3
+   Three independent synthesis engines, each governing a region:
 
-   TOP REGION    → Additive / Spectral
-     PeriodicWave rebuilt on every hole change.
-     Each hole contributes a specific Fourier partial.
-     Drawing in the top region literally reshapes the waveform.
+   TOP THIRD    — Additive / Spectral (PeriodicWave)
+     Each hole contributes a sine partial. Y = harmonic index.
+     X = Fourier phase. Drawing reshapes the waveform directly.
 
-   MIDDLE REGION → Formant / Vocal
-     Sawtooth source through three cascaded bandpass filters.
-     Y position shifts formant frequency (F1/F2/F3).
-     X position controls formant bandwidth (narrow=resonant,
-     wide=breathy). Specific patterns produce specific vowels.
+   MIDDLE THIRD — Formant / Vocal (cascaded bandpass filters)
+     Three BiquadFilter bandpass chains (F1/F2/F3).
+     Y controls formant frequency. X controls Q (narrow/wide).
+     Specific hole clusters produce specific vowel sounds.
 
-   BOTTOM REGION → Karplus-Strong Physical Strings
-     Noise burst into feedback delay loop with 1-pole lowpass.
-     Row = pitch (delay length). Column = sustain (filter coeff).
-     Strings interact: consonant intervals ring, dissonant ones clash.
+   BOTTOM THIRD — Karplus-Strong strings (feedback delay)
+     Each hole = one plucked/bowed string.
+     Y = pitch. X = sustain (left=plucked, right=bowed).
+     Stereo pan follows X. Edge drive follows distance from centre.
 
-   CROSS-MODAL MAPPINGS (synesthetic correspondences):
-     Y position      → spectral centroid (brightness)
-     X position      → temporal envelope + stereo position
-     Density         → roughness (beating between close partials)
-     Clustering      → formant peaks (vowel identity)
-     Symmetry        → consonance (complement pairs = octave ratios)
-     Edge proximity  → saturation / waveshaper drive
-     Diagonal ↗      → rising spectral sweep
-     Diagonal ↘      → falling spectral sweep
+   Drawing on either the motif cell OR the full card triggers
+   live audio updates while playing.
    ================================================================ */
 (function(){
 'use strict';
 
 const CARD_COLS = 24;
-const HOLE_SPACING_MM = 5;
+const HOLE_MM   = 5;
 
-// ── State ─────────────────────────────────────────────────────────
+// ── App state ─────────────────────────────────────────────────────
 let motifSize = 8, cardRows = 24;
 let motifGrid = [], cardGrid = [];
-let tileMode = 'straight';
+let tileMode  = 'straight';
 let showComplement = false, includeMotifRef = true, exportFormat = 'print';
-let rootHz = 55;   // G1
+let rootHz    = 55;   // G1 default
 let isPlaying = false;
-let isPointerDown = false, drawMode = null;
 
-// ── Audio graph ───────────────────────────────────────────────────
-let ctx = null;
+// Pointer drawing
+let ptrDown = false, drawMode = null, drawTarget = null; // 'motif' | 'card'
 
-// Master bus
-let masterGain, masterShaper, masterFilter;
+// ── Audio context + shared nodes ──────────────────────────────────
+let A   = null;   // AudioContext
+let out = null;   // master gain → destination
+let rev = null;   // ConvolverNode
+let revSend = null, revReturn = null;
+let masterShaper = null;
 
-// Reverb
-let reverbNode, reverbSend, reverbReturn;
+// Engine A — additive
+let addOsc   = null;   // single PeriodicWave oscillator
+let addGain  = null;
+let addFilter= null;   // gentle lowpass on additive engine
 
-// Mid/Side stereo widener
-let midGain, sideGain, splitter, merger;
+// Engine B — formant
+let formSrc  = null;   // sawtooth into formant filters
+let fFilt    = [];     // [BiquadFilter×3]
+let fGain    = [];     // [GainNode×3]
+let fMix     = null;
 
-// Engine A — Additive (top region)
-let addOsc = null;        // PeriodicWave oscillator, rebuilt on change
-let addGain = null;
-let addShaper = null;     // soft-clip tanh curve
-let addCoeffs = null;     // current {real, imag} for PeriodicWave
+// Engine C — strings
+const KS     = new Map(); // key → {nodes}
+let ksMix    = null;
 
-// Engine B — Formant (middle region)
-let formSrc = null;       // sawtooth source for all formants
-let formFilters = [];     // three BiquadFilter (bandpass) chains
-let formGains = [];       // per-formant gain nodes
-let formMix = null;       // sum of formant outputs
-let formShaper = null;    // asymmetric waveshaper (warm/vocal)
+// ── Audio init ────────────────────────────────────────────────────
+function boot(){
+  if(A) return;
+  A = new (window.AudioContext||window.webkitAudioContext)();
 
-// Engine C — Strings (bottom region)
-// Each string is a Karplus-Strong feedback network:
-//   noise → ksDelay → ksFilter → ksGain → ksDelay (feedback)
-//                              → ksOut → pan → mix
-const strings = new Map(); // key="r,c" value={nodes...}
-let stringMix = null;
-let stringShaper = null;  // hard-clip for bite
+  // Master output chain: engines → masterShaper → out → destination
+  out = A.createGain();
+  out.gain.value = parseFloat(document.getElementById('s-vol').value);
 
-// ── Init audio ────────────────────────────────────────────────────
-function initAudio(){
-  if(ctx) return;
-  ctx = new (window.AudioContext || window.webkitAudioContext)();
-
-  // ── Master bus
-  masterGain   = ctx.createGain();
-  masterGain.gain.value = parseFloat(document.getElementById('s-vol').value);
-
-  masterFilter = ctx.createBiquadFilter();
-  masterFilter.type = 'highpass';
-  masterFilter.frequency.value = 30; // remove DC / sub-rumble
-
-  masterShaper = ctx.createWaveShaper();
-  masterShaper.curve = makeSoftClip(256, 0.3);
+  masterShaper = A.createWaveShaper();
+  masterShaper.curve = softClipCurve(256, 0.6);
   masterShaper.oversample = '4x';
+  masterShaper.connect(out);
+  out.connect(A.destination);
 
-  // ── Reverb (convolution, 4s lush)
-  reverbNode   = ctx.createConvolver();
-  reverbNode.buffer = buildIR(4.0, 0.5);
-  reverbSend   = ctx.createGain();
-  reverbSend.gain.value = parseFloat(document.getElementById('s-space').value);
-  reverbReturn = ctx.createGain();
-  reverbReturn.gain.value = 0.9;
+  // Reverb send/return in parallel with dry
+  rev = A.createConvolver();
+  rev.buffer = makeIR(3.5);
+  revSend   = A.createGain();
+  revSend.gain.value = parseFloat(document.getElementById('s-space').value);
+  revReturn = A.createGain();
+  revReturn.gain.value = 0.8;
+  out.connect(revSend);
+  revSend.connect(rev);
+  rev.connect(revReturn);
+  revReturn.connect(A.destination);
 
-  // ── Mid/Side stereo widener
-  // Encode: mid = (L+R)/2, side = (L-R)/2
-  // Widen: masterGain → splitter → midGain/sideGain → merger → dest
-  splitter = ctx.createChannelSplitter(2);
-  merger   = ctx.createChannelMerger(2);
-  midGain  = ctx.createGain(); midGain.gain.value  = 1.0;
-  sideGain = ctx.createGain();
-  const w = parseFloat(document.getElementById('s-width').value);
-  sideGain.gain.value = w;
+  // ── Engine A: additive
+  addGain = A.createGain();
+  addGain.gain.value = 0.0;
+  addFilter = A.createBiquadFilter();
+  addFilter.type = 'lowpass';
+  addFilter.frequency.value = 8000;
+  addGain.connect(addFilter);
+  addFilter.connect(masterShaper);
+  // addOsc will be created in rebuildAdd()
 
-  // ── Engine A — Additive
-  addGain   = ctx.createGain(); addGain.gain.value = 0.5;
-  addShaper = ctx.createWaveShaper();
-  addShaper.curve   = makeTanh(512, 1.5);
-  addShaper.oversample = '4x';
-  addCoeffs = {real: new Float32Array(33), imag: new Float32Array(33)};
-  addCoeffs.real[0] = 0; // DC = 0
-  buildAddOsc();
-
-  // ── Engine B — Formant
-  formSrc = ctx.createOscillator();
+  // ── Engine B: formant
+  formSrc = A.createOscillator();
   formSrc.type = 'sawtooth';
   formSrc.frequency.value = rootHz;
-  formMix     = ctx.createGain(); formMix.gain.value = 0.0;
-  formShaper  = ctx.createWaveShaper();
-  formShaper.curve = makeAsymClip(512);
-  formShaper.oversample = '2x';
-  // Three formant filters
-  const fFreqs = [300, 900, 2400]; // neutral starting positions
-  for(let i=0;i<3;i++){
-    const f = ctx.createBiquadFilter();
-    f.type = 'bandpass';
-    f.frequency.value = fFreqs[i];
-    f.Q.value = 8;
-    const g = ctx.createGain(); g.gain.value = 0;
-    formSrc.connect(f); f.connect(g); g.connect(formMix);
-    formFilters.push(f); formGains.push(g);
-  }
   formSrc.start();
 
-  // ── Engine C — Strings
-  stringMix    = ctx.createGain(); stringMix.gain.value = 0.0;
-  stringShaper = ctx.createWaveShaper();
-  stringShaper.curve = makeHardClip(512, 0.7);
-  stringShaper.oversample = '4x';
+  fMix = A.createGain();
+  fMix.gain.value = 0.0;
+  fMix.connect(masterShaper);
 
-  // ── Routing
-  // Engines → per-engine shaper → masterFilter → masterShaper → masterGain
-  //         → splitter → widener → merger → dest
-  //         → reverbSend → reverbNode → reverbReturn → merger
+  // Three formant bandpass filters
+  [300, 900, 2400].forEach(freq => {
+    const f = A.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.value = freq;
+    f.Q.value = 8;
+    const g = A.createGain();
+    g.gain.value = 0;
+    formSrc.connect(f);
+    f.connect(g);
+    g.connect(fMix);
+    fFilt.push(f); fGain.push(g);
+  });
 
-  addOsc.connect(addGain);
-  addGain.connect(addShaper);
-  addShaper.connect(masterFilter);
-
-  formMix.connect(formShaper);
-  formShaper.connect(masterFilter);
-
-  stringMix.connect(stringShaper);
-  stringShaper.connect(masterFilter);
-
-  masterFilter.connect(masterShaper);
-  masterShaper.connect(masterGain);
-
-  // Send to reverb
-  masterGain.connect(reverbSend);
-  reverbSend.connect(reverbNode);
-  reverbNode.connect(reverbReturn);
-
-  // Mid/Side widening
-  masterGain.connect(splitter);
-  splitter.connect(midGain,  0); // L → mid
-  splitter.connect(sideGain, 1); // R → side (widened)
-  midGain.connect(merger,  0, 0); // mid → L
-  sideGain.connect(merger, 0, 1); // side → R
-  reverbReturn.connect(merger, 0, 0);
-  reverbReturn.connect(merger, 0, 1);
-  merger.connect(ctx.destination);
+  // ── Engine C: strings
+  ksMix = A.createGain();
+  ksMix.gain.value = 0.0;
+  ksMix.connect(masterShaper);
 }
 
-// ── Waveshaper curves ─────────────────────────────────────────────
-function makeTanh(n, drive){
-  // Soft saturation — tanh curve scaled by drive
+// ── Waveshaper helpers ────────────────────────────────────────────
+function softClipCurve(n, k){
+  const c = new Float32Array(n);
+  for(let i=0;i<n;i++){
+    const x = i*2/(n-1)-1;
+    c[i] = (1+k)*x / (1+k*Math.abs(x));
+  }
+  return c;
+}
+
+function driveClipCurve(n, drive){
   const c = new Float32Array(n);
   for(let i=0;i<n;i++){
     const x = (i*2/(n-1)-1)*drive;
@@ -778,434 +739,308 @@ function makeTanh(n, drive){
   }
   return c;
 }
-function makeSoftClip(n, amount){
-  // Gentle master bus limiting
-  const c = new Float32Array(n);
-  for(let i=0;i<n;i++){
-    let x = i*2/(n-1)-1;
-    c[i] = x / (1 + Math.abs(x) * amount);
-  }
-  return c;
-}
-function makeAsymClip(n){
-  // Asymmetric waveshaper — pushes even harmonics (warm, vocal character)
-  const c = new Float32Array(n);
-  for(let i=0;i<n;i++){
-    const x = i*2/(n-1)-1;
-    // Positive half: soft tanh; Negative half: harder clamp
-    c[i] = x > 0
-      ? Math.tanh(x * 1.8) * 0.85
-      : Math.tanh(x * 2.8) * 0.6;
-  }
-  return c;
-}
-function makeHardClip(n, threshold){
-  // Hard clip with zero-crossing smoothing — gives strings bite
-  const c = new Float32Array(n);
-  for(let i=0;i<n;i++){
-    const x = i*2/(n-1)-1;
-    c[i] = Math.max(-threshold, Math.min(threshold, x)) / threshold;
-  }
-  return c;
-}
-function makeDriveClip(n, drive){
-  // Variable drive for per-voice saturation
-  const c = new Float32Array(n);
-  for(let i=0;i<n;i++){
-    const x = (i*2/(n-1)-1) * drive;
-    c[i] = 2/(1+Math.exp(-2*x)) - 1;
-  }
-  return c;
-}
 
-// ── Reverb impulse ────────────────────────────────────────────────
-function buildIR(dur, decay){
-  const sr  = ctx.sampleRate, len = Math.floor(sr*dur);
-  const buf = ctx.createBuffer(2, len, sr);
+// ── Reverb IR ─────────────────────────────────────────────────────
+function makeIR(dur){
+  const sr  = A.sampleRate, len = Math.floor(sr*dur);
+  const buf = A.createBuffer(2, len, sr);
   for(let ch=0;ch<2;ch++){
     const d = buf.getChannelData(ch);
-    // Pre-delay of ~15ms + exponential decay with early reflections
-    const pre = Math.floor(sr*0.015);
+    const pre = Math.floor(sr*0.012);
     for(let i=pre;i<len;i++){
-      const t    = (i-pre)/(len-pre);
-      const env  = Math.pow(1-t, 1+decay*3);
-      // Early reflections: dense cluster in first 80ms
-      const er   = i < sr*0.08 ? (Math.random()<0.3?1:0) : 1;
-      d[i] = (Math.random()*2-1) * env * er;
+      const t   = (i-pre)/(len-pre);
+      const env = Math.pow(1-t, 2.2);
+      d[i] = (Math.random()*2-1) * env;
+    }
+    // Early reflections
+    for(let r=0;r<8;r++){
+      const pos = pre + Math.floor(Math.random()*sr*0.06);
+      if(pos<len) d[pos] += (Math.random()*2-1)*0.5;
     }
   }
   return buf;
 }
 
-// ── Engine A: Additive synthesis ──────────────────────────────────
-// Recalculate PeriodicWave whenever top-region holes change.
-// Each hole at (row, col) in the top third contributes:
-//   partial index k = harmonicIndex(row)
-//   phase           = 2π × col/CARD_COLS  (Fourier phase)
-//   amplitude       = amplitudeForRow(row) / sqrt(voiceCount)
+// ── Region boundaries ─────────────────────────────────────────────
+function topEnd(){ return Math.floor(cardRows/3); }
+function midEnd(){ return Math.floor(cardRows*2/3); }
 
-function topRegionBoundary(){ return Math.floor(cardRows / 3); }
-
-function harmonicIndex(row){
-  // Map row (within top region) to harmonic partial index
-  // Top of region (row 0) = high harmonic; bottom = lower harmonic
-  const boundary = topRegionBoundary();
-  // Series chosen to avoid aliasing at low fundamentals:
-  // 1,2,3,4,5,6,7,8,9,10,12,14,16,20,24,28,32
-  const series = [1,2,3,4,5,6,7,8,9,10,12,14,16,20,24,28,32];
-  const norm = 1 - (row / Math.max(boundary-1,1)); // 0=bottom, 1=top
-  const idx  = Math.round(norm * (series.length-1));
-  return series[Math.min(idx, series.length-1)];
+// ── Engine A: Additive ────────────────────────────────────────────
+// Map row (within top region) to harmonic partial index 1..32
+const HARM_SERIES = [1,2,3,4,5,6,7,8,9,10,12,14,16,20,24,28,32];
+function rowToHarmonic(r){
+  const t = topEnd();
+  const norm = 1 - r / Math.max(t-1, 1); // 0=bottom of top, 1=very top
+  const idx = Math.round(norm*(HARM_SERIES.length-1));
+  return HARM_SERIES[Math.min(idx, HARM_SERIES.length-1)];
 }
 
-function rebuildAddOsc(){
-  const size = 33; // number of harmonics
-  const real = new Float32Array(size);
-  const imag = new Float32Array(size);
-  real[0] = 0; imag[0] = 0; // no DC
+function rebuildAdd(){
+  if(!A) return;
+  const t = topEnd();
+  const SIZE = 33; // harmonics 0..32
+  const real = new Float32Array(SIZE);
+  const imag = new Float32Array(SIZE);
+  real[0] = imag[0] = 0; // no DC
 
-  const boundary = topRegionBoundary();
   let count = 0;
-  for(let r=0;r<boundary;r++)
-    for(let c=0;c<CARD_COLS;c++)
-      if(cardGrid[r][c]) count++;
+  for(let r=0;r<t;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) count++;
 
-  const scale = count > 0 ? 1/Math.sqrt(count) : 0;
-
-  for(let r=0;r<boundary;r++){
-    for(let c=0;c<CARD_COLS;c++){
-      if(!cardGrid[r][c]) continue;
-      const k     = harmonicIndex(r);
-      if(k >= size) continue;
-      const phase = (c / CARD_COLS) * Math.PI * 2;
-      const amp   = scale * (1 / Math.sqrt(k)); // natural rolloff
-      // Phase encoded as cos/sin decomposition
-      real[k] += amp * Math.cos(phase);
-      imag[k] += amp * Math.sin(phase);
+  if(count > 0){
+    const scale = 1/Math.sqrt(count);
+    for(let r=0;r<t;r++){
+      for(let c=0;c<CARD_COLS;c++){
+        if(!cardGrid[r][c]) continue;
+        const k     = rowToHarmonic(r);
+        if(k >= SIZE) continue;
+        const phase = (c/CARD_COLS) * Math.PI * 2;
+        const amp   = scale * (1/k); // amplitude rolls off with harmonic
+        real[k] += amp * Math.cos(phase);
+        imag[k] += amp * Math.sin(phase);
+      }
     }
   }
 
-  // Recreate oscillator with new waveform
-  if(addOsc){ try{ addOsc.stop(); }catch(e){} }
-  addOsc = ctx.createOscillator();
+  // Stop old oscillator
+  if(addOsc){ try{ addOsc.stop(A.currentTime+0.05); }catch(e){} }
+
+  if(count === 0){
+    addGain.gain.setTargetAtTime(0, A.currentTime, 0.05);
+    addOsc = null;
+    return;
+  }
+
+  // Check non-zero
+  let hasEnergy = false;
+  for(let i=1;i<SIZE;i++) if(real[i]!==0||imag[i]!==0){ hasEnergy=true; break; }
+
+  addOsc = A.createOscillator();
   addOsc.frequency.value = rootHz;
 
-  const allZero = real.every(v=>v===0) && imag.every(v=>v===0);
-  if(!allZero){
-    const pw = ctx.createPeriodicWave(real, imag, {disableNormalization: false});
+  if(hasEnergy){
+    // disableNormalization:true preserves our amplitudes
+    const pw = A.createPeriodicWave(real, imag, {disableNormalization: true});
     addOsc.setPeriodicWave(pw);
-    addGain.gain.setTargetAtTime(0.5, ctx.currentTime, 0.05);
   } else {
-    addGain.gain.setTargetAtTime(0.0, ctx.currentTime, 0.05);
+    addOsc.type = 'sine';
   }
+
   addOsc.connect(addGain);
   addOsc.start();
+  addGain.gain.setTargetAtTime(0.55, A.currentTime, 0.06);
 }
 
-// ── Engine B: Formant synthesis ───────────────────────────────────
-// Middle third of grid controls three bandpass filters (vocal formants).
-// Each hole at (row, col) in the middle region:
-//   Y → which formant band it primarily affects + frequency shift
-//   X → bandwidth (narrow/resonant ← left, wide/breathy → right)
-//   Density in each band → formant amplitude (how present that vowel quality is)
-
-function midRegionBounds(){
-  const t = topRegionBoundary();
-  const b = Math.floor(cardRows * 2/3);
-  return {top: t, bottom: b};
-}
-
-// Human vocal formant ranges (Hz):
-// F1: 200–900 (jaw height — open/closed vowel)
-// F2: 700–2500 (tongue front/back)
-// F3: 2000–3500 (lip rounding, timbre colour)
-const FORMANT_RANGES = [
-  {min:150,  max:950,  label:'F1'},
-  {min:700,  max:2600, label:'F2'},
-  {min:1800, max:3600, label:'F3'},
+// ── Engine B: Formant ─────────────────────────────────────────────
+// Vocal formant ranges (Hz):
+const F_RANGES = [
+  {min:200, max:900},   // F1 — jaw/openness
+  {min:700, max:2500},  // F2 — tongue front/back
+  {min:1800,max:3500},  // F3 — lip rounding
 ];
 
 function rebuildFormants(){
-  const {top, bottom} = midRegionBounds();
-  const midHeight = bottom - top;
-  if(midHeight <= 0) return;
+  if(!A) return;
+  const t = topEnd(), m = midEnd();
+  const midH = m - t;
+  if(midH <= 0) return;
 
-  // Divide middle region into three equal horizontal bands (F1 bottom, F3 top)
-  const bandH = midHeight / 3;
+  // Divide mid region into 3 equal horizontal bands: F1=bottom, F3=top
+  const bandH = midH / 3;
 
-  // For each formant: gather all holes in its band
-  const bandData = [[], [], []];
-  for(let r=top; r<bottom; r++){
-    for(let c=0; c<CARD_COLS; c++){
+  const bands = [[], [], []];
+  for(let r=t;r<m;r++){
+    for(let c=0;c<CARD_COLS;c++){
       if(!cardGrid[r][c]) continue;
-      const localRow = r - top;
-      // Band 0 = bottom of mid region = F1; Band 2 = top = F3
-      const band = Math.min(2, Math.floor((midHeight-1-localRow) / bandH));
-      bandData[band].push({r, c, localRow});
+      const local = r - t;
+      const band  = Math.min(2, Math.floor((midH-1-local)/bandH));
+      bands[band].push({r, c, local});
     }
   }
 
-  const now = ctx.currentTime;
-  const tau = 0.08;
+  let totalHoles = 0;
+  const now = A.currentTime, tau = 0.07;
 
-  for(let b=0;b<3;b++){
-    const holes  = bandData[b];
-    const fr     = FORMANT_RANGES[b];
-
+  bands.forEach((holes, b) => {
+    totalHoles += holes.length;
     if(holes.length === 0){
-      formGains[b].gain.setTargetAtTime(0, now, tau);
-      continue;
+      fGain[b].gain.setTargetAtTime(0, now, tau);
+      return;
     }
+    const fr = F_RANGES[b];
+    // Average X → Q (left=narrow=resonant, right=wide=breathy)
+    const avgX  = holes.reduce((s,h)=>s+h.c,0)/holes.length;
+    const xNorm = avgX/(CARD_COLS-1);
+    const Q     = 2 + (1-xNorm)*20; // Q 2..22
 
-    // Average X position → bandwidth (Q)
-    const avgX = holes.reduce((s,h)=>s+h.c,0) / holes.length;
-    const xNorm = avgX / (CARD_COLS-1); // 0=left, 1=right
-    // Left = narrow (high Q, resonant); Right = wide (low Q, breathy)
-    const Q = 20 - xNorm * 18; // Q: 2 → 20
+    // Average local Y → formant frequency
+    const avgY  = holes.reduce((s,h)=>s+h.local,0)/holes.length;
+    const yNorm = avgY/(midH-1); // 0=top-of-mid, 1=bottom
+    const freq  = fr.max - yNorm*(fr.max-fr.min);
 
-    // Average Y within band → formant frequency
-    const avgLocalY = holes.reduce((s,h)=>s+h.localRow,0) / holes.length;
-    const yNorm = avgLocalY / (midHeight-1); // 0=top-of-mid, 1=bottom-of-mid
-    // Invert: top of mid = high freq end of range
-    const freq = fr.max - yNorm * (fr.max - fr.min);
+    const density = holes.length/(bandH*CARD_COLS);
+    const amp     = Math.min(1.4, density*5*(Q/10));
 
-    // Amplitude proportional to density in this band, boosted by narrow Q
-    const density = holes.length / (bandH * CARD_COLS);
-    const amp = Math.min(1.2, density * 4 * (Q/10));
+    fFilt[b].frequency.setTargetAtTime(freq, now, tau);
+    fFilt[b].Q.setTargetAtTime(Q, now, tau);
+    fGain[b].gain.setTargetAtTime(amp, now, tau);
+  });
 
-    formFilters[b].frequency.setTargetAtTime(freq, now, tau);
-    formFilters[b].Q.setTargetAtTime(Q, now, tau);
-    formGains[b].gain.setTargetAtTime(amp, now, tau);
-  }
-
-  // Master formant level = total mid-region density
-  let total = 0;
-  for(let r=top;r<bottom;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) total++;
-  const totalDensity = total / (midHeight * CARD_COLS);
-  formMix.gain.setTargetAtTime(Math.min(1.5, totalDensity * 6), now, tau);
+  const density = totalHoles/(midH*CARD_COLS);
+  fMix.gain.setTargetAtTime(Math.min(1.2, density*5), now, tau);
 }
 
-// ── Engine C: Karplus-Strong strings ─────────────────────────────
-// Bottom third of grid. Each hole spawns/sustains a KS string.
-// Row  → pitch (fundamental frequency via delay length)
-// Col  → sustain: left=short/plucked, right=long/sustained/bowed
-// Distance from centre-X → drive/saturation of the string
-// Stereo pan = col mapped to [-0.9, +0.9]
-
-function botRegionBoundary(){ return Math.floor(cardRows * 2/3); }
-
-// Pitch mapping for bottom region: bottom row = rootHz, top row = rootHz*4
-function stringFreq(row){
-  const boundary = botRegionBoundary();
-  // row = boundary (top of bottom region) → high pitch
-  // row = cardRows-1 (bottom)             → rootHz
-  const norm = (row - boundary) / Math.max(cardRows-1-boundary, 1); // 0=top, 1=bottom
-  // Use harmonic series so strings consonantly relate:
-  const ratios = [4, 3, 2.5, 2, 1.5, 1.25, 1];
-  const idx = Math.round(norm * (ratios.length-1));
-  return rootHz * ratios[Math.min(idx, ratios.length-1)];
+// ── Engine C: Karplus-Strong strings ──────────────────────────────
+// Row → pitch: maps to harmonic series above rootHz
+const STR_RATIOS = [4, 3, 2.5, 2, 1.5, 1.25, 1, 0.75];
+function rowToStringFreq(r){
+  const m = midEnd(), bot = cardRows;
+  const norm = (r-m)/Math.max(bot-1-m, 1); // 0=top-of-bottom, 1=very bottom
+  const idx  = Math.round(norm*(STR_RATIOS.length-1));
+  return rootHz * STR_RATIOS[Math.min(idx, STR_RATIOS.length-1)];
 }
 
-function addString(row, col){
-  const key = row+','+col;
-  if(strings.has(key)||!ctx) return;
+function addKSString(r, c){
+  const key = r+','+c;
+  if(KS.has(key)||!A) return;
 
-  const now = ctx.currentTime;
-  const freq = stringFreq(row);
-  const period = 1/freq;
+  const now  = A.currentTime;
+  const freq = rowToStringFreq(r);
 
-  // Sustain: col 0 = 0.97 (short decay), col 23 = 0.9998 (nearly infinite)
-  const colNorm = col / (CARD_COLS-1);
-  const filterCoeff = 0.97 + colNorm * 0.0298;
+  // Sustain: col 0 → short pluck (low filter freq), col 23 → long bowed (high)
+  const colNorm  = c/(CARD_COLS-1);
+  // KS loop filter frequency: low = fast decay, high = slow decay
+  const loopFiltHz = 200 + colNorm * (freq * 1.8 - 200);
 
-  // Pan: col → stereo position
-  const pan = (colNorm * 2 - 1) * parseFloat(document.getElementById('s-width').value) * 0.9;
+  // Pan: col → stereo [-0.85, +0.85]
+  const pan = (colNorm*2-1) * parseFloat(document.getElementById('s-width').value) * 0.85;
 
-  // Drive: distance from centre-X → saturation
-  const cx = (CARD_COLS-1)/2;
-  const dist = Math.abs(col - cx) / cx; // 0=centre, 1=edge
-  const drive = 1 + dist * parseFloat(document.getElementById('s-distort').value) * 8;
+  // Drive: edge proximity → saturation
+  const cx   = (CARD_COLS-1)/2;
+  const dist = Math.abs(c-cx)/cx; // 0=centre, 1=edge
+  const drive= 1.2 + dist * parseFloat(document.getElementById('s-drive').value) * 6;
 
-  // ── Build KS network
-  // noise → noiseGain → delay → ksFilter → feedback → delay (loop)
-  //                           → ksFilter → outGain → shaper → pan → stringMix
+  // ── KS network: excitation → delayLoop → output
+  // excitation = short noise burst
+  const excBufLen = Math.max(8, Math.ceil(A.sampleRate/freq));
+  const excBuf    = A.createBuffer(1, excBufLen, A.sampleRate);
+  const excData   = excBuf.getChannelData(0);
+  for(let i=0;i<excBufLen;i++) excData[i] = Math.random()*2-1;
 
-  // Noise excitation (very short burst)
-  const noiseBufLen = Math.max(4, Math.round(ctx.sampleRate * period));
-  const noiseBuf = ctx.createBuffer(1, noiseBufLen, ctx.sampleRate);
-  const nd = noiseBuf.getChannelData(0);
-  // Pluck character: bandlimited noise burst (smooth for warm, harsh for bright)
-  const brightness = 1 - (row - botRegionBoundary()) / Math.max(cardRows - 1 - botRegionBoundary(), 1);
-  for(let i=0;i<noiseBufLen;i++){
-    // High-col (right) = bright excitation; low-col (left) = dark
-    const bright = colNorm;
-    const raw = (Math.random()*2-1);
-    nd[i] = bright > 0.5
-      ? raw
-      : raw * (0.5 + Math.random()*0.5); // softer excitation left
-  }
-  const noiseSrc = ctx.createBufferSource();
-  noiseSrc.buffer = noiseBuf;
-  noiseSrc.loop = false;
+  const excSrc  = A.createBufferSource();
+  excSrc.buffer = excBuf;
 
-  const noiseGain = ctx.createGain();
-  noiseGain.gain.value = 0.8;
+  // Delay line (one period)
+  const delay   = A.createDelay(2.0);
+  delay.delayTime.value = 1/freq;
 
-  // KS delay (one period)
-  const delay = ctx.createDelay(2.0);
-  delay.delayTime.value = period;
+  // Loop lowpass filter (controls decay speed)
+  const loopFilt = A.createBiquadFilter();
+  loopFilt.type  = 'lowpass';
+  loopFilt.frequency.value = loopFiltHz;
+  loopFilt.Q.value = 0.5;
 
-  // One-pole lowpass (KS filter) — IIR approximation
-  const ksFilter = ctx.createIIRFilter([filterCoeff], [1, -(1-filterCoeff)]);
+  // Feedback gain (slightly < 1 to prevent infinite sustain blowup)
+  const fbGain = A.createGain();
+  fbGain.gain.value = 0.996;
 
-  // Feedback gain (slightly less than 1 to prevent blowup)
-  const fbGain = ctx.createGain();
-  fbGain.gain.value = 0.998;
-
-  // Output gain — fade in slightly so it "plucks"
-  const outGain = ctx.createGain();
+  // Output envelope
+  const outGain = A.createGain();
   outGain.gain.setValueAtTime(0, now);
-  outGain.gain.linearRampToValueAtTime(0.25, now + 0.015);
+  outGain.gain.linearRampToValueAtTime(0.22, now+0.012);
 
-  // Per-voice saturation waveshaper
-  const voiceShaper = ctx.createWaveShaper();
-  voiceShaper.curve = makeDriveClip(256, drive);
-  voiceShaper.oversample = '2x';
+  // Per-voice waveshaper
+  const shaper = A.createWaveShaper();
+  shaper.curve = driveClipCurve(256, drive);
+  shaper.oversample = '2x';
 
   // Panner
-  const panner = ctx.createStereoPanner();
+  const panner = A.createStereoPanner();
   panner.pan.value = pan;
 
-  // Connect: noiseSrc → noiseGain → delay → ksFilter → fbGain → delay (feedback)
-  //                                        → ksFilter (out) handled by IIR being tapped
-  // Because IIR tap can't be split easily, use delay → iir → fbGain→delay + outGain→shaper→pan→mix
-  noiseSrc.connect(noiseGain);
-  noiseGain.connect(delay);
-  delay.connect(ksFilter);
-  ksFilter.connect(fbGain);
-  fbGain.connect(delay);       // feedback loop
-  ksFilter.connect(outGain);   // also tap to output
-  outGain.connect(voiceShaper);
-  voiceShaper.connect(panner);
-  panner.connect(stringMix);
+  // Graph:
+  // excSrc ──────────────────────────────────┐
+  //                                          ↓
+  // delay → loopFilt → fbGain ──────────→ delay  (feedback)
+  //               └──────────────────→ outGain → shaper → panner → ksMix
+  excSrc.connect(delay);
+  delay.connect(loopFilt);
+  loopFilt.connect(fbGain);
+  fbGain.connect(delay);      // feedback
+  loopFilt.connect(outGain);  // tap output before feedback
+  outGain.connect(shaper);
+  shaper.connect(panner);
+  panner.connect(ksMix);
 
-  noiseSrc.start(now);
-  // Schedule stop — strings decay naturally but we clean up after max sustain
-  const cleanupTime = now + 30; // 30s max
-  noiseSrc.stop(cleanupTime);
+  excSrc.start(now);
+  excSrc.stop(now + 1/freq * 2); // excitation lasts 2 periods
 
-  strings.set(key, {noiseSrc, noiseGain, delay, ksFilter, fbGain, outGain, voiceShaper, panner, cleanupTime});
-
-  // Rebalance string output level
+  KS.set(key, {excSrc, delay, loopFilt, fbGain, outGain, shaper, panner});
   rebalanceStrings();
-  updateStatus();
 }
 
-function removeString(row, col){
-  const key = row+','+col;
-  const s   = strings.get(key);
-  if(!s||!ctx) return;
-  const now = ctx.currentTime;
-  // Fast fade out
+function removeKSString(r, c){
+  const key = r+','+c;
+  const s   = KS.get(key);
+  if(!s||!A) return;
+  const now = A.currentTime;
   s.outGain.gain.cancelScheduledValues(now);
-  s.outGain.gain.setTargetAtTime(0, now, 0.08);
-  try{ s.noiseSrc.stop(now + 0.5); }catch(e){}
-  strings.delete(key);
+  s.outGain.gain.setTargetAtTime(0, now, 0.06);
+  try{ s.excSrc.stop(now+0.5); }catch(e){}
+  KS.delete(key);
   rebalanceStrings();
-  updateStatus();
 }
 
 function rebalanceStrings(){
-  const n = Math.max(strings.size, 1);
-  const target = 0.25 / Math.sqrt(n);
-  const now = ctx.currentTime;
-  strings.forEach(s => s.outGain.gain.setTargetAtTime(target, now, 0.1));
-  // Master string bus level
-  const hasSome = strings.size > 0;
-  stringMix.gain.setTargetAtTime(hasSome ? 1.0 : 0.0, now, 0.05);
+  const n = Math.max(KS.size, 1);
+  const t = 0.22/Math.sqrt(n);
+  const now = A.currentTime;
+  KS.forEach(s => s.outGain.gain.setTargetAtTime(t, now, 0.08));
+  ksMix.gain.setTargetAtTime(KS.size > 0 ? 1.0 : 0.0, A.currentTime, 0.05);
 }
 
-// ── Rebuild all engines from current cardGrid ─────────────────────
+// ── Full rebuild from cardGrid ────────────────────────────────────
 function rebuildAll(){
-  if(!ctx||!isPlaying) return;
-  rebuildAddOsc();
+  if(!A||!isPlaying) return;
+  rebuildAdd();
   rebuildFormants();
-  rebuildStrings();
+
+  // Strings: diff current KS map against desired
+  const m = midEnd();
+  const want = new Set();
+  for(let r=m;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) want.add(r+','+c);
+  KS.forEach((_,key)=>{ if(!want.has(key)){ const [r,c]=key.split(',').map(Number); removeKSString(r,c); }});
+  want.forEach(key=>{ if(!KS.has(key)){ const [r,c]=key.split(',').map(Number); addKSString(r,c); }});
+
   updateStatus();
 }
 
-function rebuildStrings(){
-  // Remove stale, add new
-  const want = new Set();
-  const bot  = botRegionBoundary();
-  for(let r=bot;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) want.add(r+','+c);
-  strings.forEach((_,key)=>{ if(!want.has(key)) removeString(...key.split(',').map(Number)); });
-  want.forEach(key=>{ if(!strings.has(key)) addString(...key.split(',').map(Number)); });
-}
-
-function stopAll(){
-  // Additive
+function stopAllEngines(){
   if(addOsc){ try{addOsc.stop();}catch(e){} addOsc=null; }
-  addGain && addGain.gain.setTargetAtTime(0, ctx.currentTime, 0.05);
-  // Formants
-  formMix && formMix.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
-  formGains.forEach(g => g.gain.setTargetAtTime(0, ctx.currentTime, 0.1));
-  // Strings
-  strings.forEach((_,key) => removeString(...key.split(',').map(Number)));
+  if(addGain) addGain.gain.setTargetAtTime(0, A.currentTime, 0.05);
+  if(fMix)    fMix.gain.setTargetAtTime(0,    A.currentTime, 0.08);
+  fGain.forEach(g => g.gain.setTargetAtTime(0, A.currentTime, 0.08));
+  KS.forEach((_,key)=>{ const [r,c]=key.split(',').map(Number); removeKSString(r,c); });
 }
 
-// ── Status display ────────────────────────────────────────────────
-function updateStatus(){
-  if(!ctx){ document.getElementById('s-voices').textContent='0'; return; }
-  const bot  = botRegionBoundary();
-  const top  = topRegionBoundary();
-  const {top: mt} = midRegionBounds();
-
-  let totalVoices=0, topCount=0, midCount=0, botCount=0;
-  for(let r=0;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++){
-    if(!cardGrid[r][c]) continue;
-    totalVoices++;
-    if(r < top) topCount++;
-    else if(r < bot) midCount++;
-    else botCount++;
+// ── Live per-hole update (called from toggle) ─────────────────────
+function liveUpdate(cardRow, cardCol, punched){
+  if(!A||!isPlaying) return;
+  const t = topEnd(), m = midEnd();
+  if(cardRow < t){
+    rebuildAdd(); // additive must rebuild whole wave atomically
+  } else if(cardRow < m){
+    rebuildFormants(); // formant = smooth parameter update
+  } else {
+    if(punched) addKSString(cardRow, cardCol);
+    else        removeKSString(cardRow, cardCol);
   }
-  document.getElementById('s-voices').textContent = totalVoices;
-
-  // Spectral centroid of additive engine
-  let hSum=0, hN=0;
-  for(let r=0;r<top;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]){ hSum+=harmonicIndex(r);hN++; }
-  document.getElementById('s-spectral').textContent = hN>0 ? (hSum/hN).toFixed(1)+'×' : '—';
-
-  // Region label
-  const regions=[];
-  if(topCount>0) regions.push('spectral');
-  if(midCount>0) regions.push('vocal');
-  if(botCount>0) regions.push('string');
-  document.getElementById('s-region').textContent = regions.length ? regions.join('+') : '—';
-
-  // Roughness: average inter-hole distance in frequency space (top region)
-  // Close neighbours = beating = rough
-  let roughness = 0;
-  if(topCount > 1){
-    const topHoles=[];
-    for(let r=0;r<top;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) topHoles.push(harmonicIndex(r)*rootHz);
-    for(let i=0;i<topHoles.length;i++) for(let j=i+1;j<topHoles.length;j++){
-      const diff = Math.abs(topHoles[i]-topHoles[j]);
-      // Roughness peaks around 30–80Hz beating (Plomp-Levelt)
-      roughness += Math.exp(-Math.pow((diff-50)/30, 2));
-    }
-    roughness /= (topHoles.length*(topHoles.length-1)/2);
-  }
-  document.getElementById('s-roughness').textContent = roughness>0 ? roughness.toFixed(2) : '—';
-  document.getElementById('s-note').textContent = totalVoices===0
-    ? 'draw to sculpt the sound'
-    : totalVoices===1 ? '1 voice' : totalVoices+' voices';
+  updateStatus();
 }
 
 // ── Play / stop ───────────────────────────────────────────────────
 function startPlay(){
-  initAudio();
-  if(ctx.state==='suspended') ctx.resume();
+  boot();
+  if(A.state==='suspended') A.resume();
   isPlaying = true;
   document.getElementById('s-play').classList.add('on');
   document.getElementById('s-play').disabled = true;
@@ -1216,15 +1051,50 @@ function startPlay(){
 
 function stopPlay(){
   isPlaying = false;
-  stopAll();
+  if(A) stopAllEngines();
   document.getElementById('s-play').classList.remove('on');
   document.getElementById('s-play').disabled = false;
   document.getElementById('s-stop').disabled = true;
   document.getElementById('s-note').textContent = 'ready';
-  document.getElementById('s-voices').textContent = '0';
-  document.getElementById('s-spectral').textContent = '—';
-  document.getElementById('s-region').textContent = '—';
-  document.getElementById('s-roughness').textContent = '—';
+  ['s-voices','s-spectral','s-region','s-rough'].forEach(id=>{
+    document.getElementById(id).textContent='—';
+  });
+  document.getElementById('s-voices').textContent='0';
+}
+
+// ── Status display ────────────────────────────────────────────────
+function updateStatus(){
+  if(!A){ document.getElementById('s-voices').textContent='0'; return; }
+  const t = topEnd(), m = midEnd();
+  let total=0, topN=0, midN=0, botN=0;
+  for(let r=0;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++){
+    if(!cardGrid[r][c]) continue;
+    total++;
+    if(r<t) topN++; else if(r<m) midN++; else botN++;
+  }
+  document.getElementById('s-voices').textContent = total;
+
+  // Spectral centroid of additive engine
+  let hSum=0, hN=0;
+  for(let r=0;r<t;r++) for(let c=0;c<CARD_COLS;c++)
+    if(cardGrid[r][c]){ hSum+=rowToHarmonic(r); hN++; }
+  document.getElementById('s-spectral').textContent = hN>0 ? (hSum/hN).toFixed(1)+'×' : '—';
+
+  // Active engines
+  const eng=[];
+  if(topN) eng.push('add'); if(midN) eng.push('form'); if(botN) eng.push('str');
+  document.getElementById('s-region').textContent = eng.length ? eng.join('+') : '—';
+
+  // Roughness (Plomp-Levelt approximation)
+  let rough=0, pairs=0;
+  const topFreqs=[];
+  for(let r=0;r<t;r++) for(let c=0;c<CARD_COLS;c++)
+    if(cardGrid[r][c]) topFreqs.push(rowToHarmonic(r)*rootHz);
+  for(let i=0;i<topFreqs.length;i++) for(let j=i+1;j<topFreqs.length;j++){
+    rough += Math.exp(-Math.pow((Math.abs(topFreqs[i]-topFreqs[j])-50)/40,2));
+    pairs++;
+  }
+  document.getElementById('s-rough').textContent = pairs>0 ? (rough/pairs).toFixed(2) : '—';
 }
 
 // ── Grid engine ───────────────────────────────────────────────────
@@ -1253,41 +1123,68 @@ function cardToMotif(cr,cc){
 }
 
 // ── Rendering ─────────────────────────────────────────────────────
-function cellSize(){ return window.innerWidth<=400?12:window.innerWidth<=680?15:20; }
+function cs(){ return window.innerWidth<=400?12:window.innerWidth<=680?14:18; }
 
-function renderGrid(cId,nId,rows,cols,data,editable){
-  const cs=cellSize();
-  const numEl=document.getElementById(nId);
-  const gridEl=document.getElementById(cId);
+function renderMotifGrid(){
+  const size = cs();
+  const numEl  = document.getElementById('motif-col-nums');
+  const gridEl = document.getElementById('motif-grid');
   if(!numEl||!gridEl) return;
-  numEl.innerHTML=`<div style="width:23px;flex-shrink:0"></div>`+
-    Array.from({length:cols},(_,c)=>`<div class="pc-col-num" style="width:${cs}px">${c+1}</div>`).join('');
+  numEl.innerHTML = `<div style="width:23px;flex-shrink:0"></div>`+
+    Array.from({length:motifSize},(_,c)=>`<div class="pc-col-num" style="width:${size}px">${c+1}</div>`).join('');
   gridEl.innerHTML='';
-  for(let r=0;r<rows;r++){
-    const rowEl=document.createElement('div'); rowEl.className='pc-row';
+  for(let r=0;r<motifSize;r++){
+    const row=document.createElement('div'); row.className='pc-row';
     const lbl=document.createElement('div'); lbl.className='pc-row-label';
-    lbl.textContent=rows-r; rowEl.appendChild(lbl);
-    for(let c=0;c<cols;c++){
+    lbl.textContent=motifSize-r; row.appendChild(lbl);
+    for(let c=0;c<motifSize;c++){
       const cell=document.createElement('div');
-      cell.className='pc-cell'+(editable?'':' tiled');
-      cell.style.width=cell.style.height=cs+'px';
-      if(data[r][c]) cell.classList.add('punched');
-      if(editable){
-        cell.dataset.r=r; cell.dataset.c=c;
-        cell.addEventListener('pointerdown',onPD);
-        cell.addEventListener('pointerenter',onPE);
-      }
-      rowEl.appendChild(cell);
+      cell.className='pc-cell';
+      cell.style.width=cell.style.height=size+'px';
+      if(motifGrid[r][c]) cell.classList.add('punched');
+      cell.dataset.r=r; cell.dataset.c=c; cell.dataset.grid='motif';
+      cell.addEventListener('pointerdown', onPD);
+      cell.addEventListener('pointerenter', onPE);
+      row.appendChild(cell);
     }
-    gridEl.appendChild(rowEl);
+    gridEl.appendChild(row);
+  }
+  updateGhosts();
+}
+
+function renderCardGrid(){
+  const size = cs();
+  const t = topEnd(), m = midEnd();
+  const numEl  = document.getElementById('card-col-nums');
+  const gridEl = document.getElementById('card-grid');
+  if(!numEl||!gridEl) return;
+  numEl.innerHTML = `<div style="width:23px;flex-shrink:0"></div>`+
+    Array.from({length:CARD_COLS},(_,c)=>`<div class="pc-col-num" style="width:${size}px">${c+1}</div>`).join('');
+  gridEl.innerHTML='';
+  for(let r=0;r<cardRows;r++){
+    const row=document.createElement('div'); row.className='pc-row';
+    const lbl=document.createElement('div'); lbl.className='pc-row-label';
+    lbl.textContent=cardRows-r; row.appendChild(lbl);
+    for(let c=0;c<CARD_COLS;c++){
+      const cell=document.createElement('div');
+      const reg = r<t?'region-top':r<m?'region-mid':'region-bot';
+      cell.className=`pc-cell tiled ${reg}`;
+      cell.style.width=cell.style.height=size+'px';
+      if(cardGrid[r][c]) cell.classList.add('punched');
+      cell.dataset.r=r; cell.dataset.c=c; cell.dataset.grid='card';
+      cell.addEventListener('pointerdown', onPD);
+      cell.addEventListener('pointerenter', onPE);
+      row.appendChild(cell);
+    }
+    gridEl.appendChild(row);
   }
 }
 
-function renderMotif(){ renderGrid('motif-grid','motif-col-nums',motifSize,motifSize,motifGrid,true); updateGhosts(); }
-function renderCard(){  renderGrid('card-grid','card-col-nums',cardRows,CARD_COLS,cardGrid,false); }
-
 function refreshAll(){
-  tileCard(); renderMotif(); renderCard(); updateStatusBar();
+  tileCard();
+  renderMotifGrid();
+  renderCardGrid();
+  updateStatusBar();
   if(isPlaying) rebuildAll();
 }
 
@@ -1313,56 +1210,55 @@ function updateStatusBar(){
   document.getElementById('stat-card-dim').textContent=CARD_COLS+'\u00d7'+cardRows;
 }
 
-// ── Pointer drawing with live audio update ────────────────────────
-document.addEventListener('pointerup',()=>{ isPointerDown=false; drawMode=null; });
+// ── Pointer events — both grids ───────────────────────────────────
+document.addEventListener('pointerup', ()=>{ ptrDown=false; drawMode=null; drawTarget=null; });
 
 function onPD(e){
-  e.preventDefault(); isPointerDown=true;
+  e.preventDefault();
+  ptrDown = true;
+  drawTarget = this.dataset.grid; // 'motif' or 'card'
   const r=+this.dataset.r, c=+this.dataset.c;
-  drawMode=motifGrid[r][c]?'erase':'punch';
-  toggle(r,c); this.setPointerCapture(e.pointerId);
+  const cur = drawTarget==='motif' ? motifGrid[r][c] : cardGrid[r][c];
+  drawMode = cur ? 'erase' : 'punch';
+  applyDraw(r, c, drawTarget);
+  this.setPointerCapture(e.pointerId);
 }
+
 function onPE(){
-  if(!isPointerDown||!drawMode) return;
+  if(!ptrDown||!drawMode||!drawTarget) return;
   const r=+this.dataset.r, c=+this.dataset.c;
-  if(motifGrid[r][c]!==(drawMode==='punch')) toggle(r,c);
+  if(this.dataset.grid !== drawTarget) return;
+  const cur = drawTarget==='motif' ? motifGrid[r][c] : cardGrid[r][c];
+  if(cur !== (drawMode==='punch')) applyDraw(r, c, drawTarget);
 }
 
-function toggle(r,c){
-  motifGrid[r][c]=!motifGrid[r][c];
-  const el=document.querySelector(`#motif-grid .pc-cell[data-r="${r}"][data-c="${c}"]`);
-  if(el) el.classList.toggle('punched',motifGrid[r][c]);
-  tileCard(); renderCard(); updateStatusBar(); updateGhosts();
+function applyDraw(r, c, target){
+  const val = drawMode==='punch';
 
-  if(!isPlaying||!ctx) return;
-
-  // Determine which card cells changed (all cells that map to this motif cell)
-  const bot = botRegionBoundary();
-  const top = topRegionBoundary();
-  let topChanged=false, midChanged=false, botChanged=false;
-
-  for(let cr=0;cr<cardRows;cr++) for(let cc=0;cc<CARD_COLS;cc++){
-    const {mr,mc}=cardToMotif(cr,cc);
-    if(mr===r&&mc===c){
-      if(cr < top)       topChanged = true;
-      else if(cr < bot)  midChanged = true;
-      else               botChanged = true;
-
-      // String voices: add/remove individually for live feel
-      if(cr >= bot){
-        if(cardGrid[cr][cc]) addString(cr,cc);
-        else                  removeString(cr,cc);
+  if(target==='motif'){
+    // Draw on motif → retile card → update both grids
+    motifGrid[r][c] = val;
+    const el = document.querySelector(`#motif-grid .pc-cell[data-r="${r}"][data-c="${c}"]`);
+    if(el) el.classList.toggle('punched', val);
+    tileCard();
+    renderCardGrid();
+    updateStatusBar();
+    updateGhosts();
+    // Live audio: find all card cells this motif cell affects
+    if(isPlaying){
+      for(let cr=0;cr<cardRows;cr++) for(let cc=0;cc<CARD_COLS;cc++){
+        const {mr,mc}=cardToMotif(cr,cc);
+        if(mr===r&&mc===c) liveUpdate(cr,cc,cardGrid[cr][cc]);
       }
     }
+  } else {
+    // Draw directly on card → update card cell, rebuild from card
+    cardGrid[r][c] = val;
+    const el = document.querySelector(`#card-grid .pc-cell[data-r="${r}"][data-c="${c}"]`);
+    if(el) el.classList.toggle('punched', val);
+    updateStatusBar();
+    liveUpdate(r, c, val);
   }
-
-  // Additive: full rebuild (PeriodicWave must be replaced atomically)
-  if(topChanged) rebuildAddOsc();
-
-  // Formants: parameter update only (filters stay running)
-  if(midChanged) rebuildFormants();
-
-  updateStatus();
 }
 
 // ── Presets ───────────────────────────────────────────────────────
@@ -1370,17 +1266,17 @@ const PRESETS = {
   blank:    s=>Array.from({length:s},()=>new Array(s).fill(false)),
   diamond:  s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
-    const cx=(s-1)/2, cy=(s-1)/2, r=Math.floor(s/2)-1;
-    for(let row=0;row<s;row++) for(let col=0;col<s;col++)
-      if(Math.abs(row-cy)+Math.abs(col-cx)===r) g[row][col]=true;
+    const cx=(s-1)/2, cy=(s-1)/2, rv=Math.floor(s/2)-1;
+    for(let r=0;r<s;r++) for(let c=0;c<s;c++)
+      if(Math.abs(r-cy)+Math.abs(c-cx)===rv) g[r][c]=true;
     return g;
   },
   chevron:  s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
     const h=Math.floor(s/2);
-    for(let col=0;col<s;col++){
-      const d=Math.abs(col-h)%s;
-      g[d][col]=true; if(s-1-d!==d) g[s-1-d][col]=true;
+    for(let c=0;c<s;c++){
+      const d=Math.abs(c-h)%s; g[d][c]=true;
+      if(s-1-d!==d) g[s-1-d][c]=true;
     }
     return g;
   },
@@ -1397,18 +1293,16 @@ const PRESETS = {
   },
   random:   s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.22))
 };
-function applyPreset(name){ motifGrid=PRESETS[name](motifSize); refreshAll(); }
+function applyPreset(p){ motifGrid=PRESETS[p](motifSize); refreshAll(); }
 
 // ── SVG export ────────────────────────────────────────────────────
 function buildSVG(){
-  const ag=cardGrid;
-  const sp=HOLE_SPACING_MM, mg=10;
+  const sp=HOLE_MM, mg=10;
   const W=(CARD_COLS-1)*sp+2*mg, H=(cardRows-1)*sp+2*mg;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">`;
   s+=`<rect x=".3" y=".3" width="${W-.6}" height="${H-.6}" fill="#f4f0e2" stroke="#222" stroke-width=".5" rx="2"/>`;
-  for(let c=0;c<CARD_COLS;c+=6){
+  for(let c=0;c<CARD_COLS;c+=6)
     s+=`<rect x="${mg+c*sp-sp/2}" y="${mg/2}" width="${6*sp}" height="${H-mg}" fill="#e8e0c5" opacity=".4"/>`;
-  }
   for(let c=0;c<CARD_COLS;c++)
     s+=`<text x="${mg+c*sp}" y="${mg-2.5}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="middle">${c+1}</text>`;
   for(let r=0;r<cardRows;r++){
@@ -1416,10 +1310,12 @@ function buildSVG(){
     s+=`<text x="${mg-2.5}" y="${y+.7}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="end">${cardRows-r}</text>`;
     for(let c=0;c<CARD_COLS;c++){
       const x=mg+c*sp;
-      s+=ag[r][c]?`<circle cx="${x}" cy="${y}" r="2" fill="#111"/>`:`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
+      s+=cardGrid[r][c]
+        ?`<circle cx="${x}" cy="${y}" r="2" fill="#111"/>`
+        :`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
     }
   }
-  s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de \u00b7 24st\u00d7${cardRows}r \u00b7 ${sp}mm spacing</text>`;
+  s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de \u00b7 24st\u00d7${cardRows}r \u00b7 ${sp}mm</text>`;
   if(includeMotifRef){
     const ms=2.5, mx=W-mg-motifSize*ms, my=H-mg-motifSize*ms-2;
     s+=`<rect x="${mx-1}" y="${my-1}" width="${motifSize*ms+2}" height="${motifSize*ms+2}" fill="none" stroke="#ccc" stroke-width=".3"/>`;
@@ -1438,8 +1334,7 @@ function doExport(){
     a.download='punch-card.svg'; a.click(); return;
   }
   if(exportFormat==='png'){
-    const sp=HOLE_SPACING_MM, mg=10, SC=8;
-    const W=((CARD_COLS-1)*sp+2*mg)*SC, H=((cardRows-1)*sp+2*mg)*SC;
+    const W=((CARD_COLS-1)*HOLE_MM+20)*8, H=((cardRows-1)*HOLE_MM+20)*8;
     const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
     const img=new Image();
     img.onload=()=>{
@@ -1447,16 +1342,15 @@ function doExport(){
       cv.getContext('2d').drawImage(img,0,0,W,H);
       const a=document.createElement('a'); a.href=cv.toDataURL('image/png');
       a.download='punch-card.png'; a.click(); URL.revokeObjectURL(url);
-    };
-    img.src=url; return;
+    }; img.src=url; return;
   }
   const win=window.open('','_blank');
   win.document.write(`<!DOCTYPE html><html><head><title>Punch Card \u00b7 jordanelias.de</title>
 <style>body{margin:0;background:#fff;}.w{padding:8mm;}.n{font-family:sans-serif;font-size:9px;color:#777;margin-bottom:5mm;line-height:1.6;}
 @media print{@page{margin:8mm;size:auto;}}</style></head><body>
 <div class="w"><div class="n"><strong>Print at 100% \u2014 do not scale to fit page.</strong><br>
-Hole spacing: ${HOLE_SPACING_MM}mm \u00b7 Brother / Silver Reed 24-stitch standard gauge \u00b7 Motif: ${motifSize}\u00d7${motifSize} \u00b7 Tile: ${tileMode}</div>
-${svg}</div><script>window.onload=function(){window.print();}<\/script></body></html>`);
+Hole spacing: ${HOLE_MM}mm \u00b7 Brother / Silver Reed 24-stitch standard gauge \u00b7 Motif: ${motifSize}\u00d7${motifSize} \u00b7 Tile: ${tileMode}
+</div>${svg}</div><script>window.onload=function(){window.print();}<\/script></body></html>`);
   win.document.close();
 }
 
@@ -1477,13 +1371,14 @@ document.addEventListener('DOMContentLoaded',()=>{
   wireGroup('[data-msize]','msize',    v=>{ initMotif(+v); refreshAll(); });
   wireGroup('[data-tile]','tile',      v=>{ tileMode=v; refreshAll(); });
   wireGroup('[data-cardrows]','cardrows', v=>{ cardRows=+v; refreshAll(); });
+  wireGroup('[data-export]','export',  v=>{ exportFormat=v; });
   wireGroup('[data-root]','root',      v=>{
     rootHz=+v;
-    if(ctx&&addOsc) addOsc.frequency.setTargetAtTime(rootHz, ctx.currentTime, 0.1);
-    if(ctx&&formSrc) formSrc.frequency.setTargetAtTime(rootHz, ctx.currentTime, 0.1);
-    if(isPlaying){ rebuildAddOsc(); rebuildStrings(); }
+    if(A){
+      if(formSrc) formSrc.frequency.setTargetAtTime(rootHz, A.currentTime, 0.1);
+    }
+    if(isPlaying){ rebuildAdd(); rebuildAll(); }
   });
-  wireGroup('[data-export]','export',  v=>{ exportFormat=v; });
 
   document.getElementById('toggle-complement').addEventListener('click',function(){
     showComplement=!showComplement; this.classList.toggle('on',showComplement); updateGhosts();
@@ -1497,25 +1392,24 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   document.getElementById('s-vol').addEventListener('input',function(){
     document.getElementById('s-vol-val').textContent=Math.round(this.value*100)+'%';
-    if(masterGain) masterGain.gain.setTargetAtTime(parseFloat(this.value), ctx.currentTime, 0.05);
+    if(out) out.gain.setTargetAtTime(parseFloat(this.value), A.currentTime, 0.05);
   });
   document.getElementById('s-space').addEventListener('input',function(){
     document.getElementById('s-space-val').textContent=Math.round(this.value*100)+'%';
-    if(reverbSend) reverbSend.gain.setTargetAtTime(parseFloat(this.value), ctx.currentTime, 0.05);
+    if(revSend) revSend.gain.setTargetAtTime(parseFloat(this.value), A.currentTime, 0.05);
   });
-  document.getElementById('s-distort').addEventListener('input',function(){
-    document.getElementById('s-distort-val').textContent=Math.round(this.value*100)+'%';
-    if(masterShaper) masterShaper.curve=makeSoftClip(256, 0.3+parseFloat(this.value)*2);
+  document.getElementById('s-drive').addEventListener('input',function(){
+    document.getElementById('s-drive-val').textContent=Math.round(this.value*100)+'%';
+    if(masterShaper) masterShaper.curve=softClipCurve(256, 0.6+parseFloat(this.value)*3);
   });
   document.getElementById('s-width').addEventListener('input',function(){
     document.getElementById('s-width-val').textContent=Math.round(this.value*100)+'%';
-    if(sideGain) sideGain.gain.setTargetAtTime(parseFloat(this.value), ctx.currentTime, 0.05);
   });
 
   document.getElementById('pc-export-btn').addEventListener('click', doExport);
 
-  let resizeT;
-  window.addEventListener('resize',()=>{ clearTimeout(resizeT); resizeT=setTimeout(refreshAll,150); });
+  let rT;
+  window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(refreshAll,150); });
 });
 
 })();
