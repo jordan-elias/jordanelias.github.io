@@ -331,6 +331,9 @@
 
     <hr class="gen-separator">
 
+
+    <hr class="gen-separator">
+
     <!-- MODULE 2: LISTEN -->
     <div class="gen-module">
       <p class="gen-module-label">listen</p>
@@ -338,71 +341,71 @@
       <div class="pc-status-bar">
         <div class="pc-status-left">
           <div class="pc-status-item">
-            <span class="pc-status-val" id="tx-voices">0</span>
+            <span class="pc-status-val" id="s-voices">0</span>
             <span class="pc-status-label">voices</span>
           </div>
           <div class="pc-status-item">
-            <span class="pc-status-val" id="tx-spectral">—</span>
-            <span class="pc-status-label">spectral centre</span>
+            <span class="pc-status-val" id="s-spectral">&mdash;</span>
+            <span class="pc-status-label">spectral</span>
           </div>
           <div class="pc-status-item">
-            <span class="pc-status-val" id="tx-phase">—</span>
-            <span class="pc-status-label">phase spread</span>
+            <span class="pc-status-val" id="s-region">&mdash;</span>
+            <span class="pc-status-label">region</span>
           </div>
           <div class="pc-status-item">
-            <span class="pc-status-val" id="tx-fm">—</span>
-            <span class="pc-status-label">FM index</span>
+            <span class="pc-status-val" id="s-roughness">&mdash;</span>
+            <span class="pc-status-label">roughness</span>
           </div>
         </div>
-        <div class="pc-playing-notes" id="tx-status">ready</div>
+        <div class="pc-playing-notes" id="s-note">ready</div>
       </div>
 
       <div class="gen-row">
-        <span class="gen-row-label">fundamental &rarr;</span>
-        <button class="lab-preset-btn" data-fund="55">A1</button>
-        <button class="lab-preset-btn on" data-fund="82">E2</button>
-        <button class="lab-preset-btn" data-fund="110">A2</button>
-        <button class="lab-preset-btn" data-fund="165">E3</button>
-        <button class="lab-preset-btn" data-fund="220">A3</button>
+        <span class="gen-row-label">root &rarr;</span>
+        <button class="lab-preset-btn" data-root="41">F1</button>
+        <button class="lab-preset-btn on" data-root="55">G1</button>
+        <button class="lab-preset-btn" data-root="65">F2</button>
+        <button class="lab-preset-btn" data-root="82">E2</button>
+        <button class="lab-preset-btn" data-root="110">A2</button>
       </div>
 
       <div class="lab-sliders">
         <div class="lab-ctrl">
-          <input type="range" id="tx-volume" min="0" max="1" value="0.6" step="0.01">
+          <input type="range" id="s-vol" min="0" max="1" value="0.55" step="0.01">
           <div class="lab-ctrl-bottom">
             <span class="lab-ctrl-label">volume</span>
-            <span class="lab-ctrl-val" id="tx-volume-val">60%</span>
+            <span class="lab-ctrl-val" id="s-vol-val">55%</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="tx-fm-depth" min="0" max="1" value="0.5" step="0.01">
-          <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">FM depth</span>
-            <span class="lab-ctrl-val" id="tx-fm-val">50%</span>
-          </div>
-        </div>
-        <div class="lab-ctrl">
-          <input type="range" id="tx-reverb" min="0" max="1" value="0.45" step="0.01">
+          <input type="range" id="s-space" min="0" max="1" value="0.5" step="0.01">
           <div class="lab-ctrl-bottom">
             <span class="lab-ctrl-label">space</span>
-            <span class="lab-ctrl-val" id="tx-reverb-val">45%</span>
+            <span class="lab-ctrl-val" id="s-space-val">50%</span>
           </div>
         </div>
         <div class="lab-ctrl">
-          <input type="range" id="tx-phase-spread" min="0" max="1" value="0.6" step="0.01">
+          <input type="range" id="s-distort" min="0" max="1" value="0.3" step="0.01">
           <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">phase spread</span>
-            <span class="lab-ctrl-val" id="tx-phase-val">60%</span>
+            <span class="lab-ctrl-label">saturation</span>
+            <span class="lab-ctrl-val" id="s-distort-val">30%</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="s-width" min="0" max="1" value="0.7" step="0.01">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">width</span>
+            <span class="lab-ctrl-val" id="s-width-val">70%</span>
           </div>
         </div>
       </div>
 
       <div class="gen-row">
-        <button class="lab-btn" id="tx-play">&#9654;&#xFE0E; play</button>
-        <button class="lab-btn" id="tx-stop" disabled>&#9632;&#xFE0E; stop</button>
+        <button class="lab-btn" id="s-play">&#9654;&#xFE0E; play</button>
+        <button class="lab-btn" id="s-stop" disabled>&#9632;&#xFE0E; stop</button>
       </div>
 
-      <p class="lab-hint">each hole is a voice &middot; Y position = harmonic partial &middot; X position = phase offset &middot; punch and erase while playing</p>
+      <p class="lab-hint">top rows &rarr; spectral shimmer &middot; middle rows &rarr; vowel formants &middot; bottom rows &rarr; resonant strings &middot; draw while playing</p>
     </div>
 
     <hr class="gen-separator">
@@ -583,10 +586,34 @@
 <script src="/js/header.js"></script>
 <script>
 /* ================================================================
-   Punch Card Music — Spatial Harmonic Synthesiser
-   Each hole = one voice.  Y = harmonic partial.  X = phase offset.
-   Spatial distribution of all holes determines the total timbre.
-   Punch and erase in real time while the drone plays.
+   PUNCH CARD SPATIAL SYNTHESISER
+   Three-engine architecture mapping grid position to timbre:
+
+   TOP REGION    → Additive / Spectral
+     PeriodicWave rebuilt on every hole change.
+     Each hole contributes a specific Fourier partial.
+     Drawing in the top region literally reshapes the waveform.
+
+   MIDDLE REGION → Formant / Vocal
+     Sawtooth source through three cascaded bandpass filters.
+     Y position shifts formant frequency (F1/F2/F3).
+     X position controls formant bandwidth (narrow=resonant,
+     wide=breathy). Specific patterns produce specific vowels.
+
+   BOTTOM REGION → Karplus-Strong Physical Strings
+     Noise burst into feedback delay loop with 1-pole lowpass.
+     Row = pitch (delay length). Column = sustain (filter coeff).
+     Strings interact: consonant intervals ring, dissonant ones clash.
+
+   CROSS-MODAL MAPPINGS (synesthetic correspondences):
+     Y position      → spectral centroid (brightness)
+     X position      → temporal envelope + stereo position
+     Density         → roughness (beating between close partials)
+     Clustering      → formant peaks (vowel identity)
+     Symmetry        → consonance (complement pairs = octave ratios)
+     Edge proximity  → saturation / waveshaper drive
+     Diagonal ↗      → rising spectral sweep
+     Diagonal ↘      → falling spectral sweep
    ================================================================ */
 (function(){
 'use strict';
@@ -599,309 +626,605 @@ let motifSize = 8, cardRows = 24;
 let motifGrid = [], cardGrid = [];
 let tileMode = 'straight';
 let showComplement = false, includeMotifRef = true, exportFormat = 'print';
-
-// Pointer drawing
+let rootHz = 55;   // G1
+let isPlaying = false;
 let isPointerDown = false, drawMode = null;
 
-// ── Audio ─────────────────────────────────────────────────────────
-let audioCtx     = null;
-let masterGain   = null;
-let reverbNode   = null;
-let reverbGain   = null;
-let dryGain      = null;
+// ── Audio graph ───────────────────────────────────────────────────
+let ctx = null;
 
-// Active voice map:  key = "r,c"  value = { carrier, modulator, modGain, vGain, panner }
-const voices = new Map();
+// Master bus
+let masterGain, masterShaper, masterFilter;
 
-// Current fundamental frequency (Hz)
-let fundamentalHz = 82;
+// Reverb
+let reverbNode, reverbSend, reverbReturn;
 
-function ensureAudio(){
-  if(audioCtx) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+// Mid/Side stereo widener
+let midGain, sideGain, splitter, merger;
 
-  masterGain = audioCtx.createGain();
-  masterGain.gain.value = parseFloat(document.getElementById('tx-volume').value);
+// Engine A — Additive (top region)
+let addOsc = null;        // PeriodicWave oscillator, rebuilt on change
+let addGain = null;
+let addShaper = null;     // soft-clip tanh curve
+let addCoeffs = null;     // current {real, imag} for PeriodicWave
 
-  // Long, lush reverb
-  reverbNode = audioCtx.createConvolver();
-  buildIR(3.5);
-  reverbGain = audioCtx.createGain();
-  reverbGain.gain.value = parseFloat(document.getElementById('tx-reverb').value);
-  dryGain = audioCtx.createGain();
-  dryGain.gain.value = 1 - reverbGain.gain.value;
+// Engine B — Formant (middle region)
+let formSrc = null;       // sawtooth source for all formants
+let formFilters = [];     // three BiquadFilter (bandpass) chains
+let formGains = [];       // per-formant gain nodes
+let formMix = null;       // sum of formant outputs
+let formShaper = null;    // asymmetric waveshaper (warm/vocal)
 
-  masterGain.connect(dryGain);     dryGain.connect(audioCtx.destination);
-  masterGain.connect(reverbNode);  reverbNode.connect(reverbGain);
-  reverbGain.connect(audioCtx.destination);
-}
+// Engine C — Strings (bottom region)
+// Each string is a Karplus-Strong feedback network:
+//   noise → ksDelay → ksFilter → ksGain → ksDelay (feedback)
+//                              → ksOut → pan → mix
+const strings = new Map(); // key="r,c" value={nodes...}
+let stringMix = null;
+let stringShaper = null;  // hard-clip for bite
 
-function buildIR(dur){
-  const sr  = audioCtx.sampleRate;
-  const len = Math.floor(sr * dur);
-  const buf = audioCtx.createBuffer(2, len, sr);
-  for(let ch=0; ch<2; ch++){
-    const d = buf.getChannelData(ch);
-    for(let i=0; i<len; i++)
-      d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 1.4);
+// ── Init audio ────────────────────────────────────────────────────
+function initAudio(){
+  if(ctx) return;
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // ── Master bus
+  masterGain   = ctx.createGain();
+  masterGain.gain.value = parseFloat(document.getElementById('s-vol').value);
+
+  masterFilter = ctx.createBiquadFilter();
+  masterFilter.type = 'highpass';
+  masterFilter.frequency.value = 30; // remove DC / sub-rumble
+
+  masterShaper = ctx.createWaveShaper();
+  masterShaper.curve = makeSoftClip(256, 0.3);
+  masterShaper.oversample = '4x';
+
+  // ── Reverb (convolution, 4s lush)
+  reverbNode   = ctx.createConvolver();
+  reverbNode.buffer = buildIR(4.0, 0.5);
+  reverbSend   = ctx.createGain();
+  reverbSend.gain.value = parseFloat(document.getElementById('s-space').value);
+  reverbReturn = ctx.createGain();
+  reverbReturn.gain.value = 0.9;
+
+  // ── Mid/Side stereo widener
+  // Encode: mid = (L+R)/2, side = (L-R)/2
+  // Widen: masterGain → splitter → midGain/sideGain → merger → dest
+  splitter = ctx.createChannelSplitter(2);
+  merger   = ctx.createChannelMerger(2);
+  midGain  = ctx.createGain(); midGain.gain.value  = 1.0;
+  sideGain = ctx.createGain();
+  const w = parseFloat(document.getElementById('s-width').value);
+  sideGain.gain.value = w;
+
+  // ── Engine A — Additive
+  addGain   = ctx.createGain(); addGain.gain.value = 0.5;
+  addShaper = ctx.createWaveShaper();
+  addShaper.curve   = makeTanh(512, 1.5);
+  addShaper.oversample = '4x';
+  addCoeffs = {real: new Float32Array(33), imag: new Float32Array(33)};
+  addCoeffs.real[0] = 0; // DC = 0
+  buildAddOsc();
+
+  // ── Engine B — Formant
+  formSrc = ctx.createOscillator();
+  formSrc.type = 'sawtooth';
+  formSrc.frequency.value = rootHz;
+  formMix     = ctx.createGain(); formMix.gain.value = 0.0;
+  formShaper  = ctx.createWaveShaper();
+  formShaper.curve = makeAsymClip(512);
+  formShaper.oversample = '2x';
+  // Three formant filters
+  const fFreqs = [300, 900, 2400]; // neutral starting positions
+  for(let i=0;i<3;i++){
+    const f = ctx.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.value = fFreqs[i];
+    f.Q.value = 8;
+    const g = ctx.createGain(); g.gain.value = 0;
+    formSrc.connect(f); f.connect(g); g.connect(formMix);
+    formFilters.push(f); formGains.push(g);
   }
-  reverbNode.buffer = buf;
+  formSrc.start();
+
+  // ── Engine C — Strings
+  stringMix    = ctx.createGain(); stringMix.gain.value = 0.0;
+  stringShaper = ctx.createWaveShaper();
+  stringShaper.curve = makeHardClip(512, 0.7);
+  stringShaper.oversample = '4x';
+
+  // ── Routing
+  // Engines → per-engine shaper → masterFilter → masterShaper → masterGain
+  //         → splitter → widener → merger → dest
+  //         → reverbSend → reverbNode → reverbReturn → merger
+
+  addOsc.connect(addGain);
+  addGain.connect(addShaper);
+  addShaper.connect(masterFilter);
+
+  formMix.connect(formShaper);
+  formShaper.connect(masterFilter);
+
+  stringMix.connect(stringShaper);
+  stringShaper.connect(masterFilter);
+
+  masterFilter.connect(masterShaper);
+  masterShaper.connect(masterGain);
+
+  // Send to reverb
+  masterGain.connect(reverbSend);
+  reverbSend.connect(reverbNode);
+  reverbNode.connect(reverbReturn);
+
+  // Mid/Side widening
+  masterGain.connect(splitter);
+  splitter.connect(midGain,  0); // L → mid
+  splitter.connect(sideGain, 1); // R → side (widened)
+  midGain.connect(merger,  0, 0); // mid → L
+  sideGain.connect(merger, 0, 1); // side → R
+  reverbReturn.connect(merger, 0, 0);
+  reverbReturn.connect(merger, 0, 1);
+  merger.connect(ctx.destination);
 }
 
-// ── Voice model ───────────────────────────────────────────────────
-// Each punched hole at grid position (row, col) creates a voice with:
-//
-//   carrier frequency  = fundamental × harmonicRatio(row)
-//   FM modulator freq  = carrier × modulatorRatio(col)
-//   FM index           = fmDepth × distanceFromCentre(row, col)
-//   stereo pan         = xNorm(col) mapped to [-0.8, +0.8]
-//   phase offset       = col/CARD_COLS × phaseSpread × 2π
-//     — implemented as a tiny delay line per voice
-//
-// harmonicRatio(row): maps row to a position in the harmonic series.
-//   row 0 (top)    → high harmonic (bright, metallic)
-//   row ROWS-1     → fundamental or low partial (warm, dark)
-//   Uses the actual harmonic series: 1, 2, 3, 4, 5, 6, 8, 9, 12, 16 …
-//   so each row genuinely feels different from its neighbours.
+// ── Waveshaper curves ─────────────────────────────────────────────
+function makeTanh(n, drive){
+  // Soft saturation — tanh curve scaled by drive
+  const c = new Float32Array(n);
+  for(let i=0;i<n;i++){
+    const x = (i*2/(n-1)-1)*drive;
+    c[i] = Math.tanh(x)/Math.tanh(drive);
+  }
+  return c;
+}
+function makeSoftClip(n, amount){
+  // Gentle master bus limiting
+  const c = new Float32Array(n);
+  for(let i=0;i<n;i++){
+    let x = i*2/(n-1)-1;
+    c[i] = x / (1 + Math.abs(x) * amount);
+  }
+  return c;
+}
+function makeAsymClip(n){
+  // Asymmetric waveshaper — pushes even harmonics (warm, vocal character)
+  const c = new Float32Array(n);
+  for(let i=0;i<n;i++){
+    const x = i*2/(n-1)-1;
+    // Positive half: soft tanh; Negative half: harder clamp
+    c[i] = x > 0
+      ? Math.tanh(x * 1.8) * 0.85
+      : Math.tanh(x * 2.8) * 0.6;
+  }
+  return c;
+}
+function makeHardClip(n, threshold){
+  // Hard clip with zero-crossing smoothing — gives strings bite
+  const c = new Float32Array(n);
+  for(let i=0;i<n;i++){
+    const x = i*2/(n-1)-1;
+    c[i] = Math.max(-threshold, Math.min(threshold, x)) / threshold;
+  }
+  return c;
+}
+function makeDriveClip(n, drive){
+  // Variable drive for per-voice saturation
+  const c = new Float32Array(n);
+  for(let i=0;i<n;i++){
+    const x = (i*2/(n-1)-1) * drive;
+    c[i] = 2/(1+Math.exp(-2*x)) - 1;
+  }
+  return c;
+}
 
-function harmonicRatio(row){
-  // Row 0 = top = high harmonic; row cardRows-1 = bottom = fundamental
-  // Map row index to harmonic series position
-  // Series: [1,1.5,2,2.5,3,4,5,6,7,8,9,10,12,14,16,18,20,24,28,32,36,40,48,56]
-  const series = [1,1.5,2,2.5,3,4,5,6,7,8,9,10,12,14,16,18,20,24,28,32,36,40,48,56];
-  const n = Math.min(series.length-1, cardRows-1);
-  // Invert: row 0 = highest series entry, row ROWS-1 = series[0]
-  const idx = Math.round((1 - row/(cardRows-1)) * n);
+// ── Reverb impulse ────────────────────────────────────────────────
+function buildIR(dur, decay){
+  const sr  = ctx.sampleRate, len = Math.floor(sr*dur);
+  const buf = ctx.createBuffer(2, len, sr);
+  for(let ch=0;ch<2;ch++){
+    const d = buf.getChannelData(ch);
+    // Pre-delay of ~15ms + exponential decay with early reflections
+    const pre = Math.floor(sr*0.015);
+    for(let i=pre;i<len;i++){
+      const t    = (i-pre)/(len-pre);
+      const env  = Math.pow(1-t, 1+decay*3);
+      // Early reflections: dense cluster in first 80ms
+      const er   = i < sr*0.08 ? (Math.random()<0.3?1:0) : 1;
+      d[i] = (Math.random()*2-1) * env * er;
+    }
+  }
+  return buf;
+}
+
+// ── Engine A: Additive synthesis ──────────────────────────────────
+// Recalculate PeriodicWave whenever top-region holes change.
+// Each hole at (row, col) in the top third contributes:
+//   partial index k = harmonicIndex(row)
+//   phase           = 2π × col/CARD_COLS  (Fourier phase)
+//   amplitude       = amplitudeForRow(row) / sqrt(voiceCount)
+
+function topRegionBoundary(){ return Math.floor(cardRows / 3); }
+
+function harmonicIndex(row){
+  // Map row (within top region) to harmonic partial index
+  // Top of region (row 0) = high harmonic; bottom = lower harmonic
+  const boundary = topRegionBoundary();
+  // Series chosen to avoid aliasing at low fundamentals:
+  // 1,2,3,4,5,6,7,8,9,10,12,14,16,20,24,28,32
+  const series = [1,2,3,4,5,6,7,8,9,10,12,14,16,20,24,28,32];
+  const norm = 1 - (row / Math.max(boundary-1,1)); // 0=bottom, 1=top
+  const idx  = Math.round(norm * (series.length-1));
   return series[Math.min(idx, series.length-1)];
 }
 
-function modulatorRatio(col){
-  // X position → modulator frequency ratio
-  // Left columns = near-unison modulation (subtle beating)
-  // Right columns = higher ratio (harmonic FM, bell-like)
-  // Non-integer ratios in the middle = inharmonic FM (metallic, complex)
-  const ratios = [0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,3,
-                  3.5,4,4.5,5,5.5,6,7,8,9,10,11,12,14,16];
-  return ratios[Math.min(col, ratios.length-1)];
-}
+function rebuildAddOsc(){
+  const size = 33; // number of harmonics
+  const real = new Float32Array(size);
+  const imag = new Float32Array(size);
+  real[0] = 0; imag[0] = 0; // no DC
 
-function distanceFromCentre(row, col){
-  // Normalised [0..1] distance from grid centre
-  const cx = (CARD_COLS-1)/2, cy = (cardRows-1)/2;
-  const dx = (col-cx)/cx, dy = (row-cy)/cy;
-  return Math.min(1, Math.sqrt(dx*dx + dy*dy));
-}
+  const boundary = topRegionBoundary();
+  let count = 0;
+  for(let r=0;r<boundary;r++)
+    for(let c=0;c<CARD_COLS;c++)
+      if(cardGrid[r][c]) count++;
 
-function addVoice(row, col){
-  const key = row+','+col;
-  if(voices.has(key)) return;
-  if(!audioCtx) return;
+  const scale = count > 0 ? 1/Math.sqrt(count) : 0;
 
-  const now    = audioCtx.currentTime;
-  const fmDepth = parseFloat(document.getElementById('tx-fm-depth').value);
-  const phSpread = parseFloat(document.getElementById('tx-phase-spread').value);
-
-  const hRatio  = harmonicRatio(row);
-  const mRatio  = modulatorRatio(col);
-  const carrierFreq  = fundamentalHz * hRatio;
-  const modulatorFreq= carrierFreq * mRatio;
-  const fmIndex = fmDepth * distanceFromCentre(row,col) * carrierFreq * 3;
-  const pan = ((col / (CARD_COLS-1)) * 2 - 1) * 0.8;
-
-  // Phase offset via tiny delay: col/CARD_COLS * phaseSpread * (1/carrierFreq)
-  const delayTime = (col/CARD_COLS) * phSpread * (1/Math.max(carrierFreq,1));
-
-  // Build: modulator → modGain → carrier.frequency (FM)
-  //        carrier → delay → vGain → panner → masterGain
-  const modulator = audioCtx.createOscillator();
-  modulator.type = 'sine';
-  modulator.frequency.value = modulatorFreq;
-
-  const modGain = audioCtx.createGain();
-  modGain.gain.value = 0;  // attack below
-
-  const carrier = audioCtx.createOscillator();
-  // Waveform chosen by harmonic position:
-  // Low harmonics (warm) = triangle, mid = sine, high (bright) = sawtooth
-  carrier.type = hRatio <= 2 ? 'triangle' : hRatio <= 8 ? 'sine' : 'sawtooth';
-  carrier.frequency.value = carrierFreq;
-
-  // Sub-oscillator one octave below for body (only on low harmonics)
-  let subOsc = null, subGain = null;
-  if(hRatio <= 2){
-    subOsc  = audioCtx.createOscillator();
-    subGain = audioCtx.createGain();
-    subOsc.type = 'sine';
-    subOsc.frequency.value = carrierFreq * 0.5;
-    subGain.gain.value = 0;
-    subOsc.start(now);
+  for(let r=0;r<boundary;r++){
+    for(let c=0;c<CARD_COLS;c++){
+      if(!cardGrid[r][c]) continue;
+      const k     = harmonicIndex(r);
+      if(k >= size) continue;
+      const phase = (c / CARD_COLS) * Math.PI * 2;
+      const amp   = scale * (1 / Math.sqrt(k)); // natural rolloff
+      // Phase encoded as cos/sin decomposition
+      real[k] += amp * Math.cos(phase);
+      imag[k] += amp * Math.sin(phase);
+    }
   }
 
-  const delayNode = audioCtx.createDelay(0.5);
-  delayNode.delayTime.value = Math.min(delayTime, 0.5);
+  // Recreate oscillator with new waveform
+  if(addOsc){ try{ addOsc.stop(); }catch(e){} }
+  addOsc = ctx.createOscillator();
+  addOsc.frequency.value = rootHz;
 
-  const vGain = audioCtx.createGain();
-  vGain.gain.value = 0;
+  const allZero = real.every(v=>v===0) && imag.every(v=>v===0);
+  if(!allZero){
+    const pw = ctx.createPeriodicWave(real, imag, {disableNormalization: false});
+    addOsc.setPeriodicWave(pw);
+    addGain.gain.setTargetAtTime(0.5, ctx.currentTime, 0.05);
+  } else {
+    addGain.gain.setTargetAtTime(0.0, ctx.currentTime, 0.05);
+  }
+  addOsc.connect(addGain);
+  addOsc.start();
+}
 
-  const panner = audioCtx.createStereoPanner();
+// ── Engine B: Formant synthesis ───────────────────────────────────
+// Middle third of grid controls three bandpass filters (vocal formants).
+// Each hole at (row, col) in the middle region:
+//   Y → which formant band it primarily affects + frequency shift
+//   X → bandwidth (narrow/resonant ← left, wide/breathy → right)
+//   Density in each band → formant amplitude (how present that vowel quality is)
+
+function midRegionBounds(){
+  const t = topRegionBoundary();
+  const b = Math.floor(cardRows * 2/3);
+  return {top: t, bottom: b};
+}
+
+// Human vocal formant ranges (Hz):
+// F1: 200–900 (jaw height — open/closed vowel)
+// F2: 700–2500 (tongue front/back)
+// F3: 2000–3500 (lip rounding, timbre colour)
+const FORMANT_RANGES = [
+  {min:150,  max:950,  label:'F1'},
+  {min:700,  max:2600, label:'F2'},
+  {min:1800, max:3600, label:'F3'},
+];
+
+function rebuildFormants(){
+  const {top, bottom} = midRegionBounds();
+  const midHeight = bottom - top;
+  if(midHeight <= 0) return;
+
+  // Divide middle region into three equal horizontal bands (F1 bottom, F3 top)
+  const bandH = midHeight / 3;
+
+  // For each formant: gather all holes in its band
+  const bandData = [[], [], []];
+  for(let r=top; r<bottom; r++){
+    for(let c=0; c<CARD_COLS; c++){
+      if(!cardGrid[r][c]) continue;
+      const localRow = r - top;
+      // Band 0 = bottom of mid region = F1; Band 2 = top = F3
+      const band = Math.min(2, Math.floor((midHeight-1-localRow) / bandH));
+      bandData[band].push({r, c, localRow});
+    }
+  }
+
+  const now = ctx.currentTime;
+  const tau = 0.08;
+
+  for(let b=0;b<3;b++){
+    const holes  = bandData[b];
+    const fr     = FORMANT_RANGES[b];
+
+    if(holes.length === 0){
+      formGains[b].gain.setTargetAtTime(0, now, tau);
+      continue;
+    }
+
+    // Average X position → bandwidth (Q)
+    const avgX = holes.reduce((s,h)=>s+h.c,0) / holes.length;
+    const xNorm = avgX / (CARD_COLS-1); // 0=left, 1=right
+    // Left = narrow (high Q, resonant); Right = wide (low Q, breathy)
+    const Q = 20 - xNorm * 18; // Q: 2 → 20
+
+    // Average Y within band → formant frequency
+    const avgLocalY = holes.reduce((s,h)=>s+h.localRow,0) / holes.length;
+    const yNorm = avgLocalY / (midHeight-1); // 0=top-of-mid, 1=bottom-of-mid
+    // Invert: top of mid = high freq end of range
+    const freq = fr.max - yNorm * (fr.max - fr.min);
+
+    // Amplitude proportional to density in this band, boosted by narrow Q
+    const density = holes.length / (bandH * CARD_COLS);
+    const amp = Math.min(1.2, density * 4 * (Q/10));
+
+    formFilters[b].frequency.setTargetAtTime(freq, now, tau);
+    formFilters[b].Q.setTargetAtTime(Q, now, tau);
+    formGains[b].gain.setTargetAtTime(amp, now, tau);
+  }
+
+  // Master formant level = total mid-region density
+  let total = 0;
+  for(let r=top;r<bottom;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) total++;
+  const totalDensity = total / (midHeight * CARD_COLS);
+  formMix.gain.setTargetAtTime(Math.min(1.5, totalDensity * 6), now, tau);
+}
+
+// ── Engine C: Karplus-Strong strings ─────────────────────────────
+// Bottom third of grid. Each hole spawns/sustains a KS string.
+// Row  → pitch (fundamental frequency via delay length)
+// Col  → sustain: left=short/plucked, right=long/sustained/bowed
+// Distance from centre-X → drive/saturation of the string
+// Stereo pan = col mapped to [-0.9, +0.9]
+
+function botRegionBoundary(){ return Math.floor(cardRows * 2/3); }
+
+// Pitch mapping for bottom region: bottom row = rootHz, top row = rootHz*4
+function stringFreq(row){
+  const boundary = botRegionBoundary();
+  // row = boundary (top of bottom region) → high pitch
+  // row = cardRows-1 (bottom)             → rootHz
+  const norm = (row - boundary) / Math.max(cardRows-1-boundary, 1); // 0=top, 1=bottom
+  // Use harmonic series so strings consonantly relate:
+  const ratios = [4, 3, 2.5, 2, 1.5, 1.25, 1];
+  const idx = Math.round(norm * (ratios.length-1));
+  return rootHz * ratios[Math.min(idx, ratios.length-1)];
+}
+
+function addString(row, col){
+  const key = row+','+col;
+  if(strings.has(key)||!ctx) return;
+
+  const now = ctx.currentTime;
+  const freq = stringFreq(row);
+  const period = 1/freq;
+
+  // Sustain: col 0 = 0.97 (short decay), col 23 = 0.9998 (nearly infinite)
+  const colNorm = col / (CARD_COLS-1);
+  const filterCoeff = 0.97 + colNorm * 0.0298;
+
+  // Pan: col → stereo position
+  const pan = (colNorm * 2 - 1) * parseFloat(document.getElementById('s-width').value) * 0.9;
+
+  // Drive: distance from centre-X → saturation
+  const cx = (CARD_COLS-1)/2;
+  const dist = Math.abs(col - cx) / cx; // 0=centre, 1=edge
+  const drive = 1 + dist * parseFloat(document.getElementById('s-distort').value) * 8;
+
+  // ── Build KS network
+  // noise → noiseGain → delay → ksFilter → feedback → delay (loop)
+  //                           → ksFilter → outGain → shaper → pan → stringMix
+
+  // Noise excitation (very short burst)
+  const noiseBufLen = Math.max(4, Math.round(ctx.sampleRate * period));
+  const noiseBuf = ctx.createBuffer(1, noiseBufLen, ctx.sampleRate);
+  const nd = noiseBuf.getChannelData(0);
+  // Pluck character: bandlimited noise burst (smooth for warm, harsh for bright)
+  const brightness = 1 - (row - botRegionBoundary()) / Math.max(cardRows - 1 - botRegionBoundary(), 1);
+  for(let i=0;i<noiseBufLen;i++){
+    // High-col (right) = bright excitation; low-col (left) = dark
+    const bright = colNorm;
+    const raw = (Math.random()*2-1);
+    nd[i] = bright > 0.5
+      ? raw
+      : raw * (0.5 + Math.random()*0.5); // softer excitation left
+  }
+  const noiseSrc = ctx.createBufferSource();
+  noiseSrc.buffer = noiseBuf;
+  noiseSrc.loop = false;
+
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.value = 0.8;
+
+  // KS delay (one period)
+  const delay = ctx.createDelay(2.0);
+  delay.delayTime.value = period;
+
+  // One-pole lowpass (KS filter) — IIR approximation
+  const ksFilter = ctx.createIIRFilter([filterCoeff], [1, -(1-filterCoeff)]);
+
+  // Feedback gain (slightly less than 1 to prevent blowup)
+  const fbGain = ctx.createGain();
+  fbGain.gain.value = 0.998;
+
+  // Output gain — fade in slightly so it "plucks"
+  const outGain = ctx.createGain();
+  outGain.gain.setValueAtTime(0, now);
+  outGain.gain.linearRampToValueAtTime(0.25, now + 0.015);
+
+  // Per-voice saturation waveshaper
+  const voiceShaper = ctx.createWaveShaper();
+  voiceShaper.curve = makeDriveClip(256, drive);
+  voiceShaper.oversample = '2x';
+
+  // Panner
+  const panner = ctx.createStereoPanner();
   panner.pan.value = pan;
 
-  // Connect FM
-  modulator.connect(modGain);
-  modGain.connect(carrier.frequency);
+  // Connect: noiseSrc → noiseGain → delay → ksFilter → fbGain → delay (feedback)
+  //                                        → ksFilter (out) handled by IIR being tapped
+  // Because IIR tap can't be split easily, use delay → iir → fbGain→delay + outGain→shaper→pan→mix
+  noiseSrc.connect(noiseGain);
+  noiseGain.connect(delay);
+  delay.connect(ksFilter);
+  ksFilter.connect(fbGain);
+  fbGain.connect(delay);       // feedback loop
+  ksFilter.connect(outGain);   // also tap to output
+  outGain.connect(voiceShaper);
+  voiceShaper.connect(panner);
+  panner.connect(stringMix);
 
-  // Connect audio path
-  carrier.connect(delayNode);
-  delayNode.connect(vGain);
-  if(subOsc) subOsc.connect(subGain), subGain.connect(vGain);
-  vGain.connect(panner);
-  panner.connect(masterGain);
+  noiseSrc.start(now);
+  // Schedule stop — strings decay naturally but we clean up after max sustain
+  const cleanupTime = now + 30; // 30s max
+  noiseSrc.stop(cleanupTime);
 
-  // Start oscillators
-  modulator.start(now);
-  carrier.start(now);
+  strings.set(key, {noiseSrc, noiseGain, delay, ksFilter, fbGain, outGain, voiceShaper, panner, cleanupTime});
 
-  // Attack envelope — punching a hole is an EVENT, not a fade
-  // Short sharp attack so the voice "arrives"
-  const attackTime = 0.04;
-  const targetVoiceGain = 0.18 / Math.sqrt(Math.max(voices.size+1, 1));
-
-  vGain.gain.setValueAtTime(0, now);
-  vGain.gain.linearRampToValueAtTime(targetVoiceGain, now + attackTime);
-
-  modGain.gain.setValueAtTime(0, now);
-  modGain.gain.linearRampToValueAtTime(fmIndex, now + attackTime * 2);
-
-  if(subGain){
-    subGain.gain.setValueAtTime(0, now);
-    subGain.gain.linearRampToValueAtTime(targetVoiceGain * 0.4, now + attackTime);
-  }
-
-  voices.set(key, {carrier, modulator, modGain, vGain, panner, subOsc, subGain, delayNode});
-  rebalanceGains();
+  // Rebalance string output level
+  rebalanceStrings();
   updateStatus();
 }
 
-function removeVoice(row, col){
+function removeString(row, col){
   const key = row+','+col;
-  const v   = voices.get(key);
-  if(!v||!audioCtx) return;
-
-  const now      = audioCtx.currentTime;
-  const releaseT = 0.35;
-
-  // Decay envelope — erasing is also an event
-  v.vGain.gain.cancelScheduledValues(now);
-  v.vGain.gain.setTargetAtTime(0, now, releaseT*0.3);
-  v.modGain.gain.setTargetAtTime(0, now, releaseT*0.2);
-  if(v.subGain) v.subGain.gain.setTargetAtTime(0, now, releaseT*0.3);
-
-  const stopTime = now + releaseT + 0.1;
-  v.carrier.stop(stopTime);
-  v.modulator.stop(stopTime);
-  if(v.subOsc) v.subOsc.stop(stopTime);
-
-  voices.delete(key);
-  rebalanceGains();
+  const s   = strings.get(key);
+  if(!s||!ctx) return;
+  const now = ctx.currentTime;
+  // Fast fade out
+  s.outGain.gain.cancelScheduledValues(now);
+  s.outGain.gain.setTargetAtTime(0, now, 0.08);
+  try{ s.noiseSrc.stop(now + 0.5); }catch(e){}
+  strings.delete(key);
+  rebalanceStrings();
   updateStatus();
 }
 
-function rebalanceGains(){
-  // As holes are added/removed, rebalance all voice gains so total
-  // loudness stays constant — prevents clipping but also means
-  // sparse patterns still have presence
-  const count = Math.max(voices.size, 1);
-  const target = 0.18 / Math.sqrt(count);
-  const now    = audioCtx.currentTime;
-  voices.forEach(v => {
-    v.vGain.gain.setTargetAtTime(target, now, 0.08);
-    if(v.subGain) v.subGain.gain.setTargetAtTime(target*0.4, now, 0.08);
-  });
+function rebalanceStrings(){
+  const n = Math.max(strings.size, 1);
+  const target = 0.25 / Math.sqrt(n);
+  const now = ctx.currentTime;
+  strings.forEach(s => s.outGain.gain.setTargetAtTime(target, now, 0.1));
+  // Master string bus level
+  const hasSome = strings.size > 0;
+  stringMix.gain.setTargetAtTime(hasSome ? 1.0 : 0.0, now, 0.05);
 }
 
-function rebuildAllVoices(){
-  // Called when tile/motif changes while playing —
-  // remove voices whose holes no longer exist, add new ones
-  if(!audioCtx) return;
-
-  const currentKeys = new Set();
-  for(let r=0;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++){
-    if(cardGrid[r][c]) currentKeys.add(r+','+c);
-  }
-
-  // Remove stale
-  voices.forEach((_,key)=>{ if(!currentKeys.has(key)) removeVoice(...key.split(',').map(Number)); });
-  // Add new
-  currentKeys.forEach(key=>{
-    const [r,c]=key.split(',').map(Number);
-    if(!voices.has(key)) addVoice(r,c);
-  });
+// ── Rebuild all engines from current cardGrid ─────────────────────
+function rebuildAll(){
+  if(!ctx||!isPlaying) return;
+  rebuildAddOsc();
+  rebuildFormants();
+  rebuildStrings();
+  updateStatus();
 }
 
-function stopAllVoices(){
-  voices.forEach((_,key)=>{
-    const [r,c]=key.split(',').map(Number);
-    removeVoice(r,c);
-  });
+function rebuildStrings(){
+  // Remove stale, add new
+  const want = new Set();
+  const bot  = botRegionBoundary();
+  for(let r=bot;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) want.add(r+','+c);
+  strings.forEach((_,key)=>{ if(!want.has(key)) removeString(...key.split(',').map(Number)); });
+  want.forEach(key=>{ if(!strings.has(key)) addString(...key.split(',').map(Number)); });
+}
+
+function stopAll(){
+  // Additive
+  if(addOsc){ try{addOsc.stop();}catch(e){} addOsc=null; }
+  addGain && addGain.gain.setTargetAtTime(0, ctx.currentTime, 0.05);
+  // Formants
+  formMix && formMix.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
+  formGains.forEach(g => g.gain.setTargetAtTime(0, ctx.currentTime, 0.1));
+  // Strings
+  strings.forEach((_,key) => removeString(...key.split(',').map(Number)));
 }
 
 // ── Status display ────────────────────────────────────────────────
 function updateStatus(){
-  if(!audioCtx){ document.getElementById('tx-voices').textContent='0'; return; }
+  if(!ctx){ document.getElementById('s-voices').textContent='0'; return; }
+  const bot  = botRegionBoundary();
+  const top  = topRegionBoundary();
+  const {top: mt} = midRegionBounds();
 
-  const count = voices.size;
-  document.getElementById('tx-voices').textContent = count;
-
-  if(count===0){
-    document.getElementById('tx-spectral').textContent='—';
-    document.getElementById('tx-phase').textContent='—';
-    document.getElementById('tx-fm').textContent='—';
-    document.getElementById('tx-status').textContent='no holes punched';
-    return;
-  }
-
-  // Spectral centre: average harmonic ratio of all voices
-  let hSum=0, phSum=0, fmSum=0, n=0;
+  let totalVoices=0, topCount=0, midCount=0, botCount=0;
   for(let r=0;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++){
-    if(cardGrid[r][c]){
-      hSum  += harmonicRatio(r);
-      phSum += c/CARD_COLS;
-      fmSum += distanceFromCentre(r,c);
-      n++;
-    }
+    if(!cardGrid[r][c]) continue;
+    totalVoices++;
+    if(r < top) topCount++;
+    else if(r < bot) midCount++;
+    else botCount++;
   }
-  const hAvg  = (hSum/n).toFixed(1);
-  const phAvg = Math.round(phSum/n*100)+'%';
-  const fmAvg = (fmSum/n).toFixed(2);
+  document.getElementById('s-voices').textContent = totalVoices;
 
-  document.getElementById('tx-spectral').textContent = hAvg+'×';
-  document.getElementById('tx-phase').textContent    = phAvg;
-  document.getElementById('tx-fm').textContent       = fmAvg;
-  document.getElementById('tx-status').textContent   = count===1?'1 voice':count+' voices';
+  // Spectral centroid of additive engine
+  let hSum=0, hN=0;
+  for(let r=0;r<top;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]){ hSum+=harmonicIndex(r);hN++; }
+  document.getElementById('s-spectral').textContent = hN>0 ? (hSum/hN).toFixed(1)+'×' : '—';
+
+  // Region label
+  const regions=[];
+  if(topCount>0) regions.push('spectral');
+  if(midCount>0) regions.push('vocal');
+  if(botCount>0) regions.push('string');
+  document.getElementById('s-region').textContent = regions.length ? regions.join('+') : '—';
+
+  // Roughness: average inter-hole distance in frequency space (top region)
+  // Close neighbours = beating = rough
+  let roughness = 0;
+  if(topCount > 1){
+    const topHoles=[];
+    for(let r=0;r<top;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) topHoles.push(harmonicIndex(r)*rootHz);
+    for(let i=0;i<topHoles.length;i++) for(let j=i+1;j<topHoles.length;j++){
+      const diff = Math.abs(topHoles[i]-topHoles[j]);
+      // Roughness peaks around 30–80Hz beating (Plomp-Levelt)
+      roughness += Math.exp(-Math.pow((diff-50)/30, 2));
+    }
+    roughness /= (topHoles.length*(topHoles.length-1)/2);
+  }
+  document.getElementById('s-roughness').textContent = roughness>0 ? roughness.toFixed(2) : '—';
+  document.getElementById('s-note').textContent = totalVoices===0
+    ? 'draw to sculpt the sound'
+    : totalVoices===1 ? '1 voice' : totalVoices+' voices';
 }
 
-// ── Playing state ─────────────────────────────────────────────────
-let isPlaying = false;
-
+// ── Play / stop ───────────────────────────────────────────────────
 function startPlay(){
-  ensureAudio();
-  if(audioCtx.state==='suspended') audioCtx.resume();
-  isPlaying=true;
-  document.getElementById('tx-play').classList.add('on');
-  document.getElementById('tx-stop').disabled=false;
-  document.getElementById('tx-play').disabled=true;
-  document.getElementById('tx-status').textContent='listening…';
-  // Build all voices from current card
-  rebuildAllVoices();
+  initAudio();
+  if(ctx.state==='suspended') ctx.resume();
+  isPlaying = true;
+  document.getElementById('s-play').classList.add('on');
+  document.getElementById('s-play').disabled = true;
+  document.getElementById('s-stop').disabled = false;
+  document.getElementById('s-note').textContent = 'draw to sculpt the sound';
+  rebuildAll();
 }
 
 function stopPlay(){
-  isPlaying=false;
-  stopAllVoices();
-  document.getElementById('tx-play').classList.remove('on');
-  document.getElementById('tx-play').disabled=false;
-  document.getElementById('tx-stop').disabled=true;
-  document.getElementById('tx-status').textContent='ready';
+  isPlaying = false;
+  stopAll();
+  document.getElementById('s-play').classList.remove('on');
+  document.getElementById('s-play').disabled = false;
+  document.getElementById('s-stop').disabled = true;
+  document.getElementById('s-note').textContent = 'ready';
+  document.getElementById('s-voices').textContent = '0';
+  document.getElementById('s-spectral').textContent = '—';
+  document.getElementById('s-region').textContent = '—';
+  document.getElementById('s-roughness').textContent = '—';
 }
 
 // ── Grid engine ───────────────────────────────────────────────────
@@ -932,18 +1255,18 @@ function cardToMotif(cr,cc){
 // ── Rendering ─────────────────────────────────────────────────────
 function cellSize(){ return window.innerWidth<=400?12:window.innerWidth<=680?15:20; }
 
-function renderGrid(containerId,colNumsId,rows,cols,data,editable){
+function renderGrid(cId,nId,rows,cols,data,editable){
   const cs=cellSize();
-  const numEl=document.getElementById(colNumsId);
-  const gridEl=document.getElementById(containerId);
+  const numEl=document.getElementById(nId);
+  const gridEl=document.getElementById(cId);
   if(!numEl||!gridEl) return;
   numEl.innerHTML=`<div style="width:23px;flex-shrink:0"></div>`+
     Array.from({length:cols},(_,c)=>`<div class="pc-col-num" style="width:${cs}px">${c+1}</div>`).join('');
   gridEl.innerHTML='';
   for(let r=0;r<rows;r++){
-    const row=document.createElement('div'); row.className='pc-row';
+    const rowEl=document.createElement('div'); rowEl.className='pc-row';
     const lbl=document.createElement('div'); lbl.className='pc-row-label';
-    lbl.textContent=rows-r; row.appendChild(lbl);
+    lbl.textContent=rows-r; rowEl.appendChild(lbl);
     for(let c=0;c<cols;c++){
       const cell=document.createElement('div');
       cell.className='pc-cell'+(editable?'':' tiled');
@@ -954,17 +1277,18 @@ function renderGrid(containerId,colNumsId,rows,cols,data,editable){
         cell.addEventListener('pointerdown',onPD);
         cell.addEventListener('pointerenter',onPE);
       }
-      row.appendChild(cell);
+      rowEl.appendChild(cell);
     }
-    gridEl.appendChild(row);
+    gridEl.appendChild(rowEl);
   }
 }
 
 function renderMotif(){ renderGrid('motif-grid','motif-col-nums',motifSize,motifSize,motifGrid,true); updateGhosts(); }
 function renderCard(){  renderGrid('card-grid','card-col-nums',cardRows,CARD_COLS,cardGrid,false); }
+
 function refreshAll(){
   tileCard(); renderMotif(); renderCard(); updateStatusBar();
-  if(isPlaying) rebuildAllVoices();
+  if(isPlaying) rebuildAll();
 }
 
 function updateGhosts(){
@@ -989,7 +1313,7 @@ function updateStatusBar(){
   document.getElementById('stat-card-dim').textContent=CARD_COLS+'\u00d7'+cardRows;
 }
 
-// ── Pointer drawing ───────────────────────────────────────────────
+// ── Pointer drawing with live audio update ────────────────────────
 document.addEventListener('pointerup',()=>{ isPointerDown=false; drawMode=null; });
 
 function onPD(e){
@@ -1003,24 +1327,42 @@ function onPE(){
   const r=+this.dataset.r, c=+this.dataset.c;
   if(motifGrid[r][c]!==(drawMode==='punch')) toggle(r,c);
 }
+
 function toggle(r,c){
   motifGrid[r][c]=!motifGrid[r][c];
   const el=document.querySelector(`#motif-grid .pc-cell[data-r="${r}"][data-c="${c}"]`);
   if(el) el.classList.toggle('punched',motifGrid[r][c]);
-  tileCard();
-  renderCard();
-  updateStatusBar();
-  updateGhosts();
-  // Live audio: add/remove only the tiled voices affected by this motif cell
-  if(isPlaying){
-    for(let cr=0;cr<cardRows;cr++) for(let cc=0;cc<CARD_COLS;cc++){
-      const {mr,mc}=cardToMotif(cr,cc);
-      if(mr===r&&mc===c){
-        if(cardGrid[cr][cc]) addVoice(cr,cc);
-        else                  removeVoice(cr,cc);
+  tileCard(); renderCard(); updateStatusBar(); updateGhosts();
+
+  if(!isPlaying||!ctx) return;
+
+  // Determine which card cells changed (all cells that map to this motif cell)
+  const bot = botRegionBoundary();
+  const top = topRegionBoundary();
+  let topChanged=false, midChanged=false, botChanged=false;
+
+  for(let cr=0;cr<cardRows;cr++) for(let cc=0;cc<CARD_COLS;cc++){
+    const {mr,mc}=cardToMotif(cr,cc);
+    if(mr===r&&mc===c){
+      if(cr < top)       topChanged = true;
+      else if(cr < bot)  midChanged = true;
+      else               botChanged = true;
+
+      // String voices: add/remove individually for live feel
+      if(cr >= bot){
+        if(cardGrid[cr][cc]) addString(cr,cc);
+        else                  removeString(cr,cc);
       }
     }
   }
+
+  // Additive: full rebuild (PeriodicWave must be replaced atomically)
+  if(topChanged) rebuildAddOsc();
+
+  // Formants: parameter update only (filters stay running)
+  if(midChanged) rebuildFormants();
+
+  updateStatus();
 }
 
 // ── Presets ───────────────────────────────────────────────────────
@@ -1053,7 +1395,7 @@ const PRESETS = {
     for(let i=0;i<s;i++){ g[i][i]=true; g[i][(i+2)%s]=true; }
     return g;
   },
-  random:   s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.25))
+  random:   s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.22))
 };
 function applyPreset(name){ motifGrid=PRESETS[name](motifSize); refreshAll(); }
 
@@ -1065,8 +1407,7 @@ function buildSVG(){
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">`;
   s+=`<rect x=".3" y=".3" width="${W-.6}" height="${H-.6}" fill="#f4f0e2" stroke="#222" stroke-width=".5" rx="2"/>`;
   for(let c=0;c<CARD_COLS;c+=6){
-    const x=mg+c*sp-sp/2;
-    s+=`<rect x="${x}" y="${mg/2}" width="${6*sp}" height="${H-mg}" fill="#e8e0c5" opacity=".4"/>`;
+    s+=`<rect x="${mg+c*sp-sp/2}" y="${mg/2}" width="${6*sp}" height="${H-mg}" fill="#e8e0c5" opacity=".4"/>`;
   }
   for(let c=0;c<CARD_COLS;c++)
     s+=`<text x="${mg+c*sp}" y="${mg-2.5}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="middle">${c+1}</text>`;
@@ -1075,9 +1416,7 @@ function buildSVG(){
     s+=`<text x="${mg-2.5}" y="${y+.7}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="end">${cardRows-r}</text>`;
     for(let c=0;c<CARD_COLS;c++){
       const x=mg+c*sp;
-      s+=ag[r][c]
-        ?`<circle cx="${x}" cy="${y}" r="2" fill="#111"/>`
-        :`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
+      s+=ag[r][c]?`<circle cx="${x}" cy="${y}" r="2" fill="#111"/>`:`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
     }
   }
   s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de \u00b7 24st\u00d7${cardRows}r \u00b7 ${sp}mm spacing</text>`;
@@ -1086,8 +1425,7 @@ function buildSVG(){
     s+=`<rect x="${mx-1}" y="${my-1}" width="${motifSize*ms+2}" height="${motifSize*ms+2}" fill="none" stroke="#ccc" stroke-width=".3"/>`;
     s+=`<text x="${mx}" y="${my-2.5}" font-family="sans-serif" font-size="1.8" fill="#bbb">motif</text>`;
     for(let r=0;r<motifSize;r++) for(let c=0;c<motifSize;c++)
-      if(motifGrid[r][c])
-        s+=`<rect x="${mx+c*ms}" y="${my+r*ms}" width="${ms-.3}" height="${ms-.3}" fill="#888"/>`;
+      if(motifGrid[r][c]) s+=`<rect x="${mx+c*ms}" y="${my+r*ms}" width="${ms-.3}" height="${ms-.3}" fill="#888"/>`;
   }
   return s+'</svg>';
 }
@@ -1102,8 +1440,8 @@ function doExport(){
   if(exportFormat==='png'){
     const sp=HOLE_SPACING_MM, mg=10, SC=8;
     const W=((CARD_COLS-1)*sp+2*mg)*SC, H=((cardRows-1)*sp+2*mg)*SC;
-    const img=new Image();
     const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+    const img=new Image();
     img.onload=()=>{
       const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
       cv.getContext('2d').drawImage(img,0,0,W,H);
@@ -1116,13 +1454,9 @@ function doExport(){
   win.document.write(`<!DOCTYPE html><html><head><title>Punch Card \u00b7 jordanelias.de</title>
 <style>body{margin:0;background:#fff;}.w{padding:8mm;}.n{font-family:sans-serif;font-size:9px;color:#777;margin-bottom:5mm;line-height:1.6;}
 @media print{@page{margin:8mm;size:auto;}}</style></head><body>
-<div class="w">
-<div class="n"><strong>Print at 100% \u2014 do not scale to fit page.</strong><br>
+<div class="w"><div class="n"><strong>Print at 100% \u2014 do not scale to fit page.</strong><br>
 Hole spacing: ${HOLE_SPACING_MM}mm \u00b7 Brother / Silver Reed 24-stitch standard gauge \u00b7 Motif: ${motifSize}\u00d7${motifSize} \u00b7 Tile: ${tileMode}</div>
-${svg}
-</div>
-<script>window.onload=function(){window.print();}<\/script>
-</body></html>`);
+${svg}</div><script>window.onload=function(){window.print();}<\/script></body></html>`);
   win.document.close();
 }
 
@@ -1139,12 +1473,17 @@ function wireGroup(sel,attr,cb){
 document.addEventListener('DOMContentLoaded',()=>{
   initMotif(8); applyPreset('diamond');
 
-  wireGroup('[data-preset]','preset', applyPreset);
-  wireGroup('[data-msize]','msize',   v=>{ initMotif(+v); refreshAll(); });
-  wireGroup('[data-tile]','tile',     v=>{ tileMode=v; refreshAll(); });
+  wireGroup('[data-preset]','preset',  applyPreset);
+  wireGroup('[data-msize]','msize',    v=>{ initMotif(+v); refreshAll(); });
+  wireGroup('[data-tile]','tile',      v=>{ tileMode=v; refreshAll(); });
   wireGroup('[data-cardrows]','cardrows', v=>{ cardRows=+v; refreshAll(); });
-  wireGroup('[data-fund]','fund',     v=>{ fundamentalHz=+v; if(isPlaying){ stopPlay(); startPlay(); } });
-  wireGroup('[data-export]','export', v=>{ exportFormat=v; });
+  wireGroup('[data-root]','root',      v=>{
+    rootHz=+v;
+    if(ctx&&addOsc) addOsc.frequency.setTargetAtTime(rootHz, ctx.currentTime, 0.1);
+    if(ctx&&formSrc) formSrc.frequency.setTargetAtTime(rootHz, ctx.currentTime, 0.1);
+    if(isPlaying){ rebuildAddOsc(); rebuildStrings(); }
+  });
+  wireGroup('[data-export]','export',  v=>{ exportFormat=v; });
 
   document.getElementById('toggle-complement').addEventListener('click',function(){
     showComplement=!showComplement; this.classList.toggle('on',showComplement); updateGhosts();
@@ -1153,26 +1492,24 @@ document.addEventListener('DOMContentLoaded',()=>{
     includeMotifRef=!includeMotifRef; this.classList.toggle('on',includeMotifRef);
   });
 
-  document.getElementById('tx-play').addEventListener('click', startPlay);
-  document.getElementById('tx-stop').addEventListener('click', stopPlay);
+  document.getElementById('s-play').addEventListener('click', startPlay);
+  document.getElementById('s-stop').addEventListener('click', stopPlay);
 
-  // Sliders
-  document.getElementById('tx-volume').addEventListener('input',function(){
-    document.getElementById('tx-volume-val').textContent=Math.round(this.value*100)+'%';
-    if(masterGain) masterGain.gain.setTargetAtTime(parseFloat(this.value), audioCtx.currentTime, 0.05);
+  document.getElementById('s-vol').addEventListener('input',function(){
+    document.getElementById('s-vol-val').textContent=Math.round(this.value*100)+'%';
+    if(masterGain) masterGain.gain.setTargetAtTime(parseFloat(this.value), ctx.currentTime, 0.05);
   });
-  document.getElementById('tx-fm-depth').addEventListener('input',function(){
-    document.getElementById('tx-fm-val').textContent=Math.round(this.value*100)+'%';
+  document.getElementById('s-space').addEventListener('input',function(){
+    document.getElementById('s-space-val').textContent=Math.round(this.value*100)+'%';
+    if(reverbSend) reverbSend.gain.setTargetAtTime(parseFloat(this.value), ctx.currentTime, 0.05);
   });
-  document.getElementById('tx-reverb').addEventListener('input',function(){
-    document.getElementById('tx-reverb-val').textContent=Math.round(this.value*100)+'%';
-    if(reverbGain){
-      reverbGain.gain.setTargetAtTime(parseFloat(this.value), audioCtx.currentTime, 0.05);
-      dryGain.gain.setTargetAtTime(1-parseFloat(this.value), audioCtx.currentTime, 0.05);
-    }
+  document.getElementById('s-distort').addEventListener('input',function(){
+    document.getElementById('s-distort-val').textContent=Math.round(this.value*100)+'%';
+    if(masterShaper) masterShaper.curve=makeSoftClip(256, 0.3+parseFloat(this.value)*2);
   });
-  document.getElementById('tx-phase-spread').addEventListener('input',function(){
-    document.getElementById('tx-phase-val').textContent=Math.round(this.value*100)+'%';
+  document.getElementById('s-width').addEventListener('input',function(){
+    document.getElementById('s-width-val').textContent=Math.round(this.value*100)+'%';
+    if(sideGain) sideGain.gain.setTargetAtTime(parseFloat(this.value), ctx.currentTime, 0.05);
   });
 
   document.getElementById('pc-export-btn').addEventListener('click', doExport);
