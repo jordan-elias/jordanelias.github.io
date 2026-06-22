@@ -116,7 +116,6 @@
 
     /* Dual grid layout */
     .pc-dual-grid { display: grid; grid-template-columns: auto 1fr; gap: 1.5em; align-items: start; margin-bottom: 0.75em; }
-    .pc-card-solo { margin-bottom: 0.75em; overflow-x: auto; }
     .pc-panel-title { font-family: 'Inter', sans-serif; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); opacity: 0.45; margin-bottom: 5px; }
     .pc-grid-scroll { overflow-x: auto; }
 
@@ -145,13 +144,6 @@
     .pc-cell.tiled.punched:hover { opacity: 1; }
     .pc-cell.playhead { box-shadow: 0 0 0 2px var(--accent-hover, #888); opacity: 0.5; }
     .pc-cell.punched.playhead { opacity: 1; }
-    /* Region tints on full card */
-    .pc-cell.region-top    { border-color: var(--text); opacity: 0.22; }
-    .pc-cell.region-mid    { border-color: var(--text); opacity: 0.28; }
-    .pc-cell.region-bot    { border-color: var(--text); opacity: 0.22; }
-    .pc-cell.region-top.punched { opacity: 0.85; }
-    .pc-cell.region-mid.punched { opacity: 1; }
-    .pc-cell.region-bot.punched { opacity: 0.9; }
 
     /* Article */
     .lab-exercise { border-left: 3px solid var(--text); padding: 1em 1.25em; margin: 1.5em 0; }
@@ -173,9 +165,11 @@
 
     @media (max-width: 680px) {
       .pc-dual-grid { grid-template-columns: 1fr; }
+      .pc-cell { width: 15px; height: 15px; }
+      .pc-col-num { font-size: 0.46rem; }
     }
     @media (max-width: 400px) {
-      .pc-col-num { font-size: 0.42rem; }
+      .pc-cell { width: 12px; height: 12px; }
     }
   </style>
 
@@ -318,7 +312,7 @@
           </div>
         </div>
         <div>
-          <div class="pc-panel-title">full card &mdash; 24-stitch repeat &mdash; draw here too</div>
+          <div class="pc-panel-title">full card &mdash; 24-stitch repeat</div>
           <div class="pc-grid-scroll">
             <div id="card-col-nums" class="pc-col-numbers"></div>
             <div id="card-grid" class="pc-grid"></div>
@@ -331,95 +325,101 @@
 
     <hr class="gen-separator">
 
-
-    <hr class="gen-separator">
-
-
-    <hr class="gen-separator">
-
-
-    <hr class="gen-separator">
-
-
-    <hr class="gen-separator">
-
-    <!-- MODULE 2: LISTEN -->
+    <!-- MODULE 2: TRANSFORMATIONS -->
     <div class="gen-module">
-      <p class="gen-module-label">listen</p>
+      <p class="gen-module-label">transformations</p>
 
-      <div class="pc-status-bar">
-        <div class="pc-status-left">
-          <div class="pc-status-item">
-            <span class="pc-status-val" id="s-voices">0</span>
-            <span class="pc-status-label">voices</span>
-          </div>
-          <div class="pc-status-item">
-            <span class="pc-status-val" id="s-spectral">&mdash;</span>
-            <span class="pc-status-label">spectral</span>
-          </div>
-          <div class="pc-status-item">
-            <span class="pc-status-val" id="s-region">&mdash;</span>
-            <span class="pc-status-label">engines</span>
-          </div>
-          <div class="pc-status-item">
-            <span class="pc-status-val" id="s-rough">&mdash;</span>
-            <span class="pc-status-label">roughness</span>
-          </div>
-        </div>
-        <div class="pc-playing-notes" id="s-note">ready</div>
+      <div class="gen-row">
+        <span class="gen-row-label">apply &rarr;</span>
+        <button class="lab-btn on" data-xform="P">P &mdash; prime</button>
+        <button class="lab-btn" data-xform="R">R &mdash; retrograde</button>
+        <button class="lab-btn" data-xform="I">I &mdash; inversion</button>
+        <button class="lab-btn" data-xform="RI">RI &mdash; retro-inv</button>
       </div>
 
       <div class="gen-row">
-        <span class="gen-row-label">root &rarr;</span>
-        <button class="lab-preset-btn" data-root="41">F1</button>
-        <button class="lab-preset-btn on" data-root="55">G1</button>
-        <button class="lab-preset-btn" data-root="65">F2</button>
-        <button class="lab-preset-btn" data-root="82">E2</button>
-        <button class="lab-preset-btn" data-root="110">A2</button>
+        <span class="gen-row-label">hear all &rarr;</span>
+        <button class="lab-btn" id="play-sequence">P &rarr; R &rarr; I &rarr; RI</button>
+        <span class="gen-hint">plays each in sequence with a pause between</span>
       </div>
 
-      <div class="lab-sliders">
-        <div class="lab-ctrl">
-          <input type="range" id="s-vol" min="0" max="1" value="0.6" step="0.01">
-          <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">volume</span>
-            <span class="lab-ctrl-val" id="s-vol-val">60%</span>
-          </div>
-        </div>
-        <div class="lab-ctrl">
-          <input type="range" id="s-space" min="0" max="1" value="0.45" step="0.01">
-          <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">space</span>
-            <span class="lab-ctrl-val" id="s-space-val">45%</span>
-          </div>
-        </div>
-        <div class="lab-ctrl">
-          <input type="range" id="s-drive" min="0" max="1" value="0.3" step="0.01">
-          <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">saturation</span>
-            <span class="lab-ctrl-val" id="s-drive-val">30%</span>
-          </div>
-        </div>
-        <div class="lab-ctrl">
-          <input type="range" id="s-width" min="0" max="1" value="0.65" step="0.01">
-          <div class="lab-ctrl-bottom">
-            <span class="lab-ctrl-label">stereo width</span>
-            <span class="lab-ctrl-val" id="s-width-val">65%</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="gen-row">
-        <button class="lab-btn" id="s-play">&#9654;&#xFE0E; play</button>
-        <button class="lab-btn" id="s-stop" disabled>&#9632;&#xFE0E; stop</button>
-      </div>
-
-      <p class="lab-hint">top rows &rarr; additive shimmer &middot; middle rows &rarr; vowel formants &middot; bottom rows &rarr; resonant strings &middot; draw on either grid while playing</p>
+      <p class="lab-hint">P = original &middot; R = columns reversed &middot; I = rows flipped &middot; RI = both &middot; whole tone and diminished scales are self-inverting under I</p>
     </div>
 
     <hr class="gen-separator">
 
-    <!-- MODULE 3: EXPORT -->
+    <!-- MODULE 3: PLAYBACK -->
+    <div class="gen-module">
+      <p class="gen-module-label">play as music</p>
+
+      <div class="gen-row">
+        <span class="gen-row-label">scale &rarr;</span>
+        <button class="lab-preset-btn on" data-scale="pentatonic">pentatonic</button>
+        <button class="lab-preset-btn" data-scale="major">major</button>
+        <button class="lab-preset-btn" data-scale="minor">minor</button>
+        <button class="lab-preset-btn" data-scale="wholetone">whole tone</button>
+        <button class="lab-preset-btn" data-scale="diminished">diminished</button>
+        <button class="lab-preset-btn" data-scale="blues">blues</button>
+      </div>
+
+      <div class="gen-row">
+        <span class="gen-row-label">voice &rarr;</span>
+        <button class="lab-preset-btn on" data-timbre="marimba">marimba</button>
+        <button class="lab-preset-btn" data-timbre="pluck">pluck</button>
+        <button class="lab-preset-btn" data-timbre="sine">sine</button>
+        <button class="lab-preset-btn" data-timbre="bell">bell</button>
+      </div>
+
+      <div class="gen-row">
+        <span class="gen-row-label">root &rarr;</span>
+        <select class="gen-select" id="pc-root">
+          <option value="48">C3</option>
+          <option value="50">D3</option>
+          <option value="52">E3</option>
+          <option value="53">F3</option>
+          <option value="55" selected>G3</option>
+          <option value="57">A3</option>
+          <option value="60">C4</option>
+          <option value="62">D4</option>
+        </select>
+      </div>
+
+      <div class="lab-sliders">
+        <div class="lab-ctrl">
+          <input type="range" id="pc-tempo" min="40" max="240" value="90" step="1">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">tempo</span>
+            <span class="lab-ctrl-val" id="pc-tempo-val">90 bpm</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="pc-volume" min="0" max="1" value="0.7" step="0.01">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">volume</span>
+            <span class="lab-ctrl-val" id="pc-volume-val">70%</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <input type="range" id="pc-reverb" min="0" max="1" value="0.3" step="0.01">
+          <div class="lab-ctrl-bottom">
+            <span class="lab-ctrl-label">reverb</span>
+            <span class="lab-ctrl-val" id="pc-reverb-val">30%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gen-row">
+        <button class="lab-btn" id="pc-play">&#9654;&#xFE0E; play</button>
+        <button class="lab-btn" id="pc-loop">loop</button>
+        <button class="lab-btn" id="pc-stop" disabled>&#9632;&#xFE0E; stop</button>
+      </div>
+
+      <p class="lab-hint">each column = one beat &middot; rows map to scale pitches bottom (low) to top (high)</p>
+    </div>
+
+    <hr class="gen-separator">
+
+    <!-- MODULE 4: EXPORT -->
     <div class="gen-module">
       <p class="gen-module-label">export</p>
 
@@ -433,7 +433,7 @@
       <div class="gen-row">
         <span class="gen-row-label">include &rarr;</span>
         <button class="lab-preset-btn on" id="export-motif-toggle">motif reference</button>
-        <span class="gen-hint">&mdash; adds a small diagram of your motif cell to the sheet</span>
+        <span class="gen-hint">&mdash; adds a small diagram of your motif cell</span>
       </div>
 
       <div class="download-row">
@@ -446,6 +446,7 @@
     </div>
 
   </div>
+
   <p>Mobile users &mdash; you might not hear anything if your phone is on silent.</p>
 
   <article>
@@ -510,6 +511,19 @@
     </section>
 
     <section>
+    <p>
+    If you're interested in diving deeper, the sensory intelligence lab is a web app for custom soundscapes, music composition tools, ear training exercises, journaling, and playlist building. Music therapy tools I use in my practice and sound experiments to try yourself. 
+    
+  </p>
+
+  <div class="cta-wrap">
+    <a href="https://lab.jordanelias.de" target="_blank" rel="noopener noreferrer" class="cta-btn">Explore the lab</a>
+  </div>
+
+      </section>
+
+
+    <section>
       <h2>Working with the tool</h2>
 
       <p>The workflow moves between textile and musical thinking without privileging either. Start by choosing a motif size: 8&times;8 is a good default, large enough to contain interesting patterns, small enough that the tiling produces genuine repetition within the 24-column card. Draw in the motif cell on the left; the full card updates in real time on the right. Choose a tile mode and listen immediately &mdash; the same motif tiled in different ways produces very different music, and the difference is audible before you can articulate it.</p>
@@ -565,9 +579,9 @@
     <section>
       <h2>If this resonates</h2>
 
-      <p>This post grew out of a workshop I have been developing with a Berlin knitting group, bringing experimental music and textile arts into the same space. It connects to earlier posts on <a href="/blog/generative-music/">generative music systems</a> and <a href="/blog/indeterminacy-in-music-and-life/">indeterminate music</a>, and to ongoing work on how pattern, repetition, and constraint function as both artistic and therapeutic tools.</p>
+      <p>This post grew out of a workshop collaboration combining experimental music and textile arts. The ideas here connect to earlier posts about <a href="/blog/generative-music/">generative music systems</a>, <a href="/blog/indeterminacy-in-music-and-life/">indeterminate music</a>, and the therapeutic uses of pattern and repetition.</p>
 
-      <p>If you are interested in bringing this workshop to your group &mdash; knitting circles, craft communities, music therapy contexts, experimental arts spaces &mdash; or in exploring these ideas individually, feel free to reach out via the <a href="/contact/">contact page</a>.</p>
+      <p>If you're interested in bringing this workshop to your knitting circles, craft communities, or experimental arts spaces, feel free to reach out via the <a href="/contact/">contact page</a>.</p>
 
       <p>I offer a free 30-minute consultation to explore whether working together might be a fit.</p>
 
@@ -595,514 +609,108 @@
 <script src="/js/header.js"></script>
 <script>
 /* ================================================================
-   PUNCH CARD SPATIAL SYNTHESISER  v3
-   Three independent synthesis engines, each governing a region:
-
-   TOP THIRD    — Additive / Spectral (PeriodicWave)
-     Each hole contributes a sine partial. Y = harmonic index.
-     X = Fourier phase. Drawing reshapes the waveform directly.
-
-   MIDDLE THIRD — Formant / Vocal (cascaded bandpass filters)
-     Three BiquadFilter bandpass chains (F1/F2/F3).
-     Y controls formant frequency. X controls Q (narrow/wide).
-     Specific hole clusters produce specific vowel sounds.
-
-   BOTTOM THIRD — Karplus-Strong strings (feedback delay)
-     Each hole = one plucked/bowed string.
-     Y = pitch. X = sustain (left=plucked, right=bowed).
-     Stereo pan follows X. Edge drive follows distance from centre.
-
-   Drawing on either the motif cell OR the full card triggers
-   live audio updates while playing.
+   Punch Card Music — inline JS
+   Motif engine · Tile engine · Transform engine · Audio · Export
    ================================================================ */
 (function(){
 'use strict';
 
 const CARD_COLS = 24;
-const HOLE_MM   = 5;
+const HOLE_SPACING_MM = 5;
 
-// ── App state ─────────────────────────────────────────────────────
+const SCALES = {
+  pentatonic:  [0,2,4,7,9],
+  major:       [0,2,4,5,7,9,11],
+  minor:       [0,2,3,5,7,8,10],
+  wholetone:   [0,2,4,6,8,10],
+  diminished:  [0,2,3,5,6,8,9,11],
+  blues:       [0,3,5,6,7,10]
+};
+const NOTE_NAMES = ['C','C#','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
+
+// State
 let motifSize = 8, cardRows = 24;
 let motifGrid = [], cardGrid = [];
-let tileMode  = 'straight';
+let tileMode = 'straight', currentXform = 'P';
+let currentScale = 'pentatonic', currentTimbre = 'marimba';
+let rootMidi = 55;
 let showComplement = false, includeMotifRef = true, exportFormat = 'print';
-let rootHz    = 55;   // G1 default
-let isPlaying = false;
+let isPlaying = false, isLooping = false;
+let playIntervalId = null, sequenceTimer = null, playingCol = -1;
+let isPointerDown = false, drawMode = null;
 
-// Pointer drawing
-let ptrDown = false, drawMode = null, drawTarget = null; // 'motif' | 'card'
+// Audio
+let audioCtx = null, masterGain, reverbNode, reverbGain, dryGain;
 
-// ── Audio context + shared nodes ──────────────────────────────────
-let A   = null;   // AudioContext
-let out = null;   // master gain → destination
-let rev = null;   // ConvolverNode
-let revSend = null, revReturn = null;
-let masterShaper = null;
-
-// Engine A — additive
-let addOsc   = null;   // single PeriodicWave oscillator
-let addGain  = null;
-let addFilter= null;   // gentle lowpass on additive engine
-
-// Engine B — formant
-let formSrc  = null;   // sawtooth into formant filters
-let fFilt    = [];     // [BiquadFilter×3]
-let fGain    = [];     // [GainNode×3]
-let fMix     = null;
-
-// Engine C — strings
-const KS     = new Map(); // key → {nodes}
-let ksMix    = null;
-
-// ── Audio init ────────────────────────────────────────────────────
-function boot(){
-  if(A) return;
-  A = new (window.AudioContext||window.webkitAudioContext)();
-
-  // Master output chain: engines → masterShaper → out → destination
-  out = A.createGain();
-  out.gain.value = parseFloat(document.getElementById('s-vol').value);
-
-  masterShaper = A.createWaveShaper();
-  masterShaper.curve = softClipCurve(256, 0.6);
-  masterShaper.oversample = '4x';
-  masterShaper.connect(out);
-  out.connect(A.destination);
-
-  // Reverb send/return in parallel with dry
-  rev = A.createConvolver();
-  rev.buffer = makeIR(3.5);
-  revSend   = A.createGain();
-  revSend.gain.value = parseFloat(document.getElementById('s-space').value);
-  revReturn = A.createGain();
-  revReturn.gain.value = 0.8;
-  out.connect(revSend);
-  revSend.connect(rev);
-  rev.connect(revReturn);
-  revReturn.connect(A.destination);
-
-  // ── Engine A: additive
-  addGain = A.createGain();
-  addGain.gain.value = 0.0;
-  addFilter = A.createBiquadFilter();
-  addFilter.type = 'lowpass';
-  addFilter.frequency.value = 8000;
-  addGain.connect(addFilter);
-  addFilter.connect(masterShaper);
-  // addOsc will be created in rebuildAdd()
-
-  // ── Engine B: formant
-  formSrc = A.createOscillator();
-  formSrc.type = 'sawtooth';
-  formSrc.frequency.value = rootHz;
-  formSrc.start();
-
-  fMix = A.createGain();
-  fMix.gain.value = 0.0;
-  fMix.connect(masterShaper);
-
-  // Three formant bandpass filters
-  [300, 900, 2400].forEach(freq => {
-    const f = A.createBiquadFilter();
-    f.type = 'bandpass';
-    f.frequency.value = freq;
-    f.Q.value = 8;
-    const g = A.createGain();
-    g.gain.value = 0;
-    formSrc.connect(f);
-    f.connect(g);
-    g.connect(fMix);
-    fFilt.push(f); fGain.push(g);
-  });
-
-  // ── Engine C: strings
-  ksMix = A.createGain();
-  ksMix.gain.value = 0.0;
-  ksMix.connect(masterShaper);
+function ensureAudio(){
+  if(audioCtx) return;
+  audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = parseFloat(document.getElementById('pc-volume').value);
+  reverbNode = audioCtx.createConvolver();
+  buildIR(2.0);
+  reverbGain = audioCtx.createGain();
+  dryGain = audioCtx.createGain();
+  const rv = parseFloat(document.getElementById('pc-reverb').value);
+  reverbGain.gain.value = rv; dryGain.gain.value = 1-rv;
+  masterGain.connect(dryGain); dryGain.connect(audioCtx.destination);
+  masterGain.connect(reverbNode); reverbNode.connect(reverbGain); reverbGain.connect(audioCtx.destination);
 }
+function buildIR(dur){
+  if(!audioCtx) return;
+  const sr=audioCtx.sampleRate, len=Math.floor(sr*dur);
+  const buf=audioCtx.createBuffer(2,len,sr);
+  for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.5);}
+  reverbNode.buffer=buf;
+}
+function midiFreq(m){return 440*Math.pow(2,(m-69)/12);}
+function rowToMidi(r,rows){
+  const scale=SCALES[currentScale];
+  const idx=(rows-1-r);
+  return rootMidi + Math.floor(idx/scale.length)*12 + scale[idx%scale.length];
+}
+function midiName(m){return NOTE_NAMES[((m%12)+12)%12]+(Math.floor(m/12)-1);}
 
-// ── Waveshaper helpers ────────────────────────────────────────────
-function softClipCurve(n, k){
-  const c = new Float32Array(n);
-  for(let i=0;i<n;i++){
-    const x = i*2/(n-1)-1;
-    c[i] = (1+k)*x / (1+k*Math.abs(x));
+function playNote(midi){
+  if(!audioCtx) return;
+  const f=midiFreq(midi), now=audioCtx.currentTime;
+  if(currentTimbre==='sine'){
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0.4,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.9);
+    o.connect(g);g.connect(masterGain);o.start(now);o.stop(now+0.9);
+  } else if(currentTimbre==='pluck'){
+    const bs=Math.max(2,Math.round(audioCtx.sampleRate/f));
+    const nb=audioCtx.createBuffer(1,bs,audioCtx.sampleRate);
+    const nd=nb.getChannelData(0); for(let i=0;i<bs;i++) nd[i]=Math.random()*2-1;
+    const s=audioCtx.createBufferSource();s.buffer=nb;s.loop=true;
+    const fl=audioCtx.createBiquadFilter();fl.type='lowpass';fl.frequency.value=f*2;
+    const g=audioCtx.createGain();g.gain.setValueAtTime(0.5,now);g.gain.exponentialRampToValueAtTime(0.001,now+1.3);
+    s.connect(fl);fl.connect(g);g.connect(masterGain);s.start(now);s.stop(now+1.3);
+  } else if(currentTimbre==='marimba'){
+    [[1,0.65,0.35],[4.09,0.22,0.1]].forEach(([r,a,d])=>{
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type='sine';o.frequency.value=f*r;
+      g.gain.setValueAtTime(a,now);g.gain.exponentialRampToValueAtTime(0.001,now+d+0.4);
+      o.connect(g);g.connect(masterGain);o.start(now);o.stop(now+d+0.4);
+    });
+  } else if(currentTimbre==='bell'){
+    [[1,0.55,3.0],[2.76,0.2,1.8],[5.4,0.08,1.0]].forEach(([r,a,d])=>{
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type='sine';o.frequency.value=f*r;
+      g.gain.setValueAtTime(a,now);g.gain.exponentialRampToValueAtTime(0.001,now+d);
+      o.connect(g);g.connect(masterGain);o.start(now);o.stop(now+d);
+    });
   }
-  return c;
 }
 
-function driveClipCurve(n, drive){
-  const c = new Float32Array(n);
-  for(let i=0;i<n;i++){
-    const x = (i*2/(n-1)-1)*drive;
-    c[i] = Math.tanh(x)/Math.tanh(drive);
-  }
-  return c;
-}
-
-// ── Reverb IR ─────────────────────────────────────────────────────
-function makeIR(dur){
-  const sr  = A.sampleRate, len = Math.floor(sr*dur);
-  const buf = A.createBuffer(2, len, sr);
-  for(let ch=0;ch<2;ch++){
-    const d = buf.getChannelData(ch);
-    const pre = Math.floor(sr*0.012);
-    for(let i=pre;i<len;i++){
-      const t   = (i-pre)/(len-pre);
-      const env = Math.pow(1-t, 2.2);
-      d[i] = (Math.random()*2-1) * env;
-    }
-    // Early reflections
-    for(let r=0;r<8;r++){
-      const pos = pre + Math.floor(Math.random()*sr*0.06);
-      if(pos<len) d[pos] += (Math.random()*2-1)*0.5;
-    }
-  }
-  return buf;
-}
-
-// ── Region boundaries ─────────────────────────────────────────────
-function topEnd(){ return Math.floor(cardRows/3); }
-function midEnd(){ return Math.floor(cardRows*2/3); }
-
-// ── Engine A: Additive ────────────────────────────────────────────
-// Map row (within top region) to harmonic partial index 1..32
-const HARM_SERIES = [1,2,3,4,5,6,7,8,9,10,12,14,16,20,24,28,32];
-function rowToHarmonic(r){
-  const t = topEnd();
-  const norm = 1 - r / Math.max(t-1, 1); // 0=bottom of top, 1=very top
-  const idx = Math.round(norm*(HARM_SERIES.length-1));
-  return HARM_SERIES[Math.min(idx, HARM_SERIES.length-1)];
-}
-
-function rebuildAdd(){
-  if(!A) return;
-  const t = topEnd();
-  const SIZE = 33; // harmonics 0..32
-  const real = new Float32Array(SIZE);
-  const imag = new Float32Array(SIZE);
-  real[0] = imag[0] = 0; // no DC
-
-  let count = 0;
-  for(let r=0;r<t;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) count++;
-
-  if(count > 0){
-    const scale = 1/Math.sqrt(count);
-    for(let r=0;r<t;r++){
-      for(let c=0;c<CARD_COLS;c++){
-        if(!cardGrid[r][c]) continue;
-        const k     = rowToHarmonic(r);
-        if(k >= SIZE) continue;
-        const phase = (c/CARD_COLS) * Math.PI * 2;
-        const amp   = scale * (1/k); // amplitude rolls off with harmonic
-        real[k] += amp * Math.cos(phase);
-        imag[k] += amp * Math.sin(phase);
-      }
-    }
-  }
-
-  // Stop old oscillator
-  if(addOsc){ try{ addOsc.stop(A.currentTime+0.05); }catch(e){} }
-
-  if(count === 0){
-    addGain.gain.setTargetAtTime(0, A.currentTime, 0.05);
-    addOsc = null;
-    return;
-  }
-
-  // Check non-zero
-  let hasEnergy = false;
-  for(let i=1;i<SIZE;i++) if(real[i]!==0||imag[i]!==0){ hasEnergy=true; break; }
-
-  addOsc = A.createOscillator();
-  addOsc.frequency.value = rootHz;
-
-  if(hasEnergy){
-    // disableNormalization:true preserves our amplitudes
-    const pw = A.createPeriodicWave(real, imag, {disableNormalization: true});
-    addOsc.setPeriodicWave(pw);
-  } else {
-    addOsc.type = 'sine';
-  }
-
-  addOsc.connect(addGain);
-  addOsc.start();
-  addGain.gain.setTargetAtTime(0.55, A.currentTime, 0.06);
-}
-
-// ── Engine B: Formant ─────────────────────────────────────────────
-// Vocal formant ranges (Hz):
-const F_RANGES = [
-  {min:200, max:900},   // F1 — jaw/openness
-  {min:700, max:2500},  // F2 — tongue front/back
-  {min:1800,max:3500},  // F3 — lip rounding
-];
-
-function rebuildFormants(){
-  if(!A) return;
-  const t = topEnd(), m = midEnd();
-  const midH = m - t;
-  if(midH <= 0) return;
-
-  // Divide mid region into 3 equal horizontal bands: F1=bottom, F3=top
-  const bandH = midH / 3;
-
-  const bands = [[], [], []];
-  for(let r=t;r<m;r++){
-    for(let c=0;c<CARD_COLS;c++){
-      if(!cardGrid[r][c]) continue;
-      const local = r - t;
-      const band  = Math.min(2, Math.floor((midH-1-local)/bandH));
-      bands[band].push({r, c, local});
-    }
-  }
-
-  let totalHoles = 0;
-  const now = A.currentTime, tau = 0.07;
-
-  bands.forEach((holes, b) => {
-    totalHoles += holes.length;
-    if(holes.length === 0){
-      fGain[b].gain.setTargetAtTime(0, now, tau);
-      return;
-    }
-    const fr = F_RANGES[b];
-    // Average X → Q (left=narrow=resonant, right=wide=breathy)
-    const avgX  = holes.reduce((s,h)=>s+h.c,0)/holes.length;
-    const xNorm = avgX/(CARD_COLS-1);
-    const Q     = 2 + (1-xNorm)*20; // Q 2..22
-
-    // Average local Y → formant frequency
-    const avgY  = holes.reduce((s,h)=>s+h.local,0)/holes.length;
-    const yNorm = avgY/(midH-1); // 0=top-of-mid, 1=bottom
-    const freq  = fr.max - yNorm*(fr.max-fr.min);
-
-    const density = holes.length/(bandH*CARD_COLS);
-    const amp     = Math.min(1.4, density*5*(Q/10));
-
-    fFilt[b].frequency.setTargetAtTime(freq, now, tau);
-    fFilt[b].Q.setTargetAtTime(Q, now, tau);
-    fGain[b].gain.setTargetAtTime(amp, now, tau);
-  });
-
-  const density = totalHoles/(midH*CARD_COLS);
-  fMix.gain.setTargetAtTime(Math.min(1.2, density*5), now, tau);
-}
-
-// ── Engine C: Karplus-Strong strings ──────────────────────────────
-// Row → pitch: maps to harmonic series above rootHz
-const STR_RATIOS = [4, 3, 2.5, 2, 1.5, 1.25, 1, 0.75];
-function rowToStringFreq(r){
-  const m = midEnd(), bot = cardRows;
-  const norm = (r-m)/Math.max(bot-1-m, 1); // 0=top-of-bottom, 1=very bottom
-  const idx  = Math.round(norm*(STR_RATIOS.length-1));
-  return rootHz * STR_RATIOS[Math.min(idx, STR_RATIOS.length-1)];
-}
-
-function addKSString(r, c){
-  const key = r+','+c;
-  if(KS.has(key)||!A) return;
-
-  const now  = A.currentTime;
-  const freq = rowToStringFreq(r);
-
-  // Sustain: col 0 → short pluck (low filter freq), col 23 → long bowed (high)
-  const colNorm  = c/(CARD_COLS-1);
-  // KS loop filter frequency: low = fast decay, high = slow decay
-  const loopFiltHz = 200 + colNorm * (freq * 1.8 - 200);
-
-  // Pan: col → stereo [-0.85, +0.85]
-  const pan = (colNorm*2-1) * parseFloat(document.getElementById('s-width').value) * 0.85;
-
-  // Drive: edge proximity → saturation
-  const cx   = (CARD_COLS-1)/2;
-  const dist = Math.abs(c-cx)/cx; // 0=centre, 1=edge
-  const drive= 1.2 + dist * parseFloat(document.getElementById('s-drive').value) * 6;
-
-  // ── KS network: excitation → delayLoop → output
-  // excitation = short noise burst
-  const excBufLen = Math.max(8, Math.ceil(A.sampleRate/freq));
-  const excBuf    = A.createBuffer(1, excBufLen, A.sampleRate);
-  const excData   = excBuf.getChannelData(0);
-  for(let i=0;i<excBufLen;i++) excData[i] = Math.random()*2-1;
-
-  const excSrc  = A.createBufferSource();
-  excSrc.buffer = excBuf;
-
-  // Delay line (one period)
-  const delay   = A.createDelay(2.0);
-  delay.delayTime.value = 1/freq;
-
-  // Loop lowpass filter (controls decay speed)
-  const loopFilt = A.createBiquadFilter();
-  loopFilt.type  = 'lowpass';
-  loopFilt.frequency.value = loopFiltHz;
-  loopFilt.Q.value = 0.5;
-
-  // Feedback gain (slightly < 1 to prevent infinite sustain blowup)
-  const fbGain = A.createGain();
-  fbGain.gain.value = 0.996;
-
-  // Output envelope
-  const outGain = A.createGain();
-  outGain.gain.setValueAtTime(0, now);
-  outGain.gain.linearRampToValueAtTime(0.22, now+0.012);
-
-  // Per-voice waveshaper
-  const shaper = A.createWaveShaper();
-  shaper.curve = driveClipCurve(256, drive);
-  shaper.oversample = '2x';
-
-  // Panner
-  const panner = A.createStereoPanner();
-  panner.pan.value = pan;
-
-  // Graph:
-  // excSrc ──────────────────────────────────┐
-  //                                          ↓
-  // delay → loopFilt → fbGain ──────────→ delay  (feedback)
-  //               └──────────────────→ outGain → shaper → panner → ksMix
-  excSrc.connect(delay);
-  delay.connect(loopFilt);
-  loopFilt.connect(fbGain);
-  fbGain.connect(delay);      // feedback
-  loopFilt.connect(outGain);  // tap output before feedback
-  outGain.connect(shaper);
-  shaper.connect(panner);
-  panner.connect(ksMix);
-
-  excSrc.start(now);
-  excSrc.stop(now + 1/freq * 2); // excitation lasts 2 periods
-
-  KS.set(key, {excSrc, delay, loopFilt, fbGain, outGain, shaper, panner});
-  rebalanceStrings();
-}
-
-function removeKSString(r, c){
-  const key = r+','+c;
-  const s   = KS.get(key);
-  if(!s||!A) return;
-  const now = A.currentTime;
-  s.outGain.gain.cancelScheduledValues(now);
-  s.outGain.gain.setTargetAtTime(0, now, 0.06);
-  try{ s.excSrc.stop(now+0.5); }catch(e){}
-  KS.delete(key);
-  rebalanceStrings();
-}
-
-function rebalanceStrings(){
-  const n = Math.max(KS.size, 1);
-  const t = 0.22/Math.sqrt(n);
-  const now = A.currentTime;
-  KS.forEach(s => s.outGain.gain.setTargetAtTime(t, now, 0.08));
-  ksMix.gain.setTargetAtTime(KS.size > 0 ? 1.0 : 0.0, A.currentTime, 0.05);
-}
-
-// ── Full rebuild from cardGrid ────────────────────────────────────
-function rebuildAll(){
-  if(!A||!isPlaying) return;
-  rebuildAdd();
-  rebuildFormants();
-
-  // Strings: diff current KS map against desired
-  const m = midEnd();
-  const want = new Set();
-  for(let r=m;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++) if(cardGrid[r][c]) want.add(r+','+c);
-  KS.forEach((_,key)=>{ if(!want.has(key)){ const [r,c]=key.split(',').map(Number); removeKSString(r,c); }});
-  want.forEach(key=>{ if(!KS.has(key)){ const [r,c]=key.split(',').map(Number); addKSString(r,c); }});
-
-  updateStatus();
-}
-
-function stopAllEngines(){
-  if(addOsc){ try{addOsc.stop();}catch(e){} addOsc=null; }
-  if(addGain) addGain.gain.setTargetAtTime(0, A.currentTime, 0.05);
-  if(fMix)    fMix.gain.setTargetAtTime(0,    A.currentTime, 0.08);
-  fGain.forEach(g => g.gain.setTargetAtTime(0, A.currentTime, 0.08));
-  KS.forEach((_,key)=>{ const [r,c]=key.split(',').map(Number); removeKSString(r,c); });
-}
-
-// ── Live per-hole update (called from toggle) ─────────────────────
-function liveUpdate(cardRow, cardCol, punched){
-  if(!A||!isPlaying) return;
-  const t = topEnd(), m = midEnd();
-  if(cardRow < t){
-    rebuildAdd(); // additive must rebuild whole wave atomically
-  } else if(cardRow < m){
-    rebuildFormants(); // formant = smooth parameter update
-  } else {
-    if(punched) addKSString(cardRow, cardCol);
-    else        removeKSString(cardRow, cardCol);
-  }
-  updateStatus();
-}
-
-// ── Play / stop ───────────────────────────────────────────────────
-function startPlay(){
-  boot();
-  if(A.state==='suspended') A.resume();
-  isPlaying = true;
-  document.getElementById('s-play').classList.add('on');
-  document.getElementById('s-play').disabled = true;
-  document.getElementById('s-stop').disabled = false;
-  document.getElementById('s-note').textContent = 'draw to sculpt the sound';
-  rebuildAll();
-}
-
-function stopPlay(){
-  isPlaying = false;
-  if(A) stopAllEngines();
-  document.getElementById('s-play').classList.remove('on');
-  document.getElementById('s-play').disabled = false;
-  document.getElementById('s-stop').disabled = true;
-  document.getElementById('s-note').textContent = 'ready';
-  ['s-voices','s-spectral','s-region','s-rough'].forEach(id=>{
-    document.getElementById(id).textContent='—';
-  });
-  document.getElementById('s-voices').textContent='0';
-}
-
-// ── Status display ────────────────────────────────────────────────
-function updateStatus(){
-  if(!A){ document.getElementById('s-voices').textContent='0'; return; }
-  const t = topEnd(), m = midEnd();
-  let total=0, topN=0, midN=0, botN=0;
-  for(let r=0;r<cardRows;r++) for(let c=0;c<CARD_COLS;c++){
-    if(!cardGrid[r][c]) continue;
-    total++;
-    if(r<t) topN++; else if(r<m) midN++; else botN++;
-  }
-  document.getElementById('s-voices').textContent = total;
-
-  // Spectral centroid of additive engine
-  let hSum=0, hN=0;
-  for(let r=0;r<t;r++) for(let c=0;c<CARD_COLS;c++)
-    if(cardGrid[r][c]){ hSum+=rowToHarmonic(r); hN++; }
-  document.getElementById('s-spectral').textContent = hN>0 ? (hSum/hN).toFixed(1)+'×' : '—';
-
-  // Active engines
-  const eng=[];
-  if(topN) eng.push('add'); if(midN) eng.push('form'); if(botN) eng.push('str');
-  document.getElementById('s-region').textContent = eng.length ? eng.join('+') : '—';
-
-  // Roughness (Plomp-Levelt approximation)
-  let rough=0, pairs=0;
-  const topFreqs=[];
-  for(let r=0;r<t;r++) for(let c=0;c<CARD_COLS;c++)
-    if(cardGrid[r][c]) topFreqs.push(rowToHarmonic(r)*rootHz);
-  for(let i=0;i<topFreqs.length;i++) for(let j=i+1;j<topFreqs.length;j++){
-    rough += Math.exp(-Math.pow((Math.abs(topFreqs[i]-topFreqs[j])-50)/40,2));
-    pairs++;
-  }
-  document.getElementById('s-rough').textContent = pairs>0 ? (rough/pairs).toFixed(2) : '—';
-}
-
-// ── Grid engine ───────────────────────────────────────────────────
+// Motif
 function initMotif(s){
   motifSize=s;
   motifGrid=Array.from({length:s},()=>new Array(s).fill(false));
 }
 
+// Tiling
 function tileCard(){
   cardGrid=Array.from({length:cardRows},()=>new Array(CARD_COLS).fill(false));
   for(let cr=0;cr<cardRows;cr++) for(let cc=0;cc<CARD_COLS;cc++){
@@ -1110,84 +718,70 @@ function tileCard(){
     if(mr>=0&&mr<motifSize&&mc>=0&&mc<motifSize) cardGrid[cr][cc]=motifGrid[mr][mc];
   }
 }
-
 function cardToMotif(cr,cc){
   const colRep=Math.floor(cc/motifSize), colPh=cc%motifSize;
   let rowOff=0;
   if(tileMode==='brick') rowOff=(colRep%2)*Math.floor(motifSize/2);
   const rowRep=Math.floor((cr+rowOff)/motifSize);
   const rowPh=((cr+rowOff)%motifSize+motifSize)%motifSize;
-  const mC=(tileMode==='mirror-x'||tileMode==='mirror-xy')&&(colRep%2===1)?motifSize-1-colPh:colPh;
-  const mR=(tileMode==='mirror-y'||tileMode==='mirror-xy')&&(rowRep%2===1)?motifSize-1-rowPh:rowPh;
+  let mC=(tileMode==='mirror-x'||tileMode==='mirror-xy')&&(colRep%2===1) ? motifSize-1-colPh : colPh;
+  let mR=(tileMode==='mirror-y'||tileMode==='mirror-xy')&&(rowRep%2===1) ? motifSize-1-rowPh : rowPh;
   return{mr:mR,mc:mC};
 }
 
-// ── Rendering ─────────────────────────────────────────────────────
-function cs(){ return window.innerWidth<=400?12:window.innerWidth<=680?14:18; }
-
-function renderMotifGrid(){
-  const size = cs();
-  const numEl  = document.getElementById('motif-col-nums');
-  const gridEl = document.getElementById('motif-grid');
-  if(!numEl||!gridEl) return;
-  numEl.innerHTML = `<div style="width:23px;flex-shrink:0"></div>`+
-    Array.from({length:motifSize},(_,c)=>`<div class="pc-col-num" style="width:${size}px">${c+1}</div>`).join('');
-  gridEl.innerHTML='';
-  for(let r=0;r<motifSize;r++){
-    const row=document.createElement('div'); row.className='pc-row';
-    const lbl=document.createElement('div'); lbl.className='pc-row-label';
-    lbl.textContent=motifSize-r; row.appendChild(lbl);
-    for(let c=0;c<motifSize;c++){
-      const cell=document.createElement('div');
-      cell.className='pc-cell';
-      cell.style.width=cell.style.height=size+'px';
-      if(motifGrid[r][c]) cell.classList.add('punched');
-      cell.dataset.r=r; cell.dataset.c=c; cell.dataset.grid='motif';
-      cell.addEventListener('pointerdown', onPD);
-      cell.addEventListener('pointerenter', onPE);
-      row.appendChild(cell);
-    }
-    gridEl.appendChild(row);
+// Transform
+function applyXform(g,t,rows,cols){
+  if(t==='P') return g;
+  const out=Array.from({length:rows},()=>new Array(cols).fill(false));
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+    let sr=r,sc=c;
+    if(t==='R') sc=cols-1-c;
+    else if(t==='I') sr=rows-1-r;
+    else if(t==='RI'){sc=cols-1-c;sr=rows-1-r;}
+    out[r][c]=g[sr][sc];
   }
-  updateGhosts();
+  return out;
 }
+function activeGrid(){return applyXform(cardGrid,currentXform,cardRows,CARD_COLS);}
 
-function renderCardGrid(){
-  const size = cs();
-  const t = topEnd(), m = midEnd();
-  const numEl  = document.getElementById('card-col-nums');
-  const gridEl = document.getElementById('card-grid');
+// Render
+function cellSize(){return window.innerWidth<=400?12:window.innerWidth<=680?15:20;}
+
+function renderGrid(containerId,colNumsId,rows,cols,data,editable){
+  const cs=cellSize();
+  const numEl=document.getElementById(colNumsId);
+  const gridEl=document.getElementById(containerId);
   if(!numEl||!gridEl) return;
-  numEl.innerHTML = `<div style="width:23px;flex-shrink:0"></div>`+
-    Array.from({length:CARD_COLS},(_,c)=>`<div class="pc-col-num" style="width:${size}px">${c+1}</div>`).join('');
+
+  numEl.innerHTML=`<div style="width:${23}px;flex-shrink:0"></div>`+
+    Array.from({length:cols},(_,c)=>`<div class="pc-col-num" style="width:${cs}px">${c+1}</div>`).join('');
+
   gridEl.innerHTML='';
-  for(let r=0;r<cardRows;r++){
+  for(let r=0;r<rows;r++){
     const row=document.createElement('div'); row.className='pc-row';
     const lbl=document.createElement('div'); lbl.className='pc-row-label';
-    lbl.textContent=cardRows-r; row.appendChild(lbl);
-    for(let c=0;c<CARD_COLS;c++){
+    lbl.textContent=rows-r; row.appendChild(lbl);
+    for(let c=0;c<cols;c++){
       const cell=document.createElement('div');
-      const reg = r<t?'region-top':r<m?'region-mid':'region-bot';
-      cell.className=`pc-cell tiled ${reg}`;
-      cell.style.width=cell.style.height=size+'px';
-      if(cardGrid[r][c]) cell.classList.add('punched');
-      cell.dataset.r=r; cell.dataset.c=c; cell.dataset.grid='card';
-      cell.addEventListener('pointerdown', onPD);
-      cell.addEventListener('pointerenter', onPE);
+      cell.className='pc-cell'+(editable?'':' tiled');
+      cell.style.width=cell.style.height=cs+'px';
+      if(data[r][c]) cell.classList.add('punched');
+      if(editable){cell.dataset.r=r;cell.dataset.c=c;
+        cell.addEventListener('pointerdown',onPD);
+        cell.addEventListener('pointerenter',onPE);
+      }
       row.appendChild(cell);
     }
     gridEl.appendChild(row);
   }
 }
 
-function refreshAll(){
-  tileCard();
-  renderMotifGrid();
-  renderCardGrid();
-  updateStatusBar();
-  if(isPlaying) rebuildAll();
-}
+function renderMotif(){renderGrid('motif-grid','motif-col-nums',motifSize,motifSize,motifGrid,true);updateGhosts();}
+function renderCard(){renderGrid('card-grid','card-col-nums',cardRows,CARD_COLS,activeGrid(),false);}
 
+function refreshAll(){tileCard();renderMotif();renderCard();updateStatus();}
+
+// Complement ghosts
 function updateGhosts(){
   document.querySelectorAll('#motif-grid .pc-cell').forEach(el=>el.classList.remove('ghost'));
   if(!showComplement) return;
@@ -1202,122 +796,149 @@ function updateGhosts(){
   }
 }
 
-function updateStatusBar(){
+// Status
+function updateStatus(){
   let h=0;
   for(let r=0;r<motifSize;r++) for(let c=0;c<motifSize;c++) if(motifGrid[r][c]) h++;
   document.getElementById('stat-holes').textContent=h;
   document.getElementById('stat-motif-dim').textContent=motifSize+'\u00d7'+motifSize;
   document.getElementById('stat-card-dim').textContent=CARD_COLS+'\u00d7'+cardRows;
 }
+function updatePlayhead(col){
+  document.querySelectorAll('#card-grid .pc-cell.playhead').forEach(el=>el.classList.remove('playhead'));
+  if(col<0){document.getElementById('stat-playhead').textContent='\u2014';document.getElementById('stat-notes').textContent=isPlaying?'':'ready';return;}
+  document.getElementById('stat-playhead').textContent=col+1;
+  const ag=activeGrid();
+  const rows=document.querySelectorAll('#card-grid .pc-row');
+  for(let r=0;r<cardRows;r++){const cells=rows[r]?.querySelectorAll('.pc-cell');if(cells&&cells[col])cells[col].classList.add('playhead');}
+  const notes=[];
+  for(let r=0;r<cardRows;r++) if(ag[r][col]) notes.push(midiName(rowToMidi(r,cardRows)));
+  document.getElementById('stat-notes').textContent=notes.length?notes.join('  '):'\u2014';
+}
 
-// ── Pointer events — both grids ───────────────────────────────────
-document.addEventListener('pointerup', ()=>{ ptrDown=false; drawMode=null; drawTarget=null; });
-
+// Pointer events
+document.addEventListener('pointerup',()=>{isPointerDown=false;drawMode=null;});
 function onPD(e){
   e.preventDefault();
-  ptrDown = true;
-  drawTarget = this.dataset.grid; // 'motif' or 'card'
-  const r=+this.dataset.r, c=+this.dataset.c;
-  const cur = drawTarget==='motif' ? motifGrid[r][c] : cardGrid[r][c];
-  drawMode = cur ? 'erase' : 'punch';
-  applyDraw(r, c, drawTarget);
-  this.setPointerCapture(e.pointerId);
+  isPointerDown=true;
+  const r=+this.dataset.r,c=+this.dataset.c;
+  drawMode=motifGrid[r][c]?'erase':'punch';
+  toggle(r,c); this.setPointerCapture(e.pointerId);
 }
-
 function onPE(){
-  if(!ptrDown||!drawMode||!drawTarget) return;
-  const r=+this.dataset.r, c=+this.dataset.c;
-  if(this.dataset.grid !== drawTarget) return;
-  const cur = drawTarget==='motif' ? motifGrid[r][c] : cardGrid[r][c];
-  if(cur !== (drawMode==='punch')) applyDraw(r, c, drawTarget);
+  if(!isPointerDown||!drawMode) return;
+  const r=+this.dataset.r,c=+this.dataset.c;
+  if(motifGrid[r][c]!==(drawMode==='punch')) toggle(r,c);
+}
+function toggle(r,c){
+  motifGrid[r][c]=!motifGrid[r][c];
+  const el=document.querySelector(`#motif-grid .pc-cell[data-r="${r}"][data-c="${c}"]`);
+  if(el) el.classList.toggle('punched',motifGrid[r][c]);
+  tileCard(); renderCard(); updateStatus(); updateGhosts();
 }
 
-function applyDraw(r, c, target){
-  const val = drawMode==='punch';
-
-  if(target==='motif'){
-    // Draw on motif → retile card → update both grids
-    motifGrid[r][c] = val;
-    const el = document.querySelector(`#motif-grid .pc-cell[data-r="${r}"][data-c="${c}"]`);
-    if(el) el.classList.toggle('punched', val);
-    tileCard();
-    renderCardGrid();
-    updateStatusBar();
-    updateGhosts();
-    // Live audio: find all card cells this motif cell affects
-    if(isPlaying){
-      for(let cr=0;cr<cardRows;cr++) for(let cc=0;cc<CARD_COLS;cc++){
-        const {mr,mc}=cardToMotif(cr,cc);
-        if(mr===r&&mc===c) liveUpdate(cr,cc,cardGrid[cr][cc]);
-      }
-    }
-  } else {
-    // Draw directly on card → update card cell, rebuild from card
-    cardGrid[r][c] = val;
-    const el = document.querySelector(`#card-grid .pc-cell[data-r="${r}"][data-c="${c}"]`);
-    if(el) el.classList.toggle('punched', val);
-    updateStatusBar();
-    liveUpdate(r, c, val);
+// Playback
+function startPlay(gridOverride){
+  if(isPlaying) stopPlay();
+  ensureAudio();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  isPlaying=true; playingCol=0;
+  const ag=gridOverride||activeGrid();
+  const bpm=+document.getElementById('pc-tempo').value;
+  const ms=(60/bpm)*1000;
+  document.getElementById('pc-play').classList.add('on');
+  document.getElementById('pc-stop').disabled=false;
+  document.getElementById('pc-play').disabled=true;
+  function tick(){
+    updatePlayhead(playingCol);
+    for(let r=0;r<cardRows;r++) if(ag[r][playingCol]) playNote(rowToMidi(r,cardRows));
+    playingCol++;
+    if(playingCol>=CARD_COLS){if(isLooping) playingCol=0; else{stopPlay();return;}}
   }
+  tick(); playIntervalId=setInterval(tick,ms);
+}
+function stopPlay(){
+  isPlaying=false;
+  if(playIntervalId){clearInterval(playIntervalId);playIntervalId=null;}
+  if(sequenceTimer){clearTimeout(sequenceTimer);sequenceTimer=null;}
+  playingCol=-1; updatePlayhead(-1);
+  document.getElementById('pc-play').classList.remove('on');
+  document.getElementById('pc-play').disabled=false;
+  document.getElementById('pc-stop').disabled=true;
+}
+function playSequence(){
+  if(isPlaying) stopPlay();
+  ensureAudio();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  const bpm=+document.getElementById('pc-tempo').value;
+  const cardMs=CARD_COLS*(60/bpm)*1000+700;
+  const xforms=['P','R','I','RI']; let i=0;
+  function next(){
+    if(i>=xforms.length) return;
+    const t=xforms[i++];
+    document.querySelectorAll('[data-xform]').forEach(b=>b.classList.remove('on'));
+    document.querySelector(`[data-xform="${t}"]`)?.classList.add('on');
+    currentXform=t; renderCard();
+    startPlay(activeGrid());
+    sequenceTimer=setTimeout(()=>{stopPlay();sequenceTimer=setTimeout(next,500);},cardMs);
+  }
+  next();
 }
 
-// ── Presets ───────────────────────────────────────────────────────
-const PRESETS = {
-  blank:    s=>Array.from({length:s},()=>new Array(s).fill(false)),
-  diamond:  s=>{
+// Presets
+const PRESETS={
+  blank:s=>Array.from({length:s},()=>new Array(s).fill(false)),
+  diamond:s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
-    const cx=(s-1)/2, cy=(s-1)/2, rv=Math.floor(s/2)-1;
-    for(let r=0;r<s;r++) for(let c=0;c<s;c++)
-      if(Math.abs(r-cy)+Math.abs(c-cx)===rv) g[r][c]=true;
+    const cx=(s-1)/2,cy=(s-1)/2,r=Math.floor(s/2)-1;
+    for(let row=0;row<s;row++) for(let col=0;col<s;col++)
+      if(Math.abs(row-cy)+Math.abs(col-cx)===r) g[row][col]=true;
     return g;
   },
-  chevron:  s=>{
+  chevron:s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
     const h=Math.floor(s/2);
-    for(let c=0;c<s;c++){
-      const d=Math.abs(c-h)%s; g[d][c]=true;
-      if(s-1-d!==d) g[s-1-d][c]=true;
-    }
+    for(let col=0;col<s;col++){const d=Math.abs(col-h)%s;g[d][col]=true;if(s-1-d!==d)g[s-1-d][col]=true;}
     return g;
   },
-  cross:    s=>{
+  cross:s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
     const m=Math.floor(s/2);
-    for(let i=0;i<s;i++){ g[m][i]=true; g[i][m]=true; }
+    for(let i=0;i<s;i++){g[m][i]=true;g[i][m]=true;}
     return g;
   },
-  diagonal: s=>{
+  diagonal:s=>{
     const g=Array.from({length:s},()=>new Array(s).fill(false));
-    for(let i=0;i<s;i++){ g[i][i]=true; g[i][(i+2)%s]=true; }
+    for(let i=0;i<s;i++){g[i][i]=true;g[i][(i+2)%s]=true;}
     return g;
   },
-  random:   s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.22))
+  random:s=>Array.from({length:s},()=>Array.from({length:s},()=>Math.random()<0.28))
 };
-function applyPreset(p){ motifGrid=PRESETS[p](motifSize); refreshAll(); }
+function applyPreset(name){motifGrid=PRESETS[name](motifSize);refreshAll();}
 
-// ── SVG export ────────────────────────────────────────────────────
+// SVG export
 function buildSVG(){
-  const sp=HOLE_MM, mg=10;
+  const ag=activeGrid();
+  const sp=HOLE_SPACING_MM, mg=10;
   const W=(CARD_COLS-1)*sp+2*mg, H=(cardRows-1)*sp+2*mg;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">`;
   s+=`<rect x=".3" y=".3" width="${W-.6}" height="${H-.6}" fill="#f4f0e2" stroke="#222" stroke-width=".5" rx="2"/>`;
-  for(let c=0;c<CARD_COLS;c+=6)
-    s+=`<rect x="${mg+c*sp-sp/2}" y="${mg/2}" width="${6*sp}" height="${H-mg}" fill="#e8e0c5" opacity=".4"/>`;
-  for(let c=0;c<CARD_COLS;c++)
-    s+=`<text x="${mg+c*sp}" y="${mg-2.5}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="middle">${c+1}</text>`;
+  for(let c=0;c<CARD_COLS;c+=6){
+    const x=mg+c*sp-sp/2;
+    s+=`<rect x="${x}" y="${mg/2}" width="${6*sp}" height="${H-mg}" fill="#e8e0c5" opacity=".4"/>`;
+  }
+  for(let c=0;c<CARD_COLS;c++) s+=`<text x="${mg+c*sp}" y="${mg-2.5}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="middle">${c+1}</text>`;
   for(let r=0;r<cardRows;r++){
     const y=mg+r*sp;
     s+=`<text x="${mg-2.5}" y="${y+.7}" font-family="monospace" font-size="2.2" fill="#888" text-anchor="end">${cardRows-r}</text>`;
     for(let c=0;c<CARD_COLS;c++){
       const x=mg+c*sp;
-      s+=cardGrid[r][c]
-        ?`<circle cx="${x}" cy="${y}" r="2" fill="#111"/>`
-        :`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
+      s+=ag[r][c]?`<circle cx="${x}" cy="${y}" r="2" fill="#111"/>`:`<circle cx="${x}" cy="${y}" r="1.7" fill="none" stroke="#bbb" stroke-width=".3"/>`;
     }
   }
-  s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de \u00b7 24st\u00d7${cardRows}r \u00b7 ${sp}mm</text>`;
+  s+=`<text x="${mg}" y="${H-2}" font-family="sans-serif" font-size="2" fill="#aaa">jordanelias.de \u00b7 24st\u00d7${cardRows}r \u00b7 ${currentScale} \u00b7 ${currentXform} \u00b7 ${sp}mm</text>`;
   if(includeMotifRef){
-    const ms=2.5, mx=W-mg-motifSize*ms, my=H-mg-motifSize*ms-2;
+    const ms=2.5,mx=W-mg-motifSize*ms,my=H-mg-motifSize*ms-2;
     s+=`<rect x="${mx-1}" y="${my-1}" width="${motifSize*ms+2}" height="${motifSize*ms+2}" fill="none" stroke="#ccc" stroke-width=".3"/>`;
     s+=`<text x="${mx}" y="${my-2.5}" font-family="sans-serif" font-size="1.8" fill="#bbb">motif</text>`;
     for(let r=0;r<motifSize;r++) for(let c=0;c<motifSize;c++)
@@ -1325,41 +946,42 @@ function buildSVG(){
   }
   return s+'</svg>';
 }
-
 function doExport(){
   const svg=buildSVG();
   if(exportFormat==='svg'){
     const a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
-    a.download='punch-card.svg'; a.click(); return;
+    a.download='punch-card.svg';a.click();return;
   }
   if(exportFormat==='png'){
-    const W=((CARD_COLS-1)*HOLE_MM+20)*8, H=((cardRows-1)*HOLE_MM+20)*8;
-    const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+    const sp=HOLE_SPACING_MM,mg=10,SC=8;
+    const W=((CARD_COLS-1)*sp+2*mg)*SC, H=((cardRows-1)*sp+2*mg)*SC;
     const img=new Image();
+    const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
     img.onload=()=>{
-      const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+      const cv=document.createElement('canvas');cv.width=W;cv.height=H;
       cv.getContext('2d').drawImage(img,0,0,W,H);
-      const a=document.createElement('a'); a.href=cv.toDataURL('image/png');
-      a.download='punch-card.png'; a.click(); URL.revokeObjectURL(url);
-    }; img.src=url; return;
+      const a=document.createElement('a');a.href=cv.toDataURL('image/png');
+      a.download='punch-card.png';a.click();URL.revokeObjectURL(url);
+    };
+    img.src=url;return;
   }
   const win=window.open('','_blank');
   win.document.write(`<!DOCTYPE html><html><head><title>Punch Card \u00b7 jordanelias.de</title>
 <style>body{margin:0;background:#fff;}.w{padding:8mm;}.n{font-family:sans-serif;font-size:9px;color:#777;margin-bottom:5mm;line-height:1.6;}
 @media print{@page{margin:8mm;size:auto;}}</style></head><body>
 <div class="w"><div class="n"><strong>Print at 100% \u2014 do not scale to fit page.</strong><br>
-Hole spacing: ${HOLE_MM}mm \u00b7 Brother / Silver Reed 24-stitch standard gauge \u00b7 Motif: ${motifSize}\u00d7${motifSize} \u00b7 Tile: ${tileMode}
-</div>${svg}</div><script>window.onload=function(){window.print();}<\/script></body></html>`);
+Hole spacing: ${HOLE_SPACING_MM}mm \u00b7 Brother / Silver Reed 24-stitch standard gauge \u00b7 Scale: ${currentScale} \u00b7 Transform: ${currentXform}</div>
+${svg}</div><script>window.onload=function(){window.print();}<\/script></body></html>`);
   win.document.close();
 }
 
-// ── Wiring ────────────────────────────────────────────────────────
+// Wire everything up
 function wireGroup(sel,attr,cb){
   document.querySelectorAll(sel).forEach(b=>{
     b.addEventListener('click',function(){
       document.querySelectorAll(sel).forEach(x=>x.classList.remove('on'));
-      this.classList.add('on'); cb(this.dataset[attr]);
+      this.classList.add('on');cb(this.dataset[attr]);
     });
   });
 }
@@ -1367,49 +989,51 @@ function wireGroup(sel,attr,cb){
 document.addEventListener('DOMContentLoaded',()=>{
   initMotif(8); applyPreset('diamond');
 
-  wireGroup('[data-preset]','preset',  applyPreset);
-  wireGroup('[data-msize]','msize',    v=>{ initMotif(+v); refreshAll(); });
-  wireGroup('[data-tile]','tile',      v=>{ tileMode=v; refreshAll(); });
-  wireGroup('[data-cardrows]','cardrows', v=>{ cardRows=+v; refreshAll(); });
-  wireGroup('[data-export]','export',  v=>{ exportFormat=v; });
-  wireGroup('[data-root]','root',      v=>{
-    rootHz=+v;
-    if(A){
-      if(formSrc) formSrc.frequency.setTargetAtTime(rootHz, A.currentTime, 0.1);
-    }
-    if(isPlaying){ rebuildAdd(); rebuildAll(); }
+  wireGroup('[data-preset]','preset',applyPreset);
+  wireGroup('[data-msize]','msize',v=>{initMotif(+v);refreshAll();});
+  wireGroup('[data-tile]','tile',v=>{tileMode=v;refreshAll();});
+  wireGroup('[data-cardrows]','cardrows',v=>{cardRows=+v;refreshAll();});
+  wireGroup('[data-scale]','scale',v=>{currentScale=v;});
+  wireGroup('[data-timbre]','timbre',v=>{currentTimbre=v;});
+  wireGroup('[data-export]','export',v=>{exportFormat=v;});
+
+  document.querySelectorAll('[data-xform]').forEach(b=>{
+    b.addEventListener('click',function(){
+      document.querySelectorAll('[data-xform]').forEach(x=>x.classList.remove('on'));
+      this.classList.add('on');currentXform=this.dataset.xform;
+      renderCard();if(isPlaying){stopPlay();startPlay();}
+    });
   });
 
   document.getElementById('toggle-complement').addEventListener('click',function(){
-    showComplement=!showComplement; this.classList.toggle('on',showComplement); updateGhosts();
+    showComplement=!showComplement;this.classList.toggle('on',showComplement);updateGhosts();
   });
   document.getElementById('export-motif-toggle').addEventListener('click',function(){
-    includeMotifRef=!includeMotifRef; this.classList.toggle('on',includeMotifRef);
+    includeMotifRef=!includeMotifRef;this.classList.toggle('on',includeMotifRef);
   });
 
-  document.getElementById('s-play').addEventListener('click', startPlay);
-  document.getElementById('s-stop').addEventListener('click', stopPlay);
+  document.getElementById('pc-root').addEventListener('change',function(){rootMidi=+this.value;});
+  document.getElementById('pc-play').addEventListener('click',()=>startPlay());
+  document.getElementById('pc-stop').addEventListener('click',stopPlay);
+  document.getElementById('pc-loop').addEventListener('click',function(){isLooping=!isLooping;this.classList.toggle('on',isLooping);});
+  document.getElementById('play-sequence').addEventListener('click',playSequence);
+  document.getElementById('pc-export-btn').addEventListener('click',doExport);
 
-  document.getElementById('s-vol').addEventListener('input',function(){
-    document.getElementById('s-vol-val').textContent=Math.round(this.value*100)+'%';
-    if(out) out.gain.setTargetAtTime(parseFloat(this.value), A.currentTime, 0.05);
+  document.getElementById('pc-tempo').addEventListener('input',function(){
+    document.getElementById('pc-tempo-val').textContent=this.value+' bpm';
+    if(isPlaying){stopPlay();startPlay();}
   });
-  document.getElementById('s-space').addEventListener('input',function(){
-    document.getElementById('s-space-val').textContent=Math.round(this.value*100)+'%';
-    if(revSend) revSend.gain.setTargetAtTime(parseFloat(this.value), A.currentTime, 0.05);
+  document.getElementById('pc-volume').addEventListener('input',function(){
+    document.getElementById('pc-volume-val').textContent=Math.round(this.value*100)+'%';
+    if(masterGain) masterGain.gain.value=parseFloat(this.value);
   });
-  document.getElementById('s-drive').addEventListener('input',function(){
-    document.getElementById('s-drive-val').textContent=Math.round(this.value*100)+'%';
-    if(masterShaper) masterShaper.curve=softClipCurve(256, 0.6+parseFloat(this.value)*3);
-  });
-  document.getElementById('s-width').addEventListener('input',function(){
-    document.getElementById('s-width-val').textContent=Math.round(this.value*100)+'%';
+  document.getElementById('pc-reverb').addEventListener('input',function(){
+    document.getElementById('pc-reverb-val').textContent=Math.round(this.value*100)+'%';
+    if(reverbGain){reverbGain.gain.value=parseFloat(this.value);dryGain.gain.value=1-parseFloat(this.value);}
   });
 
-  document.getElementById('pc-export-btn').addEventListener('click', doExport);
-
-  let rT;
-  window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(refreshAll,150); });
+  let resizeT;
+  window.addEventListener('resize',()=>{clearTimeout(resizeT);resizeT=setTimeout(refreshAll,150);});
 });
 
 })();
