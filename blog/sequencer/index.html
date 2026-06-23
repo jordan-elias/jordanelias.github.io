@@ -135,7 +135,7 @@
 
     /* Vertical sticky title column */
     .vertical-title {
-      width: 66px;
+      width: 72px;
       flex-shrink: 0;
       position: sticky;
       top: 64px;
@@ -149,9 +149,9 @@
     }
     .vertical-title span {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      letter-spacing: .2em;
+      letter-spacing: .22em;
       text-transform: uppercase;
       color: var(--text);
       writing-mode: vertical-rl;
@@ -205,7 +205,7 @@
     .tbtn.play-btn.playing { background: var(--accent-hover); border-color: var(--accent-hover); }
 
     .tempo-group { display: flex; align-items: center; gap: .4rem; }
-    .tempo-label { font-family: 'Space Grotesk', sans-serif; font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text); opacity: .55; }
+    .tempo-label { font-family: 'Space Grotesk', sans-serif; font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text); }
     .tempo-val { font-family: 'DM Mono', monospace; font-size: .72rem; min-width: 36px; }
 
     input[type=range].t-slider {
@@ -228,13 +228,28 @@
     }
     .t-select:focus { outline: 2px solid var(--text); outline-offset: 1px; }
 
-    /* SEQ BODY: track list left, grid right */
+    /* SEQ BODY: track list | grid | loop sidebar */
     .seq-body {
       display: flex;
       flex-direction: row;
-      /* give the body a fixed height so the grid is constrained */
-      min-height: 320px;
+      min-height: 340px;
     }
+
+    /* LOOP SIDEBAR — right column on desktop */
+    .loop-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      border-left: 1px solid var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: var(--bg);
+    }
+    .loop-sidebar-section {
+      padding: .65rem .85rem;
+      border-bottom: 1px solid var(--text);
+    }
+    .loop-sidebar-section:last-child { border-bottom: none; }
 
     /* TRACK LIST */
     .track-list {
@@ -248,7 +263,7 @@
     .track-list-header {
       font-family: 'Space Grotesk', sans-serif;
       font-size: .56rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--text); opacity: .45;
+      color: var(--text);
       padding: .45rem .7rem .3rem;
       border-bottom: 1px solid var(--text);
     }
@@ -256,7 +271,7 @@
     .track-divider {
       font-family: 'Space Grotesk', sans-serif;
       font-size: .52rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--text); opacity: .35;
+      color: var(--text);
       padding: .35rem .7rem .2rem;
       border-bottom: 1px solid var(--text);
       background: var(--bg);
@@ -279,11 +294,7 @@
     .track-item.active .track-dot { background: var(--bg); }
     .track-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: var(--text); }
     .track-name { font-family: 'Space Grotesk', sans-serif; font-size: .7rem; font-weight: 600; flex: 1; color: var(--text); }
-    .track-type-badge {
-      font-family: 'DM Mono', monospace; font-size: .52rem;
-      color: var(--text); border: 1px solid var(--text);
-      padding: .03rem .28rem; opacity: .45;
-    }
+    .track-type-badge { display: none; }
 
     /* GRID AREA */
     .grid-area {
@@ -291,7 +302,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      padding: .65rem;
       background: var(--bg);
       position: relative;
     }
@@ -301,9 +312,9 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 6px;
+      gap: 7px;
       width: 100%;
-      max-width: 320px;
+      max-width: 380px;
       aspect-ratio: 1;
     }
 
@@ -369,26 +380,15 @@
     .note-picker-off:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
 
     /* INFO BAR */
-    .info-bar {
-      border-top: 1px solid var(--text);
-      padding: .4rem .85rem;
-      font-size: .72rem; color: var(--text); opacity: .65;
-      display: flex; align-items: center; gap: .5rem;
-      min-height: 34px; flex-wrap: wrap;
-      background: var(--bg);
-    }
-    .info-bar strong { font-weight: 600; opacity: 1; }
+    .info-bar { display: none; }
 
-    /* LOOP SECTION */
+    /* LOOP SECTION — now lives inside .loop-sidebar, keep for mobile fallback */
     .loop-section {
-      border-top: 1px solid var(--text);
-      padding: .6rem .85rem;
       display: flex; flex-direction: column; gap: .5rem;
-      background: var(--bg);
     }
     .loop-section-title {
       font-family: 'Space Grotesk', sans-serif; font-size: .58rem; font-weight: 600;
-      letter-spacing: .12em; text-transform: uppercase; color: var(--text); opacity: .45;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--text);
     }
     .loop-slots { display: flex; gap: .35rem; flex-wrap: wrap; align-items: center; }
     .loop-slot-btn {
@@ -414,7 +414,7 @@
     .chain-section { display: flex; flex-direction: column; gap: .35rem; }
     .chain-title {
       font-family: 'Space Grotesk', sans-serif; font-size: .58rem; font-weight: 600;
-      letter-spacing: .1em; text-transform: uppercase; color: var(--text); opacity: .45;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--text);
     }
     .chain-builder { display: flex; gap: .3rem; align-items: center; flex-wrap: wrap; }
     .chain-step { display: flex; align-items: center; gap: .2rem; border: 1px solid var(--text); padding: .22rem .45rem; }
@@ -443,11 +443,12 @@
       background: none; border: none; cursor: pointer; padding: .25rem .35rem; opacity: .4;
     }
     .chain-clear-btn:hover { opacity: 1; color: var(--accent-hover); }
-    .chain-mode-note { font-size: .65rem; color: var(--text); font-style: italic; opacity: .55; }
+    .chain-mode-note { font-size: .65rem; color: var(--text); font-style: italic; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 700px) {
+    @media (max-width: 800px) {
       .vertical-title { display: none; }
+      .loop-sidebar { display: none; }
       .seq-body { flex-direction: column; }
       .track-list { width: 100%; border-right: none; border-bottom: 1px solid var(--text); }
       .track-list-inner { display: flex; flex-direction: row; flex-wrap: wrap; }
@@ -457,6 +458,18 @@
       .grid-area { padding: .75rem; }
       .pad-grid { max-width: 100%; gap: 5px; }
       .page-content { padding: 1em 1em 3em; }
+      /* Show loop section below on mobile */
+      .loop-section-mobile {
+        display: flex !important;
+        flex-direction: column;
+        gap: .5rem;
+        border-top: 1px solid var(--text);
+        padding: .65rem .85rem;
+        background: var(--bg);
+      }
+    }
+    @media (min-width: 801px) {
+      .loop-section-mobile { display: none !important; }
     }
     @media (max-width: 420px) {
       .track-item { width: 100%; border-right: none; }
@@ -476,7 +489,15 @@
 
   <div class="page-content">
 
+    <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li aria-current="page">Sequencer</li>
+      </ol>
+    </nav>
 
+    <p>A 16-step drum and melody sequencer. Select a track on the left, tap squares to toggle steps on or off, then press play. Each loop slot stores a different pattern — chain them to build a full arrangement.</p>
 
     <div class="seq-app" id="seqApp">
 
@@ -522,45 +543,69 @@
           <div class="pad-grid" id="padGrid"></div>
           <div class="note-picker hidden" id="notePicker"></div>
         </div>
-      </div>
-
-      <div class="info-bar">
-        <strong id="info-track">Kick</strong>
-        <span id="info-hint">Tap a square to toggle a step on or off.</span>
-      </div>
-
-      <div class="loop-section">
-        <div class="loop-section-title">loop slots</div>
-        <div class="loop-slots" id="loopSlots">
-          <button class="loop-copy-btn" id="copyLoopBtn">copy →</button>
-        </div>
-        <div class="chain-section">
-          <div class="chain-title">chain</div>
-          <div class="chain-builder" id="chainBuilder"></div>
-          <div class="chain-add">
-            <select class="chain-select" id="chain-loop-sel">
-              <option value="1">Loop 1</option><option value="2">Loop 2</option>
-              <option value="3">Loop 3</option><option value="4">Loop 4</option>
-            </select>
-            <select class="chain-select" id="chain-reps-sel">
-              <option value="1">× 1</option><option value="2">× 2</option>
-              <option value="3">× 3</option><option value="4">× 4</option>
-              <option value="8">× 8</option>
-            </select>
-            <button class="chain-add-btn" id="btn-chain-add">+ add</button>
-            <button class="chain-clear-btn" id="btn-chain-clear">clear chain</button>
-            <div style="flex:1"></div>
-            <button class="chain-add-btn" id="btn-export">
+        <!-- Loop sidebar — desktop only -->
+        <div class="loop-sidebar">
+          <div class="loop-sidebar-section">
+            <div class="loop-section-title">loop slots</div>
+            <div class="loop-slots" id="loopSlots" style="flex-direction:column; align-items:flex-start; margin-top:.4rem;">
+              <button class="loop-copy-btn" id="copyLoopBtn">copy →</button>
+            </div>
+          </div>
+          <div class="loop-sidebar-section">
+            <div class="chain-section">
+              <div class="chain-title">chain</div>
+              <div class="chain-builder" id="chainBuilder" style="flex-direction:column; margin:.35rem 0;"></div>
+              <div class="chain-add" style="flex-direction:column; align-items:flex-start; gap:.3rem;">
+                <div style="display:flex; gap:.25rem; flex-wrap:wrap;">
+                  <select class="chain-select" id="chain-loop-sel">
+                    <option value="1">Loop 1</option><option value="2">Loop 2</option>
+                    <option value="3">Loop 3</option><option value="4">Loop 4</option>
+                  </select>
+                  <select class="chain-select" id="chain-reps-sel">
+                    <option value="1">× 1</option><option value="2">× 2</option>
+                    <option value="3">× 3</option><option value="4">× 4</option>
+                    <option value="8">× 8</option>
+                  </select>
+                </div>
+                <div style="display:flex; gap:.25rem; flex-wrap:wrap;">
+                  <button class="chain-add-btn" id="btn-chain-add">+ add</button>
+                  <button class="chain-clear-btn" id="btn-chain-clear">clear</button>
+                </div>
+              </div>
+              <div class="chain-mode-note" id="chainNote" style="margin-top:.4rem;">No chain — Loop 1 repeats.</div>
+            </div>
+          </div>
+          <div class="loop-sidebar-section">
+            <button class="chain-add-btn" id="btn-export" style="width:100%;">
               <svg width="9" height="9" viewBox="0 0 9 9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 0v6M1 4.5l3.5 4 3.5-4"/></svg> export WAV
             </button>
           </div>
-          <div class="chain-mode-note" id="chainNote">No chain — Loop 1 repeats continuously.</div>
         </div>
       </div>
 
-    </div><!-- /seq-app -->
+      <!-- Mobile loop section (hidden on desktop) -->
+      <div class="loop-section-mobile" style="display:none;">
+        <div class="loop-section-title">loop slots</div>
+        <div class="loop-slots" id="loopSlotsMobile" style="gap:.35rem; flex-wrap:wrap; align-items:center; display:flex;"></div>
+        <div class="chain-title" style="margin-top:.4rem;">chain</div>
+        <div style="display:flex; gap:.25rem; flex-wrap:wrap; align-items:center;">
+          <select class="chain-select" id="chain-loop-sel-m">
+            <option value="1">Loop 1</option><option value="2">Loop 2</option>
+            <option value="3">Loop 3</option><option value="4">Loop 4</option>
+          </select>
+          <select class="chain-select" id="chain-reps-sel-m">
+            <option value="1">× 1</option><option value="2">× 2</option>
+            <option value="3">× 3</option><option value="4">× 4</option>
+            <option value="8">× 8</option>
+          </select>
+          <button class="chain-add-btn" id="btn-chain-add-m">+ add</button>
+          <button class="chain-clear-btn" id="btn-chain-clear-m">clear</button>
+          <button class="chain-add-btn" id="btn-export-m">export WAV</button>
+        </div>
+        <div class="chain-mode-note" id="chainNoteMobile">No chain — Loop 1 repeats continuously.</div>
+      </div>
 
-    <p>A 16-step drum and melody sequencer. Select a track on the left, tap squares to toggle steps on or off, then press play. Each loop slot stores a different pattern — chain them to build a full arrangement.</p>
+    </div><!-- /seq-app -->
 
     <h2>How to use the sequencer</h2>
     <p>The sequencer is a 16-step loop machine — the most common tool in electronic music production. Each of the 16 squares represents one sixteenth note: a beat subdivided into four equal parts, so four squares make up one beat and sixteen squares make one complete bar of 4/4 time. When you press play, a highlight moves through the squares from left to right, triggering any step that is switched on as it passes.</p>
@@ -579,7 +624,10 @@
     <h2>Loop slots and chaining</h2>
     <p>The sequencer has four loop slots, each storing a completely independent set of patterns across all eight tracks. The copy button duplicates the current loop to the next slot. The chain section lets you combine loops into an arrangement — choose a loop and a repeat count, then add it to the chain. Export WAV renders the result as a stereo audio file.</p>
 
-   
+    <h2>Sequencers in music therapy</h2>
+    <p>The step sequencer is an unusually useful tool in music therapy because it removes the need for real-time performance skill. A client doesn't need to play an instrument to create a groove — they need only to make decisions: which steps should sound, which should be silent. That decision-making process is itself therapeutically rich. It involves attention, preference, aesthetic judgment, and the experience of cause and effect in a low-stakes, immediately audible domain.</p>
+    <p>The grid format makes rhythmic structure visually legible in a way that standard notation doesn't — density, symmetry, and space are all visible at once. The randomize function introduces chance as a compositional tool, opening conversation about preference and tolerance for the unexpected — the same principle explored by composers like John Cage.</p>
+
   </div><!-- /page-content -->
 </div><!-- /page-wrap -->
 
@@ -878,6 +926,7 @@ function buildTracks(){
   });
 }
 function buildLoopSlots(){
+  // Desktop sidebar
   const sl=document.getElementById('loopSlots');
   sl.querySelectorAll('.loop-slot-btn').forEach(el=>el.remove());
   const cb=document.getElementById('copyLoopBtn');
@@ -889,19 +938,37 @@ function buildLoopSlots(){
     btn.addEventListener('click',()=>setEditLoop(i));
     sl.insertBefore(btn,cb);
   }
+  // Mobile
+  const slm=document.getElementById('loopSlotsMobile');
+  if(slm){
+    slm.innerHTML='';
+    for(let i=0;i<NUM_LOOPS;i++){
+      const btn=document.createElement('button');
+      btn.className='loop-slot-btn'+(i===editLoop?' current-edit':'');
+      btn.id='lsm-'+i;
+      btn.innerHTML=`<span class="slot-dot"></span>Loop ${i+1}`;
+      btn.addEventListener('click',()=>setEditLoop(i));
+      slm.appendChild(btn);
+    }
+  }
   syncLoopDots();
 }
 function syncLoopDots(){
   for(let i=0;i<NUM_LOOPS;i++){
-    const btn=document.getElementById('ls-'+i);if(!btn)continue;
-    btn.classList.toggle('current-edit',i===editLoop);
-    btn.classList.toggle('has-content',loops[i].some(t=>t.some(c=>c!==null&&c!==false)));
+    const has=loops[i].some(t=>t.some(c=>c!==null&&c!==false));
+    ['ls-','lsm-'].forEach(pfx=>{
+      const btn=document.getElementById(pfx+i);if(!btn)return;
+      btn.classList.toggle('current-edit',i===editLoop);
+      btn.classList.toggle('has-content',has);
+    });
   }
 }
 function renderChain(){
   const b=document.getElementById('chainBuilder');b.innerHTML='';
-  if(!chain.length){document.getElementById('chainNote').textContent='No chain — Loop 1 repeats continuously.';return;}
-  document.getElementById('chainNote').textContent='Playing: '+chain.map(c=>`L${c.loopIdx+1}×${c.reps}`).join(' → ')+' → repeat';
+  const noteText=!chain.length?'No chain — Loop 1 repeats.':'Playing: '+chain.map(c=>`L${c.loopIdx+1}×${c.reps}`).join(' → ')+' → repeat';
+  document.getElementById('chainNote').textContent=noteText;
+  const nm=document.getElementById('chainNoteMobile');if(nm)nm.textContent=noteText;
+  if(!chain.length)return;
   chain.forEach((entry,ci)=>{
     const div=document.createElement('div');
     div.className='chain-step'+(playing&&ci===chainPos?' active-playing':'');
@@ -1096,6 +1163,19 @@ document.getElementById('btn-export').addEventListener('click',async()=>{
   btn.innerHTML='<svg width="9" height="9" viewBox="0 0 9 9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 0v6M1 4.5l3.5 4 3.5-4"/></svg> export WAV';
   btn.style.opacity='';btn.style.pointerEvents='';
 });
+
+/* ── MOBILE BUTTON LISTENERS ── */
+const mAdd=document.getElementById('btn-chain-add-m');
+const mClear=document.getElementById('btn-chain-clear-m');
+const mExport=document.getElementById('btn-export-m');
+const mCopyLoop=document.getElementById('copyLoopBtnMobile');
+if(mAdd) mAdd.addEventListener('click',()=>{
+  const li=parseInt(document.getElementById('chain-loop-sel-m').value)-1;
+  const r=parseInt(document.getElementById('chain-reps-sel-m').value);
+  chain.push({loopIdx:li,reps:r});renderChain();
+});
+if(mClear) mClear.addEventListener('click',()=>{chain=[];chainPos=0;chainReps=0;renderChain();});
+if(mExport) mExport.addEventListener('click',()=>document.getElementById('btn-export').click());
 
 /* ── INIT ── */
 function init(){
