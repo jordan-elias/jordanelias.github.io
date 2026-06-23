@@ -103,9 +103,21 @@
     <priority>0.6</priority>
   </url>
 
-     <url>
+  <url>
     <loc>https://jordanelias.de/blog/phase-machine/</loc>
     <lastmod>2026-06-03</lastmod>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://jordanelias.de/blog/library/</loc>
+    <lastmod>2026-06-23</lastmod>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://jordanelias.de/blog/sequencer/</loc>
+    <lastmod>2026-06-23</lastmod>
     <priority>0.6</priority>
   </url>
 
