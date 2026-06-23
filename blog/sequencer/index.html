@@ -1,0 +1,1434 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Umami analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="b465c3e2-0fb1-4c36-b5db-6eaf0fe05cb7"></script>
+
+  <title>Step Sequencer: build rhythms and melodies — Jordan Elias</title>
+  <meta name="description" content="An interactive 16-step drum and melody sequencer. Build rhythms, program melodic patterns across four voices, chain loops into arrangements, and export to WAV.">
+  <meta name="author" content="Jordan Elias">
+
+  <!-- SEARCH & AI DISCOVERY -->
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <!-- CANONICAL -->
+  <link rel="canonical" href="https://jordanelias.de/blog/sequencer/">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:title" content="Step Sequencer: build rhythms and melodies — Jordan Elias">
+  <meta property="og:description" content="An interactive 16-step drum and melody sequencer. Build rhythms, program melodic patterns, chain loops, and export to WAV.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jordan Elias Music Therapy">
+  <meta property="og:locale" content="en_DE">
+  <meta property="og:url" content="https://jordanelias.de/blog/sequencer/">
+  <meta property="og:image" content="https://jordanelias.de/images/hero.jpg">
+  <meta property="og:image:alt" content="Jordan Elias — Board-Certified Music Therapist in Berlin">
+  <meta property="article:author" content="Jordan Elias">
+  <meta property="article:published_time" content="2026-07-01">
+  <meta property="article:section" content="Interactive Tools">
+  <meta property="article:tag" content="music therapy">
+  <meta property="article:tag" content="sequencer">
+  <meta property="article:tag" content="rhythm">
+  <meta property="article:tag" content="composition">
+
+  <!-- TWITTER/X CARD -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Step Sequencer: build rhythms and melodies — Jordan Elias">
+  <meta name="twitter:description" content="An interactive 16-step drum and melody sequencer. Build rhythms, program melodic patterns, chain loops, and export to WAV.">
+  <meta name="twitter:image" content="https://jordanelias.de/images/hero.jpg">
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- MAIN STYLESHEET -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- SECURITY -->
+  <meta http-equiv="Content-Security-Policy"
+  content="
+    default-src 'self';
+    img-src 'self' data: https:;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    script-src 'self' https://cloud.umami.is;
+    connect-src 'self' https://api-gateway.umami.dev;
+    object-src 'none';
+    base-uri 'self';
+    frame-ancestors 'none';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
+  <!-- STRUCTURED DATA -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Board-Certified Music Therapist",
+        "url": "https://jordanelias.de/",
+        "image": "https://jordanelias.de/images/headshot.jpg",
+        "email": "jordanelias@proton.me",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Berlin",
+          "postalCode": "12047",
+          "addressCountry": "DE"
+        },
+        "worksFor": { "@id": "https://jordanelias.de/#service" },
+        "alumniOf": [
+          {
+            "@type": "EducationalOrganization",
+            "name": "Freie Universität Berlin",
+            "sameAs": "https://www.fu-berlin.de/"
+          },
+          {
+            "@type": "EducationalOrganization",
+            "name": "Berklee College of Music",
+            "sameAs": "https://www.berklee.edu/"
+          }
+        ],
+        "hasCredential": {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Board Certified Music Therapist (MT-BC)",
+          "credentialCategory": "Professional Certification",
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "Certification Board for Music Therapists",
+            "url": "https://www.cbmt.org/"
+          }
+        },
+        "knowsAbout": [
+          "Music Therapy", "Neurodiversity", "Autism", "ADHD", "Anxiety",
+          "Burnout", "Emotional Regulation", "Neuroscience of Music",
+          "Creative Therapy", "Trauma-Informed Practice",
+          "Music and Neuroplasticity", "Queer Affirming Therapy"
+        ],
+        "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://jordanelias.de/#service",
+        "name": "Jordan Elias Music Therapy",
+        "url": "https://jordanelias.de/",
+        "founder": { "@id": "https://jordanelias.de/#person" }
+      },
+      {
+        "@type": "TechArticle",
+        "@id": "https://jordanelias.de/blog/sequencer/#article",
+        "headline": "Step Sequencer: build rhythms and melodies",
+        "description": "An interactive 16-step drum and melody sequencer. Build rhythms, program melodic patterns across four voices, chain loops into arrangements, and export to WAV.",
+        "url": "https://jordanelias.de/blog/sequencer/",
+        "datePublished": "2026-07-01",
+        "author": { "@id": "https://jordanelias.de/#person" },
+        "publisher": { "@id": "https://jordanelias.de/#service" },
+        "inLanguage": "en",
+        "isPartOf": {
+          "@type": "Blog",
+          "@id": "https://jordanelias.de/blog/#blog"
+        },
+        "about": [
+          { "@type": "Thing", "name": "Music Sequencer", "sameAs": "https://en.wikipedia.org/wiki/Music_sequencer" },
+          { "@type": "Thing", "name": "Rhythm", "sameAs": "https://en.wikipedia.org/wiki/Rhythm" },
+          { "@type": "Thing", "name": "Music Therapy", "sameAs": "https://en.wikipedia.org/wiki/Music_therapy" }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://jordanelias.de/blog/sequencer/#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" },
+          { "@type": "ListItem", "position": 3, "name": "Sequencer", "item": "https://jordanelias.de/blog/sequencer/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* ── SEQUENCER TOOL STYLES ── */
+    /* All colours use var(--bg), var(--text), var(--accent) from styles.css */
+
+    --font-mono: 'DM Mono', 'Courier New', monospace;
+
+    .seq-app {
+      border: 1px solid var(--text);
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      margin: 2em 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* TRANSPORT */
+    .transport {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .6rem .9rem;
+      border-bottom: 1px solid var(--text);
+      flex-wrap: wrap;
+      min-height: 50px;
+    }
+    .t-sep { width: 1px; height: 20px; background: var(--text); opacity: .25; flex-shrink: 0; margin: 0 .1rem; }
+
+    .tbtn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .72rem;
+      font-weight: 600;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: .38rem .85rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+      letter-spacing: .01em;
+      line-height: 1.4;
+      min-height: 34px;
+      touch-action: manipulation;
+      border-radius: 0;
+    }
+    .tbtn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .tbtn.play-btn { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .tbtn.play-btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .tbtn.play-btn.playing { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .tbtn:disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
+
+    .tempo-group { display: flex; align-items: center; gap: .45rem; }
+    .tempo-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text); opacity: .6;
+    }
+    .tempo-val {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .75rem; color: var(--text); min-width: 38px;
+    }
+    input[type=range].t-slider {
+      -webkit-appearance: none; width: 90px; height: 2px;
+      background: var(--text); opacity: .3; outline: none; cursor: pointer;
+    }
+    input[type=range].t-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px;
+      border-radius: 50%; background: var(--text); cursor: pointer; opacity: 1;
+    }
+    input[type=range].t-slider::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%; background: var(--text); border: none;
+    }
+
+    .t-select {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .7rem;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: .3rem .45rem;
+      cursor: pointer;
+      outline: none;
+      min-height: 34px;
+      border-radius: 0;
+    }
+    .t-select:focus { outline: 2px solid var(--text); }
+
+    /* BODY */
+    .seq-body {
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+    }
+
+    /* TRACK LIST */
+    .track-list {
+      width: 148px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+    .track-list-header {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .58rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--text); opacity: .5;
+      padding: .5rem .75rem .35rem;
+      border-bottom: 1px solid var(--text);
+    }
+    .track-item {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .55rem .75rem;
+      border-bottom: 1px solid var(--text);
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      touch-action: manipulation;
+      min-height: 44px;
+    }
+    .track-item:hover { background-color: var(--accent-hover); color: var(--bg); }
+    .track-item:hover .track-name { color: var(--bg); }
+    .track-item:hover .track-type-badge { color: var(--bg); border-color: var(--bg); }
+    .track-item:hover .track-dot { opacity: 1; }
+    .track-item.active { background-color: var(--text); }
+    .track-item.active .track-name { color: var(--bg); }
+    .track-item.active .track-type-badge { color: var(--bg); border-color: var(--bg); opacity: .6; }
+    .track-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .track-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .72rem; font-weight: 600; flex: 1; color: var(--text);
+    }
+    .track-item.active .track-dot { background: var(--bg) !important; }
+    .track-type-badge {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .55rem; color: var(--text);
+      border: 1px solid var(--text);
+      padding: .05rem .3rem; white-space: nowrap; opacity: .5;
+    }
+    .track-divider {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .55rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--text); opacity: .4;
+      padding: .4rem .75rem .25rem;
+      border-bottom: 1px solid var(--text);
+    }
+
+    /* GRID */
+    .grid-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: .9rem 1rem;
+      gap: .55rem;
+    }
+    .pad-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 7px;
+      width: 100%;
+      max-width: 340px;
+    }
+    .pad {
+      aspect-ratio: 1;
+      border: 1.5px solid var(--text);
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.12s ease, border-color 0.12s ease, transform .06s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      min-height: 56px;
+    }
+    .pad:active { transform: scale(.94); }
+    .pad:hover:not(.on) { background-color: var(--accent-hover); border-color: var(--accent-hover); }
+    .pad:hover:not(.on) .pad-step-num { color: var(--bg); }
+    .pad.on { border-color: var(--text); background-color: var(--text); }
+    .pad.playing { box-shadow: 0 0 0 2.5px var(--accent-hover); }
+    .pad.on.playing { box-shadow: 0 0 0 2.5px var(--accent-hover), inset 0 0 0 2px rgba(255,255,255,.2); }
+    .pad-step-num {
+      position: absolute;
+      top: 4px; left: 5px;
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .55rem;
+      color: var(--text);
+      opacity: .35;
+      pointer-events: none;
+      transition: color 0.12s ease;
+    }
+    .pad.on .pad-step-num { color: var(--bg); opacity: .6; }
+    .pad-note {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .72rem; font-weight: 500;
+      color: var(--bg);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    /* NOTE PICKER */
+    .note-picker {
+      position: fixed;
+      z-index: 500;
+      background: var(--bg);
+      border: 1px solid var(--text);
+      padding: .45rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      width: 172px;
+    }
+    .note-picker.hidden { display: none; }
+    .note-picker-btn {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .68rem;
+      padding: .3rem .2rem;
+      border: 1px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      min-height: 34px;
+      border-radius: 0;
+    }
+    .note-picker-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .note-picker-btn.selected { background-color: var(--text); color: var(--bg); border-color: var(--text); }
+    .note-picker-off {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .65rem;
+      padding: .3rem;
+      border: 1px solid var(--text);
+      background: transparent;
+      cursor: pointer;
+      text-align: center;
+      color: var(--accent-hover);
+      grid-column: 1 / -1;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      min-height: 34px;
+      border-radius: 0;
+    }
+    .note-picker-off:hover { background-color: var(--accent-hover); color: var(--bg); }
+
+    /* INFO BAR */
+    .info-bar {
+      border-top: 1px solid var(--text);
+      padding: .45rem .9rem;
+      font-size: .75rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      min-height: 36px;
+      flex-wrap: wrap;
+      opacity: .7;
+    }
+    .info-bar strong { color: var(--text); font-weight: 600; opacity: 1; }
+
+    /* LOOP SECTION */
+    .loop-section {
+      border-top: 1px solid var(--text);
+      padding: .65rem .9rem;
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+    }
+    .loop-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .6rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--text); opacity: .5;
+    }
+    .loop-slots { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; }
+
+    .loop-slot-btn {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .72rem; font-weight: 500;
+      border: 1px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      padding: .35rem .75rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      min-height: 36px;
+      display: flex; align-items: center; gap: .3rem;
+      border-radius: 0;
+    }
+    .loop-slot-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .loop-slot-btn.current-edit { background-color: var(--text); color: var(--bg); }
+    .loop-slot-btn .slot-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .4; }
+    .loop-slot-btn.current-edit .slot-dot { opacity: 1; }
+
+    .loop-copy-btn {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .65rem;
+      border: 1px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      padding: .3rem .6rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      min-height: 36px;
+      border-radius: 0;
+    }
+    .loop-copy-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+
+    /* CHAIN */
+    .chain-section { display: flex; flex-direction: column; gap: .4rem; }
+    .chain-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .6rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--text); opacity: .5;
+    }
+    .chain-builder { display: flex; gap: .35rem; align-items: center; flex-wrap: wrap; }
+    .chain-step {
+      display: flex; align-items: center; gap: .25rem;
+      border: 1px solid var(--text);
+      padding: .25rem .5rem;
+    }
+    .chain-step.active-playing { background-color: var(--accent-hover); border-color: var(--accent-hover); }
+    .chain-step.active-playing .chain-step-label { color: var(--bg); }
+    .chain-step.active-playing .chain-step-remove { color: var(--bg); }
+    .chain-step-label { font-family: 'DM Mono', 'Courier New', monospace; font-size: .68rem; color: var(--text); }
+    .chain-step-label span { font-weight: 500; }
+    .chain-step-remove { font-size: .65rem; color: var(--text); cursor: pointer; padding: 0 2px; opacity: .5; }
+    .chain-step-remove:hover { opacity: 1; color: var(--accent-hover); }
+    .chain-add { display: flex; gap: .25rem; align-items: center; flex-wrap: wrap; }
+    .chain-select {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .68rem;
+      border: 1px solid var(--text);
+      background: var(--bg);
+      color: var(--text);
+      padding: .28rem .45rem;
+      cursor: pointer; outline: none;
+      min-height: 34px;
+      border-radius: 0;
+    }
+    .chain-add-btn {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .68rem;
+      border: 1px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      padding: .28rem .65rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      min-height: 34px;
+      touch-action: manipulation;
+      border-radius: 0;
+    }
+    .chain-add-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .chain-clear-btn {
+      font-family: 'DM Mono', 'Courier New', monospace;
+      font-size: .65rem; color: var(--text);
+      background: none; border: none; cursor: pointer; padding: .28rem .4rem;
+      touch-action: manipulation; opacity: .5;
+    }
+    .chain-clear-btn:hover { opacity: 1; color: var(--accent-hover); }
+    .chain-mode-note { font-size: .68rem; color: var(--text); font-style: italic; opacity: .6; }
+
+    /* RESPONSIVE */
+    @media (max-width: 680px) {
+      .seq-body { flex-direction: column; }
+      .track-list { width: 100%; border-right: none; border-bottom: 1px solid var(--text); }
+      .track-list-inner { display: flex; flex-direction: row; flex-wrap: wrap; }
+      .track-divider { width: 100%; }
+      .track-item { width: calc(50% - 0px); border-right: 1px solid var(--text); min-height: 48px; }
+      .track-item:nth-child(even) { border-right: none; }
+      .grid-area { padding: .6rem .6rem; gap: .45rem; }
+      .pad-grid { gap: 5px; max-width: 100%; }
+      .pad { min-height: 52px; }
+      .transport { padding: .5rem .6rem; }
+      .tbtn { font-size: .68rem; padding: .38rem .6rem; min-height: 40px; }
+      input[type=range].t-slider { width: 70px; }
+      .loop-section { padding: .55rem .75rem; }
+    }
+    @media (max-width: 420px) {
+      .pad { min-height: 44px; }
+      .track-item { width: 100%; border-right: none; }
+    }
+  </style>
+
+</head>
+
+<body>
+
+{% include header.html %}
+
+<nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li aria-current="page">Sequencer</li>
+  </ol>
+</nav>
+
+<main>
+
+  <h1>Step sequencer</h1>
+
+  <p>A 16-step drum and melody sequencer. Select a track, tap squares to toggle steps on or off, then press play. Each loop slot stores a different pattern — chain them together to build a full arrangement.</p>
+
+  <!-- ══════════════════════════════════════
+       SEQUENCER APP
+  ══════════════════════════════════════ -->
+  <div class="seq-app" id="seqApp">
+
+    <!-- TRANSPORT -->
+    <div class="transport" id="transport">
+      <button class="tbtn play-btn" id="btn-play" onclick="SEQ.togglePlay()">
+        <svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor"><path d="M0 0l10 6L0 12z"/></svg> play
+      </button>
+      <div class="t-sep"></div>
+
+      <div class="tempo-group">
+        <span class="tempo-label">bpm</span>
+        <input type="range" class="t-slider" id="tempo-slider" min="60" max="200" step="1" value="120"
+          oninput="SEQ.setTempo(+this.value)">
+        <span class="tempo-val" id="tempo-val">120</span>
+      </div>
+      <div class="t-sep"></div>
+
+      <select class="t-select" id="key-select" onchange="SEQ.setKey(this.value)" title="Root note">
+        <option value="C">C</option>
+        <option value="C#">C# / Db</option>
+        <option value="D">D</option>
+        <option value="D#">Eb / D#</option>
+        <option value="E">E</option>
+        <option value="F">F</option>
+        <option value="F#">F# / Gb</option>
+        <option value="G">G</option>
+        <option value="G#">Ab / G#</option>
+        <option value="A">A</option>
+        <option value="A#">Bb / A#</option>
+        <option value="B">B</option>
+      </select>
+      <select class="t-select" id="scale-select" onchange="SEQ.setScale(this.value)" title="Scale">
+        <option value="major">Major</option>
+        <option value="minor_pentatonic">Minor Pentatonic</option>
+        <option value="major_pentatonic">Major Pentatonic</option>
+        <option value="minor">Natural Minor</option>
+        <option value="harmonic_minor">Harmonic Minor</option>
+      </select>
+      <div class="t-sep"></div>
+
+      <button class="tbtn" onclick="SEQ.randomize()" title="Randomize active track">✦ randomize</button>
+      <button class="tbtn" onclick="SEQ.clearTrack()" title="Clear active track">clear</button>
+      <button class="tbtn" onclick="SEQ.loadDefault()" title="Load example beat">example</button>
+    </div>
+
+    <!-- BODY: tracks + grid -->
+    <div class="seq-body">
+      <div class="track-list" id="trackList">
+        <div class="track-list-header">tracks</div>
+        <div id="trackListInner" class="track-list-inner"></div>
+      </div>
+      <div class="grid-area">
+        <div class="pad-grid" id="padGrid"></div>
+        <div class="note-picker hidden" id="notePicker"></div>
+      </div>
+    </div>
+
+    <!-- INFO BAR -->
+    <div class="info-bar" id="infoBar">
+      <strong id="info-track">Kick</strong>
+      <span id="info-hint">Tap a square to toggle a step on or off.</span>
+    </div>
+
+    <!-- LOOP SECTION -->
+    <div class="loop-section">
+      <div class="loop-section-title">loop slots</div>
+      <div class="loop-slots" id="loopSlots">
+        <button class="loop-copy-btn" onclick="SEQ.copyLoopTo()" id="copyLoopBtn" title="Copy current loop to another slot">copy →</button>
+      </div>
+      <div class="chain-section">
+        <div class="chain-title">chain</div>
+        <div class="chain-builder" id="chainBuilder"></div>
+        <div class="chain-add">
+          <select class="chain-select" id="chain-loop-sel">
+            <option value="1">Loop 1</option>
+            <option value="2">Loop 2</option>
+            <option value="3">Loop 3</option>
+            <option value="4">Loop 4</option>
+          </select>
+          <select class="chain-select" id="chain-reps-sel">
+            <option value="1">× 1</option>
+            <option value="2">× 2</option>
+            <option value="3">× 3</option>
+            <option value="4">× 4</option>
+            <option value="8">× 8</option>
+          </select>
+          <button class="chain-add-btn" onclick="SEQ.addChainStep()">+ add</button>
+          <button class="chain-clear-btn" onclick="SEQ.clearChain()">clear chain</button>
+          <div style="flex:1"></div>
+          <button class="chain-add-btn" onclick="SEQ.exportWav()" id="btn-export" title="Render to WAV">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 0v7M1 5l4 4 4-4"/></svg> export WAV
+          </button>
+        </div>
+        <div class="chain-mode-note" id="chainNote">No chain — Loop 1 repeats continuously.</div>
+      </div>
+    </div>
+
+  </div><!-- /seq-app -->
+
+
+  <!-- ESSAY -->
+
+  <h2>How to use the sequencer</h2>
+
+  <p>The sequencer is a 16-step loop machine — the most common tool in electronic music production. Each of the 16 squares represents one sixteenth note: a beat subdivided into four equal parts, so four squares make up one beat and sixteen squares make one complete bar of 4/4 time. When you press play, a red outline moves through the squares from left to right, triggering any step that is switched on as it passes.</p>
+
+  <h2>Tracks</h2>
+
+  <p>The left column lists eight tracks: four rhythmic (Kick, Snare, Hi-Hat, Cymbal) and four melodic (Bass, Lead 1, Lead 2, Lead 3). Only one track is active at a time — click a track name to select it, then tap squares to turn steps on or off. The grid always shows the pattern for the selected track, so you build each layer separately. When you play, all eight tracks run simultaneously.</p>
+
+  <p>A good starting point is the example beat, which loads a classic 4-on-the-floor kick pattern, snare on beats 2 and 4, and eighth-note hi-hats. Press play to hear it, then click each track in turn and look at its pattern to understand what is contributing to the sound.</p>
+
+  <h2>Rhythm tracks</h2>
+
+  <p>The four rhythm tracks — Kick, Snare, Hi-Hat, Cymbal — are on/off: a step is either active or silent. The most fundamental drum pattern in 4/4 time places a kick on steps 1, 5, 9, and 13 (the four beats), a snare on steps 5 and 13 (beats 2 and 4), and hi-hats on every other step. From this foundation you can add, remove, or shift any step to create syncopation — rhythmic interest that pushes against or between the beats.</p>
+
+  <h2>Melody tracks</h2>
+
+  <p>The melodic tracks work slightly differently. When you tap an empty step, it turns on and a small menu appears showing the available notes from your chosen scale. Tap a note name to assign it. If you tap a step that is already on, the menu reopens so you can change the note or turn the step off. The key and scale selectors in the transport bar determine which notes are available — change the key and all note names update to match.</p>
+
+  <p>The five scale options cover the most useful sounds in Western music. <strong>Major</strong> is bright and resolved. <strong>Natural minor</strong> is darker and more melancholic. <strong>Minor pentatonic</strong> — five notes from the minor scale — is particularly forgiving: almost any combination of steps sounds musical, which makes it ideal for improvising melodic ideas quickly. <strong>Major pentatonic</strong> is the equivalent bright five-note scale. <strong>Harmonic minor</strong> adds a raised seventh that gives a tense, dramatic quality.</p>
+
+  <h2>Loop slots and chaining</h2>
+
+  <p>The sequencer has four loop slots. Each stores a completely independent set of patterns across all eight tracks. By default, Loop 1 plays on repeat. Click Loop 2, 3, or 4 to switch to a different slot and program a new pattern — the copy button duplicates the current loop to the next slot so you can vary an existing pattern rather than starting from scratch.</p>
+
+  <p>The chain section lets you combine loops into an arrangement. Use the selectors to choose a loop and how many times it should repeat, then click Add. You can build a sequence like "Loop 1 twice, then Loop 2 four times, then Loop 3 once" and it will cycle through that pattern continuously. Export WAV renders the entire chain — or the current loop if no chain is set — as a stereo audio file you can take into any other software.</p>
+
+  <h2>Tempo</h2>
+
+  <p>The BPM slider controls playback speed. 120 BPM is a common tempo for house and pop music — four beats per second. 90 BPM gives a more relaxed hip-hop feel; 140 feels urgent and energetic. Changes take effect immediately, so you can adjust tempo while the sequencer is playing to find the right feel before committing to a number.</p>
+
+  <h2>Sequencers in music therapy</h2>
+
+  <p>The step sequencer is an unusually useful tool in music therapy contexts precisely because it removes the need for real-time performance skill. A client doesn't need to play an instrument to create a groove — they need only to make decisions: which steps should sound, which should be silent. That decision-making process is itself therapeutically rich. It involves attention, preference, aesthetic judgment, and the experience of cause and effect in a low-stakes, immediately audible domain.</p>
+
+  <p>The grid format also makes rhythmic structure visually legible in a way that standard music notation doesn't. You can see a rhythm as a pattern of filled and empty squares. You can see symmetry and asymmetry, density and space. For clients who respond well to visual information — including many people with ADHD or autism — this visual-rhythmic mapping can make rhythmic concepts accessible in a way that verbal instruction alone cannot.</p>
+
+  <p>The randomize function is worth noting as a therapeutic tool in its own right. Handing an element of compositional control to chance — pressing a button and hearing what emerges — is a small experiment in indeterminacy, the same principle explored by composers like John Cage. The question of what to do with the result (keep it, clear it, modify it) opens up conversation about preference, tolerance for the unexpected, and the relationship between intention and outcome.</p>
+
+</main>
+
+<footer>
+  <p>© 2025–2026 Jordan Elias</p>
+</footer>
+
+<script src="/js/header.js"></script>
+
+<!-- ═══════════════════════════════════════════════════════
+     SEQUENCER ENGINE — unchanged from Lab source
+═══════════════════════════════════════════════════════ -->
+<script>
+(function () {
+'use strict';
+
+const NUM_STEPS   = 16;
+const NUM_LOOPS   = 4;
+const LOOKAHEAD   = 0.1;
+const SCHEDULE_INTERVAL = 25;
+
+const TRACKS = [
+  { id:'kick',   name:'Kick',   type:'drum',    col:'var(--text)', hint:'Kick drum: 4-on-the-floor or syncopated.' },
+  { id:'snare',  name:'Snare',  type:'drum',    col:'var(--text)', hint:'Snare: classic on beats 2 and 4, or more.' },
+  { id:'hihat',  name:'Hi-Hat', type:'drum',    col:'var(--text)', hint:'Hi-hat: dense patterns create drive and energy.' },
+  { id:'cymbal', name:'Cymbal', type:'drum',    col:'var(--text)', hint:'Cymbal: sparse accents and crashes.' },
+  { id:'bass',   name:'Bass',   type:'melodic', col:'var(--text)', hint:'Bass: tap step to toggle, tap again to pick note from scale.' },
+  { id:'lead1',  name:'Lead 1', type:'melodic', col:'var(--text)', hint:'Lead 1: melodic line — tap to toggle, tap active step to change note.' },
+  { id:'lead2',  name:'Lead 2', type:'melodic', col:'var(--text)', hint:'Lead 2: second melodic voice.' },
+  { id:'lead3',  name:'Lead 3', type:'melodic', col:'var(--text)', hint:'Lead 3: third melodic voice for harmony or counter-melody.' },
+];
+
+const SCALES = {
+  major:           [0, 2, 4, 5, 7, 9, 11, 12],
+  minor:           [0, 2, 3, 5, 7, 8, 10, 12],
+  harmonic_minor:  [0, 2, 3, 5, 7, 8, 11, 12],
+  major_pentatonic:[0, 2, 4, 7, 9, 12],
+  minor_pentatonic:[0, 3, 5, 7, 10, 12],
+};
+
+const ROOT_HZ = (() => {
+  const A4 = 440;
+  const midiRoot = 36;
+  const semitoneFromC = { C:0,'C#':1,D:2,'D#':3,E:4,F:5,'F#':6,G:7,'G#':8,A:9,'A#':10,B:11 };
+  const out = {};
+  for (const name of Object.keys(semitoneFromC)) {
+    out[name] = A4 * Math.pow(2, (midiRoot + semitoneFromC[name] - 69) / 12);
+  }
+  return out;
+})();
+
+const LETTERS = ['C','D','E','F','G','A','B'];
+const LETTER_SEMITONE = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 };
+
+function parseRoot(root) {
+  const letter = root[0].toUpperCase();
+  let alter = 0;
+  if (root.includes('#')) alter = 1;
+  if (root.includes('b')) alter = -1;
+  return { letter, alter, semitone: LETTER_SEMITONE[letter] + alter };
+}
+
+const DEGREE_LETTER_STEPS = {
+  major:           [0,1,2,3,4,5,6,7],
+  minor:           [0,1,2,3,4,5,6,7],
+  harmonic_minor:  [0,1,2,3,4,5,6,7],
+  major_pentatonic:[0,1,2,4,5,7],
+  minor_pentatonic:[0,2,3,4,6,7],
+};
+
+function getScaleNoteName(root, scale, scaleIdx) {
+  const semitones = SCALES[scale] || SCALES.major;
+  if (scaleIdx >= semitones.length) scaleIdx = semitones.length - 1;
+  const targetSt = semitones[scaleIdx];
+  const { letter: rootLetter, alter: rootAlter } = parseRoot(root);
+  const rootLetterIdx = LETTERS.indexOf(rootLetter);
+  const letterSteps = DEGREE_LETTER_STEPS[scale] || DEGREE_LETTER_STEPS.major;
+  const letterStep  = letterSteps[Math.min(scaleIdx, letterSteps.length - 1)];
+  const degLetterIdx = (rootLetterIdx + letterStep) % 7;
+  const degLetter    = LETTERS[degLetterIdx];
+  const rootSt       = LETTER_SEMITONE[rootLetter] + rootAlter;
+  const actualSt     = ((rootSt + targetSt) % 12 + 12) % 12;
+  const naturalSt    = (LETTER_SEMITONE[degLetter] % 12 + 12) % 12;
+  let diff = actualSt - naturalSt;
+  if (diff > 6)  diff -= 12;
+  if (diff < -6) diff += 12;
+  const acc = diff === 0 ? '' : diff === 1 ? '#' : diff === -1 ? 'b' : diff === 2 ? '##' : 'bb';
+  return degLetter + acc;
+}
+
+let AC = null;
+let playing     = false;
+let currentStep = 0;
+let nextStepTime = 0;
+let scheduleTimer = null;
+let bpm = 120;
+let rootKey  = 'C';
+let scaleName = 'major';
+let activeTrack = 0;
+
+function makeEmptyLoop() {
+  return TRACKS.map(() => Array(NUM_STEPS).fill(null));
+}
+const loops = [makeEmptyLoop(), makeEmptyLoop(), makeEmptyLoop(), makeEmptyLoop()];
+let editingLoop = 0;
+let chain = [];
+let chainPos  = 0;
+let chainReps = 0;
+let pickerStep = -1;
+
+function initAudio() {
+  if (AC) return;
+  AC = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function stepDuration() { return 60 / bpm / 4; }
+
+function playKick(time, vol) {
+  const g = AC.createGain(); g.connect(AC.destination);
+  const osc = AC.createOscillator(); osc.connect(g);
+  osc.frequency.setValueAtTime(150, time);
+  osc.frequency.exponentialRampToValueAtTime(40, time + 0.08);
+  osc.type = 'sine';
+  g.gain.setValueAtTime(vol * 1.2, time);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.38);
+  const click = AC.createOscillator();
+  const clickG = AC.createGain();
+  click.connect(clickG); clickG.connect(AC.destination);
+  click.frequency.value = 800; click.type = 'square';
+  clickG.gain.setValueAtTime(vol * 0.4, time);
+  clickG.gain.exponentialRampToValueAtTime(0.001, time + 0.025);
+  osc.start(time); osc.stop(time + 0.4);
+  click.start(time); click.stop(time + 0.03);
+}
+
+function playSnare(time, vol) {
+  const bufLen = AC.sampleRate * 0.2;
+  const buf = AC.createBuffer(1, bufLen, AC.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufLen; i++) data[i] = Math.random() * 2 - 1;
+  const src = AC.createBufferSource(); src.buffer = buf;
+  const hpf = AC.createBiquadFilter(); hpf.type = 'highpass'; hpf.frequency.value = 1500;
+  const g = AC.createGain();
+  src.connect(hpf); hpf.connect(g); g.connect(AC.destination);
+  g.gain.setValueAtTime(vol * 0.9, time);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
+  const osc = AC.createOscillator();
+  const og = AC.createGain();
+  osc.connect(og); og.connect(AC.destination);
+  osc.frequency.value = 180; osc.type = 'triangle';
+  og.gain.setValueAtTime(vol * 0.4, time);
+  og.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+  src.start(time); src.stop(time + 0.22);
+  osc.start(time); osc.stop(time + 0.1);
+}
+
+function playHiHat(time, vol) {
+  const bufLen = AC.sampleRate * 0.06;
+  const buf = AC.createBuffer(1, bufLen, AC.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufLen; i++) data[i] = Math.random() * 2 - 1;
+  const src = AC.createBufferSource(); src.buffer = buf;
+  const hpf = AC.createBiquadFilter(); hpf.type = 'highpass'; hpf.frequency.value = 7000; hpf.Q.value = 0.7;
+  const g = AC.createGain();
+  src.connect(hpf); hpf.connect(g); g.connect(AC.destination);
+  g.gain.setValueAtTime(vol * 0.6, time);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.055);
+  src.start(time); src.stop(time + bufLen / AC.sampleRate + 0.01);
+}
+
+function playCymbal(time, vol) {
+  const bufLen = AC.sampleRate * 0.7;
+  const buf = AC.createBuffer(1, bufLen, AC.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufLen; i++) data[i] = Math.random() * 2 - 1;
+  const src = AC.createBufferSource(); src.buffer = buf;
+  const hpf = AC.createBiquadFilter(); hpf.type = 'bandpass'; hpf.frequency.value = 5000; hpf.Q.value = 0.5;
+  const g = AC.createGain();
+  src.connect(hpf); hpf.connect(g); g.connect(AC.destination);
+  g.gain.setValueAtTime(vol * 0.55, time);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.65);
+  src.start(time); src.stop(time + 0.72);
+}
+
+function playBass(time, hz, vol) {
+  const osc = AC.createOscillator();
+  const osc2 = AC.createOscillator();
+  const lpf = AC.createBiquadFilter();
+  const g = AC.createGain();
+  lpf.type = 'lowpass'; lpf.frequency.value = 500; lpf.Q.value = 1.5;
+  osc.type = 'sawtooth'; osc.frequency.value = hz;
+  osc2.type = 'square'; osc2.frequency.value = hz;
+  const g2 = AC.createGain(); g2.gain.value = 0.3;
+  osc.connect(lpf); osc2.connect(g2); g2.connect(lpf);
+  lpf.connect(g); g.connect(AC.destination);
+  g.gain.setValueAtTime(0.001, time);
+  g.gain.linearRampToValueAtTime(vol * 0.7, time + 0.015);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.28);
+  osc.start(time); osc.stop(time + 0.32);
+  osc2.start(time); osc2.stop(time + 0.32);
+}
+
+function playLead(time, hz, vol, variant) {
+  const osc = AC.createOscillator();
+  const lpf = AC.createBiquadFilter();
+  const g = AC.createGain();
+  const types = ['triangle','sawtooth','sine'];
+  const cutoffs = [1800,2400,1200];
+  osc.type = types[variant % types.length];
+  lpf.type = 'lowpass'; lpf.frequency.value = cutoffs[variant % cutoffs.length]; lpf.Q.value = 1.2;
+  osc.frequency.value = hz * 2;
+  osc.connect(lpf); lpf.connect(g); g.connect(AC.destination);
+  g.gain.setValueAtTime(0.001, time);
+  g.gain.linearRampToValueAtTime(vol * 0.5, time + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.22);
+  osc.start(time); osc.stop(time + 0.25);
+}
+
+function renderDrumOffline(ctx, id, time, vol) {
+  if (id === 'kick') {
+    const g = ctx.createGain(); g.connect(ctx.destination);
+    const osc = ctx.createOscillator(); osc.connect(g);
+    osc.frequency.setValueAtTime(150,time); osc.frequency.exponentialRampToValueAtTime(40,time+0.08); osc.type='sine';
+    g.gain.setValueAtTime(vol*1.2,time); g.gain.exponentialRampToValueAtTime(0.001,time+0.38);
+    osc.start(time); osc.stop(time+0.4);
+  } else if (id==='snare') {
+    const bufLen=ctx.sampleRate*0.2; const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+    const data=buf.getChannelData(0); for(let i=0;i<bufLen;i++) data[i]=Math.random()*2-1;
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const hpf=ctx.createBiquadFilter(); hpf.type='highpass'; hpf.frequency.value=1500;
+    const g=ctx.createGain(); src.connect(hpf); hpf.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol*0.9,time); g.gain.exponentialRampToValueAtTime(0.001,time+0.18);
+    src.start(time); src.stop(time+0.22);
+  } else if (id==='hihat') {
+    const bufLen=ctx.sampleRate*0.06; const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+    const data=buf.getChannelData(0); for(let i=0;i<bufLen;i++) data[i]=Math.random()*2-1;
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const hpf=ctx.createBiquadFilter(); hpf.type='highpass'; hpf.frequency.value=7000;
+    const g=ctx.createGain(); src.connect(hpf); hpf.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol*0.6,time); g.gain.exponentialRampToValueAtTime(0.001,time+0.055);
+    src.start(time); src.stop(time+0.08);
+  } else if (id==='cymbal') {
+    const bufLen=ctx.sampleRate*0.7; const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+    const data=buf.getChannelData(0); for(let i=0;i<bufLen;i++) data[i]=Math.random()*2-1;
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const hpf=ctx.createBiquadFilter(); hpf.type='bandpass'; hpf.frequency.value=5000; hpf.Q.value=0.5;
+    const g=ctx.createGain(); src.connect(hpf); hpf.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol*0.55,time); g.gain.exponentialRampToValueAtTime(0.001,time+0.65);
+    src.start(time); src.stop(time+0.72);
+  }
+}
+
+function renderMelodicOffline(ctx, leadVariant, hz, time, vol) {
+  const osc=ctx.createOscillator(); const lpf=ctx.createBiquadFilter(); const g=ctx.createGain();
+  if (leadVariant===0) {
+    lpf.type='lowpass'; lpf.frequency.value=500; lpf.Q.value=1.5;
+    osc.type='sawtooth'; osc.frequency.value=hz;
+    osc.connect(lpf); lpf.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.001,time); g.gain.linearRampToValueAtTime(vol*0.7,time+0.015);
+    g.gain.exponentialRampToValueAtTime(0.001,time+0.28);
+    osc.start(time); osc.stop(time+0.32);
+  } else {
+    const types=['triangle','sawtooth','sine']; const cutoffs=[1800,2400,1200];
+    osc.type=types[(leadVariant-1)%types.length]; lpf.type='lowpass';
+    lpf.frequency.value=cutoffs[(leadVariant-1)%cutoffs.length];
+    osc.frequency.value=hz*2;
+    osc.connect(lpf); lpf.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.001,time); g.gain.linearRampToValueAtTime(vol*0.5,time+0.02);
+    g.gain.exponentialRampToValueAtTime(0.001,time+0.22);
+    osc.start(time); osc.stop(time+0.25);
+  }
+}
+
+function audioBufferToWav(buf) {
+  const len=buf.length,sr=buf.sampleRate,ch=buf.numberOfChannels;
+  const bps=2,dl=len*ch*bps;
+  const ab=new ArrayBuffer(44+dl),v=new DataView(ab);
+  const ws=(o,s)=>{for(let i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i));};
+  ws(0,'RIFF'); v.setUint32(4,36+dl,true); ws(8,'WAVE'); ws(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,ch,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*ch*bps,true);
+  v.setUint16(32,ch*bps,true); v.setUint16(34,16,true);
+  ws(36,'data'); v.setUint32(40,dl,true);
+  let off=44;
+  for(let i=0;i<len;i++) for(let c=0;c<ch;c++){
+    const s=Math.max(-1,Math.min(1,buf.getChannelData(c)[i]||0));
+    v.setInt16(off,s<0?s*0x8000:s*0x7FFF,true); off+=2;
+  }
+  return new Blob([ab],{type:'audio/wav'});
+}
+
+function getScaleHz(root, scale, scaleIdx) {
+  const semitones = SCALES[scale] || SCALES.major;
+  const st = semitones[Math.min(scaleIdx, semitones.length - 1)];
+  return ROOT_HZ[root] * Math.pow(2, st / 12);
+}
+
+function getPlayingLoop() {
+  return chain.length === 0 ? editingLoop : chain[chainPos].loopIdx;
+}
+
+function advanceChain() {
+  if (chain.length === 0) return;
+  chainReps++;
+  if (chainReps >= chain[chainPos].reps) {
+    chainReps = 0;
+    chainPos = (chainPos + 1) % chain.length;
+  }
+  renderChainUI();
+}
+
+function scheduleStep(step, time) {
+  const loopData = loops[getPlayingLoop()];
+  TRACKS.forEach((track, ti) => {
+    const cell = loopData[ti][step];
+    if (cell === null || cell === false) return;
+    const vol = 0.85;
+    if (track.type === 'drum') {
+      if (track.id==='kick')   playKick(time, vol);
+      if (track.id==='snare')  playSnare(time, vol);
+      if (track.id==='hihat')  playHiHat(time, vol);
+      if (track.id==='cymbal') playCymbal(time, vol);
+    } else {
+      const scaleIdx = typeof cell === 'number' ? cell : 4;
+      const hz = getScaleHz(rootKey, scaleName, scaleIdx);
+      const leadVariant = ['bass','lead1','lead2','lead3'].indexOf(track.id);
+      if (leadVariant === 0) playBass(time, hz, vol);
+      else playLead(time, hz, vol, leadVariant - 1);
+    }
+  });
+}
+
+function scheduler() {
+  if (!playing || !AC) return;
+  while (nextStepTime < AC.currentTime + LOOKAHEAD) {
+    scheduleStep(currentStep, nextStepTime);
+    const stepSnap = currentStep;
+    const delay = Math.max(0, (nextStepTime - AC.currentTime) * 1000);
+    setTimeout(() => { if (playing) renderPlayhead(stepSnap); }, delay);
+    if (currentStep === 15) advanceChain();
+    currentStep = (currentStep + 1) % NUM_STEPS;
+    nextStepTime += stepDuration();
+  }
+  scheduleTimer = setTimeout(scheduler, SCHEDULE_INTERVAL);
+}
+
+let lastPlayhead = -1;
+
+function renderPlayhead(step) {
+  document.querySelectorAll('.pad').forEach((el, i) => {
+    el.classList.toggle('playing', i === step);
+  });
+  lastPlayhead = step;
+}
+
+function renderPads() {
+  const loopData = loops[editingLoop];
+  const trackData = loopData[activeTrack];
+  const track = TRACKS[activeTrack];
+  document.querySelectorAll('.pad').forEach((pad, i) => {
+    const cell = trackData[i];
+    const isOn = cell !== null && cell !== false;
+    pad.classList.toggle('on', isOn);
+    pad.style.background = '';
+    pad.style.borderColor = '';
+    const noteEl = pad.querySelector('.pad-note');
+    if (noteEl) {
+      if (track.type === 'melodic' && isOn) {
+        const idx = typeof cell === 'number' ? cell : 4;
+        noteEl.textContent = getScaleNoteName(rootKey, scaleName, idx);
+        noteEl.style.display = '';
+      } else {
+        noteEl.style.display = 'none';
+      }
+    }
+    pad.classList.toggle('playing', i === lastPlayhead);
+  });
+}
+
+function buildPadGrid() {
+  const grid = document.getElementById('padGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < NUM_STEPS; i++) {
+    const pad = document.createElement('div');
+    pad.className = 'pad';
+    pad.dataset.step = i;
+    const num = document.createElement('span');
+    num.className = 'pad-step-num';
+    num.textContent = i + 1;
+    pad.appendChild(num);
+    const noteEl = document.createElement('span');
+    noteEl.className = 'pad-note';
+    noteEl.style.display = 'none';
+    pad.appendChild(noteEl);
+    pad.addEventListener('click', () => onPadClick(i));
+    grid.appendChild(pad);
+  }
+}
+
+function buildTrackList() {
+  const inner = document.getElementById('trackListInner');
+  inner.innerHTML = '';
+  let lastType = null;
+  TRACKS.forEach((track, i) => {
+    if (track.type !== lastType) {
+      const div = document.createElement('div');
+      div.className = 'track-divider';
+      div.textContent = track.type === 'drum' ? 'Rhythm' : 'Melody';
+      inner.appendChild(div);
+      lastType = track.type;
+    }
+    const item = document.createElement('div');
+    item.className = 'track-item' + (i === activeTrack ? ' active' : '');
+    item.id = 'track-item-' + i;
+    item.innerHTML = `
+      <span class="track-dot" style="background:var(--text)"></span>
+      <span class="track-name">${track.name}</span>
+      <span class="track-type-badge">${track.type === 'drum' ? 'rhy' : 'mel'}</span>
+    `;
+    item.addEventListener('click', () => SEQ.setTrack(i));
+    inner.appendChild(item);
+  });
+}
+
+function buildLoopSlots() {
+  const slotsEl = document.getElementById('loopSlots');
+  slotsEl.querySelectorAll('.loop-slot-btn').forEach(el => el.remove());
+  const copyBtn = document.getElementById('copyLoopBtn');
+  for (let i = 0; i < NUM_LOOPS; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'loop-slot-btn' + (i === editingLoop ? ' current-edit' : '');
+    btn.id = 'loop-slot-' + i;
+    btn.innerHTML = `<span class="slot-dot"></span>Loop ${i+1}`;
+    btn.addEventListener('click', () => SEQ.setEditingLoop(i));
+    slotsEl.insertBefore(btn, copyBtn);
+  }
+  updateLoopSlotDots();
+}
+
+function updateLoopSlotDots() {
+  for (let i = 0; i < NUM_LOOPS; i++) {
+    const btn = document.getElementById('loop-slot-' + i);
+    if (!btn) continue;
+    btn.classList.toggle('current-edit', i === editingLoop);
+    const hasContent = loops[i].some(track => track.some(cell => cell !== null && cell !== false));
+    btn.classList.toggle('has-content', hasContent);
+  }
+}
+
+function renderChainUI() {
+  const builder = document.getElementById('chainBuilder');
+  builder.innerHTML = '';
+  if (chain.length === 0) {
+    document.getElementById('chainNote').textContent = 'No chain — Loop 1 repeats continuously.';
+    return;
+  }
+  const parts = chain.map(c => `L${c.loopIdx+1}×${c.reps}`);
+  document.getElementById('chainNote').textContent = `Playing: ${parts.join(' → ')} → repeat`;
+  chain.forEach((entry, ci) => {
+    const div = document.createElement('div');
+    const isActive = playing && ci === chainPos;
+    div.className = 'chain-step' + (isActive ? ' active-playing' : '');
+    div.innerHTML = `
+      <span class="chain-step-label">Loop <span>${entry.loopIdx+1}</span> × ${entry.reps}</span>
+      <span class="chain-step-remove" title="Remove">×</span>
+    `;
+    div.querySelector('.chain-step-remove').addEventListener('click', () => {
+      chain.splice(ci, 1);
+      if (chainPos >= chain.length) chainPos = 0;
+      renderChainUI();
+    });
+    builder.appendChild(div);
+  });
+}
+
+function updateInfoBar() {
+  const track = TRACKS[activeTrack];
+  document.getElementById('info-track').textContent = track.name;
+  document.getElementById('info-hint').textContent  = track.hint;
+  const isMelodic = track.type === 'melodic';
+  document.getElementById('key-select').style.opacity   = isMelodic ? '1' : '.4';
+  document.getElementById('scale-select').style.opacity = isMelodic ? '1' : '.4';
+}
+
+function openNotePicker(stepIdx, padEl) {
+  pickerStep = stepIdx;
+  const picker = document.getElementById('notePicker');
+  picker.classList.remove('hidden');
+  picker.innerHTML = '';
+  const offBtn = document.createElement('div');
+  offBtn.className = 'note-picker-off';
+  offBtn.textContent = 'turn off';
+  offBtn.addEventListener('click', () => {
+    loops[editingLoop][activeTrack][stepIdx] = null;
+    closePicker(); renderPads();
+  });
+  picker.appendChild(offBtn);
+  const semitones = SCALES[scaleName] || SCALES.major;
+  semitones.forEach((_, idx) => {
+    const noteName = getScaleNoteName(rootKey, scaleName, idx);
+    const btn = document.createElement('div');
+    btn.className = 'note-picker-btn';
+    btn.textContent = noteName;
+    const current = loops[editingLoop][activeTrack][stepIdx];
+    if (current === idx) btn.classList.add('selected');
+    btn.addEventListener('click', () => {
+      loops[editingLoop][activeTrack][stepIdx] = idx;
+      closePicker(); renderPads();
+    });
+    picker.appendChild(btn);
+  });
+  picker.style.position = 'fixed';
+  picker.style.top = '-9999px';
+  picker.style.left = '-9999px';
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const pr = padEl.getBoundingClientRect();
+  const pickerW = 172; const pickerH = 180;
+  let top = pr.bottom + 4;
+  let left = pr.left;
+  if (left + pickerW > vw - 8) left = pr.right - pickerW;
+  if (top + pickerH > vh - 8) top = pr.top - pickerH - 4;
+  left = Math.max(8, left); top = Math.max(8, top);
+  picker.style.top = top + 'px';
+  picker.style.left = left + 'px';
+}
+
+function closePicker() {
+  pickerStep = -1;
+  document.getElementById('notePicker').classList.add('hidden');
+}
+
+function onPadClick(stepIdx) {
+  const track = TRACKS[activeTrack];
+  const trackData = loops[editingLoop][activeTrack];
+  const cell = trackData[stepIdx];
+  const isOn = cell !== null && cell !== false;
+  if (pickerStep !== -1 && pickerStep !== stepIdx) closePicker();
+  if (track.type === 'drum') {
+    trackData[stepIdx] = isOn ? null : true;
+    if (!isOn && AC) {
+      const t = AC.currentTime + 0.01;
+      if (track.id==='kick')   playKick(t, 0.7);
+      if (track.id==='snare')  playSnare(t, 0.7);
+      if (track.id==='hihat')  playHiHat(t, 0.7);
+      if (track.id==='cymbal') playCymbal(t, 0.7);
+    }
+    renderPads();
+  } else {
+    if (!isOn) {
+      trackData[stepIdx] = 4;
+      renderPads();
+      const padEl = document.querySelector(`.pad[data-step="${stepIdx}"]`);
+      if (padEl) openNotePicker(stepIdx, padEl);
+    } else {
+      if (pickerStep === stepIdx) { closePicker(); }
+      else {
+        const padEl = document.querySelector(`.pad[data-step="${stepIdx}"]`);
+        if (padEl) openNotePicker(stepIdx, padEl);
+      }
+    }
+  }
+  updateLoopSlotDots();
+}
+
+document.addEventListener('click', e => {
+  if (pickerStep === -1) return;
+  const picker = document.getElementById('notePicker');
+  const grid = document.getElementById('padGrid');
+  if (!picker.contains(e.target) && !grid.contains(e.target)) closePicker();
+}, true);
+
+function loadDefaultBeat() {
+  loops[0] = makeEmptyLoop();
+  [0,4,8,12].forEach(i => { loops[0][0][i] = true; });
+  [4,12].forEach(i => { loops[0][1][i] = true; });
+  [0,2,4,6,8,10,12,14].forEach(i => { loops[0][2][i] = true; });
+  [0].forEach(i => { loops[0][3][i] = true; });
+  [[0,0],[2,2],[4,1],[8,3],[12,2],[14,0]].forEach(([step,deg]) => { loops[0][4][step] = deg; });
+  [[1,4],[5,6],[9,5],[13,4],[15,3]].forEach(([step,deg]) => { loops[0][5][step] = deg; });
+  editingLoop = 0;
+  updateLoopSlotDots();
+  renderPads();
+}
+
+const SEQ = window.SEQ = {
+  togglePlay() {
+    initAudio();
+    if (AC.state === 'suspended') AC.resume();
+    playing = !playing;
+    const btn = document.getElementById('btn-play');
+    if (playing) {
+      currentStep = 0; chainPos = 0; chainReps = 0;
+      nextStepTime = AC.currentTime + 0.05;
+      btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><rect width="10" height="10"/></svg> stop';
+      btn.classList.add('playing');
+      scheduler();
+    } else {
+      clearTimeout(scheduleTimer);
+      btn.innerHTML = '<svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor"><path d="M0 0l10 6L0 12z"/></svg> play';
+      btn.classList.remove('playing');
+      document.querySelectorAll('.pad').forEach(el => el.classList.remove('playing'));
+      lastPlayhead = -1;
+      renderChainUI();
+    }
+  },
+  setTempo(v) { bpm = v; document.getElementById('tempo-val').textContent = v; },
+  setKey(k) { rootKey = k; renderPads(); },
+  setScale(s) {
+    scaleName = s;
+    const semitones = SCALES[s] || SCALES.major;
+    const maxIdx = semitones.length - 1;
+    loops.forEach(loop => {
+      TRACKS.forEach((t, ti) => {
+        if (t.type !== 'melodic') return;
+        loop[ti].forEach((cell, si) => {
+          if (typeof cell === 'number' && cell > maxIdx) loop[ti][si] = maxIdx;
+        });
+      });
+    });
+    renderPads();
+  },
+  setTrack(i) {
+    closePicker(); activeTrack = i;
+    document.querySelectorAll('.track-item').forEach(el => el.classList.remove('active'));
+    const item = document.getElementById('track-item-' + i);
+    if (item) item.classList.add('active');
+    updateInfoBar(); renderPads();
+  },
+  setEditingLoop(i) { closePicker(); editingLoop = i; updateLoopSlotDots(); renderPads(); },
+  clearTrack() {
+    loops[editingLoop][activeTrack] = Array(NUM_STEPS).fill(null);
+    closePicker(); renderPads(); updateLoopSlotDots();
+  },
+  randomize() {
+    const track = TRACKS[activeTrack];
+    const density = track.type === 'drum' ? 0.35 : 0.3;
+    const semitones = SCALES[scaleName] || SCALES.major;
+    loops[editingLoop][activeTrack] = Array(NUM_STEPS).fill(null).map(() => {
+      if (Math.random() < density) return track.type === 'drum' ? true : Math.floor(Math.random() * semitones.length);
+      return null;
+    });
+    renderPads(); updateLoopSlotDots();
+  },
+  loadDefault() { loadDefaultBeat(); },
+  copyLoopTo() {
+    const target = (editingLoop + 1) % NUM_LOOPS;
+    loops[target] = loops[editingLoop].map(track => [...track]);
+    SEQ.setEditingLoop(target);
+  },
+  addChainStep() {
+    const loopIdx = parseInt(document.getElementById('chain-loop-sel').value) - 1;
+    const reps = parseInt(document.getElementById('chain-reps-sel').value);
+    chain.push({ loopIdx, reps });
+    renderChainUI();
+  },
+  clearChain() { chain = []; chainPos = 0; chainReps = 0; renderChainUI(); },
+  async exportWav() {
+    const btn = document.getElementById('btn-export');
+    btn.textContent = 'rendering…'; btn.style.opacity = '.5'; btn.style.pointerEvents = 'none';
+    const renderPlan = chain.length > 0
+      ? chain.flatMap(({ loopIdx, reps }) => Array(reps).fill(loopIdx))
+      : [editingLoop];
+    const sr = 44100;
+    const loopDur = NUM_STEPS * stepDuration();
+    const totalDur = renderPlan.length * loopDur;
+    const offCtx = new OfflineAudioContext(2, Math.ceil((totalDur + 1.0) * sr), sr);
+    let t = 0;
+    for (const loopIdx of renderPlan) {
+      const loopData = loops[loopIdx];
+      for (let step = 0; step < NUM_STEPS; step++) {
+        const time = t + step * stepDuration();
+        TRACKS.forEach((track, ti) => {
+          const cell = loopData[ti][step];
+          if (cell === null || cell === false) return;
+          const vol = 0.8;
+          if (track.type === 'drum') {
+            renderDrumOffline(offCtx, track.id, time, vol);
+          } else {
+            const scaleIdx = typeof cell === 'number' ? cell : 4;
+            const hz = getScaleHz(rootKey, scaleName, scaleIdx);
+            const leadVariant = ['bass','lead1','lead2','lead3'].indexOf(track.id);
+            renderMelodicOffline(offCtx, leadVariant, hz, time, vol);
+          }
+        });
+      }
+      t += loopDur;
+    }
+    try {
+      const rendered = await offCtx.startRendering();
+      const exactSamples = Math.round(totalDur * sr);
+      const trimmedBuf = offCtx.createBuffer(2, exactSamples, sr);
+      for (let ch = 0; ch < 2; ch++) {
+        trimmedBuf.getChannelData(ch).set(rendered.getChannelData(ch).subarray(0, exactSamples));
+      }
+      const wav = audioBufferToWav(trimmedBuf);
+      const url = URL.createObjectURL(wav);
+      const a = document.createElement('a'); a.href = url;
+      a.download = 'sequencer-' + Date.now() + '.wav'; a.click();
+      URL.revokeObjectURL(url);
+    } catch(e) { console.error('Export failed', e); }
+    btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 0v7M1 5l4 4 4-4"/></svg> export WAV';
+    btn.style.opacity = ''; btn.style.pointerEvents = '';
+  },
+};
+
+function init() {
+  buildPadGrid();
+  buildTrackList();
+  buildLoopSlots();
+  renderChainUI();
+  updateInfoBar();
+  loadDefaultBeat();
+  renderPads();
+}
+
+window.addEventListener('load', init);
+}());
+</script>
+
+</body>
+</html>
