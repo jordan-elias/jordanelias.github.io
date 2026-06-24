@@ -450,7 +450,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 800px) {
-      .vertical-title { display: none; }
+     
       .loop-sidebar { display: none; }
       .seq-body { flex-direction: column; }
       .track-list { width: 100%; border-right: none; border-bottom: 1px solid var(--text); }
@@ -460,7 +460,7 @@
       .track-item:nth-child(even) { border-right: none; }
       .grid-area { padding: .75rem; }
       .pad-grid { max-width: 100%; gap: 5px; }
-      .page-content { padding: 1em 1em 3em; }
+      
       /* Show loop section below on mobile */
       .loop-section-mobile {
         display: flex !important;
@@ -477,6 +477,29 @@
     @media (max-width: 420px) {
       .track-item { width: 100%; border-right: none; }
     }
+
+
+  @media (max-width: 600px) {
+
+  .vertical-title {
+    width: 36px;              /* was 64px */
+    top: 64px;
+    height: calc(100vh - 64px);
+    padding-top: 1rem;
+  }
+
+  .vertical-title span {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+  }
+
+  .page-content {
+    margin-left: 44px;       /* match new sidebar width + breathing room */
+    width: calc(100% - 44px);
+    padding: 1.5em 1em 4em;
+  }
+}
+    
   </style>
 </head>
 
