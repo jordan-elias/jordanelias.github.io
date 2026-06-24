@@ -191,7 +191,7 @@
       flex-wrap: wrap;
       background: var(--bg);
     }
-    .t-sep { width: 1px; height: 18px; background: var(--text); opacity: .2; flex-shrink: 0; }
+    .t-sep { width: 1px; height: 18px; background: var(--text); opacity: 1; flex-shrink: 0; }
 
     .tbtn {
       font-family: 'Space Grotesk', sans-serif;
@@ -213,7 +213,7 @@
 
     input[type=range].t-slider {
       -webkit-appearance: none; width: 80px; height: 2px;
-      background: var(--text); opacity: .25; outline: none; cursor: pointer;
+      background: var(--text); opacity: 1; outline: none; cursor: pointer;
     }
     input[type=range].t-slider::-webkit-slider-thumb {
       -webkit-appearance: none; width: 13px; height: 13px;
@@ -345,9 +345,9 @@
       position: absolute; top: 3px; left: 4px;
       font-family: 'DM Mono', monospace; font-size: .5rem;
       color: var(--text); opacity: .3; pointer-events: none;
-      transition: color .1s, opacity .1s;
+      transition: color .1s, opacity 1s;
     }
-    .pad.on .pad-step-num { color: var(--bg); opacity: .5; }
+    .pad.on .pad-step-num { color: var(--bg); opacity: 1; }
 
     .pad-note {
       font-family: 'DM Mono', monospace; font-size: .68rem; font-weight: 500;
@@ -403,7 +403,7 @@
     }
     .loop-slot-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
     .loop-slot-btn.current-edit { background-color: var(--text); color: var(--bg); }
-    .loop-slot-btn .slot-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .4; flex-shrink: 0; }
+    .loop-slot-btn .slot-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 1; flex-shrink: 0; }
     .loop-slot-btn.current-edit .slot-dot { opacity: 1; }
     .loop-copy-btn {
       font-family: 'DM Mono', monospace; font-size: .62rem;
@@ -426,7 +426,7 @@
     .chain-step.active-playing .chain-step-remove { color: var(--bg); }
     .chain-step-label { font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--text); }
     .chain-step-label span { font-weight: 500; }
-    .chain-step-remove { font-size: .62rem; color: var(--text); cursor: pointer; padding: 0 2px; opacity: .4; }
+    .chain-step-remove { font-size: .62rem; color: var(--text); cursor: pointer; padding: 0 2px; opacity: 1; }
     .chain-step-remove:hover { opacity: 1; color: var(--accent-hover); }
     .chain-add { display: flex; gap: .25rem; align-items: center; flex-wrap: wrap; }
     .chain-select {
@@ -443,7 +443,7 @@
     .chain-add-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
     .chain-clear-btn {
       font-family: 'DM Mono', monospace; font-size: .62rem; color: var(--text);
-      background: none; border: none; cursor: pointer; padding: .25rem .35rem; opacity: .4;
+      background: none; border: none; cursor: pointer; padding: .25rem .35rem; opacity: 1;
     }
     .chain-clear-btn:hover { opacity: 1; color: var(--accent-hover); }
     .chain-mode-note { font-size: .65rem; color: var(--text); font-style: italic; }
@@ -1149,7 +1149,7 @@ document.getElementById('btn-chain-clear').addEventListener('click',()=>{
 });
 document.getElementById('btn-export').addEventListener('click',async()=>{
   const btn=document.getElementById('btn-export');
-  btn.textContent='rendering…';btn.style.opacity='.5';btn.style.pointerEvents='none';
+  btn.textContent='rendering…';btn.style.opacity='1';btn.style.pointerEvents='none';
   const plan=chain.length>0?chain.flatMap(({loopIdx,reps})=>Array(reps).fill(loopIdx)):[editLoop];
   const sr=44100,ld=NUM_STEPS*stepDur(),total=plan.length*ld;
   const off=new OfflineAudioContext(2,Math.ceil((total+1)*sr),sr);
