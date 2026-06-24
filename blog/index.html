@@ -380,26 +380,16 @@
   .vertical-title span {
     font-size: 0.8rem;
     letter-spacing: 0.18em;
-
     writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
-
     white-space: nowrap;
   }
 
-  /* ── MAIN CONTENT OFFSET (THIS FIXES YOUR ISSUE) ── */
-  .page-content {
-    margin-left: 44px;              /* match vertical bar */
-    width: calc(100% - 44px);
-    padding: 1.5em 1em 4em;
-    min-width: 0;
-    box-sizing: border-box;
-  }
-
-  /* ── BLOG LAYOUT STACKING ── */
+  /* ── BLOG LAYOUT STACKING WITH MOBILE-ONLY OFFSET ── */
   .blog-main {
-    width: 100%;
+    margin-left: 44px;               /* Only applies on mobile to clear the title */
+    width: calc(100% - 44px);        /* Accounts for the offset */
     margin-right: 0;
     position: static;
     height: auto;
@@ -410,8 +400,9 @@
   }
 
   .blog-sidebar {
+    margin-left: 44px;               /* Only applies on mobile to stay aligned */
+    width: calc(100% - 44px);        /* Accounts for the offset */
     position: static;
-    width: 100%;
     height: auto;
     overflow: visible;
     border-left: none;
