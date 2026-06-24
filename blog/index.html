@@ -331,15 +331,14 @@
       margin: 0;
     }
 
-    .articles-list li {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      padding: 0.5rem 0;
-      /*border-bottom: 1px solid var(--text); */
-      opacity: 1;
-    }
+   .articles-list li {
+  display: flex;
+  flex-direction: column;    /* Stacks the date on top of the link */
+  align-items: flex-start;   /* Left-aligns both elements */
+  gap: 0.25rem;              /* Minimal space between the date and the title */
+  padding: 1rem 0;           /* Sets clean breathing room between different posts */
+  opacity: 1;
+}
 
     .articles-list li:last-child { border-bottom: none; }
 
@@ -557,12 +556,12 @@
 
     <ul class="articles-list">
       <li>
-        <a href="/blog/neurodiversity-affirming-music-therapy/">What it means to be Neurodiversity-Affirming</a>
-        <time datetime="2026-03-04">Mar 4, 2026</time>
+        <time datetime="2026-03-04">[2026-03-04]</time>
+        <a href="/blog/neurodiversity-affirming-music-therapy/">&gt; What it means to be Neurodiversity-Affirming</a>
       </li>
       <li>
-        <a href="/blog/indeterminacy-in-music-and-life/">Indeterminacy in Music and Life</a>
-        <time datetime="2026-02-18">Feb 18, 2026</time>
+        <time datetime="2026-03-04">[2026-02-18]</time>
+        <a href="/blog/indeterminacy-in-music-and-life/">&gt; Indeterminacy in Music and Life</a>
       </li>
     </ul>
 
