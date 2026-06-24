@@ -370,19 +370,36 @@
     display: block;
   }
 
+ @media (max-width: 700px) {
+
   .vertical-title {
     position: relative;
-    width: 50%;
+    width: 100%;
     height: auto;
+
     border-right: none;
     border-bottom: 1px solid var(--text);
+
     padding: 0.75rem 1rem;
+
+    display: block;   /* key change */
+    overflow: visible; /* prevents clipping */
   }
 
   .vertical-title span {
     writing-mode: horizontal-tb;
     transform: none;
+
+    display: block;     /* key change */
+    white-space: normal; /* allows wrapping */
+    overflow-wrap: break-word; /* safety */
+
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    line-height: 1.3;
   }
+
+}
 
   .vertical-title-spacer {
     display: none;
