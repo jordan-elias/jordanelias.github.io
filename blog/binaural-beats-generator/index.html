@@ -510,12 +510,24 @@
 
     @media (max-width: 600px) {
 
-  .page-content {
-    margin-left: 0;
-    width: 100%;
-    max-width: 100%;
-    padding: 1.25em 1em 4em;
+  .vertical-title {
+    width: 36px;              /* was 64px */
+    top: 64px;
+    height: calc(100vh - 64px);
+    padding-top: 1rem;
   }
+
+  .vertical-title span {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+  }
+
+  .page-content {
+    margin-left: 44px;       /* match new sidebar width + breathing room */
+    width: calc(100% - 44px);
+    padding: 1.5em 1em 4em;
+  }
+}
       
     @media (max-width: 600px) {
       .lab-transport-sliders { flex-direction: column; gap: 16px; }
