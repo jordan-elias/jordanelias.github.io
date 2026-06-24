@@ -553,6 +553,28 @@
       border-radius: 0;
       transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
+
+
+  @media (max-width: 600px) {
+
+  .vertical-title {
+    width: 36px;              /* was 64px */
+    top: 64px;
+    height: calc(100vh - 64px);
+    padding-top: 1rem;
+  }
+
+  .vertical-title span {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+  }
+
+  .page-content {
+    margin-left: 44px;       /* match new sidebar width + breathing room */
+    width: calc(100% - 44px);
+    padding: 1.5em 1em 4em;
+  }
+}
     
   </style>
 
@@ -722,7 +744,7 @@
 <div class="page-wrap">
 
   <div class="vertical-title" aria-hidden="true">
-    <span>Resource Library</span>
+    <span>Timbre Lab</span>
   </div>
 
   <main class="page-content">
