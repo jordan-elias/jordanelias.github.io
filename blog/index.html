@@ -360,7 +360,7 @@
       font-size: 0.9em;
     }
 
-   @media (max-width: 700px) {
+  @media (max-width: 700px) {
 
   html,
   body {
@@ -371,32 +371,33 @@
     display: block;
   }
 
-
-@media (max-width: 600px) {
-
+  /* ── VERTICAL TITLE (mobile scaled version of Timbre Lab) ── */
   .vertical-title {
-    width: 44px;              /* smaller sidebar, like Timbre Lab */
-    padding-top: 1rem;        /* same vertical spacing feel */
+    width: 44px;
+    padding-top: 1rem;
   }
 
   .vertical-title span {
-    font-size: 0.8rem;       /* match Timbre Lab scale */
+    font-size: 0.8rem;
     letter-spacing: 0.18em;
 
-    writing-mode: vertical-rl; /* explicitly preserve behavior */
+    writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
 
     white-space: nowrap;
   }
 
+  /* ── MAIN CONTENT OFFSET (THIS FIXES YOUR ISSUE) ── */
   .page-content {
-    margin-left: 44px; /* matches your mobile vertical title width */
+    margin-left: 44px;              /* match vertical bar */
     width: calc(100% - 44px);
     padding: 1.5em 1em 4em;
-    min-width: 0; /* prevents overflow weirdness */
+    min-width: 0;
+    box-sizing: border-box;
   }
 
+  /* ── BLOG LAYOUT STACKING ── */
   .blog-main {
     width: 100%;
     margin-right: 0;
@@ -419,6 +420,7 @@
     box-sizing: border-box;
   }
 
+  /* ── TOOL GRID ── */
   .tools-grid {
     grid-template-columns: 1fr;
   }
@@ -432,6 +434,7 @@
     font-size: 0.48em;
     overflow: hidden;
   }
+
 }
 
   </style>
