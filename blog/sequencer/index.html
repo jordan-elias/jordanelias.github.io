@@ -447,173 +447,58 @@
     }
     .chain-clear-btn:hover { opacity: 1; color: var(--accent-hover); }
     .chain-mode-note { font-size: .65rem; color: var(--text); font-style: italic; }
-    
 
-/* ── RESPONSIVE OVERRIDE: ZERO MOBILE SCROLLING ── */
-  @media (max-width: 800px) {
-    /* Lock the entire viewport down */
-    html, body {
-      overflow: hidden !important;
-      height: 100%;
-      position: relative;
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+     
+      .loop-sidebar { display: none; }
+      .seq-body { flex-direction: column; }
+      .track-list { width: 100%; border-right: none; border-bottom: 1px solid var(--text); }
+      .track-list-inner { display: flex; flex-direction: row; flex-wrap: wrap; }
+      .track-divider { width: 100%; }
+      .track-item { width: 50%; border-right: 1px solid var(--text); min-height: 42px; }
+      .track-item:nth-child(even) { border-right: none; }
+      .grid-area { padding: .75rem; }
+      .pad-grid { max-width: 100%; gap: 5px; }
+      
+      /* Show loop section below on mobile */
+      .loop-section-mobile {
+        display: flex !important;
+        flex-direction: column;
+        gap: .5rem;
+        border-top: 1px solid var(--text);
+        padding: .65rem .85rem;
+        background: var(--bg);
+      }
+    }
+    @media (min-width: 801px) {
+      .loop-section-mobile { display: none !important; }
+    }
+    @media (max-width: 420px) {
+      .track-item { width: 100%; border-right: none; }
     }
 
-    body {
-      padding-top: 56px; /* Space for site header */
-    }
-
-    .page-wrap {
-      height: calc(100vh - 56px);
-      min-height: 0;
-      overflow: hidden;
-    }
-
-    /* Hide vertical title column and background text to save space */
-    .vertical-title { display: none !important; }
-    .page-content > p, .page-content > h2, footer { display: none !important; }
-
-    .page-content {
-      margin-left: 0;
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      max-width: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ── THE APP FRAME ── */
-    .seq-app {
-      margin: 0;
-      border: none;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    /* ── PERSISTENT TRANSPORT PANEL ── */
-    .transport {
-      padding: 0.35rem;
-      gap: 0.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: nowrap; /* Forces everything onto one single top row */
-      overflow-x: auto;  /* Allows scrolling settings if screen is ultra-narrow */
-    }
-
-    .tbtn, .t-select {
-      font-size: 0.65rem;
-      padding: 0.2rem 0.4rem;
-      min-height: 28px;
-    }
-
-    .play-btn {
-      flex-shrink: 0;
-      font-size: 0.75rem !important;
-      padding: 0.3rem 0.6rem !important;
-    }
-
-    .tempo-group { gap: 0.2rem; }
-    input[type=range].t-slider { width: 45px; }
-
-    .seq-body {
-      flex: 1;
-      flex-direction: column;
-      min-height: 0;
-      overflow: hidden;
-      justify-content: space-between;
-    }
-
-    /* ── TRACK SELECTOR: SWIPABLE HORIZONTAL ROW ── */
-    .track-list {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid var(--text);
-    }
-    .track-list-header, .track-divider { display: none; } /* Clear clutter */
-    
-    .track-list-inner {
-      display: flex;
-      flex-direction: row;
-      overflow-x: auto; /* Slide fingers sideways to switch tracks instantly */
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .track-item {
-      flex: 0 0 auto;
-      padding: 0.4rem 0.6rem;
-      border-bottom: none;
-      border-right: 1px solid var(--text);
-      min-height: 32px;
-    }
-    .track-name { font-size: 0.65rem; }
-
-    /* ── ALWAYS VISIBLE GRIDS ── */
-    .grid-area {
-      flex: 1;
-      padding: 0.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 0; /* Critical for layout scaling */
-    }
-
-    .pad-grid {
-      grid-template-columns: repeat(4, 1fr); /* Enforces the strict 4x4 */
-      grid-template-rows: repeat(4, 1fr);
-      width: auto;
-      height: 100%;
-      max-height: 42vh; /* Locks vertical size so it never pushes things down */
-      aspect-ratio: 1;  /* Keeps pads perfectly square */
-      gap: 4px;
-    }
-
-    .pad {
-      border-width: 1px;
-    }
-    .pad-step-num { font-size: 0.4rem; top: 1px; left: 2px; }
-
-    /* ── MINI FOOTER DRAWERS FOR LOOPS ── */
-    .loop-section-mobile {
-      display: flex !important;
-      flex-direction: column;
-      border-top: 1px solid var(--text);
-      padding: 0.35rem;
-      background: var(--bg);
-      gap: 0.2rem;
-    }
-    
-    .loop-slots { gap: 0.2rem; }
-    .loop-slot-btn, .chain-add-btn, .chain-select {
-      min-height: 24px;
-      font-size: 0.58rem;
-      padding: 0.1rem 0.35rem;
-    }
-    
-    .loop-section-title, .chain-title, .chain-mode-note {
-      font-size: 0.52rem;
-      margin: 0 !important;
-    }
-  }
-
-  @media (min-width: 801px) {
-    .loop-section-mobile { display: none !important; }
-  }
 
   @media (max-width: 600px) {
-    .vertical-title {
-      width: 36px;
-      top: 64px;
-      height: calc(100vh - 64px);
-      padding-top: 1rem;
-    }
-    .vertical-title span {
-      font-size: 0.8rem;
-      letter-spacing: 0.18em;
-    }
+
+  .vertical-title {
+    width: 36px;              /* was 64px */
+    top: 64px;
+    height: calc(100vh - 64px);
+    padding-top: 1rem;
   }
+
+  .vertical-title span {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+  }
+
+  .page-content {
+    margin-left: 44px;       /* match new sidebar width + breathing room */
+    width: calc(100% - 44px);
+    padding: 1.5em 1em 4em;
+  }
+}
     
   </style>
 </head>
