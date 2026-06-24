@@ -46,183 +46,6 @@
   <!-- MAIN STYLESHEET -->
   <link rel="stylesheet" href="/css/styles.css">
 
-  <style>
-    .blog-index-page main {
-      display: flex;
-      flex-direction: column;
-      height: calc(100dvh - 64px);
-      margin-top: 0;
-      margin-bottom: 0;
-      padding-top: 2em;
-      box-sizing: border-box;
-    }
-
-    .blog-index-page h1 {
-      flex-shrink: 0;
-      margin-bottom: 0.75em;
-    }
-
-    .blog-index-layout {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      gap: 0;
-    }
-
-    .blog-index-sidebar,
-    .blog-index-content {
-      overflow-y: auto;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .blog-index-sidebar::-webkit-scrollbar,
-    .blog-index-content::-webkit-scrollbar {
-      display: none;
-    }
-
-    .blog-index-sidebar {
-      flex: 0 0 33.333%;
-      padding-right: 1.5em;
-      border-right: 1px solid var(--text);
-    }
-
-    .blog-index-content {
-      flex: 1;
-      padding-left: 1.5em;
-    }
-
-    .blog-index-sidebar p {
-      margin-top: 0;
-    }
-
-    .blog-index-nav {
-      list-style: none;
-      padding: 0;
-      margin: 1.5em 0;
-    }
-
-    .blog-index-nav li {
-      margin-bottom: 0.35em;
-    }
-
-    .blog-index-booking {
-      border: 1px solid var(--text);
-      padding: 1em;
-      margin-top: 1.5em;
-      font-size: 0.92rem;
-    }
-
-    .blog-index-booking p {
-      margin: 0 0 0.75em;
-    }
-
-    .blog-index-booking p:last-child {
-      margin-bottom: 0;
-    }
-
-    .blog-index-content h2 {
-      margin-top: 0;
-    }
-
-    .blog-index-content h2 + h2,
-    .classic-section h2 {
-      margin-top: 2.5em;
-    }
-
-    .interactive-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1em;
-    }
-
-    .interactive-card {
-      border: 1px solid var(--text);
-      padding: 1em;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5em;
-    }
-
-    .interactive-card h3 {
-      font-size: 1rem;
-      margin: 0;
-    }
-
-    .interactive-card p {
-      margin: 0;
-      font-size: 0.85rem;
-      opacity: 0.75;
-    }
-
-    .interactive-card--soon h3 {
-      opacity: 0.6;
-    }
-
-    .ascii-art {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 0.62rem;
-      line-height: 1.25;
-      margin: 0;
-      padding: 0;
-      white-space: pre;
-      overflow: hidden;
-      color: var(--text);
-      letter-spacing: 0;
-    }
-
-    .classic-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      border-top: 1px solid var(--text);
-    }
-
-    .classic-list li {
-      padding: 0.85em 0;
-      border-bottom: 1px solid var(--text);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 0.5em 1em;
-    }
-
-    .classic-list time {
-      font-size: 0.85rem;
-      opacity: 0.6;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 800px) {
-      .blog-index-page main {
-        height: auto;
-      }
-
-      .blog-index-layout {
-        flex-direction: column;
-      }
-
-      .blog-index-sidebar {
-        flex: none;
-        border-right: none;
-        border-bottom: 1px solid var(--text);
-        padding-right: 0;
-        padding-bottom: 1.5em;
-        overflow-y: visible;
-      }
-
-      .blog-index-content {
-        padding-left: 0;
-        padding-top: 1.5em;
-        overflow-y: visible;
-      }
-
-      .interactive-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-
 <!-- SECURITY -->
   <meta http-equiv="Content-Security-Policy"
   content="
@@ -395,7 +218,7 @@
   
 </head>
 
-<body class="blog-index-page">
+<body>
 
 {% include header.html %}
 
@@ -403,138 +226,18 @@
 
   <h1>Music & Mental Health Blog</h1>
 
-  <div class="blog-index-layout">
+  
+  <p>
+    Articles exploring music therapy practice, neuroscience, neurodiversity,
+    and mental health research.
+  </p>
 
-    <aside class="blog-index-sidebar" aria-label="About this blog">
+  <section aria-label="Blog articles">
 
-      <p>
-        Articles, tools, and experiments at the intersection of music therapy,
-        neuroscience, neurodiversity, and mental health.
-      </p>
+    <!-- Newest post goes at the top -->
 
-      <ul class="blog-index-nav">
-        <li><a href="/blog/library/">Library</a></li>
-        <li><a href="https://lab.jordanelias.de/" target="_blank" rel="noopener">Lab</a></li>
-        <li><a href="/about/">About</a></li>
-      </ul>
 
-      <div class="blog-index-booking">
-        <p>I offer one-to-one music therapy sessions online.</p>
-        <p><a href="https://cal.com/jordan-elias/intro" target="_blank" rel="noopener">Book a free intro call</a> to see if we're a good fit.</p>
-      </div>
-
-    </aside>
-
-    <div class="blog-index-content">
-
-      <section aria-label="Interactive modules">
-        <h2>Interactive</h2>
-
-        <div class="interactive-grid">
-
-          <article class="interactive-card">
-            <pre class="ascii-art" aria-hidden="true">  [=]=]  ]=[=
-  |~><|  |><~|
-  >LOOP  LOOP<
-  ~~phase~~</pre>
-            <h3><a href="/blog/phase-machine/">Phase Machine</a></h3>
-            <p>drifting tape loops</p>
-          </article>
-
-          <article class="interactive-card">
-            <pre class="ascii-art" aria-hidden="true"> |■·■·|·■·■|
- |·■·■|■·■·|
- |K.S.H|B.L.1|
- |->16 step-|</pre>
-            <h3><a href="/blog/sequencer/">Step Sequencer</a></h3>
-            <p>rhythms &amp; melodies</p>
-          </article>
-
-          <article class="interactive-card">
-            <pre class="ascii-art" aria-hidden="true">  .:∞∞:.
- />loop>>>
-|~~◎~~|~
- *evolve*</pre>
-            <h3><a href="/blog/generative-music/">Generative Music</a></h3>
-            <p>systems &amp; process</p>
-          </article>
-
-          <article class="interactive-card">
-            <pre class="ascii-art" aria-hidden="true"> (L)~::~(R)
-   \ | /
-    \|/
-   ~40Hz~</pre>
-            <h3><a href="/blog/binaural-beats-generator/">Binaural Beats</a></h3>
-            <p>two ears, one beat</p>
-          </article>
-
-          <article class="interactive-card">
-            <pre class="ascii-art" aria-hidden="true"> |/|/|/|/|
- |~~~~~~~~|
-  \/\/\/\/
-  spectra</pre>
-            <h3><a href="/blog/timbre-lab/">Timbre Lab</a></h3>
-            <p>build a tone</p>
-          </article>
-
-          <article class="interactive-card interactive-card--soon">
-            <pre class="ascii-art" aria-hidden="true">    ()
-   /~~\
-  |    |
-   \__/
-  breathe</pre>
-            <h3>Breathing Exercises</h3>
-            <p>coming soon</p>
-          </article>
-
-          <article class="interactive-card">
-            <pre class="ascii-art" aria-hidden="true">   (@)
-  /| |\
- &lt; * * &gt;
-  L? R?</pre>
-            <h3><a href="/blog/source-localization/">Ear Training</a></h3>
-            <p>track the sound</p>
-          </article>
-
-          <article class="interactive-card">
-            <pre class="ascii-art" aria-hidden="true"> [A]~[B]~[C]
-   \ | /
-    ? ?
-  filter out</pre>
-            <h3><a href="/blog/cocktail-party-problem/">Cocktail Party Problem</a></h3>
-            <p>hear in noise</p>
-          </article>
-
-          <article class="interactive-card interactive-card--soon">
-            <pre class="ascii-art" aria-hidden="true"> /\/\/\/\
-|~DRAW~~~|
- \/\/\/\/&gt;
- film=sound</pre>
-            <h3>Oramics</h3>
-            <p>coming soon</p>
-          </article>
-
-        </div>
-      </section>
-
-      <section class="classic-section" aria-label="Classic articles">
-        <h2>Classic</h2>
-
-        <ul class="classic-list">
-          <li>
-            <a href="/blog/neurodiversity-affirming-music-therapy/">What it means to be Neurodiversity-Affirming, and how that looks in music therapy</a>
-            <time datetime="2026-03-04">March 4, 2026</time>
-          </li>
-          <li>
-            <a href="/blog/indeterminacy-in-music-and-life/">Indeterminacy in Music and Life</a>
-            <time datetime="2026-02-18">February 18, 2026</time>
-          </li>
-        </ul>
-      </section>
-
-    </div>
-
-  </div>
+    <article class="blog-card">
       <h3>
         <a href="/blog/phase-machine/">
           Steve Reich and process music: an interactive phase machine
