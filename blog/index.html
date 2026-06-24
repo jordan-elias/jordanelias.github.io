@@ -370,47 +370,26 @@
     display: block;
   }
 
- @media (max-width: 700px) {
 
+@media (max-width: 600px) {
 
   .vertical-title {
-    position: relative;
-    width: 100%;
-    height: auto;
-
-    display: block;
-
-    padding: 0.5rem 1rem;   /* tighter top space */
-    margin: 0;
-
-    border-right: none;
-    border-bottom: 1px solid var(--text);
-
-    overflow: visible;
+    width: 44px;              /* smaller sidebar, like Timbre Lab */
+    padding-top: 1rem;        /* same vertical spacing feel */
   }
 
   .vertical-title span {
-    display: block;
+    font-size: 0.8rem;       /* match Timbre Lab scale */
+    letter-spacing: 0.18em;
 
-    writing-mode: horizontal-tb;
-    transform: none;
+    writing-mode: vertical-rl; /* explicitly preserve behavior */
+    text-orientation: mixed;
+    transform: rotate(180deg);
 
-    white-space: normal;
-    overflow-wrap: break-word;
-
-    font-size: 1rem;
-    line-height: 1.2;     /* tighter vertical fit */
-    letter-spacing: 0.12em;
-
-    margin: 0;            /* removes default spacing issues */
-    padding: 0;
+    white-space: nowrap;
   }
 
 }
-   
-  .vertical-title-spacer {
-    display: none;
-  }
 
   .blog-main {
     width: 100%;
