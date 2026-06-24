@@ -368,6 +368,28 @@
       .radigue-freq-display { flex-wrap: wrap; }
       .radigue-freq-col { width: 100px; }
     }
+
+    @media (max-width: 600px) {
+
+  .vertical-title {
+    width: 36px;              /* was 64px */
+    top: 64px;
+    height: calc(100vh - 64px);
+    padding-top: 1rem;
+  }
+
+  .vertical-title span {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+  }
+
+  .page-content {
+    margin-left: 44px;       /* match new sidebar width + breathing room */
+    width: calc(100% - 44px);
+    padding: 1.5em 1em 4em;
+  }
+}
+    
   </style>
 
   <script type="application/ld+json">
@@ -453,10 +475,13 @@
 <body>
 
 {% include header.html %}
+<div class="page-wrap">
 
-<main>
+  <h1 class="vertical-title" aria-hidden="true">
+    <span>Generative Music Systems</span>
+  </h1>
 
-  <h1>Generative Music Systems</h1>
+  <main class="page-content">
 
   
   <div class="lab-section">
@@ -758,6 +783,8 @@ The central practice of Mindfulness-Based Stress Reduction is to simply direct y
   </article>
 
 </main>
+
+</div>
 
 <footer>
   <p>© 2025-2026 Jordan Elias</p>
