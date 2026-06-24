@@ -58,6 +58,60 @@
   <link rel="stylesheet" href="/css/styles.css">
 
   <style>
+
+    /* ── PAGE LAYOUT
+       The site header is fixed (styles.css), body has padding-top: 64px.
+       Below the header we have a full-width flex row:
+       [vertical title col] | [scrollable content]
+       The vertical col is position:sticky so it tracks the scroll.
+    ── */
+
+    /* Undo the max-width centering on main so our layout fills the viewport */
+    body { padding-top: 64px; }
+
+    .page-wrap {
+      display: flex;
+      align-items: flex-start;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* Vertical sticky title column */
+    .vertical-title {
+      width: 64px;
+      flex-shrink: 0;
+      position: fixed;
+      top: 64px;
+      height: calc(100vh - 64px);
+      border-right: 1px solid var(--text);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 2rem;
+      overflow: hidden;
+    }
+    .vertical-title span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--text);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* Scrollable main area — matches styles.css max-width convention */
+    .page-content {
+      flex: 1;
+      min-width: 0;
+      padding: 2em 2em 5em;
+      max-width: 960px;
+      margin-left: 72px; /* matches your vertical bar width */
+    }
+
     .lab-section {
       border: 1px solid var(--text);
       padding: 1.5em;
@@ -553,10 +607,13 @@
 
 {% include header.html %}
 
-<main>
+<div class="page-wrap">
 
+  <div class="vertical-title" aria-hidden="true">
+    <span>Binaural Beats Generator</span>
+  </div>
 
-   <h1>Binaural Beats Generator</h1>
+  <main class="page-content">
   
   <div class="lab-section">
 
@@ -815,6 +872,8 @@
   </article>
 
 </main>
+
+</div>
 
 <footer>
   <p>© 2025-2026 Jordan Elias</p>
