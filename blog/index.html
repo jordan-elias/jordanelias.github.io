@@ -389,7 +389,12 @@
     white-space: nowrap;
   }
 
-}
+  .page-content {
+    margin-left: 44px; /* matches your mobile vertical title width */
+    width: calc(100% - 44px);
+    padding: 1.5em 1em 4em;
+    min-width: 0; /* prevents overflow weirdness */
+  }
 
   .blog-main {
     width: 100%;
