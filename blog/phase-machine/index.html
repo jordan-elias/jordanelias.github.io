@@ -358,6 +358,29 @@
     }
     .cta-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); text-decoration: none; }
 
+  
+    
+  @media (max-width: 600px) {
+
+  .vertical-title {
+    width: 36px;              /* was 64px */
+    top: 64px;
+    height: calc(100vh - 64px);
+    padding-top: 1rem;
+  }
+
+  .vertical-title span {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+  }
+
+  .page-content {
+    margin-left: 44px;       /* match new sidebar width + breathing room */
+    width: calc(100% - 44px);
+    padding: 1.5em 1em 4em;
+  }
+}
+    
     @media (max-width: 600px) {
       .tape-grid { grid-template-columns: 1fr; }
       .lab-transport-sliders { flex-direction: column; gap: 16px; }
