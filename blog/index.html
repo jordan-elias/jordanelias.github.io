@@ -260,18 +260,20 @@
     }
 
    .tool-card {
-      border: 1px solid var(--text);
-      padding: 0.75rem 0.85rem;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: left;
-      gap: 1rem;
-      transition: opacity 0.15s;
-      opacity: 1;
-    }
+  border: 1px solid var(--text);
+  padding: 1rem 1.5rem;      /* Increased padding to create that nice "buffer space" */
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.15s;
+  opacity: 1;
+
+  /* Switch to grid to lock the columns in place */
+  display: grid;
+  /* Column 1 (Art): takes up exactly 120px. Column 2 (Text): takes the rest */
+  grid-template-columns: 120px 1fr; 
+  align-items: center;       /* Keeps them vertically centered relative to each other */
+  justify-content: center;   
+}
 
     .tool-card:hover { opacity: 1; }
 
@@ -283,7 +285,7 @@
       white-space: pre;
       overflow: hidden;
       flex-shrink: 0;
-      text-align: center;
+      text-align: left;
     }
 
    .tool-card h3 {
@@ -302,6 +304,7 @@
       flex-direction: column;
       min-width: 0;
       text-align: left;
+      padding-left: 0.5rem;
     }
 
 
