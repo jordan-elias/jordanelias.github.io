@@ -64,7 +64,6 @@
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
-
 <!-- Structured Data: Blog Directory -->
 <script type="application/ld+json">
 {
@@ -111,18 +110,10 @@
         }
       },
       "knowsAbout": [
-        "Music Therapy",
-        "Neurodiversity",
-        "Autism",
-        "ADHD",
-        "Anxiety",
-        "Burnout",
-        "Emotional Regulation",
-        "Neuroscience of Music",
-        "Creative Therapy",
-        "Trauma-Informed Practice",
-        "Music and Neuroplasticity",
-        "Queer Affirming Therapy"
+        "Music Therapy", "Neurodiversity", "Autism", "ADHD", "Anxiety",
+        "Burnout", "Emotional Regulation", "Neuroscience of Music",
+        "Creative Therapy", "Trauma-Informed Practice",
+        "Music and Neuroplasticity", "Queer Affirming Therapy"
       ],
       "sameAs": [
         "https://www.instagram.com/music_therapy_berlin/"
@@ -133,9 +124,7 @@
       "@id": "https://jordanelias.de/#service",
       "name": "Jordan Elias Music Therapy",
       "url": "https://jordanelias.de/",
-      "founder": {
-        "@id": "https://jordanelias.de/#person"
-      }
+      "founder": { "@id": "https://jordanelias.de/#person" }
     },
     {
       "@type": "Blog",
@@ -143,38 +132,19 @@
       "name": "Music Therapy and Mental Health — Jordan Elias",
       "description": "A blog exploring music therapy, mental health, neurodiversity, and creative wellbeing. Written by a board-certified music therapist based in Berlin.",
       "url": "https://jordanelias.de/blog/",
-      "author": {
-        "@id": "https://jordanelias.de/#person"
-      },
-      "publisher": {
-        "@id": "https://jordanelias.de/#service"
-      },
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "publisher": { "@id": "https://jordanelias.de/#service" },
       "inLanguage": "en",
       "audience": {
         "@type": "Audience",
         "audienceType": "Neurodivergent individuals, LGBTQIA+ community, musicians, creatives seeking mental health support"
       },
       "about": [
-        {
-          "@type": "Thing",
-          "name": "Music Therapy",
-          "sameAs": "https://en.wikipedia.org/wiki/Music_therapy"
-        },
-        {
-          "@type": "Thing",
-          "name": "Neurodiversity",
-          "sameAs": "https://en.wikipedia.org/wiki/Neurodiversity"
-        },
-        {
-          "@type": "Thing",
-          "name": "Mental Health",
-          "sameAs": "https://en.wikipedia.org/wiki/Mental_health"
-        }
+        { "@type": "Thing", "name": "Music Therapy", "sameAs": "https://en.wikipedia.org/wiki/Music_therapy" },
+        { "@type": "Thing", "name": "Neurodiversity", "sameAs": "https://en.wikipedia.org/wiki/Neurodiversity" },
+        { "@type": "Thing", "name": "Mental Health", "sameAs": "https://en.wikipedia.org/wiki/Mental_health" }
       ],
-      "isPartOf": {
-        "@type": "WebSite",
-        "@id": "https://jordanelias.de/#website"
-      }
+      "isPartOf": { "@type": "WebSite", "@id": "https://jordanelias.de/#website" }
     },
     {
       "@type": "CollectionPage",
@@ -182,33 +152,16 @@
       "url": "https://jordanelias.de/blog/",
       "name": "Blog — Music Therapy, Neurodiversity & Creative Wellbeing",
       "description": "Browse all articles by Jordan Elias on music therapy, mental health, neurodiversity, and creative approaches to emotional wellbeing.",
-      "author": {
-        "@id": "https://jordanelias.de/#person"
-      },
-      "about": {
-        "@id": "https://jordanelias.de/blog/#blog"
-      },
-      "isPartOf": {
-        "@type": "WebSite",
-        "@id": "https://jordanelias.de/#website"
-      }
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "about": { "@id": "https://jordanelias.de/blog/#blog" },
+      "isPartOf": { "@type": "WebSite", "@id": "https://jordanelias.de/#website" }
     },
     {
       "@type": "BreadcrumbList",
       "@id": "https://jordanelias.de/blog/#breadcrumb",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://jordanelias.de/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Blog",
-          "item": "https://jordanelias.de/blog/"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" }
       ]
     }
   ]
@@ -216,65 +169,88 @@
 </script>
 
   <style>
-    /* Two-column blog layout */
-    .blog-layout {
+
+    /* ── GLOBAL PAGE SETUP
+       Matches the timbre lab pattern: fixed header (from styles.css) gives
+       body padding-top: 64px. Below that is a full-width flex row of three
+       compartments separated by border-right lines.
+    ── */
+
+    body { padding-top: 64px; }
+
+    .page-wrap {
       display: flex;
-      gap: 2rem;
+      align-items: stretch;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ── COLUMN 1: vertical title — fixed, same as timbre lab ── */
+    .vertical-title {
+      width: 64px;
+      flex-shrink: 0;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      height: calc(100vh - 64px);
+      border-right: 1px solid var(--text);
+      display: flex;
       align-items: flex-start;
+      justify-content: center;
+      padding-top: 2rem;
+      overflow: hidden;
+      z-index: 10;
     }
 
-    /* Left sidebar — ~1/3 width, independently scrollable */
-    .blog-sidebar {
-      flex: 0 0 30%;
-      position: sticky;
-      top: 2rem;
-      max-height: calc(100vh - 4rem);
-      overflow-y: auto;
-      scrollbar-width: none; /* Firefox */
-    }
-    .blog-sidebar::-webkit-scrollbar {
-      display: none; /* Chrome/Safari */
-    }
-
-    /* Right main column — ~2/3 width, independently scrollable */
-    .blog-main {
-      flex: 1 1 0%;
-      min-width: 0;
-      max-height: calc(100vh - 4rem);
-      overflow-y: auto;
-      scrollbar-width: none;
-    }
-    .blog-main::-webkit-scrollbar {
-      display: none;
+    .vertical-title span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--text);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      user-select: none;
     }
 
-    /* Divider between columns — uses currentColor so it inherits the site's text colour */
-    .blog-divider {
-      width: 1px;
-      background-color: currentColor;
-      opacity: 0.2;
-      align-self: stretch;
+    /* Spacer div pushes the two content columns past the fixed title bar */
+    .vertical-title-spacer {
+      width: 64px;
       flex-shrink: 0;
     }
 
-    /* Sidebar blocks */
-    .sidebar-intro {
-      margin-bottom: 1.5rem;
+    /* ── COLUMN 2: tools / main content ── */
+    .blog-main {
+      flex: 2 1 0%;
+      min-width: 0;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+      scrollbar-width: none;
+      border-right: 1px solid var(--text);
+      padding: 2em 2em 5em;
+      position: sticky;
+      top: 64px;
     }
 
-    .sidebar-box {
-      border: 1px solid currentColor;
-      opacity: 0.85;
-      padding: 1rem;
-      margin-top: 1.5rem;
+    .blog-main::-webkit-scrollbar { display: none; }
+
+    /* ── COLUMN 3: sidebar / description ── */
+    .blog-sidebar {
+      flex: 1 1 0%;
+      min-width: 0;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+      scrollbar-width: none;
+      padding: 2em 1.5em 5em;
+      position: sticky;
+      top: 64px;
     }
 
-    .sidebar-box p {
-      margin: 0 0 0.75rem;
-      font-size: 0.9em;
-    }
+    .blog-sidebar::-webkit-scrollbar { display: none; }
 
-    /* Tools grid — 2 per row */
+    /* ── TOOLS GRID — 2 per row ── */
     .tools-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -283,26 +259,28 @@
     }
 
     .tool-card {
-      border: 1px solid currentColor;
-      opacity: 0.85;
-      padding: 0.85rem;
+      border: 1px solid var(--text);
+      padding: 0.85rem 0.85rem 1rem;
       text-decoration: none;
       color: inherit;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
       transition: opacity 0.15s;
+      opacity: 0.85;
     }
 
-    .tool-card:hover {
-      opacity: 1;
-    }
+    .tool-card:hover { opacity: 1; }
 
     .tool-card pre {
       font-family: monospace;
       font-size: 0.65em;
       line-height: 1.3;
-      margin: 0 0 0.6rem;
+      margin: 0 0 0.75rem;
       white-space: pre;
       overflow: hidden;
+      text-align: left; /* keep ascii art left-aligned within centered card */
     }
 
     .tool-card h3 {
@@ -315,7 +293,7 @@
       font-size: 0.8em;
     }
 
-    /* Section label / divider */
+    /* ── SECTION LABELS ── */
     .section-label {
       font-size: 0.75em;
       letter-spacing: 0.08em;
@@ -326,12 +304,12 @@
 
     .section-rule {
       border: none;
-      border-top: 1px solid currentColor;
+      border-top: 1px solid var(--text);
       opacity: 0.2;
       margin: 1.5rem 0;
     }
 
-    /* Articles list */
+    /* ── ARTICLES LIST ── */
     .articles-list {
       list-style: none;
       padding: 0;
@@ -344,23 +322,93 @@
       align-items: baseline;
       gap: 1rem;
       padding: 0.5rem 0;
-      border-bottom: 1px solid currentColor;
+      border-bottom: 1px solid var(--text);
       opacity: 0.85;
     }
 
-    .articles-list li:last-child {
-      border-bottom: none;
-    }
+    .articles-list li:last-child { border-bottom: none; }
 
-    .articles-list a {
-      font-size: 0.95em;
-    }
+    .articles-list a { font-size: 0.95em; }
 
     .articles-list time {
       font-size: 0.8em;
       white-space: nowrap;
       opacity: 0.6;
     }
+
+    /* ── SIDEBAR CONTENT ── */
+    .sidebar-intro { margin-bottom: 2rem; }
+
+    .sidebar-box {
+      border: 1px solid var(--text);
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .sidebar-box p {
+      margin: 0 0 0.75rem;
+      font-size: 0.9em;
+    }
+
+    /* ── MOBILE: stack columns vertically ── */
+    @media (max-width: 700px) {
+
+      .page-wrap {
+        flex-direction: column;
+      }
+
+      /* On mobile the fixed vertical title becomes a top banner */
+      .vertical-title {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--text);
+        padding: 0.75rem 1rem;
+        justify-content: flex-start;
+        align-items: center;
+      }
+
+      .vertical-title span {
+        writing-mode: horizontal-tb;
+        transform: none;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+      }
+
+      .vertical-title-spacer { display: none; }
+
+      /* Tools column: full width, natural height, no sticky */
+      .blog-main {
+        position: static;
+        height: auto;
+        overflow-y: visible;
+        border-right: none;
+        border-bottom: 1px solid var(--text);
+        padding: 1.5em 1em 2em;
+      }
+
+      /* Sidebar column: full width below tools */
+      .blog-sidebar {
+        position: static;
+        height: auto;
+        overflow-y: visible;
+        padding: 1.5em 1em 3em;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 
 </head>
@@ -369,167 +417,156 @@
 
 {% include header.html %}
 
-<main>
+<div class="page-wrap">
 
-  <h1>Music & Mental Health Blog</h1>
+  <!-- COLUMN 1: fixed vertical title -->
+  <div class="vertical-title" aria-hidden="true">
+    <span>Blog</span>
+  </div>
 
-  <div class="blog-layout">
+  <!-- Spacer to push columns past the fixed bar -->
+  <div class="vertical-title-spacer"></div>
 
-    <!-- LEFT SIDEBAR -->
-    <aside class="blog-sidebar" aria-label="About this blog">
+  <!-- COLUMN 2: tools + articles -->
+  <main class="blog-main" aria-label="Blog content">
 
-      <div class="sidebar-intro">
-        <p>
-          Articles exploring music therapy practice, neuroscience, neurodiversity,
-          and mental health research.
-        </p>
-        <p>
-          <a href="/blog/library/">Library</a>
-        </p>
-      </div>
+    <p class="section-label">Tools</p>
 
-      <div class="sidebar-box">
-        <p>I offer one-to-one sessions online and in person.</p>
-        <a href="/contact/">Book a free intro call</a>
-      </div>
+    <section class="tools-grid" aria-label="Interactive tools">
 
-    </aside>
-
-    <!-- COLUMN DIVIDER -->
-    <div class="blog-divider" aria-hidden="true"></div>
-
-    <!-- RIGHT MAIN COLUMN -->
-    <div class="blog-main">
-
-      <!-- TOOLS SECTION -->
-      <p class="section-label">Tools</p>
-
-      <section class="tools-grid" aria-label="Interactive tools">
-
-        <a class="tool-card" href="/blog/phase-machine/">
-          <pre>
+      <a class="tool-card" href="/blog/phase-machine/">
+        <pre>
   )|( )|( )|(  )|( )|(
 ~-=[ . . . . . . . ]=~
   )|( .   )|( . )|(
 ~-=[ . . . . . . . ]=~
-  )|( )|( . . . )|(
-          </pre>
-          <h3>Phase Machine</h3>
-          <p>Tape loops drift</p>
-        </a>
+  )|( )|( . . . )|(</pre>
+        <h3>Phase Machine</h3>
+        <p>Two tapes drift</p>
+      </a>
 
-        <a class="tool-card" href="/blog/binaural-beats-generator/">
-          <pre>
+      <a class="tool-card" href="/blog/binaural-beats-generator/">
+        <pre>
   /~L~\ /~R~\  /~L~\
 -( 440 )-( 444 )-
   \___/ \___/  \___/
  ....::::::....::::
-  [  beat: 4 hz  ]
-          </pre>
-          <h3>Binaural Beats</h3>
-          <p>Interference patterns</p>
-        </a>
+  [  beat: 4 hz  ]</pre>
+        <h3>Binaural Beats</h3>
+        <p>Interference</p>
+      </a>
 
-        <a class="tool-card" href="/blog/sequencer/">
-  <pre>
-: . : | : . | : . : |
-+--+--+--+--+--+--+-+
-| ¦ |::| ¦ |::| ¦ |:|
-+--+--+--+--+--+--+-+
-: | : . : | : . | : .
-  </pre>
-  <h3>Sequencer</h3>
-  <p>Rhythm and melody</p>
-</a>
-
-        <a class="tool-card" href="/blog/generative-music/">
-          <pre>
+      <a class="tool-card" href="/blog/generative-music/">
+        <pre>
  .  o  .  O  .  o  .
 |-->-->-->-->-->-->--|
  \  seed: [|||] /
   '->->->->->-'
- .  O  .  o  .  O  .
-          </pre>
-          <h3>Generative Music</h3>
-          <p>Music from process</p>
-        </a>
+ .  O  .  o  .  O  .</pre>
+        <h3>Generative Music</h3>
+        <p>Process unfolding.</p>
+      </a>
 
-        <a class="tool-card" href="/blog/timbre-lab/">
-          <pre>
+      <a class="tool-card" href="/blog/timbre-lab/">
+        <pre>
  f1  ~~^~~  f2  ^^^
 |  /\/\/\  /\/\/\  |
 | /  /\/  /\/\/\   |
 |/  /  \ /\/\/\/\  |
-[=====waveform=====]
-          </pre>
-          <h3>Timbre Lab</h3>
-          <p>Shape the waveform</p>
-        </a>
+[=====waveform=====]</pre>
+        <h3>Timbre Lab</h3>
+        <p>Shape the waveform</p>
+      </a>
 
-        <a class="tool-card" href="/blog/ear-training/">
-          <pre>
- do   re   mi   fa
-(C)---(D)---(E)---(F)
- |  *right* | *wrong*
-(G)---(A)---(B)---(C)
- sol  la    ti    do
-          </pre>
-          <h3>Ear Training</h3>
-          <p>Hear patterns</p>
-        </a>
+      <a class="tool-card" href="/blog/sequencer/">
+        <pre>
+: . : | : . | : . : |
++--+--+--+--+--+--+-+
+| ¦ |::| ¦ |::| ¦ |:|
++--+--+--+--+--+--+-+
+: | : . : | : . | : .</pre>
+        <h3>Sequencer</h3>
+        <p>Rhythm and melody.</p>
+      </a>
 
-        <a class="tool-card" href="#">
-          <pre>
- __[wheel]_________
-|  o  .  *  .  o  |
-| /|\ freq->pitch  |
-|  |  .  o  .  *  |
-|__[Daphne Oram]___|
-          </pre>
-          <h3>Oramics</h3>
-          <p>Draw sound</p>
-        </a>
-
-        <a class="tool-card" href="/blog/breathing/">
-  <pre>
+      <a class="tool-card" href="#">
+        <pre>
   ))  (( ))  (( ))
  )  ~~^^~~^^~~  (
 (   >  <><>  <   )
  )  ~~vv~~vv~~  (
-  ))  (( ))  (( ))
-  </pre>
-  <h3>Breathing Exercises</h3>
-  <p>Expand and contract</p>
-</a>
+  ))  (( ))  (( ))</pre>
+        <h3>Breathing Exercises</h3>
+        <p>Expand and contract</p>
+      </a>
 
-      </section>
+      <a class="tool-card" href="/blog/ear-training/">
+        <pre>
+ do   re   mi   fa
+(C)---(D)---(E)---(F)
+ |  *right* | *wrong*
+(G)---(A)---(B)---(C)
+ sol  la    ti    do</pre>
+        <h3>Ear Training</h3>
+        <p>Hear patterns</p>
+      </a>
 
-      <!-- ARTICLES SECTION -->
-      <hr class="section-rule">
-      <p class="section-label">Articles</p>
+      <a class="tool-card" href="#">
+        <pre>
+ __[wheel]_________
+|  o  .  *  .  o  |
+| /|\ freq->pitch  |
+|  |  .  o  .  *  |
+|__[Daphne Oram]___|</pre>
+        <h3>Oramics</h3>
+        <p>Draw sound</p>
+      </a>
 
-      <ul class="articles-list">
-        <li>
-          <a href="/blog/neurodiversity-affirming-music-therapy/">What it means to be Neurodiversity-Affirming</a>
-          <time datetime="2026-03-04">Mar 4, 2026</time>
-        </li>
-        <li>
-          <a href="/blog/indeterminacy-in-music-and-life/">Indeterminacy in Music and Life</a>
-          <time datetime="2026-02-18">Feb 18, 2026</time>
-        </li>
-      </ul>
+    </section>
 
-    </div><!-- /.blog-main -->
+    <hr class="section-rule">
+    <p class="section-label">Articles</p>
 
-  </div><!-- /.blog-layout -->
+    <ul class="articles-list">
+      <li>
+        <a href="/blog/neurodiversity-affirming-music-therapy/">What it means to be Neurodiversity-Affirming</a>
+        <time datetime="2026-03-04">Mar 4, 2026</time>
+      </li>
+      <li>
+        <a href="/blog/indeterminacy-in-music-and-life/">Indeterminacy in Music and Life</a>
+        <time datetime="2026-02-18">Feb 18, 2026</time>
+      </li>
+    </ul>
 
-</main>
+  </main>
+
+  <!-- COLUMN 3: description + booking -->
+  <aside class="blog-sidebar" aria-label="About this blog">
+
+    <div class="sidebar-intro">
+      <p>
+        Articles exploring music therapy practice, neuroscience, neurodiversity,
+        and mental health research.
+      </p>
+      <p>
+        <a href="/blog/library/">Resource Library</a>
+      </p>
+    </div>
+
+    <div class="sidebar-box">
+      <p>I offer one-to-one sessions online and in person.</p>
+      <a href="/contact/">Book a free intro call</a>
+    </div>
+
+  </aside>
+
+</div>
 
 <footer>
   <p>© 2025-2026 Jordan Elias</p>
 </footer>
 
-  <script src="/js/header.js"></script>
-  
+<script src="/js/header.js"></script>
+
 </body>
 </html>
