@@ -46,12 +46,13 @@ main {
 }
 
 .header-inner {
-  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1em;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5em; /* optional: gives breathing room at edges */
 }
 
 /* Site title / wordmark */
