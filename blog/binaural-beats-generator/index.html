@@ -128,7 +128,7 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text);
-      opacity: 0.5;
+      opacity: 1;
       margin: 0 0 1em;
     }
 
@@ -173,7 +173,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text);
-      opacity: 0.5;
+      opacity: 1;
     }
 
     .bb-freq-val {
@@ -197,7 +197,7 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
       color: var(--text);
-      opacity: 0.6;
+      opacity: 1;
       line-height: 1.5;
       text-align: center;
     }
@@ -247,7 +247,7 @@
     }
 
     .lab-btn:disabled {
-      opacity: 0.3;
+      opacity: 1;
       cursor: not-allowed;
     }
 
@@ -256,7 +256,7 @@
       font-size: 0.85rem;
       font-weight: 500;
       color: var(--text);
-      opacity: 0.6;
+      opacity: 1;
       min-width: 48px;
       letter-spacing: 0.05em;
     }
@@ -284,7 +284,7 @@
       background: var(--text);
       outline: none;
       cursor: pointer;
-      opacity: 0.5;
+      opacity: 1;
     }
 
     .lab-ctrl input[type=range]::-webkit-slider-thumb {
@@ -317,14 +317,14 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text);
-      opacity: 0.5;
+      opacity: 1;
     }
 
     .lab-ctrl-val {
       font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       color: var(--text);
-      opacity: 0.7;
+      opacity: 1;
     }
 
     /* Row labels shared style */
@@ -334,7 +334,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text);
-      opacity: 0.5;
+      opacity: 1;
       margin-right: 4px;
       white-space: nowrap;
     }
@@ -355,7 +355,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text);
-      opacity: 0.5;
+      opacity: 1;
       margin-right: 4px;
     }
 
@@ -412,14 +412,14 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       color: var(--text);
-      opacity: 0.45;
+      opacity: 1;
     }
 
     .lab-hint {
       font-family: 'Inter', sans-serif;
       font-size: 0.8rem;
       color: var(--text);
-      opacity: 0.5;
+      opacity: 1;
       margin-top: 1.25em;
       text-align: center;
     }
@@ -466,7 +466,7 @@
       padding: 0.65em 0.75em;
       border-bottom: 1px solid var(--text);
       color: var(--text);
-      opacity: 0.85;
+      opacity: 1;
       vertical-align: top;
       line-height: 1.5;
     }
@@ -508,6 +508,15 @@
       text-decoration: none;
     }
 
+    @media (max-width: 600px) {
+
+  .page-content {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 1.25em 1em 4em;
+  }
+      
     @media (max-width: 600px) {
       .lab-transport-sliders { flex-direction: column; gap: 16px; }
       #btn-play { width: 90px; -webkit-tap-highlight-color: transparent; }
