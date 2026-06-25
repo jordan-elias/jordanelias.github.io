@@ -1032,18 +1032,28 @@ function renderPH(step){
 function renderPads(){
   const td=loops[editLoop][activeTrack];
   const tr=TRACKS[activeTrack];
+
   document.querySelectorAll('.pad').forEach((pad,i)=>{
     const cell=td[i];
     const on=cell!==null&&cell!==false;
+
     pad.classList.toggle('on',on);
-    pad.style.background='';pad.style.borderColor='';
+
+    pad.style.background='';
+    pad.style.borderColor='';
+
     const ne=pad.querySelector('.pad-note');
+
     if(ne){
       if(tr.type==='melodic'&&on){
         ne.textContent=noteName(rootKey,scaleName,typeof cell==='number'?cell:4);
         ne.style.display='';
-      }else ne.style.display='none';
+      } else {
+        ne.textContent='';        // IMPORTANT FIX
+        ne.style.display='none';
+      }
     }
+
     pad.classList.toggle('playing',i===lastPH);
   });
 }
