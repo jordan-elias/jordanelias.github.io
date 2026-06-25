@@ -53,9 +53,9 @@ content="
   img-src 'self' data: https:;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   font-src 'self' https://fonts.gstatic.com;
-  script-src 'self' https://cloud.umami.is;
+  script-src 'self' https://cloud.umami.is https://app.cal.com https://cal.com;
   connect-src 'self' https://api-gateway.umami.dev;
-  frame-src https://complicated.life;
+  frame-src https://complicated.life; https://cal.com
   object-src 'none';
   base-uri 'self';
   frame-ancestors 'none';
@@ -196,10 +196,6 @@ content="
 
     <h2>Get in Touch</h2>
 
-
-      <div class="cta-wrap">
-        <a href="https://cal.com/jordan-elias/intro" target="_blank" rel="noopener noreferrer" class="cta-btn">Book an intro call</a>
-      </div>
   
     <p>
       <strong>I am currently accepting new clients.</strong> 
@@ -222,6 +218,82 @@ content="
     <p>
       Follow me on <a href="https://www.instagram.com/music_therapy_berlin/" target="_blank" rel="noopener noreferrer">Instagram</a>.
     </p>
+  </section>
+
+  <section>
+
+    <!-- Cal inline embed code begins -->
+
+<div class="cal-container" id="my-cal-inline-intro"></div>
+
+<script type="text/javascript">
+  (function (C, A, L) {
+    let p = function (a, ar) { a.q.push(ar); };
+    let d = C.document;
+
+    C.Cal = C.Cal || function () {
+      let cal = C.Cal;
+      let ar = arguments;
+
+      if (!cal.loaded) {
+        cal.ns = {};
+        cal.q = cal.q || [];
+        d.head.appendChild(d.createElement("script")).src = A;
+        cal.loaded = true;
+      }
+
+      if (ar[0] === L) {
+        const api = function () { p(api, arguments); };
+        const namespace = ar[1];
+        api.q = api.q || [];
+
+        if (typeof namespace === "string") {
+          cal.ns[namespace] = cal.ns[namespace] || api;
+          p(cal.ns[namespace], ar);
+          p(cal, ["initNamespace", namespace]);
+        } else {
+          p(cal, ar);
+        }
+
+        return;
+      }
+
+      p(cal, ar);
+    };
+  })(window, "https://app.cal.com/embed/embed.js", "init");
+
+  Cal("init", "intro", { origin: "https://app.cal.com" });
+
+  Cal.config = Cal.config || {};
+  Cal.config.forwardQueryParams = true;
+
+  Cal.ns.intro("inline", {
+    elementOrSelector: "#my-cal-inline-intro",
+    calLink: "jordan-elias/intro",
+    config: {
+      layout: "month_view",
+      useSlotsViewOnSmallScreen: "true",
+      theme: "light"
+    }
+  });
+
+  Cal.ns.intro("ui", {
+    theme: "light",
+    cssVarsPerTheme: {
+      light: {
+        "cal-brand": "#F1C6D3"
+      },
+      dark: {
+        "cal-brand": "#F1C6D3"
+      }
+    },
+    hideEventTypeDetails: false,
+    layout: "month_view"
+  });
+</script>
+
+<!-- Cal inline embed code ends -->
+    
   </section>
 
   
