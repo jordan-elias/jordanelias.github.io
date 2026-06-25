@@ -1044,15 +1044,16 @@ function renderPads(){
 
     const ne=pad.querySelector('.pad-note');
 
-    if(ne){
-      if(tr.type==='melodic'&&on){
-        ne.textContent=noteName(rootKey,scaleName,typeof cell==='number'?cell:4);
-        ne.style.display='';
-      } else {
-        ne.textContent='';        // IMPORTANT FIX
-        ne.style.display='none';
-      }
-    }
+    if (ne) {
+  ne.textContent = '';
+
+  if (tr.type === 'melodic' && on) {
+    ne.textContent = noteName(rootKey, scaleName, typeof cell === 'number' ? cell : 4);
+    ne.style.display = '';
+  } else {
+    ne.style.display = 'none';
+  }
+}
 
     pad.classList.toggle('playing',i===lastPH);
   });
@@ -1228,10 +1229,7 @@ function setTrack(i){
 
   updateInfo();
 
-  // IMPORTANT: ensure DOM state updates after layout flush
-  requestAnimationFrame(() => {
-    renderPads();
-  });
+  renderPads();
 }
   
 function setEditLoop(i){closePicker();editLoop=i;syncLoopDots();renderPads();}
