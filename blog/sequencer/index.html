@@ -1146,12 +1146,20 @@ function renderChain(){
   });
 }
 function updateInfo(){
-  const tr=TRACKS[activeTrack];
-  document.getElementById('info-track').textContent=tr.name;
-  document.getElementById('info-hint').textContent=tr.hint;
-  const m=tr.type==='melodic';
-  document.getElementById('key-select').style.opacity=m?'1':'.4';
-  document.getElementById('scale-select').style.opacity=m?'1':'.4';
+  const tr = TRACKS[activeTrack];
+
+  const elTrack = document.getElementById('info-track');
+  const elHint = document.getElementById('info-hint');
+
+  if (elTrack) elTrack.textContent = tr.name;
+  if (elHint) elHint.textContent = tr.hint;
+
+  const m = tr.type === 'melodic';
+  const key = document.getElementById('key-select');
+  const scale = document.getElementById('scale-select');
+
+  if (key) key.style.opacity = m ? '1' : '.4';
+  if (scale) scale.style.opacity = m ? '1' : '.4';
 }
 
 /* ── NOTE PICKER ── */
