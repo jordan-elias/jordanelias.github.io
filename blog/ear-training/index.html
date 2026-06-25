@@ -478,14 +478,24 @@
     margin-bottom: 0.6em;
   }
 
-  /* ─────────────────────────────
-     CONTROLS (STACK + TIGHTEN)
+   /* ─────────────────────────────
+     CONTROLS (MODE + ROOT INLINE)
      ───────────────────────────── */
+
   .et-controls {
     gap: 0.6em;
     margin-bottom: 0.8em;
   }
 
+  /* Make first two groups sit side-by-side */
+  #intervalSettings {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5em;
+    align-items: start;
+  }
+
+  /* Keep groups compact */
   .et-ctrl-group {
     gap: 0.25em;
   }
@@ -498,6 +508,12 @@
     font-size: 0.7rem;
     padding: 3px 8px;
     min-height: 26px;
+  }
+
+  /* Ensure toggle rows don't force wrapping too early */
+  .et-toggle-row {
+    flex-wrap: wrap;
+    gap: 3px;
   }
 
   /* Apply button smaller, centered feel */
@@ -1120,7 +1136,7 @@ const Game = window.Game = {
     area.innerHTML = `
       <span class="et-section-label">Select the interval</span>
       <div class="et-grid" id="intervalGrid"></div>
-      <p class="et-hint" id="answerHint">Select an answer, then submit.</p>`;
+     
     const grid = document.getElementById('intervalGrid');
     pool.forEach((iv) => {
       const btn = document.createElement('button');
