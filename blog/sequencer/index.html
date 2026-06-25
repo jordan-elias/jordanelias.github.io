@@ -788,25 +788,6 @@ const TRACKS = [
   { id:'lead3',  name:'Lead 3', type:'melodic', hint:'Lead 3: third melodic voice for harmony or counter-melody.' },
 ];
 
-function getTrackLabel(tr, i) {
-  const isMobile = window.matchMedia("(max-width: 800px)").matches;
-
-  if (!isMobile) return tr.name;
-
-  const map = {
-    kick: 'K',
-    snare: 'S',
-    hihat: 'H',
-    cymbal: 'C',
-    bass: '1',
-    lead1: '2',
-    lead2: '3',
-    lead3: '4'
-  };
-
-  return map[tr.id] ?? tr.name;
-}
-
 const SCALES = {
   major:           [0,2,4,5,7,9,11,12],
   minor:           [0,2,3,5,7,8,10,12],
@@ -1072,10 +1053,7 @@ function buildTracks(){
     const item=document.createElement('div');
     item.className='track-item'+(i===activeTrack?' active':'');
     item.id='ti-'+i;
-    item.innerHTML =
-  `<span class="track-dot"></span>
-   <span class="track-name">${getTrackLabel(tr, i)}</span>
-   <span class="track-type-badge">${tr.type==='drum'?'rhy':'mel'}</span>`;
+    item.innerHTML=`<span class="track-dot"></span><span class="track-name">${tr.name}</span><span class="track-type-badge">${tr.type==='drum'?'rhy':'mel'}</span>`;
     item.addEventListener('click',()=>setTrack(i));
     inner.appendChild(item);
   });
@@ -1209,7 +1187,7 @@ function setTrack(i){
   closePicker();activeTrack=i;
   document.querySelectorAll('.track-item').forEach(el=>el.classList.remove('active'));
   const it=document.getElementById('ti-'+i);if(it)it.classList.add('active');
-  updateInfo();requestAnimationFrame(() => renderPads());
+  updateInfo();renderPads();
 }
 function setEditLoop(i){closePicker();editLoop=i;syncLoopDots();renderPads();}
 function togglePlay(){
@@ -1323,19 +1301,6 @@ document.getElementById('btn-export').addEventListener('click',async()=>{
 const mAdd=document.getElementById('btn-chain-add-m');
 const mClear=document.getElementById('btn-chain-clear-m');
 const mExport=document.getElementById('btn-export-m');
-
-const loopToggleBtn = document.getElementById('loopToggleBtn');
-const loopPanel = document.getElementById('loopPanelInner');
-
-if (loopToggleBtn && loopPanel) {
-  loopToggleBtn.addEventListener('click', () => {
-    const isOpen = loopPanel.classList.contains('open');
-
-    loopPanel.classList.toggle('open', !isOpen);
-    loopToggleBtn.classList.toggle('open', !isOpen);
-  });
-}
-  
 const mCopyLoop=document.getElementById('copyLoopBtnMobile');
 if(mAdd) mAdd.addEventListener('click',()=>{
   const li=parseInt(document.getElementById('chain-loop-sel-m').value)-1;
