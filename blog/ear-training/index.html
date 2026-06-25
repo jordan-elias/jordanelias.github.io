@@ -767,7 +767,7 @@
         <!-- Submit row -->
         <div class="et-submit-row">
           <button class="et-submit" id="submitBtn" onclick="Game.checkAnswer()" disabled>Submit</button>
-          <button class="et-next" id="nextBtn" onclick="Game.next()">Next →</button>
+          <button class="et-next" id="nextBtn" onclick="Game.next()">Next</button>
           <div class="et-feedback" id="feedback"></div>
         </div>
       </div>
@@ -1261,7 +1261,7 @@ const Game = window.Game = {
         btn.disabled = true;
       });
       const name = G.currentAnswer.interval.name;
-      feedbackEl.textContent = correct ? `✓ ${name}` : `${name} (${G.currentAnswer.interval.short})`;
+      feedbackEl.textContent = correct ? `${name}` : `${name} (${G.currentAnswer.interval.short})`;
       if (!correct) G.errors[name] = (G.errors[name] || 0) + 1;
 
     } else {
