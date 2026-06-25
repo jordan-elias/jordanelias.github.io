@@ -224,7 +224,7 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: white;
+      color: var(--text);
       opacity: 0.92;
       text-shadow: 0 1px 3px rgba(0,0,0,.2);
       pointer-events: none;
@@ -723,11 +723,11 @@ function easeOut(t) { return 1-Math.pow(1-clamp(t,0,1),2.2); }
 // COLOUR
 // ─────────────────────────────────────────────────────────
 const PHASE_HSL = {
-  inhale:  [196, 72, 62],
-  hold:    [165, 40, 55],
-  exhale:  [148, 38, 38],
-  rest:    [150, 18, 68],
-  settle:  [150, 15, 75],
+  inhale:  [346, 85, 68],   // coral-pink — energised, expansive (near --accent-hover)
+  hold:    [280, 45, 58],   // blue-violet — suspended, between coral and cobalt
+  exhale:  [236, 55, 48],   // cobalt blue — grounding, releasing (near --text)
+  rest:    [236, 35, 65],   // soft periwinkle — neutral, open
+  settle:  [344, 30, 78],   // blush — close to --bg, gentle entry state
 };
 const SIZES = { settle: 0.59, inhale: 1.00, hold: 0.97, exhale: 0.46, rest: 0.48 };
 const MIN_PX = 44, MAX_PX = 118;
