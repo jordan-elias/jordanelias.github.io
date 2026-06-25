@@ -723,11 +723,11 @@ function easeOut(t) { return 1-Math.pow(1-clamp(t,0,1),2.2); }
 // COLOUR
 // ─────────────────────────────────────────────────────────
 const PHASE_HSL = {
-  inhale:  [346, 85, 68],   // coral-pink — energised, expansive (near --accent-hover)
-  hold:    [280, 45, 58],   // blue-violet — suspended, between coral and cobalt
-  exhale:  [236, 55, 48],   // cobalt blue — grounding, releasing (near --text)
-  rest:    [236, 35, 65],   // soft periwinkle — neutral, open
-  settle:  [344, 30, 78],   // blush — close to --bg, gentle entry state
+  inhale: [346, 78, 66],   // warm rose-coral (slightly desaturated to reduce glare)
+  hold:   [280, 38, 56],   // softened violet (less neon, more atmospheric)
+  exhale: [230, 42, 44],   // deeper indigo-blue (less cobalt, more grounded)
+  rest:   [235, 22, 72],   // pale foggy periwinkle (much lower saturation = neutrality)
+  settle: [345, 18, 80],   // warm blush-gray (closer to background, less “colorful”)
 };
 const SIZES = { settle: 0.59, inhale: 1.00, hold: 0.97, exhale: 0.46, rest: 0.48 };
 const MIN_PX = 44, MAX_PX = 118;
