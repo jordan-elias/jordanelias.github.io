@@ -448,57 +448,168 @@
     .chain-clear-btn:hover { opacity: 1; color: var(--accent-hover); }
     .chain-mode-note { font-size: .65rem; color: var(--text); font-style: italic; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 800px) {
-     
-      .loop-sidebar { display: none; }
-      .seq-body { flex-direction: column; }
-      .track-list { width: 100%; border-right: none; border-bottom: 1px solid var(--text); }
-      .track-list-inner { display: flex; flex-direction: row; flex-wrap: wrap; }
-      .track-divider { width: 100%; }
-      .track-item { width: 50%; border-right: 1px solid var(--text); min-height: 42px; }
-      .track-item:nth-child(even) { border-right: none; }
-      .grid-area { padding: .75rem; }
-      .pad-grid { max-width: 100%; gap: 5px; }
-      
-      /* Show loop section below on mobile */
-      .loop-section-mobile {
-        display: flex !important;
-        flex-direction: column;
-        gap: .5rem;
-        border-top: 1px solid var(--text);
-        padding: .65rem .85rem;
-        background: var(--bg);
-      }
-    }
-    @media (min-width: 801px) {
-      .loop-section-mobile { display: none !important; }
-    }
-    @media (max-width: 420px) {
-      .track-item { width: 100%; border-right: none; }
-    }
+    /* ── MOBILE (≤800px) ── */
+@media (max-width: 800px) {
 
+  /* hide desktop sidebar entirely */
+  .loop-sidebar { display: none; }
 
-  @media (max-width: 600px) {
+  /* seq body stacks: track-row → grid → loop toggle */
+  .seq-body { flex-direction: column; }
 
+  /* ── TRANSPORT ── */
+  .transport {
+    gap: .3rem;
+    padding: .35rem .5rem;
+  }
+  .tbtn {
+    font-size: .62rem;
+    padding: .25rem .5rem;
+    min-height: 26px;
+  }
+  .t-sep { height: 14px; }
+  .tempo-label { display: none; }
+  .tempo-val { font-size: .62rem; min-width: 26px; }
+  input[type=range].t-slider { width: 56px; }
+  .t-select { font-size: .6rem; padding: .2rem .3rem; min-height: 26px; }
+
+  /* ── TRACK ROW (horizontal, single chars) ── */
+  .track-list {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--text);
+    flex-direction: row;
+    display: flex;
+    align-items: stretch;
+    min-height: 0;
+  }
+  .track-list-header { display: none; }
+  .track-divider { display: none; }
+  .track-list-inner {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  .track-item {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: .3rem .1rem;
+    min-height: 34px;
+    border-bottom: none;
+    border-right: 1px solid var(--text);
+    gap: 0;
+  }
+  .track-item:last-child { border-right: none; }
+  .track-dot { display: none; }
+  .track-name {
+    font-size: .6rem;
+    font-weight: 700;
+    text-align: center;
+    flex: 0;
+  }
+
+  /* ── PAD GRID ── */
+  .grid-area {
+    padding: .4rem;
+  }
+  .pad-grid {
+    max-width: 100%;
+    gap: 3px;
+  }
+  .pad-step-num { font-size: .42rem; top: 2px; left: 3px; }
+  .pad-note { font-size: .58rem; }
+
+  /* ── LOOP TOGGLE + PANEL ── */
+  .loop-section-mobile {
+    display: flex !important;
+    flex-direction: column;
+    background: var(--bg);
+    border-top: 1px solid var(--text);
+  }
+
+  /* toggle button row */
+  .loop-toggle-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .62rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--text);
+    border: none;
+    border-bottom: 1px solid var(--text);
+    padding: .4rem .85rem;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+  }
+  .loop-toggle-btn.open {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  /* collapsible inner panel */
+  .loop-panel-inner {
+    display: none;
+    flex-direction: column;
+    gap: .5rem;
+    padding: .65rem .85rem;
+  }
+  .loop-panel-inner.open {
+    display: flex;
+  }
+
+  /* tighten up loop/chain elements inside panel */
+  .loop-slots { gap: .3rem; flex-wrap: wrap; }
+  .loop-slot-btn {
+    font-size: .62rem;
+    padding: .22rem .5rem;
+    min-height: 26px;
+  }
+  .loop-copy-btn {
+    font-size: .58rem;
+    padding: .2rem .45rem;
+    min-height: 26px;
+  }
+  .chain-title { font-size: .55rem; margin-top: .3rem; }
+  .chain-builder { gap: .25rem; }
+  .chain-step { padding: .18rem .35rem; }
+  .chain-step-label { font-size: .6rem; }
+  .chain-select { font-size: .6rem; padding: .2rem .3rem; min-height: 26px; }
+  .chain-add-btn { font-size: .6rem; padding: .2rem .5rem; min-height: 26px; }
+  .chain-clear-btn { font-size: .58rem; padding: .2rem .3rem; }
+  .chain-mode-note { font-size: .58rem; }
+}
+
+/* ── NARROW PHONES (≤420px) ── */
+@media (max-width: 420px) {
+  .track-item { padding: .25rem .05rem; min-height: 30px; }
+  .track-name { font-size: .55rem; }
+  .pad-grid { gap: 2px; }
+  .grid-area { padding: .3rem; }
+}
+
+/* ── VERTICAL TITLE (≤600px) ── */
+@media (max-width: 600px) {
   .vertical-title {
-    width: 36px;              /* was 64px */
+    width: 36px;
     top: 64px;
     height: calc(100vh - 64px);
     padding-top: 1rem;
   }
-
   .vertical-title span {
     font-size: 0.8rem;
     letter-spacing: 0.18em;
   }
-
   .page-content {
-    margin-left: 44px;       /* match new sidebar width + breathing room */
+    margin-left: 44px;
     width: calc(100% - 44px);
-    padding: 1.5em 1em 4em;
+    padding: .75em .75em 4em;
   }
 }
+
     
   </style>
 </head>
@@ -601,32 +712,33 @@
           </div>
         </div>
       </div>
+<!-- Mobile loop section (hidden on desktop) -->
+<div class="loop-section-mobile" style="display:none;">
+  <button class="loop-toggle-btn" id="loopToggleBtn">loops</button>
+  <div class="loop-panel-inner" id="loopPanelInner">
+    <div class="loop-section-title">loop slots</div>
+    <div class="loop-slots" id="loopSlotsMobile" style="gap:.35rem; flex-wrap:wrap; align-items:center; display:flex;"></div>
+    <div class="chain-title" style="margin-top:.4rem;">chain</div>
+    <div style="display:flex; gap:.25rem; flex-wrap:wrap; align-items:center;">
+      <select class="chain-select" id="chain-loop-sel-m">
+        <option value="1">Loop 1</option><option value="2">Loop 2</option>
+        <option value="3">Loop 3</option><option value="4">Loop 4</option>
+      </select>
+      <select class="chain-select" id="chain-reps-sel-m">
+        <option value="1">× 1</option><option value="2">× 2</option>
+        <option value="3">× 3</option><option value="4">× 4</option>
+        <option value="8">× 8</option>
+      </select>
+      <button class="chain-add-btn" id="btn-chain-add-m">+ add</button>
+      <button class="chain-clear-btn" id="btn-chain-clear-m">clear</button>
+      <button class="chain-add-btn" id="btn-export-m">export WAV</button>
+    </div>
+    <div class="chain-mode-note" id="chainNoteMobile">No chain — Loop 1 repeats continuously.</div>
+  </div><!-- /loopPanelInner -->
+</div><!-- /loop-section-mobile -->
+</div><!-- /seq-app -->
 
-      <!-- Mobile loop section (hidden on desktop) -->
-      <div class="loop-section-mobile" style="display:none;">
-        <div class="loop-section-title">loop slots</div>
-        <div class="loop-slots" id="loopSlotsMobile" style="gap:.35rem; flex-wrap:wrap; align-items:center; display:flex;"></div>
-        <div class="chain-title" style="margin-top:.4rem;">chain</div>
-        <div style="display:flex; gap:.25rem; flex-wrap:wrap; align-items:center;">
-          <select class="chain-select" id="chain-loop-sel-m">
-            <option value="1">Loop 1</option><option value="2">Loop 2</option>
-            <option value="3">Loop 3</option><option value="4">Loop 4</option>
-          </select>
-          <select class="chain-select" id="chain-reps-sel-m">
-            <option value="1">× 1</option><option value="2">× 2</option>
-            <option value="3">× 3</option><option value="4">× 4</option>
-            <option value="8">× 8</option>
-          </select>
-          <button class="chain-add-btn" id="btn-chain-add-m">+ add</button>
-          <button class="chain-clear-btn" id="btn-chain-clear-m">clear</button>
-          <button class="chain-add-btn" id="btn-export-m">export WAV</button>
-        </div>
-        <div class="chain-mode-note" id="chainNoteMobile">No chain — Loop 1 repeats continuously.</div>
-      </div>
-
-
-
-    </div><!-- /seq-app -->
+    
 
     <p>A 16-step drum and melody sequencer. Select a track on the left, tap squares to toggle steps on or off, then press play. Each loop slot stores a different pattern — chain them to build a full arrangement. If you're on mobile and don't hear anything, try turning off silent mode.</p>
 
