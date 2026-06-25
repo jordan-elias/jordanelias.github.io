@@ -1216,11 +1216,24 @@ document.addEventListener('click',e=>{
 
 /* ── ACTIONS ── */
 function setTrack(i){
-  closePicker();activeTrack=i;
-  document.querySelectorAll('.track-item').forEach(el=>el.classList.remove('active'));
-  const it=document.getElementById('ti-'+i);if(it)it.classList.add('active');
-  updateInfo();requestAnimationFrame(() => renderPads());
+  closePicker();
+
+  activeTrack = i;
+
+  document.querySelectorAll('.track-item')
+    .forEach(el => el.classList.remove('active'));
+
+  const it = document.getElementById('ti-' + i);
+  if (it) it.classList.add('active');
+
+  updateInfo();
+
+  // IMPORTANT: ensure DOM state updates after layout flush
+  requestAnimationFrame(() => {
+    renderPads();
+  });
 }
+  
 function setEditLoop(i){closePicker();editLoop=i;syncLoopDots();renderPads();}
 function togglePlay(){
   initAC();if(AC.state==='suspended')AC.resume();
