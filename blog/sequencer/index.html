@@ -1209,7 +1209,7 @@ function setTrack(i){
   closePicker();activeTrack=i;
   document.querySelectorAll('.track-item').forEach(el=>el.classList.remove('active'));
   const it=document.getElementById('ti-'+i);if(it)it.classList.add('active');
-  updateInfo();renderPads();
+  updateInfo();requestAnimationFrame(() => renderPads());
 }
 function setEditLoop(i){closePicker();editLoop=i;syncLoopDots();renderPads();}
 function togglePlay(){
