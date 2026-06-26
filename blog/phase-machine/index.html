@@ -358,7 +358,242 @@
     }
     .cta-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); text-decoration: none; }
 
-  
+    /* ── Tape status line ── */
+  .tape-status-row {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text);
+    opacity: 0;
+    margin-bottom: 0.75em;
+    min-height: 1.1em;
+    transition: opacity 0.3s ease;
+    letter-spacing: 0.02em;
+  }
+ 
+  /* ── Load tape button (mic mode only; melodic has its own inside the editor) ── */
+  #load-tape-btn {
+    display: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background-color: var(--text);
+    color: var(--bg);
+    border: 2px solid var(--text);
+    padding: 0.45em 1.1em;
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: center;
+    border-radius: 0;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  }
+  #load-tape-btn:hover:not(:disabled) {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: var(--bg);
+  }
+  #load-tape-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+ 
+  /* ── Melodic editor panel ──
+     Sits immediately above .lab-section. Bottom border removed so they read
+     as one connected surface. */
+  #melodic-editor {
+    display: none;
+    border: 1px solid var(--text);
+    border-bottom: none;
+    padding: 1.25em 1.5em 1.5em;
+    margin-bottom: 0;
+  }
+ 
+  #melodic-editor > h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.5;
+    margin: 0 0 1.25em;
+  }
+ 
+  /* Controls row: steps / root / scale selects */
+  .mel-controls-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25em;
+  }
+ 
+  .mel-ctrl-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+ 
+  .mel-ctrl-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.5;
+  }
+ 
+  .mel-ctrl-group select {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--text);
+    border-radius: 0;
+    padding: 3px 8px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    min-width: 82px;
+  }
+  .mel-ctrl-group select:focus {
+    outline: 1px solid var(--text);
+    outline-offset: 1px;
+  }
+ 
+  /* ── Step pad grid ── */
+  #mel-pads {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
+    gap: 8px;
+    margin-bottom: 1.25em;
+  }
+ 
+  .mel-pad {
+    position: relative;
+    border: 1px solid var(--text);
+    padding: 0.5em 0.45em 0.4em;
+    cursor: pointer;
+    user-select: none;
+    min-height: 54px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+ 
+  /* Hover highlight — uses currentColor at low alpha, works in dark mode */
+  .mel-pad:hover {
+    border-color: var(--text);
+    box-shadow: inset 0 0 0 9999px rgba(128,128,128,0.07);
+  }
+ 
+  /* Step number — top-left */
+  .step-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.58rem;
+    color: var(--text);
+    opacity: 0.38;
+    line-height: 1;
+  }
+ 
+  /* Note name — centre */
+  .step-note-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text);
+    text-align: center;
+    line-height: 1;
+    padding: 3px 0 2px;
+  }
+ 
+  /* A / B playhead indicator row — bottom of pad */
+  .step-ind-row {
+    display: flex;
+    justify-content: space-between;
+    min-height: 11px;
+  }
+ 
+  .step-ind-a,
+  .step-ind-b {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+ 
+  /* ── Note picker popup ── */
+  .note-picker {
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 0;
+    z-index: 200;
+    background: var(--bg, #fff);
+    border: 1px solid var(--text);
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    /* width is set to max-content but clamped so it doesn't overflow page */
+    width: max-content;
+    max-width: min(220px, 90vw);
+    /* Hidden until .visible */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s ease, visibility 0.1s ease;
+  }
+ 
+  .note-picker.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+ 
+  .note-pick-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--text);
+    padding: 3px 5px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 0;
+    transition: background-color 0.09s, color 0.09s;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+  .note-pick-btn:hover {
+    background-color: var(--text);
+    color: var(--bg, #fff);
+  }
+  .note-pick-btn.selected {
+    background-color: var(--text);
+    color: var(--bg, #fff);
+  }
+ 
+  /* Melodic editor bottom action row */
+  .mel-action-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+ 
+  /* ── Mobile adjustments ── */
+  @media (max-width: 600px) {
+    #mel-pads {
+      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    }
+    /* On small screens, open picker below the pad to avoid clipping at top */
+    .note-picker {
+      bottom: auto;
+      top: calc(100% + 5px);
+    }
+  }
+ 
     
   @media (max-width: 600px) {
 
@@ -479,21 +714,83 @@
 
   <main class="page-content">
 
+<!-- ═══ 4. ADD THIS IMMEDIATELY BEFORE <div class="lab-section"> ══════ -->
+<div id="melodic-editor">
+  <h3>Sequencer</h3>
  
+  <div class="mel-controls-row">
+ 
+    <div class="mel-ctrl-group">
+      <span class="mel-ctrl-label">Steps</span>
+      <select id="mel-steps">
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <option value="8" selected>8</option>
+        <option value="10">10</option>
+        <option value="12">12</option>
+      </select>
+    </div>
+ 
+    <div class="mel-ctrl-group">
+      <span class="mel-ctrl-label">Root</span>
+      <select id="mel-root">
+        <option value="C">C</option>
+        <option value="G">G</option>
+        <option value="D">D</option>
+        <option value="A">A</option>
+        <option value="E">E</option>
+        <option value="B">B</option>
+        <option value="F#">F#</option>
+        <option value="C#">C#</option>
+        <option value="F">F</option>
+        <option value="Bb">Bb</option>
+        <option value="Eb">Eb</option>
+        <option value="Ab">Ab</option>
+        <option value="Db">Db</option>
+        <option value="Gb">Gb</option>
+      </select>
+    </div>
+ 
+    <div class="mel-ctrl-group">
+      <span class="mel-ctrl-label">Scale</span>
+      <select id="mel-scale">
+        <option value="Major">Major</option>
+        <option value="Minor">Minor</option>
+        <option value="Harmonic Minor">Harm. minor</option>
+        <option value="Major Pent">Major pent</option>
+        <option value="Minor Pent">Minor pent</option>
+      </select>
+    </div>
+ 
+  </div>
+ 
+  <div id="mel-pads"></div>
+ 
+  <div class="mel-action-row">
+    <button class="lab-preset-btn" id="mel-clear">clear</button>
+    <button class="lab-btn" id="mel-load">load tape &#8594;</button>
+  </div>
+</div>
+<!-- end #melodic-editor -->
+    
   <!-- TOOL FIRST -->
   <div class="lab-section">
 
-    <!-- Source loading -->
-    <div class="gen-row">
-      <span class="gen-row-label">source →</span>
-      <button class="lab-preset-btn on" id="src-default">default loop</button>
-      <label  class="upload-label" id="pm-upload-label" for="pm-file-input">upload file</label>
-      <input  type="file" id="pm-file-input" accept="audio/*">
-      <button class="lab-preset-btn" id="src-mic">microphone</button>
-      <button class="lab-btn" id="pm-record" style="display:none;min-width:80px">&#9679;&#xFE0E; record</button>
-      <span   class="rec-state-label" id="pm-rec-state" style="display:none"></span>
-      <button class="lab-preset-btn" id="pm-rec-new" style="display:none">record new</button>
-    </div>
+   <div class="gen-row">
+  <span class="gen-row-label">source</span>
+  <button class="lab-preset-btn on" id="src-default">default loop</button>
+  <label  class="upload-label" id="pm-upload-label" for="pm-file-input">upload file</label>
+  <input  type="file" id="pm-file-input" accept="audio/*">
+  <button class="lab-preset-btn" id="src-mic">microphone</button>
+  <button class="lab-preset-btn" id="src-melodic">melodic</button>
+  <button class="lab-btn" id="pm-record" style="display:none;min-width:80px">&#9679;&#xFE0E; record</button>
+  <span   class="rec-state-label" id="pm-rec-state" style="display:none"></span>
+  <button class="lab-preset-btn" id="pm-rec-new" style="display:none">record new</button>
+  <button id="load-tape-btn" disabled>load tape &#8594;</button>
+</div>
+
+  <!-- ═══ 3. ADD THIS IMMEDIATELY AFTER THE SOURCE .gen-row ═════════════ -->
+<div class="tape-status-row" id="tape-status"></div>
 
     <!-- Phase display -->
     <div class="phase-display">
