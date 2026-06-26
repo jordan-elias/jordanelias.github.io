@@ -1,0 +1,2146 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Oramics: drawing sound</title>
+  <meta name="description" content="Draw directly onto a moving canvas. Your shapes become sound — pitch, amplitude, timbre, modulation — inspired by Daphne Oram's machine from 1957.">
+  <meta name="author" content="Jordan Elias">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jordanelias.de/blog/oramics/">
+
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jordan Elias Music Therapy">
+  <meta property="og:url" content="https://jordanelias.de/blog/oramics/">
+  <meta property="og:title" content="Oramics: drawing sound">
+  <meta property="og:description" content="Draw directly onto a moving canvas. Your shapes become sound — pitch, amplitude, timbre, modulation — inspired by Daphne Oram's machine from 1957.">
+  <meta property="og:image" content="https://jordanelias.de/images/hero.jpg">
+  <meta property="article:published_time" content="2026-06-26">
+  <meta property="article:author" content="https://jordanelias.de/about/">
+  <meta property="article:section" content="Music Therapy">
+  <meta property="article:tag" content="Electronic music">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+    /* ── PAGE LAYOUT (mirrors timbre-lab) ── */
+    body { padding-top: 64px; }
+
+    .page-wrap {
+      display: flex;
+      align-items: flex-start;
+      min-height: calc(100vh - 64px);
+    }
+
+    .vertical-title {
+      width: 64px;
+      flex-shrink: 0;
+      position: fixed;
+      top: 64px;
+      height: calc(100vh - 64px);
+      border-right: 1px solid var(--text);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 2rem;
+      overflow: hidden;
+    }
+    .vertical-title span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--text);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .page-content {
+      flex: 1;
+      min-width: 0;
+      padding: 2em 2em 5em;
+      max-width: 960px;
+      margin-left: 72px;
+      width: calc(100% - 72px);
+    }
+
+    /* ── LAYER COLORS (color-theory palette for pink/navy site) ── */
+    /* Terracotta, sage, amber, plum — muted, harmonious */
+    :root {
+      --layer-pitch:  #b85c38; /* terracotta / rust   */
+      --layer-amp:    #4a7c59; /* sage / forest green  */
+      --layer-timbre: #c49a2a; /* warm amber / ochre   */
+      --layer-mod:    #7a3f6e; /* deep plum / violet   */
+    }
+
+    /* ── ORAMICS APP ── */
+    .orm-app {
+      border: 1px solid var(--text);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      margin: 1.5em 0 1em;
+      /* no border-radius — matches blog's zero-radius aesthetic */
+    }
+
+    /* ── TRANSPORT BAR ── */
+    .orm-transport {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .5rem .75rem;
+      border-bottom: 1px solid var(--text);
+      flex-wrap: wrap;
+      background: var(--bg);
+    }
+
+    .orm-sep {
+      width: 1px;
+      height: 18px;
+      background: var(--text);
+      opacity: .25;
+      flex-shrink: 0;
+      margin: 0 .1rem;
+    }
+
+    .orm-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .72rem;
+      font-weight: 600;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: .32rem .75rem;
+      cursor: pointer;
+      letter-spacing: .03em;
+      transition: background .12s, color .12s;
+      white-space: nowrap;
+      line-height: 1.4;
+      touch-action: manipulation;
+    }
+    .orm-btn:hover { background: var(--text); color: var(--bg); }
+    .orm-btn.active { background: var(--text); color: var(--bg); }
+    .orm-btn.danger:hover { background: #b03a2e; border-color: #b03a2e; color: #fff; }
+    .orm-btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
+
+    .orm-select {
+      font-family: 'Inter', sans-serif;
+      font-size: .72rem;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: .3rem .45rem;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .orm-speed-row {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+    }
+    .orm-speed-label {
+      font-family: 'Inter', sans-serif;
+      font-size: .62rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: .65;
+      white-space: nowrap;
+    }
+    .orm-speed-val {
+      font-family: 'Inter', sans-serif;
+      font-size: .7rem;
+      color: var(--text);
+      min-width: 32px;
+    }
+    input[type=range].orm-slider {
+      -webkit-appearance: none;
+      width: 64px;
+      height: 2px;
+      background: var(--text);
+      outline: none;
+      cursor: pointer;
+      opacity: .6;
+    }
+    input[type=range].orm-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: var(--text);
+      cursor: pointer;
+    }
+    input[type=range].orm-slider::-moz-range-thumb {
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: var(--text);
+      border: none;
+      cursor: pointer;
+    }
+
+    /* analog toggle */
+    .orm-toggle-wrap { display: flex; align-items: center; gap: .35rem; }
+    .orm-toggle-label { font-family: 'Inter', sans-serif; font-size: .68rem; color: var(--text); opacity: .65; }
+    .orm-toggle { position: relative; width: 30px; height: 17px; }
+    .orm-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .orm-toggle-track {
+      position: absolute; inset: 0;
+      background: transparent;
+      border: 1px solid var(--text);
+      border-radius: 17px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .orm-toggle-track::before {
+      content: '';
+      position: absolute;
+      width: 11px; height: 11px;
+      left: 2px; top: 2px;
+      background: var(--text);
+      border-radius: 50%;
+      transition: transform .15s;
+      opacity: .4;
+    }
+    .orm-toggle input:checked + .orm-toggle-track { background: var(--text); }
+    .orm-toggle input:checked + .orm-toggle-track::before { transform: translateX(13px); background: var(--bg); opacity: 1; }
+
+    /* ── CANVAS AREA ── */
+    .orm-canvas-area {
+      position: relative;
+      width: 100%;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    /* zoom controls — top right of canvas */
+    .orm-zoom-controls {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .orm-zoom-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--text);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background .1s, color .1s;
+      touch-action: manipulation;
+      padding: 0;
+    }
+    .orm-zoom-btn:hover { background: var(--text); color: var(--bg); }
+
+    /* canvas stack */
+    .orm-canvas-inner {
+      position: absolute;
+      inset: 0;
+    }
+    .orm-canvas-inner canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: block;
+    }
+    #oc-grid    { z-index: 1; pointer-events: none; }
+    #oc-pitch   { z-index: 2; pointer-events: none; }
+    #oc-amp     { z-index: 3; pointer-events: none; }
+    #oc-timbre  { z-index: 4; pointer-events: none; }
+    #oc-mod     { z-index: 5; pointer-events: none; }
+    #oc-ui      { z-index: 6; pointer-events: none; }
+    #oc-overlay { z-index: 7; pointer-events: none; }
+    #oc-draw    { z-index: 8; cursor: crosshair; }
+
+    /* ── STATUS BAR ── */
+    .orm-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .3rem .75rem;
+      border-top: 1px solid var(--text);
+      border-bottom: 1px solid var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: .62rem;
+      color: var(--text);
+      opacity: .75;
+      flex-wrap: wrap;
+      gap: .35rem;
+      background: var(--bg);
+    }
+    .orm-status-pos { font-weight: 500; opacity: 1; }
+    .orm-status-tip { font-style: italic; }
+
+    /* ── BOTTOM CONTROLS ── */
+    .orm-controls {
+      display: flex;
+      flex-direction: row;
+      background: var(--bg);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .orm-controls::-webkit-scrollbar { display: none; }
+
+    .orm-ctrl-section {
+      border-right: 1px solid var(--text);
+      border-right-opacity: .3;
+      padding: .6rem .8rem;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .orm-ctrl-section:last-child { border-right: none; }
+
+    .orm-ctrl-title {
+      font-family: 'Inter', sans-serif;
+      font-size: .55rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: .5;
+      white-space: nowrap;
+    }
+
+    /* Layer tabs */
+    .orm-layer-tabs { display: flex; gap: .3rem; }
+    .orm-layer-tab {
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .35rem .6rem;
+      border: 1px solid var(--text);
+      cursor: pointer;
+      transition: background .1s;
+      touch-action: manipulation;
+      white-space: nowrap;
+      opacity: .55;
+    }
+    .orm-layer-tab:hover { opacity: .8; }
+    .orm-layer-tab.active { background: var(--text); opacity: 1; }
+    .orm-layer-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .orm-layer-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .68rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .orm-layer-tab.active .orm-layer-name { color: var(--bg); }
+    .orm-layer-tab.active .orm-layer-dot { /* dot shows on dark bg */ }
+    .orm-layer-vis {
+      font-size: .6rem;
+      cursor: pointer;
+      padding: 2px 3px;
+      color: var(--text);
+      line-height: 1;
+    }
+    .orm-layer-tab.active .orm-layer-vis { color: var(--bg); }
+
+    /* Layer scale */
+    .orm-scale-row {
+      display: flex;
+      gap: .6rem;
+      font-family: 'Inter', sans-serif;
+      font-size: .6rem;
+    }
+    .orm-scale-entry { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+    .orm-scale-entry .sk { font-size: .52rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text); opacity: .5; }
+    .orm-scale-entry .sv { color: var(--text); font-size: .65rem; font-weight: 500; }
+
+    /* Layer hint */
+    .orm-layer-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: .64rem;
+      color: var(--text);
+      opacity: .55;
+      font-style: italic;
+      max-width: 280px;
+    }
+
+    /* Tool buttons */
+    .orm-tool-grid { display: flex; flex-wrap: wrap; gap: .25rem; }
+    .orm-tool-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .66rem;
+      font-weight: 600;
+      padding: .32rem .6rem;
+      border: 1px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: background .1s, color .1s;
+      white-space: nowrap;
+      touch-action: manipulation;
+    }
+    .orm-tool-btn:hover { background: var(--text); color: var(--bg); }
+    .orm-tool-btn.active { background: var(--text); color: var(--bg); }
+
+    /* Brush controls */
+    .orm-brush-row {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .orm-brush-label {
+      font-family: 'Inter', sans-serif;
+      font-size: .6rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: .55;
+      width: 26px;
+      flex-shrink: 0;
+    }
+    .orm-brush-val {
+      font-family: 'Inter', sans-serif;
+      font-size: .62rem;
+      color: var(--text);
+      min-width: 24px;
+    }
+    input[type=range].orm-brush-slider {
+      -webkit-appearance: none;
+      width: 120px;
+      height: 2px;
+      background: var(--text);
+      outline: none;
+      cursor: pointer;
+      opacity: .6;
+      flex-shrink: 0;
+    }
+    input[type=range].orm-brush-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: var(--text);
+      cursor: pointer;
+    }
+    input[type=range].orm-brush-slider::-moz-range-thumb {
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: var(--text);
+      border: none;
+      cursor: pointer;
+    }
+    /* brush preview dot */
+    .orm-brush-preview {
+      width: 32px; height: 32px;
+      border: 1px solid var(--text);
+      display: flex; align-items: center; justify-content: center;
+      background: #fff;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .orm-brush-dot {
+      border-radius: 50%;
+      transition: width .1s, height .1s, filter .1s;
+    }
+
+    /* ── KEYBOARD HINTS (below app, above article) ── */
+    .orm-kbd-section {
+      margin: 1.5em 0;
+      border: 1px solid var(--text);
+      padding: .85em 1em;
+      background: var(--bg);
+    }
+    .orm-kbd-title {
+      font-family: 'Inter', sans-serif;
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: .55;
+      margin-bottom: .6em;
+    }
+    .orm-kbd-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: .3rem .75rem;
+    }
+    .orm-kbd-row {
+      display: flex;
+      align-items: baseline;
+      gap: .4rem;
+      font-family: 'Inter', sans-serif;
+      font-size: .72rem;
+      color: var(--text);
+    }
+    .orm-kbd {
+      font-family: 'Inter', sans-serif;
+      font-size: .6rem;
+      background: var(--text);
+      color: var(--bg);
+      padding: .1rem .35rem;
+      border-radius: 2px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .orm-kbd-desc { opacity: .7; }
+
+    /* ═══════════════════════════
+       MOBILE LAYOUT
+       Canvas plays top-to-bottom.
+    ═══════════════════════════ */
+    @media (max-width: 600px) {
+      .vertical-title {
+        width: 36px;
+        top: 64px;
+        height: calc(100vh - 64px);
+        padding-top: 1rem;
+      }
+      .vertical-title span {
+        font-size: .8rem;
+        letter-spacing: .18em;
+      }
+      .page-content {
+        margin-left: 44px;
+        width: calc(100% - 44px);
+        padding: 1em .75em 4em;
+      }
+
+      /* App fills viewport height minus header */
+      .orm-app {
+        /* 64px site header + some breathing room */
+        height: calc(100vh - 64px - 2em);
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Transport: compact single row, scrollable */
+      .orm-transport {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        gap: .25rem;
+        padding: .4rem .5rem;
+        flex-shrink: 0;
+      }
+      .orm-transport::-webkit-scrollbar { display: none; }
+      .orm-btn { padding: .3rem .55rem; font-size: .66rem; }
+      .orm-sep { display: none; }
+      .orm-speed-label { display: none; }
+      input[type=range].orm-slider { width: 50px; }
+
+      /* Canvas takes all remaining vertical space */
+      .orm-canvas-area { flex: 1; min-height: 0; }
+
+      /* Status: single line, abbreviated */
+      .orm-status { flex-shrink: 0; padding: .2rem .5rem; }
+      .orm-status-tip { display: none; }
+
+      /* Controls: compact single row, no labels, scrollable */
+      .orm-controls {
+        flex-direction: row;
+        flex-shrink: 0;
+        overflow-x: auto;
+      }
+      .orm-ctrl-section {
+        padding: .4rem .5rem;
+        gap: .3rem;
+        border-right: 1px solid var(--text);
+      }
+      .orm-ctrl-title { display: none; }
+      .orm-layer-tabs { gap: .2rem; }
+      .orm-layer-tab { padding: .28rem .45rem; }
+      .orm-layer-name { font-size: .62rem; }
+      .orm-layer-vis { display: none; }
+      .orm-layer-hint { display: none; }
+      .orm-scale-row { display: none; }
+      .orm-tool-grid { flex-wrap: nowrap; }
+      .orm-tool-btn { padding: .28rem .5rem; font-size: .62rem; }
+      input[type=range].orm-brush-slider { width: 80px; }
+      .orm-brush-preview { width: 24px; height: 24px; }
+      .orm-zoom-controls { top: 4px; right: 4px; }
+      .orm-zoom-btn { width: 22px; height: 22px; font-size: .7rem; }
+
+      /* Keyboard hints hidden on mobile */
+      .orm-kbd-section { display: none; }
+    }
+
+    /* ── ESSAY (mirrors timbre-lab conventions) ── */
+    .physics-chain {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      padding: 1em 0;
+      margin: 1.5em 0;
+      border-top: 1px solid var(--text);
+      border-bottom: 1px solid var(--text);
+    }
+    .chain-step {
+      font-family: 'Inter', sans-serif;
+      font-size: .78rem;
+      color: var(--text);
+      border: 1px solid var(--text);
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+    .chain-arrow { font-size: .75rem; color: var(--text); }
+
+    .pull-quote {
+      border-left: 3px solid var(--text);
+      padding: .75rem 1rem;
+      margin: 1.5rem 0;
+    }
+    .pull-quote p { font-size: .9rem; font-style: italic; line-height: 1.65; }
+    .pull-quote cite { display: block; font-size: .72rem; opacity: .65; font-style: normal; margin-top: .35rem; }
+
+    .cta-wrap { text-align: center; margin: 2em 0 1em; }
+    .cta-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .9rem;
+      font-weight: 500;
+      background: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: .65em 1.6em;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background .15s, color .15s;
+    }
+    .cta-btn:hover { background: var(--text); color: var(--bg); }
+  </style>
+</head>
+
+<body>
+
+{% include header.html %}
+
+<div class="page-wrap">
+
+  <h1 class="vertical-title" aria-hidden="true">
+    <span>Oramics</span>
+  </h1>
+
+  <main class="page-content">
+  <article>
+
+    <section>
+      <!-- ══════════════════════════════════════
+           THE INSTRUMENT
+      ══════════════════════════════════════ -->
+      <div class="orm-app" id="ormApp">
+
+        <!-- Transport -->
+        <div class="orm-transport" id="ormToolbar">
+          <button class="orm-btn" id="orm-play" onclick="ORM.togglePlay()">
+            <svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px"><path d="M0 0l9 5.5L0 11z"/></svg>play
+          </button>
+          <button class="orm-btn" id="orm-loop" onclick="ORM.toggleLoop()" title="Loop">↺ loop</button>
+
+          <div class="orm-sep"></div>
+
+          <div class="orm-speed-row">
+            <span class="orm-speed-label">speed</span>
+            <input type="range" class="orm-slider" id="orm-speed" min="0.1" max="3" step="0.05" value="0.8"
+              oninput="ORM.setSpeed(+this.value)">
+            <span class="orm-speed-val" id="orm-speed-val">0.80×</span>
+          </div>
+
+          <div class="orm-sep"></div>
+
+          <select class="orm-select" id="orm-wave" onchange="ORM.setWave(this.value)">
+            <option value="sine">sine</option>
+            <option value="triangle">triangle</option>
+            <option value="sawtooth">sawtooth</option>
+            <option value="square">square</option>
+          </select>
+
+          <div class="orm-speed-row">
+            <span class="orm-speed-label">voices</span>
+            <input type="range" class="orm-slider" id="orm-voices" min="1" max="6" step="1" value="1"
+              oninput="ORM.setVoices(+this.value); document.getElementById('orm-voices-val').textContent=this.value;">
+            <span class="orm-speed-val" id="orm-voices-val">1</span>
+          </div>
+
+          <div class="orm-sep"></div>
+
+          <div class="orm-toggle-wrap">
+            <label class="orm-toggle" title="Analog — adds wow, flutter, drift">
+              <input type="checkbox" id="orm-analog" onchange="ORM.setAnalog(this.checked)">
+              <span class="orm-toggle-track"></span>
+            </label>
+            <span class="orm-toggle-label">analog</span>
+          </div>
+
+          <div class="orm-sep"></div>
+
+          <button class="orm-btn" onclick="ORM.undo()" id="orm-undo" title="Undo (Cmd/Ctrl+Z)">↩ undo</button>
+          <button class="orm-btn" onclick="ORM.randomize()" title="Random Oramics shapes">✦ random</button>
+          <button class="orm-btn danger" onclick="ORM.clearAll()">clear</button>
+        </div>
+
+        <!-- Canvas -->
+        <div class="orm-canvas-area" id="ormCanvasArea">
+          <!-- Zoom controls -->
+          <div class="orm-zoom-controls">
+            <button class="orm-zoom-btn" onclick="ORM.zoomIn()"  title="Zoom in">+</button>
+            <button class="orm-zoom-btn" onclick="ORM.zoomOut()" title="Zoom out">−</button>
+          </div>
+
+          <div class="orm-canvas-inner" id="ormCanvasInner">
+            <canvas id="oc-grid"></canvas>
+            <canvas id="oc-pitch"></canvas>
+            <canvas id="oc-amp"></canvas>
+            <canvas id="oc-timbre"></canvas>
+            <canvas id="oc-mod"></canvas>
+            <canvas id="oc-ui"></canvas>
+            <canvas id="oc-overlay"></canvas>
+            <canvas id="oc-draw"></canvas>
+          </div>
+        </div>
+
+        <!-- Status bar -->
+        <div class="orm-status">
+          <span>
+            pos: <strong class="orm-status-pos" id="ost-pos">0.00s</strong> ·
+            pitch: <span id="ost-pitch">—</span> ·
+            amp: <span id="ost-amp">—</span> ·
+            filter: <span id="ost-filter">—</span>
+          </span>
+          <span class="orm-status-tip" id="ost-tip">Draw on the canvas · left→right = time · up/down = value</span>
+        </div>
+
+        <!-- Bottom controls -->
+        <div class="orm-controls" id="ormControls">
+
+          <!-- Layers -->
+          <div class="orm-ctrl-section">
+            <div class="orm-ctrl-title">layer</div>
+            <div class="orm-layer-tabs" id="ormLayerTabs">
+              <div class="orm-layer-tab active" id="ltab-pitch" onclick="ORM.setLayer('pitch')">
+                <span class="orm-layer-dot" style="background:var(--layer-pitch)"></span>
+                <span class="orm-layer-name">Pitch</span>
+                <span class="orm-layer-vis" onclick="ORM.toggleVis('pitch',event)">●</span>
+              </div>
+              <div class="orm-layer-tab" id="ltab-amp" onclick="ORM.setLayer('amp')">
+                <span class="orm-layer-dot" style="background:var(--layer-amp)"></span>
+                <span class="orm-layer-name">Amp</span>
+                <span class="orm-layer-vis" onclick="ORM.toggleVis('amp',event)">●</span>
+              </div>
+              <div class="orm-layer-tab" id="ltab-timbre" onclick="ORM.setLayer('timbre')">
+                <span class="orm-layer-dot" style="background:var(--layer-timbre)"></span>
+                <span class="orm-layer-name">Timbre</span>
+                <span class="orm-layer-vis" onclick="ORM.toggleVis('timbre',event)">●</span>
+              </div>
+              <div class="orm-layer-tab" id="ltab-mod" onclick="ORM.setLayer('mod')">
+                <span class="orm-layer-dot" style="background:var(--layer-mod)"></span>
+                <span class="orm-layer-name">Mod</span>
+                <span class="orm-layer-vis" onclick="ORM.toggleVis('mod',event)">●</span>
+              </div>
+            </div>
+            <div class="orm-layer-hint" id="orm-layer-hint">Vertical position = frequency. Top = 2000 Hz · Bottom = 80 Hz.</div>
+            <div class="orm-scale-row">
+              <div class="orm-scale-entry"><span class="sk">top</span><span class="sv" id="orm-scale-top">2000 Hz</span></div>
+              <div class="orm-scale-entry"><span class="sk">mid</span><span class="sv" id="orm-scale-mid">600 Hz</span></div>
+              <div class="orm-scale-entry"><span class="sk">bot</span><span class="sv" id="orm-scale-bot">80 Hz</span></div>
+            </div>
+          </div>
+
+          <!-- Tools -->
+          <div class="orm-ctrl-section">
+            <div class="orm-ctrl-title">tool</div>
+            <div class="orm-tool-grid">
+              <button class="orm-tool-btn active" id="tool-brush"  onclick="ORM.setTool('brush')">brush</button>
+              <button class="orm-tool-btn"        id="tool-line"   onclick="ORM.setTool('line')">line</button>
+              <button class="orm-tool-btn"        id="tool-erase"  onclick="ORM.setTool('erase')">erase</button>
+              <button class="orm-tool-btn"        id="tool-sine"   onclick="ORM.setTool('sine')">∿ sine</button>
+              <button class="orm-tool-btn"        id="tool-circle" onclick="ORM.setTool('circle')">◯ ellipse</button>
+              <button class="orm-tool-btn"        id="tool-flat"   onclick="ORM.setTool('flat')">― flat</button>
+            </div>
+          </div>
+
+          <!-- Brush -->
+          <div class="orm-ctrl-section">
+            <div class="orm-ctrl-title">brush</div>
+            <div class="orm-brush-row">
+              <div class="orm-brush-preview" id="ormBrushPreview">
+                <div class="orm-brush-dot" id="ormBrushDot" style="width:8px;height:8px;"></div>
+              </div>
+            </div>
+            <div class="orm-brush-row">
+              <span class="orm-brush-label">size</span>
+              <input type="range" class="orm-brush-slider" min="1" max="60" value="8" id="orm-bsize"
+                oninput="ORM.setBrushSize(+this.value)">
+              <span class="orm-brush-val" id="orm-bsize-val">8</span>
+            </div>
+            <div class="orm-brush-row">
+              <span class="orm-brush-label">soft</span>
+              <input type="range" class="orm-brush-slider" min="0" max="1" step=".05" value="0.6" id="orm-bsoft"
+                oninput="ORM.setBrushSoft(+this.value)">
+              <span class="orm-brush-val" id="orm-bsoft-val">.60</span>
+            </div>
+          </div>
+
+        </div><!-- /orm-controls -->
+      </div><!-- /orm-app -->
+
+    </section>
+
+    <!-- KEYBOARD SHORTCUTS -->
+    <div class="orm-kbd-section">
+      <div class="orm-kbd-title">Keyboard shortcuts</div>
+      <div class="orm-kbd-grid">
+        <div class="orm-kbd-row"><span class="orm-kbd">space</span><span class="orm-kbd-desc">play / stop</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">⌘Z / Ctrl Z</span><span class="orm-kbd-desc">undo</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">B</span><span class="orm-kbd-desc">brush</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">L</span><span class="orm-kbd-desc">line</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">E</span><span class="orm-kbd-desc">erase</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">S</span><span class="orm-kbd-desc">sine curve</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">C</span><span class="orm-kbd-desc">ellipse</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">F</span><span class="orm-kbd-desc">flat line</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">1 – 4</span><span class="orm-kbd-desc">switch layer</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">[ ]</span><span class="orm-kbd-desc">brush size −/+</span></div>
+      </div>
+    </div>
+
+    <!-- ESSAY -->
+    <section>
+      <h2>Sound drawn onto film</h2>
+      <p class="post-meta"><time datetime="2026-06-26">June 26, 2026</time></p>
+      <p>Written by Jordan Elias, MT-BC</p>
+
+      <p>In 1957 Daphne Oram left the BBC, where she had worked as a sound engineer and composer for over a decade, and set up a studio in a converted oast house in Kent. There, over the following years, she built a machine unlike anything that existed: the Oramics machine. A set of ten synchronised strips of 35mm film ran horizontally through the device. The composer drew directly onto the film — shapes, curves, lines, marks — and as the film moved through a photoelectric cell, the light transmitted through the drawn marks was converted into control voltages, which in turn controlled oscillators, filters, and amplifiers. The drawing was the score. The score was the sound.</p>
+
+      <p>Oramics was not notation. It was not a description of sound intended for a performer to realise. It was a direct physical encoding of sound itself: the shape on the film was the sound you heard, with no intermediary, no interpretation, no performance. The composer drew in time and heard time drawn back. This was a genuinely new relationship between the act of inscription and the act of sounding — one that most electronic music systems of the period, which used keyboards, punch cards, or written parameter sheets, did not offer.</p>
+
+      <div class="physics-chain">
+        <span class="chain-step">mark on film</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">light transmission</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">photoelectric cell</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">control voltage</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">oscillator / filter</span>
+        <span class="chain-arrow">→</span>
+        <span class="chain-step">sound</span>
+      </div>
+
+      <h2>From the BBC to the oast house</h2>
+      <p>Daphne Oram was born in Wiltshire in 1925. She taught herself composition and showed exceptional ability young; at eighteen she joined the BBC as a music balancer, one of the few women in technical roles in the corporation at that time. Over the following decade she worked in studios, composed incidental music for radio programmes, and became increasingly convinced that electronic sound offered compositional possibilities unavailable through conventional instruments and notation. In 1957 she co-founded the BBC Radiophonic Workshop — alongside Desmond Briscoe — and became its first studio manager. She left the following year, frustrated by the institutional constraints placed on the Workshop's work and determined to pursue her own research independently.</p>
+
+      <p>The Oramics machine occupied much of the next two decades. It was an enormously laborious undertaking — designing, constructing, and refining a bespoke electronic instrument with minimal funding and institutional support, largely alone. Oram applied for patents, sought grants, and gave demonstrations, but the machine never received the recognition or resources that might have allowed it to develop into something widely used. She continued working in her studio in Fairseat, Kent, composing, teaching, and writing — her book <em>An Individual Note of Music, Sound and Electronics</em> (1972) remains one of the most distinctive accounts of electronic music's possibilities — until her death in 2003.</p>
+
+      <div class="pull-quote">
+        <p>The Oramics machine was trying to escape the tyranny of the note — to give composers direct, continuous, unquantised control over sound in time, in the same way a painter has continuous control over mark and surface.</p>
+        <cite>— paraphrased from Daphne Oram, <em>An Individual Note</em>, 1972</cite>
+      </div>
+
+      <h2>The machine and its logic</h2>
+      <p>The Oramics machine worked through photoelectric cells reading the opacity of marks drawn on clear film. A dense, opaque mark blocked more light; a thin or faint mark allowed more through. The amount of light reaching the cell determined the voltage output, which in turn determined the parameter being controlled — frequency on one strip, amplitude on another, filter settings on a third. Multiple strips ran simultaneously, so a composer could draw different control curves for different parameters on different strips, all advancing in synchrony through the machine.</p>
+
+      <p>The spatial logic of the system was immediate and intuitive: drawing a line that moved upward on the pitch strip produced a rising pitch. A dense, heavy mark on the amplitude strip produced a loud sound. A curved, organic shape produced a curved, organic modulation. The act of drawing was compositional; the visual shape of the drawing was the sonic shape of the music. Oram called this "visualising sound" — and it remains one of the most direct translations of visual mark-making into sonic experience that electronic music has produced.</p>
+
+      <h2>How this instrument works</h2>
+      <p>This browser-based Oramics instrument follows the logic of the original machine as closely as a digital medium allows. You draw on four independent layers — pitch, amplitude, timbre, and modulation — and as the playhead moves across your drawing, the pixel values it reads are converted into audio parameters in real time. The pitch layer maps vertical position to frequency: marks drawn high produce high pitches, marks drawn low produce low ones. The amplitude layer reads pixel density to set volume. Timbre controls a low-pass filter cutoff, shaping brightness. Modulation adds vibrato and FM depth.</p>
+
+      <p>Drawing tools include freehand brush, straight line, sine curve, ellipse, and flat line — with live ghost previews during drag so you can see each shape before committing it. The zoom controls let you work in finer detail without affecting playback, which always reads the full canvas. The analog toggle adds subtle wow and flutter, modelling the mechanical imperfection of the original film transport. Try the randomise button to generate Oramics-style shapes automatically and hear how they sound before drawing your own.</p>
+
+      <p>If you're curious about working with sound, creativity, and the body in music therapy, feel free to get in touch via the <a href="/contact/">contact page</a>. Music experience is not required.</p>
+
+      <div class="cta-wrap">
+        <a href="https://cal.com/jordan-elias/intro" target="_blank" rel="noopener noreferrer" class="cta-btn">Book an intro call</a>
+      </div>
+
+      <p>Further reading:</p>
+      <ul>
+        <li><em>An Individual Note of Music, Sound and Electronics</em> — Daphne Oram (1972)</li>
+        <li><em>Daphne Oram: An Individual Note</em> — Shulman, ed. (2021)</li>
+        <li>The <a href="https://www.goldsmiths.ac.uk/oram/" target="_blank" rel="noopener">Daphne Oram Collection</a> at Goldsmiths, University of London</li>
+      </ul>
+    </section>
+
+  </article>
+  </main>
+</div>
+
+<footer>
+  <p>© 2025–2026 Jordan Elias</p>
+</footer>
+
+<script src="/js/header.js"></script>
+
+<!-- ══════════════════════════════════════════════════════
+     ORAMICS ENGINE
+══════════════════════════════════════════════════════ -->
+<script>
+(function () {
+'use strict';
+
+/* ── LAYER CONFIG ── */
+const LAYERS = {
+  pitch:  { id: 'oc-pitch',  color: '#b85c38', alpha: 0.85,
+            hint: 'Vertical position = frequency. Top = 2000 Hz · Bottom = 80 Hz.' },
+  amp:    { id: 'oc-amp',    color: '#4a7c59', alpha: 0.75,
+            hint: 'Pixel brightness = amplitude. Dense marks = louder output.' },
+  timbre: { id: 'oc-timbre', color: '#c49a2a', alpha: 0.75,
+            hint: 'Vertical position = filter cutoff. Top = bright · Bottom = muffled.' },
+  mod:    { id: 'oc-mod',    color: '#7a3f6e', alpha: 0.75,
+            hint: 'Vertical position = modulation depth. Top = heavy vibrato / FM.' },
+};
+
+const LAYER_SCALES = {
+  pitch:  { top: '2000 Hz', mid: '600 Hz',  bot: '80 Hz'  },
+  amp:    { top: '100%',    mid: '50%',     bot: '0%'     },
+  timbre: { top: '8000 Hz', mid: '2000 Hz', bot: '200 Hz' },
+  mod:    { top: '100%',    mid: '50%',     bot: '0%'     },
+};
+
+/* ── MOBILE DETECTION ── */
+function isMobile() { return window.innerWidth <= 600; }
+
+/* ── AUDIO ENGINE ── */
+let AC = null, masterGain;
+const voices = [];
+let numVoices = 1;
+let waveType = 'sine';
+let analogOn = false;
+let analogLFO = null, analogLFOGain = null;
+
+function initAudio() {
+  if (AC) return;
+  AC = new (window.AudioContext || window.webkitAudioContext)();
+  masterGain = AC.createGain();
+  masterGain.gain.value = 0.7;
+
+  const limiter = AC.createDynamicsCompressor();
+  limiter.threshold.value = -8;
+  limiter.knee.value = 6;
+  limiter.ratio.value = 10;
+  limiter.attack.value = 0.005;
+  limiter.release.value = 0.1;
+
+  masterGain.connect(limiter);
+  limiter.connect(AC.destination);
+
+  analogLFO = AC.createOscillator();
+  analogLFOGain = AC.createGain();
+  analogLFO.type = 'sine';
+  analogLFO.frequency.value = 0.7;
+  analogLFOGain.gain.value = 0;
+  analogLFO.connect(analogLFOGain);
+  analogLFO.start();
+
+  buildVoices();
+}
+
+function buildVoices() {
+  voices.forEach(v => {
+    try { v.osc.stop(); } catch(e){}
+    try { v.vibLFO.stop(); } catch(e){}
+    try { v.fmLFO.stop(); } catch(e){}
+  });
+  voices.length = 0;
+
+  for (let i = 0; i < numVoices; i++) {
+    const osc     = AC.createOscillator();
+    const oscGain = AC.createGain();
+    const filter  = AC.createBiquadFilter();
+    const vGain   = AC.createGain();
+
+    const vibLFO  = AC.createOscillator();
+    const vibGain = AC.createGain();
+    vibLFO.type = 'sine';
+    vibLFO.frequency.value = 5.5;
+    vibGain.gain.value = 0;
+    vibLFO.connect(vibGain);
+    vibGain.connect(osc.frequency);
+
+    const fmLFO  = AC.createOscillator();
+    const fmGain = AC.createGain();
+    fmLFO.type = 'sine';
+    fmLFO.frequency.value = 2.3;
+    fmGain.gain.value = 0;
+    fmLFO.connect(fmGain);
+    fmGain.connect(osc.frequency);
+
+    if (analogLFOGain) analogLFOGain.connect(osc.frequency);
+
+    filter.type = 'lowpass';
+    filter.frequency.value = 2000;
+    filter.Q.value = 1.2;
+    osc.type = waveType;
+    osc.frequency.value = 220;
+    oscGain.gain.value = 0;
+    vGain.gain.value = 0;
+
+    osc.connect(oscGain);
+    oscGain.connect(filter);
+    filter.connect(vGain);
+    vGain.connect(masterGain);
+
+    osc.start();
+    vibLFO.start();
+    fmLFO.start();
+
+    voices.push({ osc, oscGain, filter, vGain, vibLFO, vibGain, fmLFO, fmGain });
+  }
+}
+
+function ramp(param, val, tc) {
+  if (!AC) return;
+  param.setTargetAtTime(val, AC.currentTime, tc || 0.04);
+}
+
+/* ── CANVAS STATE ── */
+const canvases = {}, ctxs = {};
+let W = 0, H = 0;
+let gridCtx = null, uiCtx = null, overlayCtx = null, drawCtx = null;
+
+/* ── ZOOM STATE ── */
+let zoomLevel = 1; // 1 = full canvas, 2 = 2× zoom, etc.
+const ZOOM_STEPS = [1, 1.5, 2, 3, 4];
+let zoomIdx = 0;
+
+/* Canvas logical size (always W × H) vs viewport pan offset */
+let panOffsetX = 0; // horizontal pan in canvas pixels (desktop)
+let panOffsetY = 0; // vertical pan in canvas pixels (mobile)
+
+/* ── PLAYBACK STATE ── */
+let playing = false;
+let looping = true;
+let playheadX = 0;   // position in CANVAS pixels (0..W)
+let playheadT = 0;
+let lastRafT = 0;
+let rafId = null;
+let speed = 0.8;
+const PIXELS_PER_SECOND = 80;
+
+/* ── DRAWING STATE ── */
+let activeLayer = 'pitch';
+let tool = 'brush';
+let brushSize = 8;
+let brushSoft = 0.6;
+let drawing = false;
+let lineStart = null;
+let lastPos = null;
+let visibleLayers = { pitch: true, amp: true, timbre: true, mod: true };
+
+/* ── UNDO ── */
+const MAX_UNDO = 30;
+const undoStack = {};
+Object.keys(LAYERS).forEach(k => { undoStack[k] = []; });
+
+function pushUndo(k) {
+  if (!W || !H) return;
+  undoStack[k].push(ctxs[k].getImageData(0, 0, W, H));
+  if (undoStack[k].length > MAX_UNDO) undoStack[k].shift();
+}
+
+/* ── HELPERS: canvas ↔ screen coordinates ── */
+/* Desktop: time = x (left→right), value = y (top = high). Pan/zoom on x. */
+/* Mobile:  time = y (top→bottom), value = x (left = low, right = high). Pan/zoom on y. */
+
+function screenToCanvas(sx, sy) {
+  if (isMobile()) {
+    // x = value axis (left=low, right=high), y = time axis
+    const cx = sx; // value axis: no pan, full width
+    const cy = (sy + panOffsetY) / zoomLevel;
+    return { x: cx, y: cy };
+  } else {
+    const cx = (sx + panOffsetX) / zoomLevel;
+    const cy = sy;
+    return { x: cx, y: cy };
+  }
+}
+
+function canvasToScreen(cx, cy) {
+  if (isMobile()) {
+    return { x: cx, y: cy * zoomLevel - panOffsetY };
+  } else {
+    return { x: cx * zoomLevel - panOffsetX, y: cy };
+  }
+}
+
+/* ── CANVAS SIZING ── */
+function calcCanvasHeight() {
+  if (isMobile()) {
+    // on mobile the app fills the viewport minus header, so canvas area
+    // gets whatever is left after transport + status + controls
+    // We calculate this dynamically in resize()
+    return null;
+  }
+  const vph = window.innerHeight;
+  return Math.round(Math.min(Math.max(320, vph * 0.42), 560));
+}
+
+/* ── INIT ── */
+function init() {
+  Object.keys(LAYERS).forEach(k => {
+    const c = document.getElementById(LAYERS[k].id);
+    canvases[k] = c;
+    ctxs[k] = c.getContext('2d');
+  });
+  gridCtx    = document.getElementById('oc-grid').getContext('2d');
+  uiCtx      = document.getElementById('oc-ui').getContext('2d');
+  overlayCtx = document.getElementById('oc-overlay').getContext('2d');
+  drawCtx    = document.getElementById('oc-draw');
+
+  resize();
+  window.addEventListener('resize', () => { resize(); });
+
+  const dc = drawCtx;
+
+  dc.addEventListener('mousedown',  onDrawStart);
+  dc.addEventListener('mousemove',  onDrawMove);
+  dc.addEventListener('mouseup',    onDrawEnd);
+  dc.addEventListener('mouseleave', onDrawLeave);
+
+  dc.addEventListener('touchstart',  e => { e.preventDefault(); onDrawStart(normTouch(e)); }, { passive: false });
+  dc.addEventListener('touchmove',   e => { e.preventDefault(); onDrawMove(normTouch(e)); },  { passive: false });
+  dc.addEventListener('touchend',    e => { e.preventDefault(); onDrawEnd(normTouch(e)); },   { passive: false });
+  dc.addEventListener('touchcancel', e => { e.preventDefault(); onDrawLeave(); },             { passive: false });
+
+  document.addEventListener('keydown', onKeyDown);
+
+  updateBrushPreview();
+  document.getElementById('orm-loop').classList.add('active');
+}
+
+function normTouch(e) {
+  const t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]);
+  if (!t) return e;
+  return { clientX: t.clientX, clientY: t.clientY };
+}
+
+/* layerImages: persists canvas data across resizes */
+const layerImages = {};
+
+function backupLayer(k) {
+  if (!W || !H) return;
+  layerImages[k] = ctxs[k].getImageData(0, 0, W, H);
+}
+function restoreLayerImages() {
+  Object.keys(LAYERS).forEach(k => {
+    if (layerImages[k]) ctxs[k].putImageData(layerImages[k], 0, 0);
+  });
+}
+
+function resize() {
+  const area = document.getElementById('ormCanvasArea');
+  const inner = document.getElementById('ormCanvasInner');
+
+  if (isMobile()) {
+    // On mobile the app fills the viewport. Let CSS handle heights via flex.
+    // The canvas area gets flex:1, so we read its actual rendered size.
+    // We trigger a tiny RAF to let the browser lay out first.
+    requestAnimationFrame(() => {
+      W = inner.clientWidth  || window.innerWidth - 44;
+      H = inner.clientHeight || 200;
+      if (W <= 0 || H <= 0) return;
+      setCanvasSizes();
+      drawGrid();
+      restoreLayerImages();
+      drawUI();
+    });
+  } else {
+    const h = calcCanvasHeight();
+    area.style.height = h + 'px';
+    W = inner.clientWidth;
+    H = inner.clientHeight;
+    if (W <= 0 || H <= 0) return;
+    setCanvasSizes();
+    drawGrid();
+    restoreLayerImages();
+    drawUI();
+  }
+}
+
+function setCanvasSizes() {
+  const ids = ['oc-grid','oc-pitch','oc-amp','oc-timbre','oc-mod','oc-ui','oc-overlay','oc-draw'];
+  ids.forEach(id => {
+    const c = document.getElementById(id);
+    if (c) { c.width = W; c.height = H; }
+  });
+}
+
+/* ── GRID ── */
+function drawGrid() {
+  if (!gridCtx || !W || !H) return;
+  const ctx = gridCtx;
+  ctx.clearRect(0, 0, W, H);
+
+  // White background
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+
+  if (isMobile()) {
+    /* Mobile: time = Y axis, value = X axis */
+
+    // Time lines (horizontal) — every second
+    ctx.strokeStyle = 'rgba(0,0,0,.07)';
+    ctx.lineWidth = 1;
+    const totalTime = H / PIXELS_PER_SECOND;
+    for (let s = 0; s <= totalTime; s++) {
+      const y = s * PIXELS_PER_SECOND;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      if (s > 0) {
+        ctx.fillStyle = 'rgba(32,38,157,.25)';
+        ctx.font = '8px Inter, sans-serif';
+        ctx.fillText(s + 's', 3, y - 2);
+      }
+    }
+    // Quarter-second lines
+    ctx.strokeStyle = 'rgba(0,0,0,.03)';
+    for (let q = 0; q <= totalTime * 4; q++) {
+      const y = q * PIXELS_PER_SECOND / 4;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    // Hz lines (vertical) — octaves
+    const octaves = [80, 160, 320, 640, 1280];
+    ctx.strokeStyle = 'rgba(32,38,157,.1)';
+    octaves.forEach(hz => {
+      const x = hzToX_mobile(hz);
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      ctx.fillStyle = 'rgba(32,38,157,.3)';
+      ctx.font = '8px Inter, sans-serif';
+      ctx.fillText(hz + 'Hz', x + 2, H - 4);
+    });
+
+    // Midline (vertical)
+    ctx.strokeStyle = 'rgba(32,38,157,.1)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke();
+    ctx.setLineDash([]);
+
+  } else {
+    /* Desktop: time = X, value = Y */
+
+    // Second lines (vertical)
+    ctx.strokeStyle = 'rgba(0,0,0,.07)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x <= W; x += PIXELS_PER_SECOND) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      if (x > 0) {
+        ctx.fillStyle = 'rgba(32,38,157,.25)';
+        ctx.font = '8px Inter, sans-serif';
+        ctx.fillText((x / PIXELS_PER_SECOND).toFixed(0) + 's', x + 3, H - 4);
+      }
+    }
+    // Quarter-second lines
+    ctx.strokeStyle = 'rgba(0,0,0,.03)';
+    for (let x = 0; x <= W; x += PIXELS_PER_SECOND / 4) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+
+    // Hz lines (horizontal)
+    const octaves = [80, 160, 320, 640, 1280];
+    ctx.strokeStyle = 'rgba(32,38,157,.1)';
+    octaves.forEach(hz => {
+      const y = hzToY(hz);
+      if (y < 0 || y > H) return;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      ctx.fillStyle = 'rgba(32,38,157,.3)';
+      ctx.font = '8px Inter, sans-serif';
+      ctx.fillText(hz + 'Hz', 4, y - 2);
+    });
+
+    // Midline (horizontal)
+    ctx.strokeStyle = 'rgba(32,38,157,.1)';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+/* ── COORDINATE HELPERS ── */
+
+// Desktop: vertical axis = hz
+function hzToY(hz) {
+  const minHz = 80, maxHz = 2000;
+  const t = (Math.log(hz) - Math.log(minHz)) / (Math.log(maxHz) - Math.log(minHz));
+  return H - t * H;
+}
+function yToHz(y) {
+  if (!H) return 440;
+  const t = 1 - y / H;
+  return 80 * Math.pow(2000 / 80, Math.max(0, Math.min(1, t)));
+}
+
+// Mobile: horizontal axis = hz (left = low, right = high)
+function hzToX_mobile(hz) {
+  const minHz = 80, maxHz = 2000;
+  const t = (Math.log(hz) - Math.log(minHz)) / (Math.log(maxHz) - Math.log(minHz));
+  return t * W;
+}
+function xToHz_mobile(x) {
+  if (!W) return 440;
+  const t = x / W;
+  return 80 * Math.pow(2000 / 80, Math.max(0, Math.min(1, t)));
+}
+
+/* ── UI CANVAS (playhead + compositing) ── */
+function drawUI() {
+  if (!uiCtx || !W || !H) return;
+  uiCtx.clearRect(0, 0, W, H);
+
+  // Draw zoomed view of layer canvases
+  if (zoomLevel > 1) {
+    if (isMobile()) {
+      // Zoom: vertical
+      const srcH = H / zoomLevel;
+      Object.keys(LAYERS).forEach(k => {
+        if (!visibleLayers[k]) return;
+        const isActive = k === activeLayer;
+        uiCtx.globalAlpha = isActive ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
+        uiCtx.drawImage(canvases[k], 0, panOffsetY, W, srcH, 0, 0, W, H);
+      });
+    } else {
+      const srcW = W / zoomLevel;
+      Object.keys(LAYERS).forEach(k => {
+        if (!visibleLayers[k]) return;
+        const isActive = k === activeLayer;
+        uiCtx.globalAlpha = isActive ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
+        uiCtx.drawImage(canvases[k], panOffsetX, 0, srcW, H, 0, 0, W, H);
+      });
+    }
+  } else {
+    Object.keys(LAYERS).forEach(k => {
+      if (!visibleLayers[k]) return;
+      const isActive = k === activeLayer;
+      uiCtx.globalAlpha = isActive ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
+      uiCtx.drawImage(canvases[k], 0, 0);
+    });
+  }
+  uiCtx.globalAlpha = 1;
+
+  // Playhead
+  uiCtx.strokeStyle = 'rgba(176, 58, 46, 0.9)';
+  uiCtx.lineWidth = 2;
+  uiCtx.shadowColor = '#b03a2e';
+  uiCtx.shadowBlur = 5;
+
+  if (isMobile()) {
+    // Playhead = horizontal line
+    const screenY = canvasToScreen(0, playheadX).y; // playheadX is time position in canvas pixels
+    uiCtx.beginPath();
+    uiCtx.moveTo(0, screenY);
+    uiCtx.lineTo(W, screenY);
+    uiCtx.stroke();
+    uiCtx.shadowBlur = 0;
+    uiCtx.fillStyle = '#b03a2e';
+    uiCtx.font = '8px Inter, sans-serif';
+    uiCtx.fillText(playheadT.toFixed(2) + 's', 4, screenY - 3);
+  } else {
+    // Playhead = vertical line
+    const screenX = canvasToScreen(playheadX, 0).x;
+    uiCtx.beginPath();
+    uiCtx.moveTo(screenX, 0);
+    uiCtx.lineTo(screenX, H);
+    uiCtx.stroke();
+    uiCtx.shadowBlur = 0;
+    uiCtx.fillStyle = '#b03a2e';
+    uiCtx.font = '8px Inter, sans-serif';
+    const lx = screenX + 4 + (screenX > W - 40 ? -40 : 0);
+    uiCtx.fillText(playheadT.toFixed(2) + 's', lx, 11);
+  }
+}
+
+/* ── CLEAR OVERLAY ── */
+function clearOverlay() {
+  if (overlayCtx) overlayCtx.clearRect(0, 0, W, H);
+}
+
+/* ── OVERLAY PREVIEWS ── */
+// These work in screen coordinates (what you see, accounting for zoom/pan)
+function drawOverlayLine(a, b) {
+  if (!overlayCtx) return;
+  overlayCtx.clearRect(0, 0, W, H);
+  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
+  overlayCtx.lineWidth = Math.max(1, brushSize * zoomLevel);
+  overlayCtx.lineCap = 'round';
+  overlayCtx.setLineDash([6, 4]);
+  overlayCtx.beginPath();
+  overlayCtx.moveTo(a.x, a.y);
+  overlayCtx.lineTo(b.x, b.y);
+  overlayCtx.stroke();
+  overlayCtx.setLineDash([]);
+}
+
+function drawOverlaySine(a, b) {
+  if (!overlayCtx) return;
+  overlayCtx.clearRect(0, 0, W, H);
+  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
+  overlayCtx.lineWidth = Math.max(1, brushSize * zoomLevel * 0.6);
+  overlayCtx.lineCap = 'round';
+  overlayCtx.setLineDash([6, 4]);
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const steps = Math.max(4, Math.abs(isMobile() ? dy : dx));
+  overlayCtx.beginPath();
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const x = a.x + dx * t;
+    const amp2 = dy / 2;
+    const y = a.y + amp2 + Math.sin(t * 2 * Math.PI * 2) * amp2;
+    i === 0 ? overlayCtx.moveTo(x, y) : overlayCtx.lineTo(x, y);
+  }
+  overlayCtx.stroke();
+  overlayCtx.setLineDash([]);
+}
+
+function drawOverlayCircle(a, b) {
+  if (!overlayCtx) return;
+  overlayCtx.clearRect(0, 0, W, H);
+  const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2;
+  const rx = Math.max(1, Math.abs(b.x - a.x) / 2);
+  const ry = Math.max(1, Math.abs(b.y - a.y) / 2);
+  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
+  overlayCtx.lineWidth = Math.max(1, brushSize * zoomLevel * 0.6);
+  overlayCtx.setLineDash([6, 4]);
+  overlayCtx.beginPath();
+  overlayCtx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+  overlayCtx.stroke();
+  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '33';
+  overlayCtx.lineWidth = 1;
+  overlayCtx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
+  overlayCtx.setLineDash([]);
+}
+
+function drawOverlayFlat(a, b) {
+  if (!overlayCtx) return;
+  overlayCtx.clearRect(0, 0, W, H);
+  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
+  overlayCtx.lineWidth = Math.max(1, brushSize * zoomLevel);
+  overlayCtx.lineCap = 'round';
+  overlayCtx.setLineDash([6, 4]);
+  overlayCtx.beginPath();
+  if (isMobile()) {
+    // flat = horizontal in screen space = constant time in canvas
+    const midX = (a.x + b.x) / 2;
+    overlayCtx.moveTo(midX, a.y);
+    overlayCtx.lineTo(midX, b.y);
+  } else {
+    const midY = (a.y + b.y) / 2;
+    overlayCtx.moveTo(a.x, midY);
+    overlayCtx.lineTo(b.x, midY);
+  }
+  overlayCtx.stroke();
+  overlayCtx.setLineDash([]);
+}
+
+/* ── CANVAS SAMPLING ── */
+function sampleLayer(layerKey, canvasPos) {
+  // canvasPos = position along the TIME axis in canvas pixels
+  const ctx = ctxs[layerKey];
+  if (!ctx) return -1;
+
+  if (isMobile()) {
+    // time = Y axis, value = X axis
+    const py = Math.max(0, Math.min(H - 1, Math.round(canvasPos)));
+    const imageData = ctx.getImageData(0, py, W, 1);
+    const data = imageData.data;
+    let weightedX = 0, totalWeight = 0;
+    for (let col = 0; col < W; col++) {
+      const a = data[col * 4 + 3];
+      if (a > 8) {
+        const w = a / 255;
+        weightedX += col * w;
+        totalWeight += w;
+      }
+    }
+    if (totalWeight === 0) return -1;
+    return (weightedX / totalWeight) / W; // 0 = left = low, 1 = right = high
+  } else {
+    // time = X axis, value = Y axis
+    const px = Math.max(0, Math.min(W - 1, Math.round(canvasPos)));
+    const imageData = ctx.getImageData(px, 0, 1, H);
+    const data = imageData.data;
+    let weightedY = 0, totalWeight = 0;
+    for (let row = 0; row < H; row++) {
+      const a = data[row * 4 + 3];
+      if (a > 8) {
+        const w = a / 255;
+        weightedY += row * w;
+        totalWeight += w;
+      }
+    }
+    if (totalWeight === 0) return -1;
+    return (weightedY / totalWeight) / H; // 0 = top = high, 1 = bottom = low
+  }
+}
+
+function normToAudio(layerKey, norm) {
+  // norm is 0..1:
+  // pitch desktop: 0=top=2000Hz, 1=bottom=80Hz  → so pitch = 80 * (2000/80)^(1-norm)
+  // pitch mobile:  0=left=80Hz,  1=right=2000Hz → same formula but norm means high, so flip
+  if (isMobile()) {
+    // norm = 0 means left = 80Hz (low), norm = 1 means right = 2000Hz (high)
+    // so pitch = 80 * (2000/80)^norm
+    if (layerKey === 'pitch') return 80 * Math.pow(2000 / 80, norm);
+    return norm; // amp, timbre, mod: 0=left=low, 1=right=high; re-map below
+  } else {
+    // norm = 0=top=high, 1=bottom=low
+    if (layerKey === 'pitch') return 80 * Math.pow(2000 / 80, 1 - norm);
+    return 1 - norm;
+  }
+}
+
+function sampleAndApply() {
+  if (!AC) return;
+  const pitchNorm  = sampleLayer('pitch',  playheadX);
+  const ampNorm    = sampleLayer('amp',    playheadX);
+  const timbreNorm = sampleLayer('timbre', playheadX);
+  const modNorm    = sampleLayer('mod',    playheadX);
+
+  const tc = 0.06;
+
+  let targetPitch, targetAmp, targetFilter, targetMod;
+
+  if (isMobile()) {
+    targetPitch  = pitchNorm  >= 0 ? normToAudio('pitch',  pitchNorm)  : 0;
+    targetAmp    = ampNorm    >= 0 ? ampNorm    : (pitchNorm >= 0 ? 0.6 : 0);
+    targetFilter = timbreNorm >= 0 ? 200 * Math.pow(8000/200, timbreNorm) : 2000;
+    targetMod    = modNorm    >= 0 ? modNorm    : 0;
+  } else {
+    targetPitch  = pitchNorm  >= 0 ? normToAudio('pitch', pitchNorm)  : 0;
+    targetAmp    = ampNorm    >= 0 ? normToAudio('amp',   ampNorm)    : (pitchNorm >= 0 ? 0.6 : 0);
+    targetFilter = timbreNorm >= 0 ? 200 * Math.pow(8000/200, 1 - timbreNorm) : 2000;
+    targetMod    = modNorm    >= 0 ? normToAudio('mod',   modNorm)    : 0;
+  }
+
+  const drift = analogOn ? (Math.random() - 0.5) * targetPitch * 0.004 : 0;
+
+  voices.forEach((v, i) => {
+    let pitchOffset = 0;
+    if (numVoices > 1) {
+      const intervals = [0, 1.5, 1.2, -1.2, 1.7, -1.5];
+      pitchOffset = (intervals[i] || 0) * 50;
+    }
+    if (targetPitch > 0 && targetAmp > 0) {
+      ramp(v.osc.frequency, Math.max(20, targetPitch + pitchOffset + drift), tc);
+      ramp(v.oscGain.gain, targetAmp * 0.6, tc);
+    } else {
+      ramp(v.oscGain.gain, 0, tc);
+    }
+    ramp(v.filter.frequency, targetFilter, tc * 2);
+    ramp(v.vGain.gain, 1, tc);
+    ramp(v.vibGain.gain, targetMod * 25, tc);
+    ramp(v.fmGain.gain, targetMod * targetPitch * 0.08, tc);
+    v.fmLFO.frequency.setTargetAtTime(2 + targetMod * 8, AC.currentTime, tc);
+    v.osc.type = waveType;
+  });
+
+  document.getElementById('ost-pos').textContent    = playheadT.toFixed(2) + 's';
+  document.getElementById('ost-pitch').textContent  = targetPitch > 0 ? targetPitch.toFixed(0) + ' Hz' : '—';
+  document.getElementById('ost-amp').textContent    = targetAmp > 0 ? (targetAmp * 100).toFixed(0) + '%' : '—';
+  document.getElementById('ost-filter').textContent = targetFilter.toFixed(0) + ' Hz';
+}
+
+/* ── RAF LOOP ── */
+function raf(ts) {
+  if (!playing) return;
+  const dt = lastRafT ? (ts - lastRafT) / 1000 : 0;
+  lastRafT = ts;
+
+  // playheadX moves along the TIME axis in canvas pixels
+  const canvasLength = isMobile() ? H : W;
+  playheadX += dt * speed * PIXELS_PER_SECOND;
+  playheadT  = playheadX / PIXELS_PER_SECOND;
+
+  if (playheadX >= canvasLength) {
+    if (looping) { playheadX = 0; playheadT = 0; }
+    else { ORM.stop(); return; }
+  }
+
+  // Auto-pan to follow playhead when zoomed
+  if (zoomLevel > 1) {
+    if (isMobile()) {
+      // Pan so playhead stays in view (vertical)
+      const screenY = canvasToScreen(0, playheadX).y;
+      if (screenY > H * 0.75) {
+        panOffsetY = Math.min(canvasLength - H / zoomLevel, panOffsetY + (screenY - H * 0.75));
+      }
+      if (screenY < H * 0.25) {
+        panOffsetY = Math.max(0, panOffsetY - (H * 0.25 - screenY));
+      }
+    } else {
+      const screenX = canvasToScreen(playheadX, 0).x;
+      if (screenX > W * 0.75) {
+        panOffsetX = Math.min(W - W / zoomLevel, panOffsetX + (screenX - W * 0.75));
+      }
+      if (screenX < W * 0.25) {
+        panOffsetX = Math.max(0, panOffsetX - (W * 0.25 - screenX));
+      }
+    }
+  }
+
+  sampleAndApply();
+  drawUI();
+  rafId = requestAnimationFrame(raf);
+}
+
+/* ══════════════════════════════════════════════════════════
+   DRAWING
+══════════════════════════════════════════════════════════ */
+
+function getScreenPos(e) {
+  const c = document.getElementById('oc-draw');
+  const r = c.getBoundingClientRect();
+  return {
+    x: (e.clientX || 0) - r.left,
+    y: (e.clientY || 0) - r.top,
+  };
+}
+
+function onDrawStart(e) {
+  if (!AC) initAudio();
+  const sp = getScreenPos(e);
+  const cp = screenToCanvas(sp.x, sp.y);
+
+  if (['line','sine','circle','flat'].includes(tool)) {
+    lineStart = sp;
+    drawing = true;
+    return;
+  }
+
+  drawing = true;
+  lastPos = null;
+  pushUndo(activeLayer);
+  drawMarkAt(cp);
+  backupLayer(activeLayer);
+  drawUI();
+  maybePreviewPitch(cp);
+  lastPos = cp;
+}
+
+function onDrawMove(e) {
+  const sp = getScreenPos(e);
+  const cp = screenToCanvas(sp.x, sp.y);
+
+  // Status tip
+  let valStr;
+  if (isMobile()) {
+    valStr = activeLayer === 'pitch'
+      ? xToHz_mobile(cp.x).toFixed(0) + ' Hz'
+      : ((cp.x / W) * 100).toFixed(0) + '%';
+    document.getElementById('ost-tip').textContent =
+      `${activeLayer}: ${valStr} · t=${( cp.y / PIXELS_PER_SECOND).toFixed(2)}s`;
+  } else {
+    valStr = activeLayer === 'pitch'
+      ? yToHz(cp.y).toFixed(0) + ' Hz'
+      : ((1 - cp.y / H) * 100).toFixed(0) + '%';
+    document.getElementById('ost-tip').textContent =
+      `${activeLayer}: ${valStr} · t=${( cp.x / PIXELS_PER_SECOND).toFixed(2)}s`;
+  }
+
+  if (!drawing) return;
+
+  if (['line','sine','circle','flat'].includes(tool)) {
+    if (lineStart) {
+      if (tool === 'line')   drawOverlayLine(lineStart, sp);
+      if (tool === 'sine')   drawOverlaySine(lineStart, sp);
+      if (tool === 'circle') drawOverlayCircle(lineStart, sp);
+      if (tool === 'flat')   drawOverlayFlat(lineStart, sp);
+    }
+    return;
+  }
+
+  if (tool === 'erase' || tool === 'brush') {
+    drawMarkAt(cp);
+    backupLayer(activeLayer);
+    drawUI();
+    maybePreviewPitch(cp);
+    lastPos = cp;
+  }
+}
+
+function onDrawEnd(e) {
+  if (!drawing) return;
+  const sp = e ? getScreenPos(e) : null;
+  clearOverlay();
+
+  if (['line','sine','circle','flat'].includes(tool) && lineStart && sp) {
+    const epSP = sp;
+    const aSP = lineStart;
+    // Convert to canvas coords
+    const a = screenToCanvas(aSP.x, aSP.y);
+    const b = screenToCanvas(epSP.x, epSP.y);
+    pushUndo(activeLayer);
+    if (tool === 'line')   commitLine(a, b);
+    if (tool === 'sine')   commitSine(a, b);
+    if (tool === 'circle') commitCircle(a, b);
+    if (tool === 'flat')   commitFlat(a, b);
+    backupLayer(activeLayer);
+    drawUI();
+    lineStart = null;
+  }
+
+  drawing = false;
+  lastPos = null;
+
+  if (AC && voices.length && activeLayer === 'pitch' && !playing) {
+    clearTimeout(ORM._previewTimeout);
+    ORM._previewTimeout = setTimeout(() => {
+      voices[0].oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08);
+    }, 120);
+  }
+}
+
+function onDrawLeave() {
+  if (!['line','sine','circle','flat'].includes(tool)) onDrawEnd(null);
+  document.getElementById('ost-tip').textContent = 'Draw on the canvas · left→right = time · up/down = value';
+}
+
+function maybePreviewPitch(cp) {
+  if (activeLayer === 'pitch' && AC && voices.length) {
+    const hz = isMobile() ? xToHz_mobile(cp.x) : yToHz(cp.y);
+    voices[0].osc.frequency.setTargetAtTime(hz, AC.currentTime, 0.02);
+    voices[0].oscGain.gain.setTargetAtTime(0.35, AC.currentTime, 0.02);
+    voices[0].vGain.gain.value = 1;
+  }
+}
+
+/* Drawing to layer canvas in canvas coords */
+function drawMarkAt(cp) {
+  const ctx = ctxs[activeLayer];
+  const color = LAYERS[activeLayer].color;
+  const x = cp.x, y = cp.y;
+
+  if (tool === 'erase') {
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(x, y, brushSize * 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,1)';
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    return;
+  }
+  if (tool !== 'brush') return;
+
+  if (lastPos && brushSoft > 0) {
+    const dist = Math.hypot(x - lastPos.x, y - lastPos.y);
+    const steps = Math.ceil(dist / (Math.max(1, brushSize) * 0.4));
+    for (let s = 0; s <= steps; s++) {
+      const t = steps ? s / steps : 0;
+      drawBrushDab(ctx, lastPos.x + (x - lastPos.x) * t, lastPos.y + (y - lastPos.y) * t, color);
+    }
+  } else {
+    drawBrushDab(ctx, x, y, color);
+  }
+}
+
+function drawBrushDab(ctx, x, y, color) {
+  const r = Math.max(1, brushSize);
+  if (brushSoft > 0.05) {
+    const coreR = (1 - brushSoft) * r;
+    const grad = ctx.createRadialGradient(x, y, Math.max(0, coreR), x, y, r);
+    grad.addColorStop(0,   color + 'ee');
+    grad.addColorStop(0.4, color + 'cc');
+    grad.addColorStop(1,   color + '00');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    ctx.fillStyle = color + 'dd';
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+/* Commit tools (canvas coords) */
+function commitLine(a, b) {
+  const ctx = ctxs[activeLayer];
+  ctx.strokeStyle = LAYERS[activeLayer].color + 'cc';
+  ctx.lineWidth = brushSize;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
+  ctx.stroke();
+}
+
+function commitSine(a, b) {
+  const ctx = ctxs[activeLayer];
+  ctx.strokeStyle = LAYERS[activeLayer].color + 'cc';
+  ctx.lineWidth = brushSize;
+  ctx.lineCap = 'round';
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const steps = Math.max(4, Math.abs(isMobile() ? dy : dx));
+  ctx.beginPath();
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const x = a.x + dx * t;
+    const amp2 = dy / 2;
+    const y = a.y + amp2 + Math.sin(t * 2 * Math.PI * 2) * amp2;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+}
+
+function commitCircle(a, b) {
+  const ctx = ctxs[activeLayer];
+  const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2;
+  const rx = Math.max(1, Math.abs(b.x - a.x) / 2);
+  const ry = Math.max(1, Math.abs(b.y - a.y) / 2);
+  ctx.strokeStyle = LAYERS[activeLayer].color + 'cc';
+  ctx.lineWidth = brushSize;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function commitFlat(a, b) {
+  const ctx = ctxs[activeLayer];
+  ctx.strokeStyle = LAYERS[activeLayer].color + 'cc';
+  ctx.lineWidth = brushSize;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  if (isMobile()) {
+    // flat in mobile = constant value (vertical line in canvas coords)
+    const midX = (a.x + b.x) / 2;
+    ctx.moveTo(midX, a.y);
+    ctx.lineTo(midX, b.y);
+  } else {
+    const midY = (a.y + b.y) / 2;
+    ctx.moveTo(a.x, midY);
+    ctx.lineTo(b.x, midY);
+  }
+  ctx.stroke();
+}
+
+/* ── BRUSH PREVIEW ── */
+function updateBrushPreview() {
+  const dot = document.getElementById('ormBrushDot');
+  if (!dot) return;
+  const maxD = 30;
+  const d = Math.min(maxD, brushSize * (brushSoft > 0.05 ? 1.5 : 0.85));
+  dot.style.width  = d + 'px';
+  dot.style.height = d + 'px';
+  dot.style.filter = brushSoft > 0.1 ? `blur(${(brushSoft * 2).toFixed(1)}px)` : 'none';
+  dot.style.background = LAYERS[activeLayer].color;
+}
+
+/* ── KEYBOARD ── */
+function onKeyDown(e) {
+  const tag = (e.target || e.srcElement).tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+
+  switch (e.key) {
+    case ' ':
+      e.preventDefault();
+      playing ? ORM.stop() : ORM.play();
+      break;
+    case 'z': case 'Z':
+      if (e.metaKey || e.ctrlKey) { e.preventDefault(); ORM.undo(); }
+      break;
+    case 'b': case 'B': ORM.setTool('brush');  break;
+    case 'l': case 'L': ORM.setTool('line');   break;
+    case 'e': case 'E': ORM.setTool('erase');  break;
+    case 's': case 'S': ORM.setTool('sine');   break;
+    case 'c': case 'C': ORM.setTool('circle'); break;
+    case 'f': case 'F': ORM.setTool('flat');   break;
+    case '1': ORM.setLayer('pitch');  break;
+    case '2': ORM.setLayer('amp');    break;
+    case '3': ORM.setLayer('timbre'); break;
+    case '4': ORM.setLayer('mod');    break;
+    case '[': ORM.setBrushSize(Math.max(1,  brushSize - 2)); break;
+    case ']': ORM.setBrushSize(Math.min(60, brushSize + 2)); break;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   RANDOM GENERATORS
+══════════════════════════════════════════════════════════ */
+function generateOrganicCurve(ctx, color, points, brushW) {
+  const ptList = [];
+  for (let i = 0; i <= points; i++) {
+    if (isMobile()) {
+      ptList.push({ y: (i / points) * H, x: 0.15*W + Math.random()*0.7*W });
+    } else {
+      ptList.push({ x: (i / points) * W, y: 0.15*H + Math.random()*0.7*H });
+    }
+  }
+  ctx.strokeStyle = color + 'cc';
+  ctx.lineWidth = brushW * 8;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(ptList[0].x, ptList[0].y);
+  for (let i = 1; i < ptList.length - 1; i++) {
+    const xc = (ptList[i].x + ptList[i+1].x) / 2;
+    const yc = (ptList[i].y + ptList[i+1].y) / 2;
+    ctx.quadraticCurveTo(ptList[i].x, ptList[i].y, xc, yc);
+  }
+  ctx.lineTo(ptList[ptList.length-1].x, ptList[ptList.length-1].y);
+  ctx.stroke();
+  // Soft blobs along the curve
+  for (let i = 0; i < points * 3; i++) {
+    const t = Math.random();
+    const idx = Math.floor(t * (ptList.length - 1));
+    const base = ptList[Math.min(idx, ptList.length-1)];
+    const bx = base.x + (Math.random()-.5) * 30;
+    const by = base.y + (Math.random()-.5) * 30;
+    const r = 12 + Math.random() * 20;
+    const grad = ctx.createRadialGradient(bx, by, 0, bx, by, r);
+    grad.addColorStop(0, color + '66');
+    grad.addColorStop(1, color + '00');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(bx, by, r, 0, Math.PI*2); ctx.fill();
+  }
+}
+
+function generateSwells(ctx, color, count) {
+  for (let i = 0; i < count; i++) {
+    let cx, cy, rw, rh;
+    if (isMobile()) {
+      cy = (i + 0.5 + Math.random()*0.4 - 0.2) / count * H;
+      rh = (0.06 + Math.random()*0.12) * H;
+      cx = W * (0.1 + Math.random()*0.3);
+      rw = rh;
+    } else {
+      cx = (i + 0.5 + Math.random()*0.4 - 0.2) / count * W;
+      rw = (0.06 + Math.random()*0.12) * W;
+      cy = H * (0.1 + Math.random()*0.3);
+      rh = rw * 0.7;
+    }
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(rw, rh));
+    grad.addColorStop(0, color + 'dd');
+    grad.addColorStop(0.5, color + '88');
+    grad.addColorStop(1, color + '00');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, Math.max(1,rw), Math.max(1,rh), 0, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function generateSparseMarks(ctx, color) {
+  const count = 4 + Math.floor(Math.random()*6);
+  for (let i = 0; i < count; i++) {
+    let x1, y1, x2, y2;
+    if (isMobile()) {
+      x1 = Math.random() * W * 0.5;
+      y1 = Math.random() * H;
+      const len = (0.04 + Math.random()*0.12) * H;
+      x2 = x1 + (Math.random()-.5)*W*0.2;
+      y2 = y1 + len;
+    } else {
+      x1 = Math.random() * W;
+      y1 = Math.random() * H * 0.5;
+      const len = (0.04 + Math.random()*0.12) * W;
+      x2 = x1 + len;
+      y2 = y1 + (Math.random()-.5)*H*0.2;
+    }
+    ctx.strokeStyle = color + 'bb';
+    ctx.lineWidth = 4 + Math.random()*10;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   PUBLIC CONTROLLER
+══════════════════════════════════════════════════════════ */
+const ORM = window.ORM = {
+  _previewTimeout: null,
+
+  togglePlay() { playing ? ORM.stop() : ORM.play(); },
+
+  play() {
+    if (!AC) initAudio();
+    if (AC.state === 'suspended') AC.resume();
+    playing = true;
+    lastRafT = 0;
+    const btn = document.getElementById('orm-play');
+    btn.innerHTML = '<svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" style="margin-right:3px"><rect width="9" height="9"/></svg>stop';
+    btn.classList.add('active');
+    rafId = requestAnimationFrame(raf);
+  },
+
+  stop() {
+    playing = false;
+    cancelAnimationFrame(rafId);
+    if (AC) voices.forEach(v => v.oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08));
+    const btn = document.getElementById('orm-play');
+    btn.innerHTML = '<svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px"><path d="M0 0l9 5.5L0 11z"/></svg>play';
+    btn.classList.remove('active');
+    drawUI();
+  },
+
+  toggleLoop() {
+    looping = !looping;
+    document.getElementById('orm-loop').classList.toggle('active', looping);
+  },
+
+  setSpeed(v) {
+    speed = v;
+    document.getElementById('orm-speed-val').textContent = v.toFixed(2) + '×';
+  },
+
+  setWave(w) {
+    waveType = w;
+    voices.forEach(v => { v.osc.type = w; });
+  },
+
+  setVoices(n) {
+    numVoices = n;
+    if (AC) buildVoices();
+  },
+
+  setAnalog(on) {
+    analogOn = on;
+    if (analogLFOGain && AC) {
+      analogLFOGain.gain.setTargetAtTime(on ? 8 : 0, AC.currentTime, 0.3);
+    }
+  },
+
+  setLayer(k) {
+    activeLayer = k;
+    document.querySelectorAll('.orm-layer-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('ltab-' + k).classList.add('active');
+    document.getElementById('orm-layer-hint').textContent = LAYERS[k].hint;
+    const sc = LAYER_SCALES[k];
+    document.getElementById('orm-scale-top').textContent = sc.top;
+    document.getElementById('orm-scale-mid').textContent = sc.mid;
+    document.getElementById('orm-scale-bot').textContent = sc.bot;
+    updateBrushPreview();
+  },
+
+  toggleVis(k, e) {
+    e.stopPropagation();
+    visibleLayers[k] = !visibleLayers[k];
+    const vis = document.querySelector(`#ltab-${k} .orm-layer-vis`);
+    if (vis) vis.style.opacity = visibleLayers[k] ? '1' : '0.2';
+    drawUI();
+  },
+
+  setTool(t) {
+    tool = t;
+    document.querySelectorAll('.orm-tool-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('tool-' + t);
+    if (btn) btn.classList.add('active');
+    const cursors = { brush:'crosshair', line:'crosshair', erase:'cell', sine:'crosshair', circle:'crosshair', flat:'crosshair' };
+    document.getElementById('oc-draw').style.cursor = cursors[t] || 'crosshair';
+  },
+
+  setBrushSize(v) {
+    brushSize = v;
+    document.getElementById('orm-bsize-val').textContent = v;
+    document.getElementById('orm-bsize').value = v;
+    updateBrushPreview();
+  },
+
+  setBrushSoft(v) {
+    brushSoft = v;
+    document.getElementById('orm-bsoft-val').textContent = v.toFixed(2);
+    document.getElementById('orm-bsoft').value = v;
+    updateBrushPreview();
+  },
+
+  clearAll() {
+    Object.keys(LAYERS).forEach(k => {
+      ctxs[k].clearRect(0, 0, W, H);
+      delete layerImages[k];
+      undoStack[k] = [];
+    });
+    drawGrid();
+    drawUI();
+    ORM.stop();
+  },
+
+  undo() {
+    const stack = undoStack[activeLayer];
+    if (!stack.length) return;
+    const img = stack.pop();
+    ctxs[activeLayer].putImageData(img, 0, 0);
+    layerImages[activeLayer] = ctxs[activeLayer].getImageData(0, 0, W, H);
+    drawGrid();
+    drawUI();
+  },
+
+  randomize() {
+    Object.keys(LAYERS).forEach(k => {
+      pushUndo(k);
+      ctxs[k].clearRect(0, 0, W, H);
+      if (k === 'pitch')       generateOrganicCurve(ctxs[k], LAYERS[k].color, 3, 0.7);
+      else if (k === 'amp')    generateSwells(ctxs[k], LAYERS[k].color, 4);
+      else if (k === 'timbre') generateOrganicCurve(ctxs[k], LAYERS[k].color, 5, 0.5);
+      else if (k === 'mod')    generateSparseMarks(ctxs[k], LAYERS[k].color);
+      backupLayer(k);
+    });
+    drawUI();
+  },
+
+  zoomIn() {
+    if (zoomIdx < ZOOM_STEPS.length - 1) {
+      zoomIdx++;
+      zoomLevel = ZOOM_STEPS[zoomIdx];
+      // Reset pan so we don't jump to an empty area
+      clampPan();
+      drawGrid();
+      restoreLayerImages();
+      drawUI();
+    }
+  },
+
+  zoomOut() {
+    if (zoomIdx > 0) {
+      zoomIdx--;
+      zoomLevel = ZOOM_STEPS[zoomIdx];
+      clampPan();
+      drawGrid();
+      restoreLayerImages();
+      drawUI();
+    }
+  },
+};
+
+function clampPan() {
+  if (isMobile()) {
+    const maxPan = Math.max(0, H - H / zoomLevel);
+    panOffsetY = Math.max(0, Math.min(maxPan, panOffsetY));
+  } else {
+    const maxPan = Math.max(0, W - W / zoomLevel);
+    panOffsetX = Math.max(0, Math.min(maxPan, panOffsetX));
+  }
+}
+
+window.addEventListener('load', init);
+window.addEventListener('resize', () => {
+  // reset zoom pan on resize
+  clampPan();
+});
+
+}());
+</script>
+
+</body>
+</html>
