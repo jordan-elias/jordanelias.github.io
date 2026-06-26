@@ -91,7 +91,7 @@ class AudioEngine {
     const duration = 4.0; // Fixed 4-second window
     
     // Schedule target word at random time between 0.5s and 2.5s
-    const wordStartTime = startTime + 0.5 + (Math.random() * 2.0);
+    const wordStartTime = startTime + 0.4 + (Math.random() * 1.5);
     
     // Spatial positions for maskers (azimuth angles in radians)
     const positions = [
