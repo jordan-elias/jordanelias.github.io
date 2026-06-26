@@ -620,6 +620,166 @@
       .tape-grid { grid-template-columns: 1fr; }
       .lab-transport-sliders { flex-direction: column; gap: 16px; }
     }
+
+
+   /* ── Prevent horizontal drag / overflow on all viewports ── */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+ 
+  /* ── Mobile: compact lab section ── */
+  @media (max-width: 600px) {
+ 
+    /* Tighten the main lab box */
+    .lab-section {
+      padding: 1em 0.85em 1em;
+    }
+ 
+    /* Source row: tighter gap, smaller text */
+    .gen-row {
+      gap: 5px;
+      margin-bottom: 0.75em;
+    }
+ 
+    .gen-row-label {
+      font-size: 0.6rem;
+      margin-right: 2px;
+    }
+ 
+    /* Preset buttons (source, record new) */
+    .lab-preset-btn {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+    }
+ 
+    /* Upload label */
+    .upload-label {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+    }
+ 
+    /* Main action buttons (play, reset) */
+    .lab-btn {
+      font-size: 0.78rem;
+      padding: 0.4em 0.9em;
+      min-width: 72px;
+    }
+ 
+    /* Load tape button */
+    #load-tape-btn {
+      font-size: 0.78rem;
+      padding: 0.35em 0.85em;
+    }
+ 
+    /* Phase display: tighter, allow tighter wrapping */
+    .phase-display {
+      padding: 0.55em 0.75em;
+      gap: 0.5em;
+      margin-bottom: 0.9em;
+    }
+ 
+    .phase-col-label {
+      font-size: 0.58rem;
+    }
+ 
+    .phase-col-val {
+      font-size: 0.8rem;
+      min-width: 56px;
+    }
+ 
+    /* Sliders: tighter */
+    .lab-transport-sliders {
+      gap: 12px;
+      margin-bottom: 0.9em;
+    }
+ 
+    .lab-ctrl-label,
+    .lab-ctrl-val {
+      font-size: 0.62rem;
+    }
+ 
+    /* Sync row */
+    .sync-key-row {
+      margin-bottom: 0.75em;
+      gap: 7px;
+    }
+ 
+    .sync-key-badge {
+      font-size: 0.75rem;
+      padding: 0.2em 0.55em;
+    }
+ 
+    .sync-key-desc {
+      font-size: 0.68rem;
+    }
+ 
+    /* Lab hint */
+    .lab-hint {
+      font-size: 0.7rem;
+      margin-top: 0.65em;
+    }
+ 
+    /* Tape status */
+    .tape-status-row {
+      font-size: 0.7rem;
+      margin-bottom: 0.5em;
+    }
+ 
+    /* Melodic editor: compact on mobile */
+    #melodic-editor {
+      padding: 0.9em 0.85em 1em;
+    }
+ 
+    .mel-controls-row {
+      gap: 10px;
+      margin-bottom: 0.9em;
+    }
+ 
+    .mel-ctrl-label {
+      font-size: 0.58rem;
+    }
+ 
+    .mel-ctrl-group select {
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      min-width: 68px;
+    }
+ 
+    /* BPM slider label */
+    .mel-bpm-row {
+      margin-bottom: 0.9em;
+    }
+ 
+    /* Step pads: slightly smaller */
+    #mel-pads {
+      gap: 5px;
+      margin-bottom: 0.9em;
+    }
+ 
+    .mel-pad {
+      min-height: 46px;
+      padding: 0.4em 0.35em 0.3em;
+    }
+ 
+    .step-note-name {
+      font-size: 0.72rem;
+    }
+ 
+    .step-num {
+      font-size: 0.52rem;
+    }
+ 
+    .step-ind-a,
+    .step-ind-b {
+      font-size: 0.52rem;
+    }
+ 
+    .mel-action-row {
+      gap: 6px;
+    }
+ 
+  }
   </style>
 
   <script type="application/ld+json">
@@ -714,7 +874,6 @@
 
   <main class="page-content">
 
-<!-- ═══ 4. ADD THIS IMMEDIATELY BEFORE <div class="lab-section"> ══════ -->
 <div id="melodic-editor">
   <h3>Sequencer</h3>
  
@@ -764,11 +923,20 @@
  
   </div>
  
+  <!-- BPM control -->
+  <div class="lab-ctrl mel-bpm-row">
+    <input type="range" id="mel-bpm" min="40" max="240" value="120" step="1">
+    <div class="lab-ctrl-bottom">
+      <span class="lab-ctrl-label">tempo</span>
+      <span class="lab-ctrl-val" id="mel-bpm-val">120 bpm</span>
+    </div>
+  </div>
+ 
   <div id="mel-pads"></div>
  
   <div class="mel-action-row">
     <button class="lab-preset-btn" id="mel-clear">clear</button>
-    <button class="lab-btn" id="mel-load">load tape:</button>
+    <button class="lab-btn" id="mel-load">load tape &#8594;</button>
   </div>
 </div>
 <!-- end #melodic-editor -->
