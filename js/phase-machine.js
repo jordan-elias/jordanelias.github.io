@@ -228,9 +228,13 @@
   var melRoot   = 'C';
   var melScale  = 'Major';
   var melPads   = [];   /* [{name, midi} | null] */
-  var melBpm    = 120;
+  var melBpm    = 120;  /* kept in sync with #mel-bpm slider */
   var melActiveA = -1;
   var melActiveB = -1;
+
+  /* Touch detection — on touch devices we skip the mouseenter hover delay
+     so a single tap opens the note picker immediately (no double-tap needed) */
+  var isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
 
   /* Mic */
   var mediaRec    = null;
@@ -630,6 +634,9 @@
   }
 
   function commitMelodicTape() {
+    /* Read current BPM from slider before rendering */
+    var bpmEl = document.getElementById('mel-bpm');
+    if (bpmEl) melBpm = parseInt(bpmEl.value, 10) || 120;
     var result = renderMelodicBuffer(melPads, melBpm);
     currentMode = MODE.MELODIC;
     setSrcUI('melodic');
@@ -718,7 +725,8 @@
     pad.appendChild(indRow);
     pad.appendChild(picker);
 
-    /* Click: toggle picker */
+    /* Click / tap: open picker immediately (works for both mouse and touch).
+       On touch devices this is the only interaction path — no hover delay. */
     pad.addEventListener('click', function (e) {
       if (e.target.closest('.note-picker')) return;
       var isOpen = picker.classList.contains('visible');
@@ -726,23 +734,25 @@
       if (!isOpen) picker.classList.add('visible');
     });
 
-    /* Hover: open after short delay */
-    var hoverTimer = null;
-    pad.addEventListener('mouseenter', function () {
-      clearTimeout(hoverTimer);
-      hoverTimer = setTimeout(function () {
-        closeAllPickers();
-        picker.classList.add('visible');
-      }, 150);
-    });
-    pad.addEventListener('mouseleave', function (e) {
-      clearTimeout(hoverTimer);
-      if (picker.contains(e.relatedTarget)) return;
-      picker.classList.remove('visible');
-    });
-    picker.addEventListener('mouseleave', function (e) {
-      if (!pad.contains(e.relatedTarget)) picker.classList.remove('visible');
-    });
+    /* Hover (desktop only): open after short delay, close on leave */
+    if (!isTouchDevice) {
+      var hoverTimer = null;
+      pad.addEventListener('mouseenter', function () {
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function () {
+          closeAllPickers();
+          picker.classList.add('visible');
+        }, 150);
+      });
+      pad.addEventListener('mouseleave', function (e) {
+        clearTimeout(hoverTimer);
+        if (picker.contains(e.relatedTarget)) return;
+        picker.classList.remove('visible');
+      });
+      picker.addEventListener('mouseleave', function (e) {
+        if (!pad.contains(e.relatedTarget)) picker.classList.remove('visible');
+      });
+    }
 
     return pad;
   }
@@ -900,12 +910,18 @@
     var melStepsEl = document.getElementById('mel-steps');
     var melRootEl  = document.getElementById('mel-root');
     var melScaleEl = document.getElementById('mel-scale');
+    var melBpmEl   = document.getElementById('mel-bpm');
+    var melBpmVal  = document.getElementById('mel-bpm-val');
     var melClear   = document.getElementById('mel-clear');
     var melLoad    = document.getElementById('mel-load');
 
     if (melStepsEl) melStepsEl.addEventListener('change', buildPads);
     if (melRootEl)  melRootEl.addEventListener('change', onKeyOrScaleChange);
     if (melScaleEl) melScaleEl.addEventListener('change', onKeyOrScaleChange);
+    if (melBpmEl)   melBpmEl.addEventListener('input', function (e) {
+      melBpm = parseInt(e.target.value, 10) || 120;
+      if (melBpmVal) melBpmVal.textContent = melBpm + ' bpm';
+    });
     if (melClear)   melClear.addEventListener('click', function () {
       melPads = [];
       buildPads();
