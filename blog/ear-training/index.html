@@ -1289,7 +1289,7 @@ const Game = window.Game = {
       const invStr = G.currentAnswer.inversion > 0
         ? ` — ${['','1st','2nd'][G.currentAnswer.inversion]} inversion` : '';
       feedbackEl.textContent = correct
-        ? `✓ ${chord.name}${invStr}`
+        ? `${chord.name}${invStr}`
         : `${chord.name} (${chord.symbol || 'triad'})${invStr}`;
 
       if (!correct) G.errors[chord.name] = (G.errors[chord.name] || 0) + 1;
