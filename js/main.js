@@ -94,7 +94,7 @@ async function preloadAssets() {
   // Load a few sample target words
   const sampleWords = ['red', 'blue', 'one', 'two'];
   for (const word of sampleWords) {
-    for (let variant = 0; variant < 3; variant++) {
+    for (let variant = 0; variant < 6; variant++) {
       await assetLoader.loadTargetWord(word, variant);
     }
   }
@@ -332,7 +332,7 @@ async function play() {
     audioEngine.stopAll();
     stopSpectrogram();
     state.isPlaying = false;
-    document.getElementById('btn-play').innerHTML = '&#9654;&#xFE0E; play';
+    document.getElementById('btn-play').innerHTML = 'play';
     return;
   }
   
@@ -401,7 +401,7 @@ async function play() {
   
   // Update UI
   state.isPlaying = true;
-  document.getElementById('btn-play').innerHTML = '&#9632;&#xFE0E; stop';
+  document.getElementById('btn-play').innerHTML = 'stop';
   document.getElementById('btn-repeat').disabled = false;
   showFeedback('', '');
   
@@ -413,7 +413,7 @@ async function play() {
   // Auto-enable controls after playback
   setTimeout(() => {
     state.isPlaying = false;
-    document.getElementById('btn-play').innerHTML = '&#9654;&#xFE0E; play';
+    document.getElementById('btn-play').innerHTML = 'next';
     if (state.spectrogramEnabled) stopSpectrogram();
   }, duration * 1000);
 }
@@ -440,7 +440,7 @@ function repeat() {
   
   // Update UI
   state.isPlaying = true;
-  document.getElementById('btn-play').innerHTML = '&#9632;&#xFE0E; stop';
+  document.getElementById('btn-play').innerHTML = 'stop';
   
   // Start spectrogram
   if (state.spectrogramEnabled) {
@@ -450,7 +450,7 @@ function repeat() {
   // Auto-enable controls after playback
   setTimeout(() => {
     state.isPlaying = false;
-    document.getElementById('btn-play').innerHTML = '&#9654;&#xFE0E; play';
+    document.getElementById('btn-play').innerHTML = 'next';
     if (state.spectrogramEnabled) stopSpectrogram();
   }, duration * 1000);
 }
@@ -460,7 +460,7 @@ function next() {
   stopSpectrogram();
   
   state.isPlaying = false;
-  document.getElementById('btn-play').innerHTML = '&#9654;&#xFE0E; play';
+  document.getElementById('btn-play').innerHTML = 'next';
   document.getElementById('btn-repeat').disabled = true;
   document.getElementById('btn-next').disabled = true;
   
