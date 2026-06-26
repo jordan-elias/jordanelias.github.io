@@ -191,7 +191,7 @@
   ]
 }
 </script>
-
+  
   <style>
     /* ── PAGE LAYOUT (mirrors timbre-lab) ── */
     body { padding-top: 64px; }
@@ -238,23 +238,21 @@
       width: calc(100% - 72px);
     }
 
-    /* ── LAYER COLORS (color-theory palette for pink/navy site) ── */
-    /* Terracotta, sage, amber, plum — muted, harmonious */
+    /* ── LAYER COLORS ── */
     :root {
-      --layer-pitch:  #b85c38; /* terracotta / rust   */
-      --layer-amp:    #4a7c59; /* sage / forest green  */
-      --layer-timbre: #c49a2a; /* warm amber / ochre   */
-      --layer-mod:    #7a3f6e; /* deep plum / violet   */
+      --layer-pitch:  #b85c38;
+      --layer-amp:    #4a7c59;
+      --layer-timbre: #c49a2a;
+      --layer-mod:    #7a3f6e;
     }
 
     /* ── ORAMICS APP ── */
     .orm-app {
       border: 1px solid var(--text);
-      background: #fff;
+      background: var(--bg);
       display: flex;
       flex-direction: column;
       margin: 1.5em 0 1em;
-      /* no border-radius — matches blog's zero-radius aesthetic */
     }
 
     /* ── TRANSPORT BAR ── */
@@ -266,6 +264,7 @@
       border-bottom: 1px solid var(--text);
       flex-wrap: wrap;
       background: var(--bg);
+      flex-shrink: 0;
     }
 
     .orm-sep {
@@ -292,7 +291,7 @@
       line-height: 1.4;
       touch-action: manipulation;
     }
-    .orm-btn:hover { background: var(--text); color: var(--bg); }
+    .orm-btn:hover  { background: var(--text); color: var(--bg); }
     .orm-btn.active { background: var(--text); color: var(--bg); }
     .orm-btn.danger:hover { background: #b03a2e; border-color: #b03a2e; color: #fff; }
     .orm-btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
@@ -330,26 +329,18 @@
     }
     input[type=range].orm-slider {
       -webkit-appearance: none;
-      width: 64px;
-      height: 2px;
+      width: 64px; height: 2px;
       background: var(--text);
-      outline: none;
-      cursor: pointer;
-      opacity: .6;
+      outline: none; cursor: pointer; opacity: .6;
     }
     input[type=range].orm-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 13px; height: 13px;
-      border-radius: 50%;
-      background: var(--text);
-      cursor: pointer;
+      border-radius: 50%; background: var(--text); cursor: pointer;
     }
     input[type=range].orm-slider::-moz-range-thumb {
       width: 13px; height: 13px;
-      border-radius: 50%;
-      background: var(--text);
-      border: none;
-      cursor: pointer;
+      border-radius: 50%; background: var(--text); border: none; cursor: pointer;
     }
 
     /* analog toggle */
@@ -384,13 +375,13 @@
       width: 100%;
       background: #fff;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
-    /* zoom controls — top right of canvas */
+    /* zoom indicator + controls */
     .orm-zoom-controls {
       position: absolute;
-      top: 6px;
-      right: 6px;
+      top: 6px; right: 6px;
       z-index: 30;
       display: flex;
       flex-direction: column;
@@ -400,32 +391,42 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: .8rem;
       font-weight: 600;
-      width: 26px;
-      height: 26px;
+      width: 26px; height: 26px;
       border: 1px solid var(--text);
       background: var(--bg);
       color: var(--text);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       line-height: 1;
       transition: background .1s, color .1s;
       touch-action: manipulation;
       padding: 0;
     }
     .orm-zoom-btn:hover { background: var(--text); color: var(--bg); }
+    .orm-zoom-level {
+      font-family: 'Inter', sans-serif;
+      font-size: .55rem;
+      text-align: center;
+      color: var(--text);
+      opacity: .55;
+      line-height: 1.4;
+    }
 
-    /* canvas stack */
+    /* The canvas inner is the viewport into the larger logical canvas */
     .orm-canvas-inner {
       position: absolute;
       inset: 0;
+      overflow: hidden;
     }
+    /* Each canvas layer is positioned at (0,0) with logical dimensions,
+       then translated by CSS transform to implement pan/zoom viewport.
+       The draw canvas stays full viewport size and maps coords mathematically. */
     .orm-canvas-inner canvas {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100%;
       display: block;
+      /* width/height set by JS to viewport W×H for the UI/overlay/draw layers,
+         and to logical W×H (scaled) for the layer canvases */
     }
     #oc-grid    { z-index: 1; pointer-events: none; }
     #oc-pitch   { z-index: 2; pointer-events: none; }
@@ -451,6 +452,7 @@
       flex-wrap: wrap;
       gap: .35rem;
       background: var(--bg);
+      flex-shrink: 0;
     }
     .orm-status-pos { font-weight: 500; opacity: 1; }
     .orm-status-tip { font-style: italic; }
@@ -463,12 +465,12 @@
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+      flex-shrink: 0;
     }
     .orm-controls::-webkit-scrollbar { display: none; }
 
     .orm-ctrl-section {
       border-right: 1px solid var(--text);
-      border-right-opacity: .3;
       padding: .6rem .8rem;
       flex-shrink: 0;
       display: flex;
@@ -502,130 +504,101 @@
       white-space: nowrap;
       opacity: .55;
     }
-    .orm-layer-tab:hover { opacity: .8; }
+    .orm-layer-tab:hover  { opacity: .8; }
     .orm-layer-tab.active { background: var(--text); opacity: 1; }
-    .orm-layer-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .orm-layer-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .orm-layer-name {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: .68rem;
-      font-weight: 600;
+      font-size: .68rem; font-weight: 600;
       color: var(--text);
     }
     .orm-layer-tab.active .orm-layer-name { color: var(--bg); }
-    .orm-layer-tab.active .orm-layer-dot { /* dot shows on dark bg */ }
     .orm-layer-vis {
-      font-size: .6rem;
-      cursor: pointer;
-      padding: 2px 3px;
-      color: var(--text);
-      line-height: 1;
+      font-size: .6rem; cursor: pointer;
+      padding: 2px 3px; color: var(--text); line-height: 1;
     }
     .orm-layer-tab.active .orm-layer-vis { color: var(--bg); }
 
-    /* Layer scale */
+    /* Layer scale + hint */
     .orm-scale-row {
-      display: flex;
-      gap: .6rem;
-      font-family: 'Inter', sans-serif;
-      font-size: .6rem;
+      display: flex; gap: .6rem;
+      font-family: 'Inter', sans-serif; font-size: .6rem;
     }
     .orm-scale-entry { display: flex; flex-direction: column; align-items: center; gap: 1px; }
     .orm-scale-entry .sk { font-size: .52rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text); opacity: .5; }
     .orm-scale-entry .sv { color: var(--text); font-size: .65rem; font-weight: 500; }
-
-    /* Layer hint */
     .orm-layer-hint {
-      font-family: 'Inter', sans-serif;
-      font-size: .64rem;
-      color: var(--text);
-      opacity: .55;
-      font-style: italic;
-      max-width: 280px;
+      font-family: 'Inter', sans-serif; font-size: .64rem;
+      color: var(--text); opacity: .55; font-style: italic; max-width: 280px;
     }
 
-    /* Tool buttons */
-    .orm-tool-grid { display: flex; flex-wrap: wrap; gap: .25rem; }
+    /* ── TOOL BUTTONS ── */
+    .orm-tool-group {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+    }
+    .orm-tool-row {
+      display: flex;
+      gap: .25rem;
+    }
     .orm-tool-btn {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: .66rem;
-      font-weight: 600;
+      font-size: .66rem; font-weight: 600;
       padding: .32rem .6rem;
       border: 1px solid var(--text);
-      background: transparent;
-      color: var(--text);
+      background: transparent; color: var(--text);
       cursor: pointer;
       transition: background .1s, color .1s;
       white-space: nowrap;
       touch-action: manipulation;
     }
-    .orm-tool-btn:hover { background: var(--text); color: var(--bg); }
+    .orm-tool-btn:hover  { background: var(--text); color: var(--bg); }
     .orm-tool-btn.active { background: var(--text); color: var(--bg); }
 
-    /* Brush controls */
-    .orm-brush-row {
-      display: flex;
-      align-items: center;
-      gap: .45rem;
+    /* shape select dropdown in controls */
+    .orm-shape-select {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .66rem; font-weight: 600;
+      background: var(--bg); color: var(--text);
+      border: 1px solid var(--text);
+      padding: .3rem .4rem;
+      cursor: pointer; outline: none;
     }
+    .orm-shape-select:focus { outline: 1px solid var(--text); }
+
+    /* Brush controls */
+    .orm-brush-row { display: flex; align-items: center; gap: .45rem; }
     .orm-brush-label {
       font-family: 'Inter', sans-serif;
-      font-size: .6rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      color: var(--text);
-      opacity: .55;
-      width: 26px;
-      flex-shrink: 0;
+      font-size: .6rem; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--text); opacity: .55; width: 26px; flex-shrink: 0;
     }
     .orm-brush-val {
-      font-family: 'Inter', sans-serif;
-      font-size: .62rem;
-      color: var(--text);
-      min-width: 24px;
+      font-family: 'Inter', sans-serif; font-size: .62rem;
+      color: var(--text); min-width: 24px;
     }
     input[type=range].orm-brush-slider {
       -webkit-appearance: none;
-      width: 120px;
-      height: 2px;
-      background: var(--text);
-      outline: none;
-      cursor: pointer;
-      opacity: .6;
-      flex-shrink: 0;
+      width: 100px; height: 2px;
+      background: var(--text); outline: none; cursor: pointer; opacity: .6; flex-shrink: 0;
     }
     input[type=range].orm-brush-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 13px; height: 13px;
-      border-radius: 50%;
-      background: var(--text);
-      cursor: pointer;
+      width: 13px; height: 13px; border-radius: 50%; background: var(--text); cursor: pointer;
     }
     input[type=range].orm-brush-slider::-moz-range-thumb {
-      width: 13px; height: 13px;
-      border-radius: 50%;
-      background: var(--text);
-      border: none;
-      cursor: pointer;
+      width: 13px; height: 13px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
     }
-    /* brush preview dot */
     .orm-brush-preview {
       width: 32px; height: 32px;
       border: 1px solid var(--text);
       display: flex; align-items: center; justify-content: center;
-      background: #fff;
-      flex-shrink: 0;
-      overflow: hidden;
+      background: #fff; flex-shrink: 0; overflow: hidden;
     }
-    .orm-brush-dot {
-      border-radius: 50%;
-      transition: width .1s, height .1s, filter .1s;
-    }
+    .orm-brush-dot { border-radius: 50%; transition: width .1s, height .1s, filter .1s; }
 
-    /* ── KEYBOARD HINTS (below app, above article) ── */
+    /* ── KEYBOARD HINTS ── */
     .orm-kbd-section {
       margin: 1.5em 0;
       border: 1px solid var(--text);
@@ -634,12 +607,8 @@
     }
     .orm-kbd-title {
       font-family: 'Inter', sans-serif;
-      font-size: .62rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--text);
-      opacity: .55;
-      margin-bottom: .6em;
+      font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text); opacity: .55; margin-bottom: .6em;
     }
     .orm-kbd-grid {
       display: grid;
@@ -647,130 +616,103 @@
       gap: .3rem .75rem;
     }
     .orm-kbd-row {
-      display: flex;
-      align-items: baseline;
-      gap: .4rem;
-      font-family: 'Inter', sans-serif;
-      font-size: .72rem;
-      color: var(--text);
+      display: flex; align-items: baseline; gap: .4rem;
+      font-family: 'Inter', sans-serif; font-size: .72rem; color: var(--text);
     }
     .orm-kbd {
-      font-family: 'Inter', sans-serif;
-      font-size: .6rem;
-      background: var(--text);
-      color: var(--bg);
-      padding: .1rem .35rem;
-      border-radius: 2px;
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-family: 'Inter', sans-serif; font-size: .6rem;
+      background: var(--text); color: var(--bg);
+      padding: .1rem .35rem; border-radius: 2px; white-space: nowrap; flex-shrink: 0;
     }
     .orm-kbd-desc { opacity: .7; }
 
     /* ═══════════════════════════
        MOBILE LAYOUT
-       Canvas plays top-to-bottom.
     ═══════════════════════════ */
     @media (max-width: 600px) {
       .vertical-title {
-        width: 36px;
-        top: 64px;
-        height: calc(100vh - 64px);
-        padding-top: 1rem;
+        width: 36px; top: 64px;
+        height: calc(100vh - 64px); padding-top: 1rem;
       }
-      .vertical-title span {
-        font-size: .8rem;
-        letter-spacing: .18em;
-      }
+      .vertical-title span { font-size: .8rem; letter-spacing: .18em; }
+
+      /* Less top padding on mobile so app is close to top */
       .page-content {
         margin-left: 44px;
         width: calc(100% - 44px);
-        padding: 1em .75em 4em;
+        padding: .4em .5em 4em;
       }
 
-      /* App fills viewport height minus header */
+      /* App exactly fits the viewport below the site header */
       .orm-app {
-        /* 64px site header + some breathing room */
-        height: calc(100vh - 64px - 2em);
+        height: calc(100vh - 64px - .8em);
         display: flex;
         flex-direction: column;
       }
 
-      /* Transport: compact single row, scrollable */
+      /* Transport: compact single scrollable row */
       .orm-transport {
         flex-wrap: nowrap;
         overflow-x: auto;
         scrollbar-width: none;
-        gap: .25rem;
-        padding: .4rem .5rem;
+        gap: .2rem;
+        padding: .3rem .4rem;
         flex-shrink: 0;
       }
       .orm-transport::-webkit-scrollbar { display: none; }
-      .orm-btn { padding: .3rem .55rem; font-size: .66rem; }
+      .orm-btn { padding: .28rem .5rem; font-size: .64rem; }
       .orm-sep { display: none; }
       .orm-speed-label { display: none; }
-      input[type=range].orm-slider { width: 50px; }
+      input[type=range].orm-slider { width: 46px; }
+      .orm-toggle-label { display: none; }
 
-      /* Canvas takes all remaining vertical space */
+      /* Canvas fills all remaining space */
       .orm-canvas-area { flex: 1; min-height: 0; }
 
-      /* Status: single line, abbreviated */
-      .orm-status { flex-shrink: 0; padding: .2rem .5rem; }
+      /* Status: single line */
+      .orm-status { flex-shrink: 0; padding: .18rem .4rem; font-size: .58rem; }
       .orm-status-tip { display: none; }
 
-      /* Controls: compact single row, no labels, scrollable */
-      .orm-controls {
-        flex-direction: row;
-        flex-shrink: 0;
-        overflow-x: auto;
-      }
-      .orm-ctrl-section {
-        padding: .4rem .5rem;
-        gap: .3rem;
-        border-right: 1px solid var(--text);
-      }
+      /* Controls: compact horizontal row */
+      .orm-controls { flex-shrink: 0; }
+      .orm-ctrl-section { padding: .3rem .4rem; gap: .25rem; }
       .orm-ctrl-title { display: none; }
-      .orm-layer-tabs { gap: .2rem; }
-      .orm-layer-tab { padding: .28rem .45rem; }
-      .orm-layer-name { font-size: .62rem; }
+      .orm-layer-tabs { gap: .18rem; }
+      .orm-layer-tab { padding: .25rem .38rem; }
+      .orm-layer-name { font-size: .6rem; }
       .orm-layer-vis { display: none; }
       .orm-layer-hint { display: none; }
       .orm-scale-row { display: none; }
-      .orm-tool-grid { flex-wrap: nowrap; }
-      .orm-tool-btn { padding: .28rem .5rem; font-size: .62rem; }
-      input[type=range].orm-brush-slider { width: 80px; }
-      .orm-brush-preview { width: 24px; height: 24px; }
+      .orm-tool-row { flex-wrap: nowrap; }
+      .orm-tool-btn { padding: .25rem .42rem; font-size: .6rem; }
+      .orm-shape-select { font-size: .6rem; padding: .22rem .3rem; }
+      input[type=range].orm-brush-slider { width: 70px; }
+      .orm-brush-preview { width: 22px; height: 22px; }
+      .orm-brush-label { display: none; }
       .orm-zoom-controls { top: 4px; right: 4px; }
       .orm-zoom-btn { width: 22px; height: 22px; font-size: .7rem; }
+      .orm-zoom-level { font-size: .5rem; }
 
       /* Keyboard hints hidden on mobile */
       .orm-kbd-section { display: none; }
     }
 
-    /* ── ESSAY (mirrors timbre-lab conventions) ── */
+    /* ── ESSAY STYLES ── */
     .physics-chain {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      padding: 1em 0;
-      margin: 1.5em 0;
-      border-top: 1px solid var(--text);
-      border-bottom: 1px solid var(--text);
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 6px; padding: 1em 0; margin: 1.5em 0;
+      border-top: 1px solid var(--text); border-bottom: 1px solid var(--text);
     }
     .chain-step {
-      font-family: 'Inter', sans-serif;
-      font-size: .78rem;
-      color: var(--text);
-      border: 1px solid var(--text);
-      padding: 3px 10px;
-      border-radius: 2px;
+      font-family: 'Inter', sans-serif; font-size: .78rem;
+      color: var(--text); border: 1px solid var(--text);
+      padding: 3px 10px; border-radius: 2px;
     }
     .chain-arrow { font-size: .75rem; color: var(--text); }
 
     .pull-quote {
       border-left: 3px solid var(--text);
-      padding: .75rem 1rem;
-      margin: 1.5rem 0;
+      padding: .75rem 1rem; margin: 1.5rem 0;
     }
     .pull-quote p { font-size: .9rem; font-style: italic; line-height: 1.65; }
     .pull-quote cite { display: block; font-size: .72rem; opacity: .65; font-style: normal; margin-top: .35rem; }
@@ -778,21 +720,16 @@
     .cta-wrap { text-align: center; margin: 2em 0 1em; }
     .cta-btn {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: .9rem;
-      font-weight: 500;
-      background: transparent;
-      color: var(--text);
+      font-size: .9rem; font-weight: 500;
+      background: transparent; color: var(--text);
       border: 2px solid var(--text);
       padding: .65em 1.6em;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
+      cursor: pointer; text-decoration: none; display: inline-block;
       transition: background .15s, color .15s;
     }
     .cta-btn:hover { background: var(--text); color: var(--bg); }
   </style>
 </head>
-
 <body>
 
 {% include header.html %}
@@ -807,15 +744,12 @@
   <article>
 
     <section>
-      <!-- ══════════════════════════════════════
-           THE INSTRUMENT
-      ══════════════════════════════════════ -->
       <div class="orm-app" id="ormApp">
 
         <!-- Transport -->
         <div class="orm-transport" id="ormToolbar">
           <button class="orm-btn" id="orm-play" onclick="ORM.togglePlay()">
-            <svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px"><path d="M0 0l9 5.5L0 11z"/></svg>play
+            <svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px;vertical-align:middle"><path d="M0 0l9 5.5L0 11z"/></svg>play
           </button>
           <button class="orm-btn" id="orm-loop" onclick="ORM.toggleLoop()" title="Loop">↺ loop</button>
 
@@ -863,9 +797,9 @@
 
         <!-- Canvas -->
         <div class="orm-canvas-area" id="ormCanvasArea">
-          <!-- Zoom controls -->
           <div class="orm-zoom-controls">
             <button class="orm-zoom-btn" onclick="ORM.zoomIn()"  title="Zoom in">+</button>
+            <div class="orm-zoom-level" id="orm-zoom-level">1×</div>
             <button class="orm-zoom-btn" onclick="ORM.zoomOut()" title="Zoom out">−</button>
           </div>
 
@@ -928,44 +862,48 @@
             </div>
           </div>
 
-          <!-- Tools -->
+          <!-- Draw tools: pen type + erase, then shape -->
           <div class="orm-ctrl-section">
-            <div class="orm-ctrl-title">tool</div>
-            <div class="orm-tool-grid">
-              <button class="orm-tool-btn active" id="tool-brush"  onclick="ORM.setTool('brush')">brush</button>
-              <button class="orm-tool-btn"        id="tool-line"   onclick="ORM.setTool('line')">line</button>
-              <button class="orm-tool-btn"        id="tool-erase"  onclick="ORM.setTool('erase')">erase</button>
-              <button class="orm-tool-btn"        id="tool-sine"   onclick="ORM.setTool('sine')">∿ sine</button>
-              <button class="orm-tool-btn"        id="tool-circle" onclick="ORM.setTool('circle')">◯ ellipse</button>
-              <button class="orm-tool-btn"        id="tool-flat"   onclick="ORM.setTool('flat')">― flat</button>
+            <div class="orm-ctrl-title">draw</div>
+            <div class="orm-tool-group">
+              <div class="orm-tool-row">
+                <button class="orm-tool-btn active" id="tool-pen"       onclick="ORM.setTool('pen')">pen</button>
+                <button class="orm-tool-btn"        id="tool-calligraphy" onclick="ORM.setTool('calligraphy')">calligraphy</button>
+                <button class="orm-tool-btn"        id="tool-airbrush"  onclick="ORM.setTool('airbrush')">airbrush</button>
+                <button class="orm-tool-btn"        id="tool-erase"     onclick="ORM.setTool('erase')">erase</button>
+              </div>
+              <div class="orm-tool-row">
+                <span class="orm-ctrl-title" style="align-self:center;margin-right:.25rem;">shape</span>
+                <select class="orm-shape-select" id="orm-shape" onchange="ORM.setShape(this.value)">
+                  <option value="none">— none —</option>
+                  <option value="line">line</option>
+                  <option value="circle">circle / ellipse</option>
+                  <option value="rect">rectangle</option>
+                  <option value="sine">∿ sine curve</option>
+                  <option value="flat">― flat line</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <!-- Brush -->
+          <!-- Brush size only -->
           <div class="orm-ctrl-section">
             <div class="orm-ctrl-title">brush</div>
             <div class="orm-brush-row">
               <div class="orm-brush-preview" id="ormBrushPreview">
-                <div class="orm-brush-dot" id="ormBrushDot" style="width:8px;height:8px;"></div>
+                <div class="orm-brush-dot" id="ormBrushDot"></div>
               </div>
             </div>
             <div class="orm-brush-row">
               <span class="orm-brush-label">size</span>
-              <input type="range" class="orm-brush-slider" min="1" max="60" value="8" id="orm-bsize"
+              <input type="range" class="orm-brush-slider" min="1" max="60" value="4" id="orm-bsize"
                 oninput="ORM.setBrushSize(+this.value)">
-              <span class="orm-brush-val" id="orm-bsize-val">8</span>
-            </div>
-            <div class="orm-brush-row">
-              <span class="orm-brush-label">soft</span>
-              <input type="range" class="orm-brush-slider" min="0" max="1" step=".05" value="0.6" id="orm-bsoft"
-                oninput="ORM.setBrushSoft(+this.value)">
-              <span class="orm-brush-val" id="orm-bsoft-val">.60</span>
+              <span class="orm-brush-val" id="orm-bsize-val">4</span>
             </div>
           </div>
 
         </div><!-- /orm-controls -->
       </div><!-- /orm-app -->
-
     </section>
 
     <!-- KEYBOARD SHORTCUTS -->
@@ -974,12 +912,10 @@
       <div class="orm-kbd-grid">
         <div class="orm-kbd-row"><span class="orm-kbd">space</span><span class="orm-kbd-desc">play / stop</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">⌘Z / Ctrl Z</span><span class="orm-kbd-desc">undo</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">B</span><span class="orm-kbd-desc">brush</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">L</span><span class="orm-kbd-desc">line</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">P</span><span class="orm-kbd-desc">pen</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">K</span><span class="orm-kbd-desc">calligraphy</span></div>
+        <div class="orm-kbd-row"><span class="orm-kbd">A</span><span class="orm-kbd-desc">airbrush</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">E</span><span class="orm-kbd-desc">erase</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">S</span><span class="orm-kbd-desc">sine curve</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">C</span><span class="orm-kbd-desc">ellipse</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">F</span><span class="orm-kbd-desc">flat line</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">1 – 4</span><span class="orm-kbd-desc">switch layer</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">[ ]</span><span class="orm-kbd-desc">brush size −/+</span></div>
       </div>
@@ -1024,12 +960,17 @@
 
       <p>The spatial logic of the system was immediate and intuitive: drawing a line that moved upward on the pitch strip produced a rising pitch. A dense, heavy mark on the amplitude strip produced a loud sound. A curved, organic shape produced a curved, organic modulation. The act of drawing was compositional; the visual shape of the drawing was the sonic shape of the music. Oram called this "visualising sound" — and it remains one of the most direct translations of visual mark-making into sonic experience that electronic music has produced.</p>
 
+      <h2>Recognition, legacy, and the archive</h2>
+      <p>For much of her career, Oram worked in near-obscurity. The Radiophonic Workshop's output — the sounds she had helped shape — reached millions of listeners through BBC drama and documentary, but the technical and compositional work behind it went largely uncredited, as was common for studio employees of the period. Women in technical roles in the early years of British broadcasting faced particular barriers to attribution. Oram's decision to leave and work independently was partly a refusal of that institutional erasure, but independence came with its own costs: chronic underfunding, no institutional infrastructure, and the difficulty of maintaining and developing a complex bespoke machine without support.</p>
+
+      <p>The reassessment of Oram's work has gathered pace since her death. The Daphne Oram Collection, now held at Goldsmiths, University of London, contains her correspondence, patents, scores, and technical drawings, as well as the Oramics machine itself — restored to working condition after years of deterioration. Scholars, curators, and electronic musicians have returned to her work and found in it a sophistication and radicalism that was never adequately recognised in her lifetime. Her refusal to separate the act of composition from the act of inscription — to insist that drawing <em>was</em> music, not merely a description of it — places her squarely in a lineage of ideas that would later animate graphic notation, live electronics, and interactive computer music. The Oramics machine was not a curiosity or a failed prototype. It was a coherent and original vision of what composing could be.</p>
+
       <h2>How this instrument works</h2>
       <p>This browser-based Oramics instrument follows the logic of the original machine as closely as a digital medium allows. You draw on four independent layers — pitch, amplitude, timbre, and modulation — and as the playhead moves across your drawing, the pixel values it reads are converted into audio parameters in real time. The pitch layer maps vertical position to frequency: marks drawn high produce high pitches, marks drawn low produce low ones. The amplitude layer reads pixel density to set volume. Timbre controls a low-pass filter cutoff, shaping brightness. Modulation adds vibrato and FM depth.</p>
 
-      <p>Drawing tools include freehand brush, straight line, sine curve, ellipse, and flat line — with live ghost previews during drag so you can see each shape before committing it. The zoom controls let you work in finer detail without affecting playback, which always reads the full canvas. The analog toggle adds subtle wow and flutter, modelling the mechanical imperfection of the original film transport. Try the randomise button to generate Oramics-style shapes automatically and hear how they sound before drawing your own.</p>
+      <p>Three drawing tools follow different mark-making traditions: the pen lays down a clean, hard-edged line; calligraphy produces a pressure-sensitive stroke that varies in width with drawing speed, echoing the reed and the brush; airbrush builds up soft, diffuse clouds of pigment that accumulate with repeated passes. Shapes can be drawn separately — line, ellipse, rectangle, sine curve, or flat line — using the shape selector, which previews your mark as a ghost before committing it. The zoom controls let you work in finer detail without affecting playback, which always reads the full canvas. Try the randomise button to generate Oramics-style shapes and hear how they sound before drawing your own.</p>
 
-      <p>If you're curious about working with sound, creativity, and the body in music therapy, feel free to get in touch via the <a href="/contact/">contact page</a>. Music experience is not required.</p>
+      <p>If you're curious about working with sound, creativity, and the body in music therapy, feel free to get in touch.</p>
 
       <div class="cta-wrap">
         <a href="/contact/" class="cta-btn">Book an intro call</a>
@@ -1053,25 +994,23 @@
 
 <script src="/js/header.js"></script>
 
-<!-- ══════════════════════════════════════════════════════
-     ORAMICS ENGINE
-══════════════════════════════════════════════════════ -->
 <script>
 (function () {
 'use strict';
 
-/* ── LAYER CONFIG ── */
+/* ════════════════════════════════════════
+   LAYER CONFIG
+════════════════════════════════════════ */
 const LAYERS = {
   pitch:  { id: 'oc-pitch',  color: '#b85c38', alpha: 0.85,
             hint: 'Vertical position = frequency. Top = 2000 Hz · Bottom = 80 Hz.' },
   amp:    { id: 'oc-amp',    color: '#4a7c59', alpha: 0.75,
-            hint: 'Pixel brightness = amplitude. Dense marks = louder output.' },
+            hint: 'Pixel density = amplitude. Dense marks = louder output.' },
   timbre: { id: 'oc-timbre', color: '#c49a2a', alpha: 0.75,
             hint: 'Vertical position = filter cutoff. Top = bright · Bottom = muffled.' },
   mod:    { id: 'oc-mod',    color: '#7a3f6e', alpha: 0.75,
             hint: 'Vertical position = modulation depth. Top = heavy vibrato / FM.' },
 };
-
 const LAYER_SCALES = {
   pitch:  { top: '2000 Hz', mid: '600 Hz',  bot: '80 Hz'  },
   amp:    { top: '100%',    mid: '50%',     bot: '0%'     },
@@ -1079,15 +1018,17 @@ const LAYER_SCALES = {
   mod:    { top: '100%',    mid: '50%',     bot: '0%'     },
 };
 
-/* ── MOBILE DETECTION ── */
+/* ════════════════════════════════════════
+   MOBILE DETECTION
+════════════════════════════════════════ */
 function isMobile() { return window.innerWidth <= 600; }
 
-/* ── AUDIO ENGINE ── */
+/* ════════════════════════════════════════
+   AUDIO ENGINE
+════════════════════════════════════════ */
 let AC = null, masterGain;
 const voices = [];
-let numVoices = 1;
-let waveType = 'sine';
-let analogOn = false;
+let numVoices = 1, waveType = 'sine', analogOn = false;
 let analogLFO = null, analogLFOGain = null;
 
 function initAudio() {
@@ -1095,77 +1036,37 @@ function initAudio() {
   AC = new (window.AudioContext || window.webkitAudioContext)();
   masterGain = AC.createGain();
   masterGain.gain.value = 0.7;
-
   const limiter = AC.createDynamicsCompressor();
-  limiter.threshold.value = -8;
-  limiter.knee.value = 6;
-  limiter.ratio.value = 10;
-  limiter.attack.value = 0.005;
-  limiter.release.value = 0.1;
-
+  limiter.threshold.value = -8; limiter.knee.value = 6;
+  limiter.ratio.value = 10; limiter.attack.value = 0.005; limiter.release.value = 0.1;
   masterGain.connect(limiter);
   limiter.connect(AC.destination);
-
   analogLFO = AC.createOscillator();
   analogLFOGain = AC.createGain();
-  analogLFO.type = 'sine';
-  analogLFO.frequency.value = 0.7;
+  analogLFO.type = 'sine'; analogLFO.frequency.value = 0.7;
   analogLFOGain.gain.value = 0;
-  analogLFO.connect(analogLFOGain);
-  analogLFO.start();
-
+  analogLFO.connect(analogLFOGain); analogLFO.start();
   buildVoices();
 }
 
 function buildVoices() {
-  voices.forEach(v => {
-    try { v.osc.stop(); } catch(e){}
-    try { v.vibLFO.stop(); } catch(e){}
-    try { v.fmLFO.stop(); } catch(e){}
-  });
+  voices.forEach(v => { try{v.osc.stop();}catch(e){} try{v.vibLFO.stop();}catch(e){} try{v.fmLFO.stop();}catch(e){} });
   voices.length = 0;
-
   for (let i = 0; i < numVoices; i++) {
-    const osc     = AC.createOscillator();
-    const oscGain = AC.createGain();
-    const filter  = AC.createBiquadFilter();
-    const vGain   = AC.createGain();
-
-    const vibLFO  = AC.createOscillator();
-    const vibGain = AC.createGain();
-    vibLFO.type = 'sine';
-    vibLFO.frequency.value = 5.5;
-    vibGain.gain.value = 0;
-    vibLFO.connect(vibGain);
-    vibGain.connect(osc.frequency);
-
-    const fmLFO  = AC.createOscillator();
-    const fmGain = AC.createGain();
-    fmLFO.type = 'sine';
-    fmLFO.frequency.value = 2.3;
-    fmGain.gain.value = 0;
-    fmLFO.connect(fmGain);
-    fmGain.connect(osc.frequency);
-
+    const osc = AC.createOscillator(), oscGain = AC.createGain();
+    const filter = AC.createBiquadFilter(), vGain = AC.createGain();
+    const vibLFO = AC.createOscillator(), vibGain = AC.createGain();
+    vibLFO.type = 'sine'; vibLFO.frequency.value = 5.5; vibGain.gain.value = 0;
+    vibLFO.connect(vibGain); vibGain.connect(osc.frequency);
+    const fmLFO = AC.createOscillator(), fmGain = AC.createGain();
+    fmLFO.type = 'sine'; fmLFO.frequency.value = 2.3; fmGain.gain.value = 0;
+    fmLFO.connect(fmGain); fmGain.connect(osc.frequency);
     if (analogLFOGain) analogLFOGain.connect(osc.frequency);
-
-    filter.type = 'lowpass';
-    filter.frequency.value = 2000;
-    filter.Q.value = 1.2;
-    osc.type = waveType;
-    osc.frequency.value = 220;
-    oscGain.gain.value = 0;
-    vGain.gain.value = 0;
-
-    osc.connect(oscGain);
-    oscGain.connect(filter);
-    filter.connect(vGain);
-    vGain.connect(masterGain);
-
-    osc.start();
-    vibLFO.start();
-    fmLFO.start();
-
+    filter.type = 'lowpass'; filter.frequency.value = 2000; filter.Q.value = 1.2;
+    osc.type = waveType; osc.frequency.value = 220;
+    oscGain.gain.value = 0; vGain.gain.value = 0;
+    osc.connect(oscGain); oscGain.connect(filter); filter.connect(vGain); vGain.connect(masterGain);
+    osc.start(); vibLFO.start(); fmLFO.start();
     voices.push({ osc, oscGain, filter, vGain, vibLFO, vibGain, fmLFO, fmGain });
   }
 }
@@ -1175,114 +1076,144 @@ function ramp(param, val, tc) {
   param.setTargetAtTime(val, AC.currentTime, tc || 0.04);
 }
 
-/* ── CANVAS STATE ── */
-const canvases = {}, ctxs = {};
-let W = 0, H = 0;
-let gridCtx = null, uiCtx = null, overlayCtx = null, drawCtx = null;
+/* ════════════════════════════════════════
+   CANVAS & ZOOM STATE
 
-/* ── ZOOM STATE ── */
-let zoomLevel = 1; // 1 = full canvas, 2 = 2× zoom, etc.
+   Architecture:
+   - Each layer canvas (pitch, amp, timbre, mod) is the LOGICAL canvas size (LW × LH).
+     These are NEVER displayed directly by CSS — they are off-screen drawing surfaces.
+   - The UI/overlay/draw canvases are the VIEWPORT size (VW × VH) and are what the user sees.
+   - drawUI() composites the layer canvases into the UI canvas using drawImage with
+     src rect = [panX, panY, LW/zoom, LH/zoom] → dst rect = [0, 0, VW, VH].
+   - Mouse events on the draw canvas are converted from viewport coords to logical canvas
+     coords before any drawing operation.
+   - Playback ALWAYS samples the logical canvases at full resolution regardless of zoom.
+════════════════════════════════════════ */
+
+/* Logical (full) canvas dimensions */
+let LW = 0, LH = 0;
+/* Viewport dimensions */
+let VW = 0, VH = 0;
+
+const layerCanvases = {}; // off-screen, logical size
+const layerCtxs = {};
+let gridCanvas = null, gridCtx = null;
+let uiCtx = null, overlayCtx = null;
+let drawCanvas = null;
+
+/* Zoom state */
 const ZOOM_STEPS = [1, 1.5, 2, 3, 4];
 let zoomIdx = 0;
+/* panX/panY = top-left corner of the viewport in LOGICAL canvas pixels */
+let panX = 0, panY = 0;
+function zoom() { return ZOOM_STEPS[zoomIdx]; }
+/* How many logical pixels fit in the viewport */
+function vpLogW() { return VW / zoom(); }
+function vpLogH() { return VH / zoom(); }
 
-/* Canvas logical size (always W × H) vs viewport pan offset */
-let panOffsetX = 0; // horizontal pan in canvas pixels (desktop)
-let panOffsetY = 0; // vertical pan in canvas pixels (mobile)
+/* Convert viewport (screen) coords → logical canvas coords */
+function vToL(sx, sy) {
+  if (isMobile()) {
+    // mobile: time=Y, value=X
+    return { x: sx,         y: panY + sy / zoom() };
+  } else {
+    return { x: panX + sx / zoom(), y: sy };
+  }
+}
 
-/* ── PLAYBACK STATE ── */
-let playing = false;
-let looping = true;
-let playheadX = 0;   // position in CANVAS pixels (0..W)
+/* Convert logical canvas pos → viewport (screen) pos */
+function lToV_time(logicalTimePos) {
+  // logicalTimePos: position along the TIME axis
+  if (isMobile()) {
+    return (logicalTimePos - panY) * zoom(); // screen Y
+  } else {
+    return (logicalTimePos - panX) * zoom(); // screen X
+  }
+}
+
+/* ════════════════════════════════════════
+   PLAYBACK STATE
+════════════════════════════════════════ */
+let playing = false, looping = true;
+let playheadPos = 0; // position along TIME axis in LOGICAL pixels (0..LW or 0..LH)
 let playheadT = 0;
-let lastRafT = 0;
-let rafId = null;
-let speed = 0.8;
+let lastRafT = 0, rafId = null, speed = 0.8;
 const PIXELS_PER_SECOND = 80;
 
-/* ── DRAWING STATE ── */
+/* ════════════════════════════════════════
+   DRAWING STATE
+════════════════════════════════════════ */
 let activeLayer = 'pitch';
-let tool = 'brush';
-let brushSize = 8;
-let brushSoft = 0.6;
-let drawing = false;
-let lineStart = null;
-let lastPos = null;
+let tool = 'pen';    // 'pen' | 'calligraphy' | 'airbrush' | 'erase'
+let activeShape = 'none'; // 'none' | 'line' | 'circle' | 'rect' | 'sine' | 'flat'
+let brushSize = 4;
+let drawing = false, shapeStart = null, lastLogical = null;
 let visibleLayers = { pitch: true, amp: true, timbre: true, mod: true };
 
-/* ── UNDO ── */
+/* airbrush interval */
+let airbrushInterval = null;
+let lastAirPos = null;
+
+/* ════════════════════════════════════════
+   UNDO
+════════════════════════════════════════ */
 const MAX_UNDO = 30;
 const undoStack = {};
 Object.keys(LAYERS).forEach(k => { undoStack[k] = []; });
+const layerSnapshots = {}; // persists across resize
 
 function pushUndo(k) {
-  if (!W || !H) return;
-  undoStack[k].push(ctxs[k].getImageData(0, 0, W, H));
+  if (!LW || !LH) return;
+  undoStack[k].push(layerCtxs[k].getImageData(0, 0, LW, LH));
   if (undoStack[k].length > MAX_UNDO) undoStack[k].shift();
 }
-
-/* ── HELPERS: canvas ↔ screen coordinates ── */
-/* Desktop: time = x (left→right), value = y (top = high). Pan/zoom on x. */
-/* Mobile:  time = y (top→bottom), value = x (left = low, right = high). Pan/zoom on y. */
-
-function screenToCanvas(sx, sy) {
-  if (isMobile()) {
-    // x = value axis (left=low, right=high), y = time axis
-    const cx = sx; // value axis: no pan, full width
-    const cy = (sy + panOffsetY) / zoomLevel;
-    return { x: cx, y: cy };
-  } else {
-    const cx = (sx + panOffsetX) / zoomLevel;
-    const cy = sy;
-    return { x: cx, y: cy };
-  }
+function backupLayer(k) {
+  if (!LW || !LH) return;
+  layerSnapshots[k] = layerCtxs[k].getImageData(0, 0, LW, LH);
 }
-
-function canvasToScreen(cx, cy) {
-  if (isMobile()) {
-    return { x: cx, y: cy * zoomLevel - panOffsetY };
-  } else {
-    return { x: cx * zoomLevel - panOffsetX, y: cy };
-  }
-}
-
-/* ── CANVAS SIZING ── */
-function calcCanvasHeight() {
-  if (isMobile()) {
-    // on mobile the app fills the viewport minus header, so canvas area
-    // gets whatever is left after transport + status + controls
-    // We calculate this dynamically in resize()
-    return null;
-  }
-  const vph = window.innerHeight;
-  return Math.round(Math.min(Math.max(320, vph * 0.42), 560));
-}
-
-/* ── INIT ── */
-function init() {
+function restoreAll() {
   Object.keys(LAYERS).forEach(k => {
-    const c = document.getElementById(LAYERS[k].id);
-    canvases[k] = c;
-    ctxs[k] = c.getContext('2d');
+    if (layerSnapshots[k]) layerCtxs[k].putImageData(layerSnapshots[k], 0, 0);
   });
-  gridCtx    = document.getElementById('oc-grid').getContext('2d');
+}
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+function init() {
+  // Create off-screen layer canvases
+  Object.keys(LAYERS).forEach(k => {
+    const c = document.createElement('canvas');
+    layerCanvases[k] = c;
+    layerCtxs[k] = c.getContext('2d');
+  });
+
+  // Grid canvas (also off-screen, logical size)
+  gridCanvas = document.createElement('canvas');
+  gridCtx = gridCanvas.getContext('2d');
+
+  // On-screen UI/overlay/draw canvases
   uiCtx      = document.getElementById('oc-ui').getContext('2d');
   overlayCtx = document.getElementById('oc-overlay').getContext('2d');
-  drawCtx    = document.getElementById('oc-draw');
+  drawCanvas = document.getElementById('oc-draw');
+
+  // Hide the on-screen layer canvas elements — we use off-screen ones
+  ['oc-pitch','oc-amp','oc-timbre','oc-mod','oc-grid'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
 
   resize();
-  window.addEventListener('resize', () => { resize(); });
+  window.addEventListener('resize', resize);
 
-  const dc = drawCtx;
-
-  dc.addEventListener('mousedown',  onDrawStart);
-  dc.addEventListener('mousemove',  onDrawMove);
-  dc.addEventListener('mouseup',    onDrawEnd);
-  dc.addEventListener('mouseleave', onDrawLeave);
-
-  dc.addEventListener('touchstart',  e => { e.preventDefault(); onDrawStart(normTouch(e)); }, { passive: false });
-  dc.addEventListener('touchmove',   e => { e.preventDefault(); onDrawMove(normTouch(e)); },  { passive: false });
-  dc.addEventListener('touchend',    e => { e.preventDefault(); onDrawEnd(normTouch(e)); },   { passive: false });
-  dc.addEventListener('touchcancel', e => { e.preventDefault(); onDrawLeave(); },             { passive: false });
+  drawCanvas.addEventListener('mousedown',  onDrawStart);
+  drawCanvas.addEventListener('mousemove',  onDrawMove);
+  drawCanvas.addEventListener('mouseup',    onDrawEnd);
+  drawCanvas.addEventListener('mouseleave', onDrawLeave);
+  drawCanvas.addEventListener('touchstart',  e => { e.preventDefault(); onDrawStart(normTouch(e)); }, { passive: false });
+  drawCanvas.addEventListener('touchmove',   e => { e.preventDefault(); onDrawMove(normTouch(e));  }, { passive: false });
+  drawCanvas.addEventListener('touchend',    e => { e.preventDefault(); onDrawEnd(normTouch(e));   }, { passive: false });
+  drawCanvas.addEventListener('touchcancel', e => { e.preventDefault(); onDrawLeave(); },             { passive: false });
 
   document.addEventListener('keydown', onKeyDown);
 
@@ -1292,577 +1223,458 @@ function init() {
 
 function normTouch(e) {
   const t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]);
-  if (!t) return e;
-  return { clientX: t.clientX, clientY: t.clientY };
-}
-
-/* layerImages: persists canvas data across resizes */
-const layerImages = {};
-
-function backupLayer(k) {
-  if (!W || !H) return;
-  layerImages[k] = ctxs[k].getImageData(0, 0, W, H);
-}
-function restoreLayerImages() {
-  Object.keys(LAYERS).forEach(k => {
-    if (layerImages[k]) ctxs[k].putImageData(layerImages[k], 0, 0);
-  });
+  return t ? { clientX: t.clientX, clientY: t.clientY } : e;
 }
 
 function resize() {
-  const area = document.getElementById('ormCanvasArea');
+  const area  = document.getElementById('ormCanvasArea');
   const inner = document.getElementById('ormCanvasInner');
 
   if (isMobile()) {
-    // On mobile the app fills the viewport. Let CSS handle heights via flex.
-    // The canvas area gets flex:1, so we read its actual rendered size.
-    // We trigger a tiny RAF to let the browser lay out first.
-    requestAnimationFrame(() => {
-      W = inner.clientWidth  || window.innerWidth - 44;
-      H = inner.clientHeight || 200;
-      if (W <= 0 || H <= 0) return;
-      setCanvasSizes();
-      drawGrid();
-      restoreLayerImages();
-      drawUI();
-    });
+    requestAnimationFrame(() => doResize(area, inner));
   } else {
-    const h = calcCanvasHeight();
-    area.style.height = h + 'px';
-    W = inner.clientWidth;
-    H = inner.clientHeight;
-    if (W <= 0 || H <= 0) return;
-    setCanvasSizes();
-    drawGrid();
-    restoreLayerImages();
-    drawUI();
+    doResize(area, inner);
   }
 }
 
-function setCanvasSizes() {
-  const ids = ['oc-grid','oc-pitch','oc-amp','oc-timbre','oc-mod','oc-ui','oc-overlay','oc-draw'];
-  ids.forEach(id => {
-    const c = document.getElementById(id);
-    if (c) { c.width = W; c.height = H; }
+function doResize(area, inner) {
+  /* Desktop canvas height */
+  if (!isMobile()) {
+    const h = Math.round(Math.min(Math.max(400, window.innerHeight * 0.52), 640));
+    area.style.height = h + 'px';
+  }
+
+  /* Viewport size = what the user sees */
+  VW = inner.clientWidth  || 600;
+  VH = inner.clientHeight || 300;
+  if (VW <= 0 || VH <= 0) return;
+
+  /* Logical canvas: always the full 10-second drawing surface */
+  /* On mobile the time axis is vertical so LH = time dimension */
+  if (isMobile()) {
+    LW = VW;          // value axis fills width
+    LH = 10 * PIXELS_PER_SECOND; // 10 seconds of time always available
+  } else {
+    LW = 10 * PIXELS_PER_SECOND; // 10 seconds
+    LH = VH;          // value axis fills height
+  }
+
+  /* Size off-screen layer canvases to LOGICAL size */
+  Object.keys(LAYERS).forEach(k => {
+    layerCanvases[k].width  = LW;
+    layerCanvases[k].height = LH;
   });
+  gridCanvas.width  = LW;
+  gridCanvas.height = LH;
+
+  /* Size on-screen UI/overlay/draw canvases to VIEWPORT size */
+  ['oc-ui','oc-overlay','oc-draw'].forEach(id => {
+    const c = document.getElementById(id);
+    if (c) { c.width = VW; c.height = VH; }
+  });
+
+  clampPan();
+  drawGrid();
+  restoreAll();
+  drawUI();
 }
 
-/* ── GRID ── */
-function drawGrid() {
-  if (!gridCtx || !W || !H) return;
-  const ctx = gridCtx;
-  ctx.clearRect(0, 0, W, H);
+/* ════════════════════════════════════════
+   PAN / ZOOM HELPERS
+════════════════════════════════════════ */
+function clampPan() {
+  if (isMobile()) {
+    panX = 0;
+    panY = Math.max(0, Math.min(LH - vpLogH(), panY));
+  } else {
+    panY = 0;
+    panX = Math.max(0, Math.min(LW - vpLogW(), panX));
+  }
+}
 
-  // White background
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, W, H);
+/* ════════════════════════════════════════
+   GRID (drawn onto off-screen gridCanvas)
+════════════════════════════════════════ */
+function drawGrid() {
+  if (!gridCtx || !LW || !LH) return;
+  gridCtx.clearRect(0, 0, LW, LH);
+  gridCtx.fillStyle = '#ffffff';
+  gridCtx.fillRect(0, 0, LW, LH);
 
   if (isMobile()) {
-    /* Mobile: time = Y axis, value = X axis */
-
-    // Time lines (horizontal) — every second
-    ctx.strokeStyle = 'rgba(0,0,0,.07)';
-    ctx.lineWidth = 1;
-    const totalTime = H / PIXELS_PER_SECOND;
-    for (let s = 0; s <= totalTime; s++) {
+    // Time = Y, value = X
+    gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
+    for (let s = 0; s <= LH / PIXELS_PER_SECOND; s++) {
       const y = s * PIXELS_PER_SECOND;
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
       if (s > 0) {
-        ctx.fillStyle = 'rgba(32,38,157,.25)';
-        ctx.font = '8px Inter, sans-serif';
-        ctx.fillText(s + 's', 3, y - 2);
+        gridCtx.fillStyle='rgba(32,38,157,.22)'; gridCtx.font='8px Inter,sans-serif';
+        gridCtx.fillText(s+'s', 3, y-2);
       }
     }
-    // Quarter-second lines
-    ctx.strokeStyle = 'rgba(0,0,0,.03)';
-    for (let q = 0; q <= totalTime * 4; q++) {
-      const y = q * PIXELS_PER_SECOND / 4;
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    gridCtx.strokeStyle = 'rgba(0,0,0,.03)';
+    for (let q = 0; q <= (LH/PIXELS_PER_SECOND)*4; q++) {
+      const y = q * PIXELS_PER_SECOND/4;
+      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
     }
-
-    // Hz lines (vertical) — octaves
-    const octaves = [80, 160, 320, 640, 1280];
-    ctx.strokeStyle = 'rgba(32,38,157,.1)';
-    octaves.forEach(hz => {
-      const x = hzToX_mobile(hz);
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-      ctx.fillStyle = 'rgba(32,38,157,.3)';
-      ctx.font = '8px Inter, sans-serif';
-      ctx.fillText(hz + 'Hz', x + 2, H - 4);
+    [80,160,320,640,1280].forEach(hz => {
+      const x = hzToX_m(hz);
+      gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.lineWidth=1;
+      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
+      gridCtx.fillStyle='rgba(32,38,157,.3)'; gridCtx.font='8px Inter,sans-serif';
+      gridCtx.fillText(hz+'Hz', x+2, LH-4);
     });
-
-    // Midline (vertical)
-    ctx.strokeStyle = 'rgba(32,38,157,.1)';
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke();
-    ctx.setLineDash([]);
-
+    gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.setLineDash([4,4]);
+    gridCtx.beginPath(); gridCtx.moveTo(LW/2,0); gridCtx.lineTo(LW/2,LH); gridCtx.stroke();
+    gridCtx.setLineDash([]);
   } else {
-    /* Desktop: time = X, value = Y */
-
-    // Second lines (vertical)
-    ctx.strokeStyle = 'rgba(0,0,0,.07)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x <= W; x += PIXELS_PER_SECOND) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-      if (x > 0) {
-        ctx.fillStyle = 'rgba(32,38,157,.25)';
-        ctx.font = '8px Inter, sans-serif';
-        ctx.fillText((x / PIXELS_PER_SECOND).toFixed(0) + 's', x + 3, H - 4);
+    // Time = X, value = Y
+    gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
+    for (let s = 0; s <= LW / PIXELS_PER_SECOND; s++) {
+      const x = s * PIXELS_PER_SECOND;
+      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
+      if (s > 0) {
+        gridCtx.fillStyle='rgba(32,38,157,.22)'; gridCtx.font='8px Inter,sans-serif';
+        gridCtx.fillText(s+'s', x+3, LH-4);
       }
     }
-    // Quarter-second lines
-    ctx.strokeStyle = 'rgba(0,0,0,.03)';
-    for (let x = 0; x <= W; x += PIXELS_PER_SECOND / 4) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    gridCtx.strokeStyle = 'rgba(0,0,0,.03)';
+    for (let q = 0; q <= (LW/PIXELS_PER_SECOND)*4; q++) {
+      const x = q * PIXELS_PER_SECOND/4;
+      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
     }
-
-    // Hz lines (horizontal)
-    const octaves = [80, 160, 320, 640, 1280];
-    ctx.strokeStyle = 'rgba(32,38,157,.1)';
-    octaves.forEach(hz => {
-      const y = hzToY(hz);
-      if (y < 0 || y > H) return;
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-      ctx.fillStyle = 'rgba(32,38,157,.3)';
-      ctx.font = '8px Inter, sans-serif';
-      ctx.fillText(hz + 'Hz', 4, y - 2);
+    [80,160,320,640,1280].forEach(hz => {
+      const y = hzToY_d(hz);
+      if (y<0||y>LH) return;
+      gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.lineWidth=1;
+      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
+      gridCtx.fillStyle='rgba(32,38,157,.3)'; gridCtx.font='8px Inter,sans-serif';
+      gridCtx.fillText(hz+'Hz', 4, y-2);
     });
-
-    // Midline (horizontal)
-    ctx.strokeStyle = 'rgba(32,38,157,.1)';
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
-    ctx.setLineDash([]);
+    gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.setLineDash([4,4]);
+    gridCtx.beginPath(); gridCtx.moveTo(0,LH/2); gridCtx.lineTo(LW,LH/2); gridCtx.stroke();
+    gridCtx.setLineDash([]);
   }
 }
 
-/* ── COORDINATE HELPERS ── */
-
-// Desktop: vertical axis = hz
-function hzToY(hz) {
-  const minHz = 80, maxHz = 2000;
-  const t = (Math.log(hz) - Math.log(minHz)) / (Math.log(maxHz) - Math.log(minHz));
-  return H - t * H;
+/* ════════════════════════════════════════
+   COORDINATE HELPERS
+════════════════════════════════════════ */
+function hzToY_d(hz) {
+  const t = (Math.log(hz)-Math.log(80))/(Math.log(2000)-Math.log(80));
+  return LH - t*LH;
 }
-function yToHz(y) {
-  if (!H) return 440;
-  const t = 1 - y / H;
-  return 80 * Math.pow(2000 / 80, Math.max(0, Math.min(1, t)));
+function yToHz_d(y) {
+  const t = 1 - y/LH;
+  return 80*Math.pow(2000/80, Math.max(0,Math.min(1,t)));
 }
-
-// Mobile: horizontal axis = hz (left = low, right = high)
-function hzToX_mobile(hz) {
-  const minHz = 80, maxHz = 2000;
-  const t = (Math.log(hz) - Math.log(minHz)) / (Math.log(maxHz) - Math.log(minHz));
-  return t * W;
+function hzToX_m(hz) {
+  const t = (Math.log(hz)-Math.log(80))/(Math.log(2000)-Math.log(80));
+  return t*LW;
 }
-function xToHz_mobile(x) {
-  if (!W) return 440;
-  const t = x / W;
-  return 80 * Math.pow(2000 / 80, Math.max(0, Math.min(1, t)));
+function xToHz_m(x) {
+  const t = x/LW;
+  return 80*Math.pow(2000/80, Math.max(0,Math.min(1,t)));
 }
 
-/* ── UI CANVAS (playhead + compositing) ── */
+/* ════════════════════════════════════════
+   DRAW UI (composites into viewport)
+   This is the ONLY place we read from off-screen layer canvases to display.
+   src rect = logical slice = [panX, panY, vpLogW, vpLogH]
+   dst rect = full viewport = [0, 0, VW, VH]
+════════════════════════════════════════ */
 function drawUI() {
-  if (!uiCtx || !W || !H) return;
-  uiCtx.clearRect(0, 0, W, H);
+  if (!uiCtx || !VW || !VH) return;
+  uiCtx.clearRect(0, 0, VW, VH);
 
-  // Draw zoomed view of layer canvases
-  if (zoomLevel > 1) {
-    if (isMobile()) {
-      // Zoom: vertical
-      const srcH = H / zoomLevel;
-      Object.keys(LAYERS).forEach(k => {
-        if (!visibleLayers[k]) return;
-        const isActive = k === activeLayer;
-        uiCtx.globalAlpha = isActive ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
-        uiCtx.drawImage(canvases[k], 0, panOffsetY, W, srcH, 0, 0, W, H);
-      });
-    } else {
-      const srcW = W / zoomLevel;
-      Object.keys(LAYERS).forEach(k => {
-        if (!visibleLayers[k]) return;
-        const isActive = k === activeLayer;
-        uiCtx.globalAlpha = isActive ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
-        uiCtx.drawImage(canvases[k], panOffsetX, 0, srcW, H, 0, 0, W, H);
-      });
-    }
-  } else {
-    Object.keys(LAYERS).forEach(k => {
-      if (!visibleLayers[k]) return;
-      const isActive = k === activeLayer;
-      uiCtx.globalAlpha = isActive ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
-      uiCtx.drawImage(canvases[k], 0, 0);
-    });
-  }
+  const srcX = isMobile() ? 0    : panX;
+  const srcY = isMobile() ? panY : 0;
+  const srcW = isMobile() ? LW   : vpLogW();
+  const srcH = isMobile() ? vpLogH() : LH;
+
+  // Draw grid
+  uiCtx.globalAlpha = 1;
+  uiCtx.drawImage(gridCanvas, srcX, srcY, srcW, srcH, 0, 0, VW, VH);
+
+  // Draw layers
+  Object.keys(LAYERS).forEach(k => {
+    if (!visibleLayers[k]) return;
+    uiCtx.globalAlpha = (k === activeLayer) ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
+    uiCtx.drawImage(layerCanvases[k], srcX, srcY, srcW, srcH, 0, 0, VW, VH);
+  });
   uiCtx.globalAlpha = 1;
 
-  // Playhead
-  uiCtx.strokeStyle = 'rgba(176, 58, 46, 0.9)';
+  // Playhead: convert logical time pos → viewport screen pos
+  const screenPos = lToV_time(playheadPos);
+  uiCtx.strokeStyle = 'rgba(176,58,46,0.9)';
   uiCtx.lineWidth = 2;
-  uiCtx.shadowColor = '#b03a2e';
-  uiCtx.shadowBlur = 5;
-
+  uiCtx.shadowColor = '#b03a2e'; uiCtx.shadowBlur = 5;
+  uiCtx.beginPath();
   if (isMobile()) {
-    // Playhead = horizontal line
-    const screenY = canvasToScreen(0, playheadX).y; // playheadX is time position in canvas pixels
-    uiCtx.beginPath();
-    uiCtx.moveTo(0, screenY);
-    uiCtx.lineTo(W, screenY);
-    uiCtx.stroke();
-    uiCtx.shadowBlur = 0;
-    uiCtx.fillStyle = '#b03a2e';
-    uiCtx.font = '8px Inter, sans-serif';
-    uiCtx.fillText(playheadT.toFixed(2) + 's', 4, screenY - 3);
+    uiCtx.moveTo(0, screenPos); uiCtx.lineTo(VW, screenPos);
   } else {
-    // Playhead = vertical line
-    const screenX = canvasToScreen(playheadX, 0).x;
-    uiCtx.beginPath();
-    uiCtx.moveTo(screenX, 0);
-    uiCtx.lineTo(screenX, H);
-    uiCtx.stroke();
-    uiCtx.shadowBlur = 0;
-    uiCtx.fillStyle = '#b03a2e';
-    uiCtx.font = '8px Inter, sans-serif';
-    const lx = screenX + 4 + (screenX > W - 40 ? -40 : 0);
-    uiCtx.fillText(playheadT.toFixed(2) + 's', lx, 11);
+    uiCtx.moveTo(screenPos, 0); uiCtx.lineTo(screenPos, VH);
+  }
+  uiCtx.stroke();
+  uiCtx.shadowBlur = 0;
+
+  uiCtx.fillStyle = '#b03a2e';
+  uiCtx.font = '8px Inter,sans-serif';
+  if (isMobile()) {
+    uiCtx.fillText(playheadT.toFixed(2)+'s', 4, Math.max(10, screenPos-3));
+  } else {
+    const lx = screenPos+4 + (screenPos>VW-40 ? -44:0);
+    uiCtx.fillText(playheadT.toFixed(2)+'s', lx, 11);
   }
 }
 
-/* ── CLEAR OVERLAY ── */
 function clearOverlay() {
-  if (overlayCtx) overlayCtx.clearRect(0, 0, W, H);
+  if (overlayCtx) overlayCtx.clearRect(0,0,VW,VH);
 }
 
-/* ── OVERLAY PREVIEWS ── */
-// These work in screen coordinates (what you see, accounting for zoom/pan)
-function drawOverlayLine(a, b) {
-  if (!overlayCtx) return;
-  overlayCtx.clearRect(0, 0, W, H);
+/* ════════════════════════════════════════
+   OVERLAY PREVIEWS (shape ghosts in viewport coords)
+════════════════════════════════════════ */
+function overlayStyle() {
   overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
-  overlayCtx.lineWidth = Math.max(1, brushSize * zoomLevel);
-  overlayCtx.lineCap = 'round';
-  overlayCtx.setLineDash([6, 4]);
-  overlayCtx.beginPath();
-  overlayCtx.moveTo(a.x, a.y);
-  overlayCtx.lineTo(b.x, b.y);
-  overlayCtx.stroke();
-  overlayCtx.setLineDash([]);
+  overlayCtx.lineWidth   = Math.max(1, brushSize * zoom());
+  overlayCtx.lineCap     = 'round';
+  overlayCtx.setLineDash([6,4]);
 }
 
-function drawOverlaySine(a, b) {
-  if (!overlayCtx) return;
-  overlayCtx.clearRect(0, 0, W, H);
-  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
-  overlayCtx.lineWidth = Math.max(1, brushSize * zoomLevel * 0.6);
-  overlayCtx.lineCap = 'round';
-  overlayCtx.setLineDash([6, 4]);
-  const dx = b.x - a.x, dy = b.y - a.y;
-  const steps = Math.max(4, Math.abs(isMobile() ? dy : dx));
-  overlayCtx.beginPath();
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps;
-    const x = a.x + dx * t;
-    const amp2 = dy / 2;
-    const y = a.y + amp2 + Math.sin(t * 2 * Math.PI * 2) * amp2;
-    i === 0 ? overlayCtx.moveTo(x, y) : overlayCtx.lineTo(x, y);
-  }
-  overlayCtx.stroke();
-  overlayCtx.setLineDash([]);
-}
-
-function drawOverlayCircle(a, b) {
-  if (!overlayCtx) return;
-  overlayCtx.clearRect(0, 0, W, H);
-  const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2;
-  const rx = Math.max(1, Math.abs(b.x - a.x) / 2);
-  const ry = Math.max(1, Math.abs(b.y - a.y) / 2);
-  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
-  overlayCtx.lineWidth = Math.max(1, brushSize * zoomLevel * 0.6);
-  overlayCtx.setLineDash([6, 4]);
-  overlayCtx.beginPath();
-  overlayCtx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-  overlayCtx.stroke();
-  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '33';
-  overlayCtx.lineWidth = 1;
-  overlayCtx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
-  overlayCtx.setLineDash([]);
-}
-
-function drawOverlayFlat(a, b) {
-  if (!overlayCtx) return;
-  overlayCtx.clearRect(0, 0, W, H);
-  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
-  overlayCtx.lineWidth = Math.max(1, brushSize * zoomLevel);
-  overlayCtx.lineCap = 'round';
-  overlayCtx.setLineDash([6, 4]);
-  overlayCtx.beginPath();
+/* Convert a logical coord to viewport for overlay drawing */
+function logToVP(lc) {
   if (isMobile()) {
-    // flat = horizontal in screen space = constant time in canvas
-    const midX = (a.x + b.x) / 2;
-    overlayCtx.moveTo(midX, a.y);
-    overlayCtx.lineTo(midX, b.y);
+    return { x: lc.x, y: (lc.y - panY) * zoom() };
   } else {
-    const midY = (a.y + b.y) / 2;
-    overlayCtx.moveTo(a.x, midY);
-    overlayCtx.lineTo(b.x, midY);
+    return { x: (lc.x - panX) * zoom(), y: lc.y };
   }
-  overlayCtx.stroke();
-  overlayCtx.setLineDash([]);
 }
 
-/* ── CANVAS SAMPLING ── */
-function sampleLayer(layerKey, canvasPos) {
-  // canvasPos = position along the TIME axis in canvas pixels
-  const ctx = ctxs[layerKey];
+function drawOverlay(a, b) {
+  if (!overlayCtx || !a || !b) return;
+  const va = logToVP(a), vb = logToVP(b);
+  overlayCtx.clearRect(0,0,VW,VH);
+  overlayCtx.save();
+  overlayStyle();
+
+  if (activeShape === 'line') {
+    overlayCtx.beginPath(); overlayCtx.moveTo(va.x,va.y); overlayCtx.lineTo(vb.x,vb.y); overlayCtx.stroke();
+  } else if (activeShape === 'circle') {
+    const cx=(va.x+vb.x)/2, cy=(va.y+vb.y)/2;
+    const rx=Math.max(1,Math.abs(vb.x-va.x)/2), ry=Math.max(1,Math.abs(vb.y-va.y)/2);
+    overlayCtx.beginPath(); overlayCtx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); overlayCtx.stroke();
+    overlayCtx.strokeStyle = LAYERS[activeLayer].color+'33'; overlayCtx.lineWidth=1;
+    overlayCtx.strokeRect(va.x,va.y,vb.x-va.x,vb.y-va.y);
+  } else if (activeShape === 'rect') {
+    overlayCtx.beginPath(); overlayCtx.strokeRect(va.x,va.y,vb.x-va.x,vb.y-va.y); overlayCtx.stroke();
+  } else if (activeShape === 'sine') {
+    const dx=vb.x-va.x, dy=vb.y-va.y;
+    const steps=Math.max(4,Math.abs(isMobile()?dy:dx));
+    overlayCtx.beginPath();
+    for(let i=0;i<=steps;i++){
+      const t=i/steps;
+      const x=va.x+dx*t, amp2=dy/2;
+      const y=va.y+amp2+Math.sin(t*2*Math.PI*2)*amp2;
+      i===0?overlayCtx.moveTo(x,y):overlayCtx.lineTo(x,y);
+    }
+    overlayCtx.stroke();
+  } else if (activeShape === 'flat') {
+    if (isMobile()) {
+      const mx=(va.x+vb.x)/2;
+      overlayCtx.beginPath(); overlayCtx.moveTo(mx,va.y); overlayCtx.lineTo(mx,vb.y); overlayCtx.stroke();
+    } else {
+      const my=(va.y+vb.y)/2;
+      overlayCtx.beginPath(); overlayCtx.moveTo(va.x,my); overlayCtx.lineTo(vb.x,my); overlayCtx.stroke();
+    }
+  }
+  overlayCtx.setLineDash([]); overlayCtx.restore();
+}
+
+/* ════════════════════════════════════════
+   CANVAS SAMPLING (always reads LOGICAL canvas at full resolution)
+════════════════════════════════════════ */
+function sampleLayer(k, timePos) {
+  const ctx = layerCtxs[k];
   if (!ctx) return -1;
-
   if (isMobile()) {
-    // time = Y axis, value = X axis
-    const py = Math.max(0, Math.min(H - 1, Math.round(canvasPos)));
-    const imageData = ctx.getImageData(0, py, W, 1);
-    const data = imageData.data;
-    let weightedX = 0, totalWeight = 0;
-    for (let col = 0; col < W; col++) {
-      const a = data[col * 4 + 3];
-      if (a > 8) {
-        const w = a / 255;
-        weightedX += col * w;
-        totalWeight += w;
-      }
-    }
-    if (totalWeight === 0) return -1;
-    return (weightedX / totalWeight) / W; // 0 = left = low, 1 = right = high
+    // time=Y, value=X
+    const py = Math.max(0,Math.min(LH-1,Math.round(timePos)));
+    const d  = ctx.getImageData(0, py, LW, 1).data;
+    let wx=0, wt=0;
+    for(let col=0;col<LW;col++){const a=d[col*4+3];if(a>8){const w=a/255;wx+=col*w;wt+=w;}}
+    if(wt===0)return -1;
+    return (wx/wt)/LW; // 0=left=80Hz, 1=right=2000Hz
   } else {
-    // time = X axis, value = Y axis
-    const px = Math.max(0, Math.min(W - 1, Math.round(canvasPos)));
-    const imageData = ctx.getImageData(px, 0, 1, H);
-    const data = imageData.data;
-    let weightedY = 0, totalWeight = 0;
-    for (let row = 0; row < H; row++) {
-      const a = data[row * 4 + 3];
-      if (a > 8) {
-        const w = a / 255;
-        weightedY += row * w;
-        totalWeight += w;
-      }
-    }
-    if (totalWeight === 0) return -1;
-    return (weightedY / totalWeight) / H; // 0 = top = high, 1 = bottom = low
-  }
-}
-
-function normToAudio(layerKey, norm) {
-  // norm is 0..1:
-  // pitch desktop: 0=top=2000Hz, 1=bottom=80Hz  → so pitch = 80 * (2000/80)^(1-norm)
-  // pitch mobile:  0=left=80Hz,  1=right=2000Hz → same formula but norm means high, so flip
-  if (isMobile()) {
-    // norm = 0 means left = 80Hz (low), norm = 1 means right = 2000Hz (high)
-    // so pitch = 80 * (2000/80)^norm
-    if (layerKey === 'pitch') return 80 * Math.pow(2000 / 80, norm);
-    return norm; // amp, timbre, mod: 0=left=low, 1=right=high; re-map below
-  } else {
-    // norm = 0=top=high, 1=bottom=low
-    if (layerKey === 'pitch') return 80 * Math.pow(2000 / 80, 1 - norm);
-    return 1 - norm;
+    // time=X, value=Y
+    const px = Math.max(0,Math.min(LW-1,Math.round(timePos)));
+    const d  = ctx.getImageData(px, 0, 1, LH).data;
+    let wy=0, wt=0;
+    for(let row=0;row<LH;row++){const a=d[row*4+3];if(a>8){const w=a/255;wy+=row*w;wt+=w;}}
+    if(wt===0)return -1;
+    return (wy/wt)/LH; // 0=top=2000Hz, 1=bottom=80Hz
   }
 }
 
 function sampleAndApply() {
   if (!AC) return;
-  const pitchNorm  = sampleLayer('pitch',  playheadX);
-  const ampNorm    = sampleLayer('amp',    playheadX);
-  const timbreNorm = sampleLayer('timbre', playheadX);
-  const modNorm    = sampleLayer('mod',    playheadX);
+  const pN=sampleLayer('pitch',playheadPos), aN=sampleLayer('amp',playheadPos);
+  const tN=sampleLayer('timbre',playheadPos), mN=sampleLayer('mod',playheadPos);
+  const tc=0.06;
 
-  const tc = 0.06;
-
-  let targetPitch, targetAmp, targetFilter, targetMod;
-
+  let tPitch, tAmp, tFilter, tMod;
   if (isMobile()) {
-    targetPitch  = pitchNorm  >= 0 ? normToAudio('pitch',  pitchNorm)  : 0;
-    targetAmp    = ampNorm    >= 0 ? ampNorm    : (pitchNorm >= 0 ? 0.6 : 0);
-    targetFilter = timbreNorm >= 0 ? 200 * Math.pow(8000/200, timbreNorm) : 2000;
-    targetMod    = modNorm    >= 0 ? modNorm    : 0;
+    tPitch  = pN>=0 ? 80*Math.pow(2000/80, pN)      : 0;
+    tAmp    = aN>=0 ? aN                             : (pN>=0?0.6:0);
+    tFilter = tN>=0 ? 200*Math.pow(8000/200, tN)    : 2000;
+    tMod    = mN>=0 ? mN                             : 0;
   } else {
-    targetPitch  = pitchNorm  >= 0 ? normToAudio('pitch', pitchNorm)  : 0;
-    targetAmp    = ampNorm    >= 0 ? normToAudio('amp',   ampNorm)    : (pitchNorm >= 0 ? 0.6 : 0);
-    targetFilter = timbreNorm >= 0 ? 200 * Math.pow(8000/200, 1 - timbreNorm) : 2000;
-    targetMod    = modNorm    >= 0 ? normToAudio('mod',   modNorm)    : 0;
+    tPitch  = pN>=0 ? 80*Math.pow(2000/80, 1-pN)    : 0;
+    tAmp    = aN>=0 ? (1-aN)                         : (pN>=0?0.6:0);
+    tFilter = tN>=0 ? 200*Math.pow(8000/200, 1-tN)  : 2000;
+    tMod    = mN>=0 ? (1-mN)                         : 0;
   }
 
-  const drift = analogOn ? (Math.random() - 0.5) * targetPitch * 0.004 : 0;
-
-  voices.forEach((v, i) => {
-    let pitchOffset = 0;
-    if (numVoices > 1) {
-      const intervals = [0, 1.5, 1.2, -1.2, 1.7, -1.5];
-      pitchOffset = (intervals[i] || 0) * 50;
-    }
-    if (targetPitch > 0 && targetAmp > 0) {
-      ramp(v.osc.frequency, Math.max(20, targetPitch + pitchOffset + drift), tc);
-      ramp(v.oscGain.gain, targetAmp * 0.6, tc);
+  const drift = analogOn ? (Math.random()-.5)*tPitch*0.004 : 0;
+  voices.forEach((v,i) => {
+    const intervals=[0,1.5,1.2,-1.2,1.7,-1.5];
+    const pOff = numVoices>1 ? (intervals[i]||0)*50 : 0;
+    if(tPitch>0 && tAmp>0){
+      ramp(v.osc.frequency, Math.max(20,tPitch+pOff+drift), tc);
+      ramp(v.oscGain.gain, tAmp*0.6, tc);
     } else {
       ramp(v.oscGain.gain, 0, tc);
     }
-    ramp(v.filter.frequency, targetFilter, tc * 2);
+    ramp(v.filter.frequency, tFilter, tc*2);
     ramp(v.vGain.gain, 1, tc);
-    ramp(v.vibGain.gain, targetMod * 25, tc);
-    ramp(v.fmGain.gain, targetMod * targetPitch * 0.08, tc);
-    v.fmLFO.frequency.setTargetAtTime(2 + targetMod * 8, AC.currentTime, tc);
+    ramp(v.vibGain.gain, tMod*25, tc);
+    ramp(v.fmGain.gain, tMod*tPitch*0.08, tc);
+    v.fmLFO.frequency.setTargetAtTime(2+tMod*8, AC.currentTime, tc);
     v.osc.type = waveType;
   });
 
-  document.getElementById('ost-pos').textContent    = playheadT.toFixed(2) + 's';
-  document.getElementById('ost-pitch').textContent  = targetPitch > 0 ? targetPitch.toFixed(0) + ' Hz' : '—';
-  document.getElementById('ost-amp').textContent    = targetAmp > 0 ? (targetAmp * 100).toFixed(0) + '%' : '—';
-  document.getElementById('ost-filter').textContent = targetFilter.toFixed(0) + ' Hz';
+  document.getElementById('ost-pos').textContent    = playheadT.toFixed(2)+'s';
+  document.getElementById('ost-pitch').textContent  = tPitch>0 ? tPitch.toFixed(0)+' Hz':'—';
+  document.getElementById('ost-amp').textContent    = tAmp>0   ? (tAmp*100).toFixed(0)+'%':'—';
+  document.getElementById('ost-filter').textContent = tFilter.toFixed(0)+' Hz';
 }
 
-/* ── RAF LOOP ── */
+/* ════════════════════════════════════════
+   RAF LOOP
+════════════════════════════════════════ */
 function raf(ts) {
   if (!playing) return;
-  const dt = lastRafT ? (ts - lastRafT) / 1000 : 0;
+  const dt = lastRafT ? (ts-lastRafT)/1000 : 0;
   lastRafT = ts;
-
-  // playheadX moves along the TIME axis in canvas pixels
-  const canvasLength = isMobile() ? H : W;
-  playheadX += dt * speed * PIXELS_PER_SECOND;
-  playheadT  = playheadX / PIXELS_PER_SECOND;
-
-  if (playheadX >= canvasLength) {
-    if (looping) { playheadX = 0; playheadT = 0; }
+  const timeAxisLen = isMobile() ? LH : LW;
+  playheadPos += dt * speed * PIXELS_PER_SECOND;
+  playheadT    = playheadPos / PIXELS_PER_SECOND;
+  if (playheadPos >= timeAxisLen) {
+    if (looping) { playheadPos=0; playheadT=0; }
     else { ORM.stop(); return; }
   }
-
-  // Auto-pan to follow playhead when zoomed
-  if (zoomLevel > 1) {
+  // Auto-pan to keep playhead in view
+  if (zoom() > 1) {
     if (isMobile()) {
-      // Pan so playhead stays in view (vertical)
-      const screenY = canvasToScreen(0, playheadX).y;
-      if (screenY > H * 0.75) {
-        panOffsetY = Math.min(canvasLength - H / zoomLevel, panOffsetY + (screenY - H * 0.75));
-      }
-      if (screenY < H * 0.25) {
-        panOffsetY = Math.max(0, panOffsetY - (H * 0.25 - screenY));
-      }
+      const sy = (playheadPos-panY)*zoom();
+      if (sy>VH*0.75) panY = Math.min(LH-vpLogH(), panY+(sy-VH*0.75)/zoom());
+      if (sy<VH*0.25) panY = Math.max(0, panY-(VH*0.25-sy)/zoom());
     } else {
-      const screenX = canvasToScreen(playheadX, 0).x;
-      if (screenX > W * 0.75) {
-        panOffsetX = Math.min(W - W / zoomLevel, panOffsetX + (screenX - W * 0.75));
-      }
-      if (screenX < W * 0.25) {
-        panOffsetX = Math.max(0, panOffsetX - (W * 0.25 - screenX));
-      }
+      const sx = (playheadPos-panX)*zoom();
+      if (sx>VW*0.75) panX = Math.min(LW-vpLogW(), panX+(sx-VW*0.75)/zoom());
+      if (sx<VW*0.25) panX = Math.max(0, panX-(VW*0.25-sx)/zoom());
     }
   }
-
   sampleAndApply();
   drawUI();
   rafId = requestAnimationFrame(raf);
 }
 
-/* ══════════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    DRAWING
-══════════════════════════════════════════════════════════ */
-
-function getScreenPos(e) {
-  const c = document.getElementById('oc-draw');
-  const r = c.getBoundingClientRect();
-  return {
-    x: (e.clientX || 0) - r.left,
-    y: (e.clientY || 0) - r.top,
-  };
+════════════════════════════════════════ */
+function getVP(e) {
+  const r = drawCanvas.getBoundingClientRect();
+  return { x: (e.clientX||0)-r.left, y: (e.clientY||0)-r.top };
 }
 
 function onDrawStart(e) {
   if (!AC) initAudio();
-  const sp = getScreenPos(e);
-  const cp = screenToCanvas(sp.x, sp.y);
+  const vp = getVP(e);
+  const lc = vToL(vp.x, vp.y);
 
-  if (['line','sine','circle','flat'].includes(tool)) {
-    lineStart = sp;
+  if (activeShape !== 'none') {
+    shapeStart = lc;
     drawing = true;
     return;
   }
 
-  drawing = true;
-  lastPos = null;
+  drawing = true; lastLogical = null;
   pushUndo(activeLayer);
-  drawMarkAt(cp);
+
+  if (tool === 'airbrush') {
+    lastAirPos = lc;
+    applyAirbrush(lc);
+    airbrushInterval = setInterval(() => { if(lastAirPos) applyAirbrush(lastAirPos); }, 40);
+  } else {
+    drawMark(lc);
+  }
+
   backupLayer(activeLayer);
   drawUI();
-  maybePreviewPitch(cp);
-  lastPos = cp;
+  previewPitch(lc);
+  lastLogical = lc;
 }
 
 function onDrawMove(e) {
-  const sp = getScreenPos(e);
-  const cp = screenToCanvas(sp.x, sp.y);
+  const vp = getVP(e);
+  const lc = vToL(vp.x, vp.y);
 
   // Status tip
-  let valStr;
-  if (isMobile()) {
-    valStr = activeLayer === 'pitch'
-      ? xToHz_mobile(cp.x).toFixed(0) + ' Hz'
-      : ((cp.x / W) * 100).toFixed(0) + '%';
-    document.getElementById('ost-tip').textContent =
-      `${activeLayer}: ${valStr} · t=${( cp.y / PIXELS_PER_SECOND).toFixed(2)}s`;
-  } else {
-    valStr = activeLayer === 'pitch'
-      ? yToHz(cp.y).toFixed(0) + ' Hz'
-      : ((1 - cp.y / H) * 100).toFixed(0) + '%';
-    document.getElementById('ost-tip').textContent =
-      `${activeLayer}: ${valStr} · t=${( cp.x / PIXELS_PER_SECOND).toFixed(2)}s`;
-  }
+  const valStr = (activeLayer==='pitch')
+    ? (isMobile() ? xToHz_m(lc.x) : yToHz_d(lc.y)).toFixed(0)+' Hz'
+    : ((isMobile() ? lc.x/LW : 1-lc.y/LH)*100).toFixed(0)+'%';
+  const timeVal = (isMobile() ? lc.y : lc.x)/PIXELS_PER_SECOND;
+  document.getElementById('ost-tip').textContent = `${activeLayer}: ${valStr} · t=${timeVal.toFixed(2)}s`;
 
   if (!drawing) return;
 
-  if (['line','sine','circle','flat'].includes(tool)) {
-    if (lineStart) {
-      if (tool === 'line')   drawOverlayLine(lineStart, sp);
-      if (tool === 'sine')   drawOverlaySine(lineStart, sp);
-      if (tool === 'circle') drawOverlayCircle(lineStart, sp);
-      if (tool === 'flat')   drawOverlayFlat(lineStart, sp);
-    }
-    return;
+  if (activeShape !== 'none' && shapeStart) {
+    drawOverlay(shapeStart, lc); return;
   }
 
-  if (tool === 'erase' || tool === 'brush') {
-    drawMarkAt(cp);
+  if (tool === 'airbrush') { lastAirPos = lc; return; }
+  if (tool === 'erase' || tool === 'pen' || tool === 'calligraphy') {
+    drawMark(lc);
     backupLayer(activeLayer);
     drawUI();
-    maybePreviewPitch(cp);
-    lastPos = cp;
+    previewPitch(lc);
+    lastLogical = lc;
   }
 }
 
 function onDrawEnd(e) {
   if (!drawing) return;
-  const sp = e ? getScreenPos(e) : null;
+  const vp = e ? getVP(e) : null;
   clearOverlay();
 
-  if (['line','sine','circle','flat'].includes(tool) && lineStart && sp) {
-    const epSP = sp;
-    const aSP = lineStart;
-    // Convert to canvas coords
-    const a = screenToCanvas(aSP.x, aSP.y);
-    const b = screenToCanvas(epSP.x, epSP.y);
-    pushUndo(activeLayer);
-    if (tool === 'line')   commitLine(a, b);
-    if (tool === 'sine')   commitSine(a, b);
-    if (tool === 'circle') commitCircle(a, b);
-    if (tool === 'flat')   commitFlat(a, b);
-    backupLayer(activeLayer);
-    drawUI();
-    lineStart = null;
+  if (tool === 'airbrush') {
+    clearInterval(airbrushInterval); airbrushInterval = null;
+    backupLayer(activeLayer); drawUI();
   }
 
-  drawing = false;
-  lastPos = null;
+  if (activeShape !== 'none' && shapeStart && vp) {
+    const lc = vToL(vp.x, vp.y);
+    pushUndo(activeLayer);
+    commitShape(shapeStart, lc);
+    shapeStart = null;
+    backupLayer(activeLayer);
+    drawUI();
+  }
 
-  if (AC && voices.length && activeLayer === 'pitch' && !playing) {
+  drawing = false; lastLogical = null; lastAirPos = null;
+
+  if (AC && voices.length && activeLayer==='pitch' && !playing) {
     clearTimeout(ORM._previewTimeout);
     ORM._previewTimeout = setTimeout(() => {
       voices[0].oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08);
@@ -1871,435 +1683,376 @@ function onDrawEnd(e) {
 }
 
 function onDrawLeave() {
-  if (!['line','sine','circle','flat'].includes(tool)) onDrawEnd(null);
+  if (tool !== 'airbrush') onDrawEnd(null);
+  else { clearInterval(airbrushInterval); airbrushInterval=null; drawing=false; lastAirPos=null; backupLayer(activeLayer); drawUI(); }
   document.getElementById('ost-tip').textContent = 'Draw on the canvas · left→right = time · up/down = value';
 }
 
-function maybePreviewPitch(cp) {
-  if (activeLayer === 'pitch' && AC && voices.length) {
-    const hz = isMobile() ? xToHz_mobile(cp.x) : yToHz(cp.y);
+function previewPitch(lc) {
+  if (activeLayer==='pitch' && AC && voices.length) {
+    const hz = isMobile() ? xToHz_m(lc.x) : yToHz_d(lc.y);
     voices[0].osc.frequency.setTargetAtTime(hz, AC.currentTime, 0.02);
     voices[0].oscGain.gain.setTargetAtTime(0.35, AC.currentTime, 0.02);
     voices[0].vGain.gain.value = 1;
   }
 }
 
-/* Drawing to layer canvas in canvas coords */
-function drawMarkAt(cp) {
-  const ctx = ctxs[activeLayer];
+/* ── MARK DRAWING ONTO LOGICAL LAYER CANVAS ── */
+function drawMark(lc) {
+  const ctx   = layerCtxs[activeLayer];
   const color = LAYERS[activeLayer].color;
-  const x = cp.x, y = cp.y;
+  const x = lc.x, y = lc.y;
 
   if (tool === 'erase') {
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
-    ctx.arc(x, y, brushSize * 1.5, 0, Math.PI * 2);
+    ctx.arc(x, y, brushSize*1.8, 0, Math.PI*2);
     ctx.fillStyle = 'rgba(0,0,0,1)';
     ctx.fill();
     ctx.globalCompositeOperation = 'source-over';
     return;
   }
-  if (tool !== 'brush') return;
 
-  if (lastPos && brushSoft > 0) {
-    const dist = Math.hypot(x - lastPos.x, y - lastPos.y);
-    const steps = Math.ceil(dist / (Math.max(1, brushSize) * 0.4));
-    for (let s = 0; s <= steps; s++) {
-      const t = steps ? s / steps : 0;
-      drawBrushDab(ctx, lastPos.x + (x - lastPos.x) * t, lastPos.y + (y - lastPos.y) * t, color);
+  if (tool === 'pen') {
+    // Hard-edged, consistent width
+    if (lastLogical) {
+      ctx.strokeStyle = color+'ee';
+      ctx.lineWidth   = brushSize;
+      ctx.lineCap     = 'round';
+      ctx.lineJoin    = 'round';
+      ctx.beginPath();
+      ctx.moveTo(lastLogical.x, lastLogical.y);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = color+'ee';
+      ctx.beginPath(); ctx.arc(x,y,brushSize/2,0,Math.PI*2); ctx.fill();
     }
-  } else {
-    drawBrushDab(ctx, x, y, color);
+    return;
+  }
+
+  if (tool === 'calligraphy') {
+    // Width varies with speed — faster = thinner
+    let speed_px = 0;
+    if (lastLogical) {
+      speed_px = Math.hypot(x-lastLogical.x, y-lastLogical.y);
+    }
+    const minW = Math.max(1, brushSize*0.2);
+    const maxW = brushSize * 1.8;
+    const w    = Math.max(minW, maxW - speed_px * 0.4);
+    // Calligraphy angle: stroke along 45° nib
+    const angle = Math.PI/4;
+    if (lastLogical) {
+      // Draw a quadrilateral along the path at the nib angle
+      const dx=x-lastLogical.x, dy=y-lastLogical.y;
+      const len=Math.hypot(dx,dy)||1;
+      const nx=-dy/len, ny=dx/len; // normal
+      const hw=w/2;
+      ctx.fillStyle = color+'cc';
+      ctx.beginPath();
+      ctx.moveTo(lastLogical.x+nx*hw*Math.cos(angle), lastLogical.y+ny*hw*Math.cos(angle));
+      ctx.lineTo(lastLogical.x-nx*hw*Math.cos(angle), lastLogical.y-ny*hw*Math.cos(angle));
+      ctx.lineTo(x-nx*hw*Math.cos(angle),             y-ny*hw*Math.cos(angle));
+      ctx.lineTo(x+nx*hw*Math.cos(angle),             y+ny*hw*Math.cos(angle));
+      ctx.closePath(); ctx.fill();
+    } else {
+      ctx.fillStyle = color+'cc';
+      ctx.beginPath(); ctx.arc(x,y,w/2,0,Math.PI*2); ctx.fill();
+    }
+    return;
   }
 }
 
-function drawBrushDab(ctx, x, y, color) {
-  const r = Math.max(1, brushSize);
-  if (brushSoft > 0.05) {
-    const coreR = (1 - brushSoft) * r;
-    const grad = ctx.createRadialGradient(x, y, Math.max(0, coreR), x, y, r);
-    grad.addColorStop(0,   color + 'ee');
-    grad.addColorStop(0.4, color + 'cc');
-    grad.addColorStop(1,   color + '00');
-    ctx.fillStyle = grad;
+function applyAirbrush(lc) {
+  const ctx   = layerCtxs[activeLayer];
+  const color = LAYERS[activeLayer].color;
+  const r     = brushSize * 3;
+  // Scatter particles in the radius
+  const count = Math.ceil(brushSize * 1.2);
+  for (let i=0; i<count; i++) {
+    const angle = Math.random()*Math.PI*2;
+    const dist  = Math.pow(Math.random(), 0.5) * r; // cluster toward center
+    const px    = lc.x + Math.cos(angle)*dist;
+    const py    = lc.y + Math.sin(angle)*dist;
+    const alpha = (1 - dist/r) * 0.18;
+    ctx.fillStyle = color + Math.round(alpha*255).toString(16).padStart(2,'0');
+    ctx.beginPath(); ctx.arc(px,py,1,0,Math.PI*2); ctx.fill();
+  }
+  backupLayer(activeLayer);
+  drawUI();
+}
+
+/* ── SHAPE COMMIT (to logical canvas) ── */
+function commitShape(a, b) {
+  const ctx   = layerCtxs[activeLayer];
+  const color = LAYERS[activeLayer].color;
+  ctx.strokeStyle = color+'cc';
+  ctx.lineWidth   = brushSize;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+
+  if (activeShape === 'line') {
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+  } else if (activeShape === 'circle') {
+    const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
+    const rx=Math.max(1,Math.abs(b.x-a.x)/2), ry=Math.max(1,Math.abs(b.y-a.y)/2);
+    ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke();
+  } else if (activeShape === 'rect') {
+    ctx.beginPath(); ctx.strokeRect(a.x, a.y, b.x-a.x, b.y-a.y);
+  } else if (activeShape === 'sine') {
+    const dx=b.x-a.x, dy=b.y-a.y;
+    const steps=Math.max(4,Math.abs(isMobile()?dy:dx));
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-  } else {
-    ctx.fillStyle = color + 'dd';
-    ctx.beginPath();
-    ctx.arc(x, y, r * 0.5, 0, Math.PI * 2);
-    ctx.fill();
+    for(let i=0;i<=steps;i++){
+      const t=i/steps;
+      const x=a.x+dx*t, amp2=dy/2;
+      const y=a.y+amp2+Math.sin(t*2*Math.PI*2)*amp2;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  } else if (activeShape === 'flat') {
+    if (isMobile()) {
+      const mx=(a.x+b.x)/2;
+      ctx.beginPath(); ctx.moveTo(mx,a.y); ctx.lineTo(mx,b.y); ctx.stroke();
+    } else {
+      const my=(a.y+b.y)/2;
+      ctx.beginPath(); ctx.moveTo(a.x,my); ctx.lineTo(b.x,my); ctx.stroke();
+    }
   }
-}
-
-/* Commit tools (canvas coords) */
-function commitLine(a, b) {
-  const ctx = ctxs[activeLayer];
-  ctx.strokeStyle = LAYERS[activeLayer].color + 'cc';
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(a.x, a.y);
-  ctx.lineTo(b.x, b.y);
-  ctx.stroke();
-}
-
-function commitSine(a, b) {
-  const ctx = ctxs[activeLayer];
-  ctx.strokeStyle = LAYERS[activeLayer].color + 'cc';
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = 'round';
-  const dx = b.x - a.x, dy = b.y - a.y;
-  const steps = Math.max(4, Math.abs(isMobile() ? dy : dx));
-  ctx.beginPath();
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps;
-    const x = a.x + dx * t;
-    const amp2 = dy / 2;
-    const y = a.y + amp2 + Math.sin(t * 2 * Math.PI * 2) * amp2;
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  }
-  ctx.stroke();
-}
-
-function commitCircle(a, b) {
-  const ctx = ctxs[activeLayer];
-  const cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2;
-  const rx = Math.max(1, Math.abs(b.x - a.x) / 2);
-  const ry = Math.max(1, Math.abs(b.y - a.y) / 2);
-  ctx.strokeStyle = LAYERS[activeLayer].color + 'cc';
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-  ctx.stroke();
-}
-
-function commitFlat(a, b) {
-  const ctx = ctxs[activeLayer];
-  ctx.strokeStyle = LAYERS[activeLayer].color + 'cc';
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  if (isMobile()) {
-    // flat in mobile = constant value (vertical line in canvas coords)
-    const midX = (a.x + b.x) / 2;
-    ctx.moveTo(midX, a.y);
-    ctx.lineTo(midX, b.y);
-  } else {
-    const midY = (a.y + b.y) / 2;
-    ctx.moveTo(a.x, midY);
-    ctx.lineTo(b.x, midY);
-  }
-  ctx.stroke();
 }
 
 /* ── BRUSH PREVIEW ── */
 function updateBrushPreview() {
   const dot = document.getElementById('ormBrushDot');
-  if (!dot) return;
-  const maxD = 30;
-  const d = Math.min(maxD, brushSize * (brushSoft > 0.05 ? 1.5 : 0.85));
-  dot.style.width  = d + 'px';
-  dot.style.height = d + 'px';
-  dot.style.filter = brushSoft > 0.1 ? `blur(${(brushSoft * 2).toFixed(1)}px)` : 'none';
+  const box = document.getElementById('ormBrushPreview');
+  if (!dot || !box) return;
+  const boxW = box.offsetWidth || 32;
+  const d = Math.min(boxW-4, brushSize * 2.2);
+  dot.style.width  = d+'px';
+  dot.style.height = d+'px';
   dot.style.background = LAYERS[activeLayer].color;
+  if (tool === 'calligraphy') {
+    dot.style.borderRadius = '2px';
+    dot.style.transform = 'rotate(45deg)';
+    dot.style.filter = 'none';
+  } else if (tool === 'airbrush') {
+    dot.style.borderRadius = '50%';
+    dot.style.transform = '';
+    dot.style.filter = `blur(${(brushSize*0.3).toFixed(1)}px)`;
+  } else {
+    dot.style.borderRadius = '50%';
+    dot.style.transform = '';
+    dot.style.filter = 'none';
+  }
 }
 
-/* ── KEYBOARD ── */
+/* ── KEYBOARD SHORTCUTS ── */
 function onKeyDown(e) {
-  const tag = (e.target || e.srcElement).tagName;
-  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
-
-  switch (e.key) {
-    case ' ':
-      e.preventDefault();
-      playing ? ORM.stop() : ORM.play();
-      break;
+  const tag = (e.target||e.srcElement).tagName;
+  if (tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA') return;
+  switch(e.key) {
+    case ' ':  e.preventDefault(); playing?ORM.stop():ORM.play(); break;
     case 'z': case 'Z':
-      if (e.metaKey || e.ctrlKey) { e.preventDefault(); ORM.undo(); }
-      break;
-    case 'b': case 'B': ORM.setTool('brush');  break;
-    case 'l': case 'L': ORM.setTool('line');   break;
-    case 'e': case 'E': ORM.setTool('erase');  break;
-    case 's': case 'S': ORM.setTool('sine');   break;
-    case 'c': case 'C': ORM.setTool('circle'); break;
-    case 'f': case 'F': ORM.setTool('flat');   break;
+      if(e.metaKey||e.ctrlKey){e.preventDefault();ORM.undo();} break;
+    case 'p': case 'P': ORM.setTool('pen');         break;
+    case 'k': case 'K': ORM.setTool('calligraphy'); break;
+    case 'a': case 'A': ORM.setTool('airbrush');    break;
+    case 'e': case 'E': ORM.setTool('erase');        break;
     case '1': ORM.setLayer('pitch');  break;
     case '2': ORM.setLayer('amp');    break;
     case '3': ORM.setLayer('timbre'); break;
     case '4': ORM.setLayer('mod');    break;
-    case '[': ORM.setBrushSize(Math.max(1,  brushSize - 2)); break;
-    case ']': ORM.setBrushSize(Math.min(60, brushSize + 2)); break;
+    case '[': ORM.setBrushSize(Math.max(1,  brushSize-2)); break;
+    case ']': ORM.setBrushSize(Math.min(60, brushSize+2)); break;
   }
 }
 
-/* ══════════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    RANDOM GENERATORS
-══════════════════════════════════════════════════════════ */
-function generateOrganicCurve(ctx, color, points, brushW) {
-  const ptList = [];
-  for (let i = 0; i <= points; i++) {
-    if (isMobile()) {
-      ptList.push({ y: (i / points) * H, x: 0.15*W + Math.random()*0.7*W });
-    } else {
-      ptList.push({ x: (i / points) * W, y: 0.15*H + Math.random()*0.7*H });
-    }
+════════════════════════════════════════ */
+function genOrganicCurve(ctx, color, points) {
+  const pts=[];
+  for(let i=0;i<=points;i++){
+    if(isMobile()) pts.push({y:(i/points)*LH, x:0.15*LW+Math.random()*0.7*LW});
+    else           pts.push({x:(i/points)*LW, y:0.15*LH+Math.random()*0.7*LH});
   }
-  ctx.strokeStyle = color + 'cc';
-  ctx.lineWidth = brushW * 8;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.beginPath();
-  ctx.moveTo(ptList[0].x, ptList[0].y);
-  for (let i = 1; i < ptList.length - 1; i++) {
-    const xc = (ptList[i].x + ptList[i+1].x) / 2;
-    const yc = (ptList[i].y + ptList[i+1].y) / 2;
-    ctx.quadraticCurveTo(ptList[i].x, ptList[i].y, xc, yc);
+  ctx.strokeStyle=color+'cc'; ctx.lineWidth=8; ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=1;i<pts.length-1;i++){
+    const xc=(pts[i].x+pts[i+1].x)/2, yc=(pts[i].y+pts[i+1].y)/2;
+    ctx.quadraticCurveTo(pts[i].x,pts[i].y,xc,yc);
   }
-  ctx.lineTo(ptList[ptList.length-1].x, ptList[ptList.length-1].y);
-  ctx.stroke();
-  // Soft blobs along the curve
-  for (let i = 0; i < points * 3; i++) {
-    const t = Math.random();
-    const idx = Math.floor(t * (ptList.length - 1));
-    const base = ptList[Math.min(idx, ptList.length-1)];
-    const bx = base.x + (Math.random()-.5) * 30;
-    const by = base.y + (Math.random()-.5) * 30;
-    const r = 12 + Math.random() * 20;
-    const grad = ctx.createRadialGradient(bx, by, 0, bx, by, r);
-    grad.addColorStop(0, color + '66');
-    grad.addColorStop(1, color + '00');
-    ctx.fillStyle = grad;
-    ctx.beginPath(); ctx.arc(bx, by, r, 0, Math.PI*2); ctx.fill();
+  ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y); ctx.stroke();
+  for(let i=0;i<points*3;i++){
+    const t=Math.random(), idx=Math.floor(t*(pts.length-1));
+    const base=pts[Math.min(idx,pts.length-1)];
+    const bx=base.x+(Math.random()-.5)*30, by=base.y+(Math.random()-.5)*30, r=12+Math.random()*20;
+    const g=ctx.createRadialGradient(bx,by,0,bx,by,r);
+    g.addColorStop(0,color+'66'); g.addColorStop(1,color+'00');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(bx,by,r,0,Math.PI*2); ctx.fill();
+  }
+}
+function genSwells(ctx, color, count) {
+  for(let i=0;i<count;i++){
+    let cx,cy,rw,rh;
+    if(isMobile()){cy=(i+0.5+Math.random()*0.4-0.2)/count*LH;rh=(0.06+Math.random()*0.12)*LH;cx=LW*(0.1+Math.random()*0.3);rw=rh;}
+    else{cx=(i+0.5+Math.random()*0.4-0.2)/count*LW;rw=(0.06+Math.random()*0.12)*LW;cy=LH*(0.1+Math.random()*0.3);rh=rw*0.7;}
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(rw,rh));
+    g.addColorStop(0,color+'dd'); g.addColorStop(0.5,color+'88'); g.addColorStop(1,color+'00');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.ellipse(cx,cy,Math.max(1,rw),Math.max(1,rh),0,0,Math.PI*2); ctx.fill();
+  }
+}
+function genSparseMarks(ctx, color) {
+  const n=4+Math.floor(Math.random()*6);
+  for(let i=0;i<n;i++){
+    let x1,y1,x2,y2;
+    if(isMobile()){x1=Math.random()*LW*0.5;y1=Math.random()*LH;const l=(0.04+Math.random()*0.12)*LH;x2=x1+(Math.random()-.5)*LW*0.2;y2=y1+l;}
+    else{x1=Math.random()*LW;y1=Math.random()*LH*0.5;const l=(0.04+Math.random()*0.12)*LW;x2=x1+l;y2=y1+(Math.random()-.5)*LH*0.2;}
+    ctx.strokeStyle=color+'bb'; ctx.lineWidth=4+Math.random()*10; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
   }
 }
 
-function generateSwells(ctx, color, count) {
-  for (let i = 0; i < count; i++) {
-    let cx, cy, rw, rh;
-    if (isMobile()) {
-      cy = (i + 0.5 + Math.random()*0.4 - 0.2) / count * H;
-      rh = (0.06 + Math.random()*0.12) * H;
-      cx = W * (0.1 + Math.random()*0.3);
-      rw = rh;
-    } else {
-      cx = (i + 0.5 + Math.random()*0.4 - 0.2) / count * W;
-      rw = (0.06 + Math.random()*0.12) * W;
-      cy = H * (0.1 + Math.random()*0.3);
-      rh = rw * 0.7;
-    }
-    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(rw, rh));
-    grad.addColorStop(0, color + 'dd');
-    grad.addColorStop(0.5, color + '88');
-    grad.addColorStop(1, color + '00');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, Math.max(1,rw), Math.max(1,rh), 0, 0, Math.PI*2);
-    ctx.fill();
-  }
-}
-
-function generateSparseMarks(ctx, color) {
-  const count = 4 + Math.floor(Math.random()*6);
-  for (let i = 0; i < count; i++) {
-    let x1, y1, x2, y2;
-    if (isMobile()) {
-      x1 = Math.random() * W * 0.5;
-      y1 = Math.random() * H;
-      const len = (0.04 + Math.random()*0.12) * H;
-      x2 = x1 + (Math.random()-.5)*W*0.2;
-      y2 = y1 + len;
-    } else {
-      x1 = Math.random() * W;
-      y1 = Math.random() * H * 0.5;
-      const len = (0.04 + Math.random()*0.12) * W;
-      x2 = x1 + len;
-      y2 = y1 + (Math.random()-.5)*H*0.2;
-    }
-    ctx.strokeStyle = color + 'bb';
-    ctx.lineWidth = 4 + Math.random()*10;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-  }
-}
-
-/* ══════════════════════════════════════════════════════════
+/* ════════════════════════════════════════
    PUBLIC CONTROLLER
-══════════════════════════════════════════════════════════ */
+════════════════════════════════════════ */
 const ORM = window.ORM = {
   _previewTimeout: null,
 
-  togglePlay() { playing ? ORM.stop() : ORM.play(); },
+  togglePlay() { playing?ORM.stop():ORM.play(); },
 
   play() {
-    if (!AC) initAudio();
-    if (AC.state === 'suspended') AC.resume();
-    playing = true;
-    lastRafT = 0;
-    const btn = document.getElementById('orm-play');
-    btn.innerHTML = '<svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" style="margin-right:3px"><rect width="9" height="9"/></svg>stop';
+    if(!AC) initAudio();
+    if(AC.state==='suspended') AC.resume();
+    playing=true; lastRafT=0;
+    const btn=document.getElementById('orm-play');
+    btn.innerHTML='<svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" style="margin-right:3px;vertical-align:middle"><rect width="9" height="9"/></svg>stop';
     btn.classList.add('active');
-    rafId = requestAnimationFrame(raf);
+    rafId=requestAnimationFrame(raf);
   },
 
   stop() {
-    playing = false;
-    cancelAnimationFrame(rafId);
-    if (AC) voices.forEach(v => v.oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08));
-    const btn = document.getElementById('orm-play');
-    btn.innerHTML = '<svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px"><path d="M0 0l9 5.5L0 11z"/></svg>play';
+    playing=false; cancelAnimationFrame(rafId);
+    if(AC) voices.forEach(v=>v.oscGain.gain.setTargetAtTime(0,AC.currentTime,0.08));
+    const btn=document.getElementById('orm-play');
+    btn.innerHTML='<svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px;vertical-align:middle"><path d="M0 0l9 5.5L0 11z"/></svg>play';
     btn.classList.remove('active');
     drawUI();
   },
 
   toggleLoop() {
-    looping = !looping;
-    document.getElementById('orm-loop').classList.toggle('active', looping);
+    looping=!looping;
+    document.getElementById('orm-loop').classList.toggle('active',looping);
   },
 
   setSpeed(v) {
-    speed = v;
-    document.getElementById('orm-speed-val').textContent = v.toFixed(2) + '×';
+    speed=v;
+    document.getElementById('orm-speed-val').textContent=v.toFixed(2)+'×';
   },
 
   setWave(w) {
-    waveType = w;
-    voices.forEach(v => { v.osc.type = w; });
+    waveType=w; voices.forEach(v=>{v.osc.type=w;});
   },
 
   setVoices(n) {
-    numVoices = n;
-    if (AC) buildVoices();
+    numVoices=n; if(AC) buildVoices();
   },
 
   setAnalog(on) {
-    analogOn = on;
-    if (analogLFOGain && AC) {
-      analogLFOGain.gain.setTargetAtTime(on ? 8 : 0, AC.currentTime, 0.3);
-    }
+    analogOn=on;
+    if(analogLFOGain&&AC) analogLFOGain.gain.setTargetAtTime(on?8:0,AC.currentTime,0.3);
   },
 
   setLayer(k) {
-    activeLayer = k;
-    document.querySelectorAll('.orm-layer-tab').forEach(el => el.classList.remove('active'));
-    document.getElementById('ltab-' + k).classList.add('active');
-    document.getElementById('orm-layer-hint').textContent = LAYERS[k].hint;
-    const sc = LAYER_SCALES[k];
-    document.getElementById('orm-scale-top').textContent = sc.top;
-    document.getElementById('orm-scale-mid').textContent = sc.mid;
-    document.getElementById('orm-scale-bot').textContent = sc.bot;
+    activeLayer=k;
+    document.querySelectorAll('.orm-layer-tab').forEach(el=>el.classList.remove('active'));
+    document.getElementById('ltab-'+k).classList.add('active');
+    document.getElementById('orm-layer-hint').textContent=LAYERS[k].hint;
+    const sc=LAYER_SCALES[k];
+    document.getElementById('orm-scale-top').textContent=sc.top;
+    document.getElementById('orm-scale-mid').textContent=sc.mid;
+    document.getElementById('orm-scale-bot').textContent=sc.bot;
     updateBrushPreview();
   },
 
-  toggleVis(k, e) {
+  toggleVis(k,e) {
     e.stopPropagation();
-    visibleLayers[k] = !visibleLayers[k];
-    const vis = document.querySelector(`#ltab-${k} .orm-layer-vis`);
-    if (vis) vis.style.opacity = visibleLayers[k] ? '1' : '0.2';
+    visibleLayers[k]=!visibleLayers[k];
+    const v=document.querySelector(`#ltab-${k} .orm-layer-vis`);
+    if(v) v.style.opacity=visibleLayers[k]?'1':'0.2';
     drawUI();
   },
 
   setTool(t) {
-    tool = t;
-    document.querySelectorAll('.orm-tool-btn').forEach(b => b.classList.remove('active'));
-    const btn = document.getElementById('tool-' + t);
-    if (btn) btn.classList.add('active');
-    const cursors = { brush:'crosshair', line:'crosshair', erase:'cell', sine:'crosshair', circle:'crosshair', flat:'crosshair' };
-    document.getElementById('oc-draw').style.cursor = cursors[t] || 'crosshair';
-  },
-
-  setBrushSize(v) {
-    brushSize = v;
-    document.getElementById('orm-bsize-val').textContent = v;
-    document.getElementById('orm-bsize').value = v;
+    tool=t;
+    document.querySelectorAll('.orm-tool-btn').forEach(b=>b.classList.remove('active'));
+    const btn=document.getElementById('tool-'+t);
+    if(btn) btn.classList.add('active');
+    drawCanvas.style.cursor = t==='erase'?'cell':'crosshair';
     updateBrushPreview();
   },
 
-  setBrushSoft(v) {
-    brushSoft = v;
-    document.getElementById('orm-bsoft-val').textContent = v.toFixed(2);
-    document.getElementById('orm-bsoft').value = v;
+  setShape(s) {
+    activeShape=s;
+    drawCanvas.style.cursor = s!=='none'?'crosshair':(tool==='erase'?'cell':'crosshair');
+  },
+
+  setBrushSize(v) {
+    brushSize=v;
+    document.getElementById('orm-bsize-val').textContent=v;
+    document.getElementById('orm-bsize').value=v;
     updateBrushPreview();
   },
 
   clearAll() {
-    Object.keys(LAYERS).forEach(k => {
-      ctxs[k].clearRect(0, 0, W, H);
-      delete layerImages[k];
-      undoStack[k] = [];
+    Object.keys(LAYERS).forEach(k=>{
+      layerCtxs[k].clearRect(0,0,LW,LH);
+      delete layerSnapshots[k];
+      undoStack[k]=[];
     });
-    drawGrid();
-    drawUI();
-    ORM.stop();
+    drawGrid(); drawUI(); ORM.stop();
   },
 
   undo() {
-    const stack = undoStack[activeLayer];
-    if (!stack.length) return;
-    const img = stack.pop();
-    ctxs[activeLayer].putImageData(img, 0, 0);
-    layerImages[activeLayer] = ctxs[activeLayer].getImageData(0, 0, W, H);
-    drawGrid();
+    const stack=undoStack[activeLayer];
+    if(!stack.length) return;
+    const img=stack.pop();
+    layerCtxs[activeLayer].putImageData(img,0,0);
+    layerSnapshots[activeLayer]=layerCtxs[activeLayer].getImageData(0,0,LW,LH);
     drawUI();
   },
 
   randomize() {
-    Object.keys(LAYERS).forEach(k => {
+    Object.keys(LAYERS).forEach(k=>{
       pushUndo(k);
-      ctxs[k].clearRect(0, 0, W, H);
-      if (k === 'pitch')       generateOrganicCurve(ctxs[k], LAYERS[k].color, 3, 0.7);
-      else if (k === 'amp')    generateSwells(ctxs[k], LAYERS[k].color, 4);
-      else if (k === 'timbre') generateOrganicCurve(ctxs[k], LAYERS[k].color, 5, 0.5);
-      else if (k === 'mod')    generateSparseMarks(ctxs[k], LAYERS[k].color);
+      layerCtxs[k].clearRect(0,0,LW,LH);
+      if(k==='pitch')       genOrganicCurve(layerCtxs[k],LAYERS[k].color,3);
+      else if(k==='amp')    genSwells(layerCtxs[k],LAYERS[k].color,4);
+      else if(k==='timbre') genOrganicCurve(layerCtxs[k],LAYERS[k].color,5);
+      else if(k==='mod')    genSparseMarks(layerCtxs[k],LAYERS[k].color);
       backupLayer(k);
     });
     drawUI();
   },
 
   zoomIn() {
-    if (zoomIdx < ZOOM_STEPS.length - 1) {
+    if(zoomIdx<ZOOM_STEPS.length-1){
       zoomIdx++;
-      zoomLevel = ZOOM_STEPS[zoomIdx];
-      // Reset pan so we don't jump to an empty area
-      clampPan();
-      drawGrid();
-      restoreLayerImages();
-      drawUI();
+      document.getElementById('orm-zoom-level').textContent=ZOOM_STEPS[zoomIdx]+'×';
+      clampPan(); drawUI();
     }
   },
 
   zoomOut() {
-    if (zoomIdx > 0) {
+    if(zoomIdx>0){
       zoomIdx--;
-      zoomLevel = ZOOM_STEPS[zoomIdx];
-      clampPan();
-      drawGrid();
-      restoreLayerImages();
-      drawUI();
+      document.getElementById('orm-zoom-level').textContent=ZOOM_STEPS[zoomIdx]+'×';
+      clampPan(); drawUI();
     }
   },
 };
 
-function clampPan() {
-  if (isMobile()) {
-    const maxPan = Math.max(0, H - H / zoomLevel);
-    panOffsetY = Math.max(0, Math.min(maxPan, panOffsetY));
-  } else {
-    const maxPan = Math.max(0, W - W / zoomLevel);
-    panOffsetX = Math.max(0, Math.min(maxPan, panOffsetX));
-  }
-}
-
 window.addEventListener('load', init);
-window.addEventListener('resize', () => {
-  // reset zoom pan on resize
-  clampPan();
-});
 
 }());
 </script>
