@@ -193,7 +193,7 @@
 </script>
   
   <style>
-    /* ── PAGE LAYOUT (mirrors timbre-lab) ── */
+    /* ── PAGE LAYOUT ── */
     body { padding-top: 64px; }
 
     .page-wrap {
@@ -373,6 +373,8 @@
     .orm-canvas-area {
       position: relative;
       width: 100%;
+      /* Scales with viewport: taller on bigger screens */
+      height: clamp(380px, 60vh, 720px);
       background: #fff;
       overflow: hidden;
       flex-shrink: 0;
@@ -412,21 +414,15 @@
       line-height: 1.4;
     }
 
-    /* The canvas inner is the viewport into the larger logical canvas */
     .orm-canvas-inner {
       position: absolute;
       inset: 0;
       overflow: hidden;
     }
-    /* Each canvas layer is positioned at (0,0) with logical dimensions,
-       then translated by CSS transform to implement pan/zoom viewport.
-       The draw canvas stays full viewport size and maps coords mathematically. */
     .orm-canvas-inner canvas {
       position: absolute;
       top: 0; left: 0;
       display: block;
-      /* width/height set by JS to viewport W×H for the UI/overlay/draw layers,
-         and to logical W×H (scaled) for the layer canvases */
     }
     #oc-grid    { z-index: 1; pointer-events: none; }
     #oc-pitch   { z-index: 2; pointer-events: none; }
@@ -532,7 +528,7 @@
       color: var(--text); opacity: .55; font-style: italic; max-width: 280px;
     }
 
-    /* ── TOOL BUTTONS ── */
+    /* ── TOOL BUTTONS (desktop) ── */
     .orm-tool-group {
       display: flex;
       flex-direction: column;
@@ -555,6 +551,9 @@
     }
     .orm-tool-btn:hover  { background: var(--text); color: var(--bg); }
     .orm-tool-btn.active { background: var(--text); color: var(--bg); }
+
+    /* Mobile tool dropdown — hidden on desktop */
+    .orm-tool-mobile-wrap { display: none; }
 
     /* shape select dropdown in controls */
     .orm-shape-select {
@@ -596,7 +595,11 @@
       display: flex; align-items: center; justify-content: center;
       background: #fff; flex-shrink: 0; overflow: hidden;
     }
-    .orm-brush-dot { border-radius: 50%; transition: width .1s, height .1s, filter .1s; }
+    /* Calligraphy nib: a slanted rectangle, not a dot */
+    .orm-brush-dot {
+      border-radius: 50%;
+      transition: width .1s, height .1s, filter .1s, border-radius .1s, transform .1s;
+    }
 
     /* ── KEYBOARD HINTS ── */
     .orm-kbd-section {
@@ -636,18 +639,16 @@
       }
       .vertical-title span { font-size: .8rem; letter-spacing: .18em; }
 
-      /* Less top padding on mobile so app is close to top */
       .page-content {
         margin-left: 44px;
         width: calc(100% - 44px);
-        padding: .5em .5em 4em;
+        padding: .4em .5em 4em;
       }
 
-      /* App exactly fits the viewport below the site header */
+      /* App is normal block flow on mobile — page scrolls */
       .orm-app {
-        height: calc(100vh - 64px - .8em);
-        display: flex;
-        flex-direction: column;
+        height: auto;
+        display: block;
       }
 
       /* Transport: compact single scrollable row */
@@ -657,7 +658,6 @@
         scrollbar-width: none;
         gap: .2rem;
         padding: .3rem .4rem;
-        flex-shrink: 0;
       }
       .orm-transport::-webkit-scrollbar { display: none; }
       .orm-btn { padding: .28rem .5rem; font-size: .64rem; }
@@ -666,24 +666,39 @@
       input[type=range].orm-slider { width: 46px; }
       .orm-toggle-label { display: none; }
 
-      /* Canvas fills all remaining space */
-      .orm-canvas-area { flex: 1; min-height: 0; }
+      /* Canvas: fixed height, internal pan only */
+      .orm-canvas-area {
+        height: 45vh;
+        flex-shrink: 0;
+      }
 
       /* Status: single line */
-      .orm-status { flex-shrink: 0; padding: .18rem .4rem; font-size: .58rem; }
+      .orm-status { padding: .18rem .4rem; font-size: .58rem; }
       .orm-status-tip { display: none; }
 
-      /* Controls: compact horizontal row */
-      .orm-controls { flex-shrink: 0; }
-      .orm-ctrl-section { padding: .3rem .4rem; gap: .25rem; }
+      /* Controls: normal block flow, wraps */
+      .orm-controls {
+        flex-wrap: wrap;
+        overflow-x: visible;
+      }
+      .orm-ctrl-section {
+        padding: .35rem .45rem;
+        gap: .25rem;
+        border-bottom: 1px solid var(--text);
+      }
+      .orm-ctrl-section:last-child { border-bottom: none; }
       .orm-ctrl-title { display: none; }
+
+      /* Hide desktop tool buttons, show dropdown */
+      .orm-tool-desktop { display: none !important; }
+      .orm-tool-mobile-wrap { display: flex; align-items: center; gap: .35rem; }
+
       .orm-layer-tabs { gap: .18rem; }
       .orm-layer-tab { padding: .25rem .38rem; }
       .orm-layer-name { font-size: .6rem; }
       .orm-layer-vis { display: none; }
       .orm-layer-hint { display: none; }
       .orm-scale-row { display: none; }
-      .orm-tool-row { flex-wrap: nowrap; }
       .orm-tool-btn { padding: .25rem .42rem; font-size: .6rem; }
       .orm-shape-select { font-size: .6rem; padding: .22rem .3rem; }
       input[type=range].orm-brush-slider { width: 70px; }
@@ -771,13 +786,6 @@
             <option value="square">square</option>
           </select>
 
-          <div class="orm-speed-row">
-            <span class="orm-speed-label">voices</span>
-            <input type="range" class="orm-slider" id="orm-voices" min="1" max="6" step="1" value="1"
-              oninput="ORM.setVoices(+this.value); document.getElementById('orm-voices-val').textContent=this.value;">
-            <span class="orm-speed-val" id="orm-voices-val">1</span>
-          </div>
-
           <div class="orm-sep"></div>
 
           <div class="orm-toggle-wrap">
@@ -862,16 +870,27 @@
             </div>
           </div>
 
-          <!-- Draw tools: pen type + erase, then shape -->
+          <!-- Draw tools -->
           <div class="orm-ctrl-section">
             <div class="orm-ctrl-title">draw</div>
             <div class="orm-tool-group">
-              <div class="orm-tool-row">
-                <button class="orm-tool-btn active" id="tool-pen"       onclick="ORM.setTool('pen')">pen</button>
+              <!-- Desktop: individual buttons -->
+              <div class="orm-tool-row orm-tool-desktop">
+                <button class="orm-tool-btn active" id="tool-pen"         onclick="ORM.setTool('pen')">pen</button>
                 <button class="orm-tool-btn"        id="tool-calligraphy" onclick="ORM.setTool('calligraphy')">calligraphy</button>
-                <button class="orm-tool-btn"        id="tool-airbrush"  onclick="ORM.setTool('airbrush')">airbrush</button>
-                <button class="orm-tool-btn"        id="tool-erase"     onclick="ORM.setTool('erase')">erase</button>
+                <button class="orm-tool-btn"        id="tool-airbrush"    onclick="ORM.setTool('airbrush')">airbrush</button>
+                <button class="orm-tool-btn"        id="tool-erase"       onclick="ORM.setTool('erase')">erase</button>
               </div>
+              <!-- Mobile: dropdown -->
+              <div class="orm-tool-mobile-wrap">
+                <select class="orm-select" id="tool-mobile-select" onchange="ORM.setTool(this.value)">
+                  <option value="pen">pen</option>
+                  <option value="calligraphy">calligraphy</option>
+                  <option value="airbrush">airbrush</option>
+                  <option value="erase">erase</option>
+                </select>
+              </div>
+              <!-- Shape row (both) -->
               <div class="orm-tool-row">
                 <span class="orm-ctrl-title" style="align-self:center;margin-right:.25rem;">shape</span>
                 <select class="orm-shape-select" id="orm-shape" onchange="ORM.setShape(this.value)">
@@ -886,7 +905,7 @@
             </div>
           </div>
 
-          <!-- Brush size only -->
+          <!-- Brush size -->
           <div class="orm-ctrl-section">
             <div class="orm-ctrl-title">brush</div>
             <div class="orm-brush-row">
@@ -966,7 +985,7 @@
       <p>The reassessment of Oram's work has gathered pace since her death. The Daphne Oram Collection, now held at Goldsmiths, University of London, contains her correspondence, patents, scores, and technical drawings, as well as the Oramics machine itself — restored to working condition after years of deterioration. Scholars, curators, and electronic musicians have returned to her work and found in it a sophistication and radicalism that was never adequately recognised in her lifetime. Her refusal to separate the act of composition from the act of inscription — to insist that drawing <em>was</em> music, not merely a description of it — places her squarely in a lineage of ideas that would later animate graphic notation, live electronics, and interactive computer music. The Oramics machine was not a curiosity or a failed prototype. It was a coherent and original vision of what composing could be.</p>
 
       <h2>How this instrument works</h2>
-      <p>This browser-based Oramics instrument follows the logic of the original machine as closely as a digital medium allows. You draw on four independent layers — pitch, amplitude, timbre, and modulation — and as the playhead moves across your drawing, the pixel values it reads are converted into audio parameters in real time. The pitch layer maps vertical position to frequency: marks drawn high produce high pitches, marks drawn low produce low ones. The amplitude layer reads pixel density to set volume. Timbre controls a low-pass filter cutoff, shaping brightness. Modulation adds vibrato and FM depth.</p>
+      <p>This browser-based Oramics instrument follows the logic of the original machine as closely as a digital medium allows. You draw on four independent layers — pitch, amplitude, timbre, and modulation — and as the playhead moves across your drawing, the pixel values it reads are converted into audio parameters in real time. The pitch layer maps vertical position to frequency: marks drawn high produce high pitches, marks drawn low produce low ones. Crucially, each separate mark on the pitch layer produces an independent voice — two strokes at different heights sound simultaneously, just as two separate film strips would have driven two separate oscillators on the original machine. The amplitude layer reads pixel density to set volume per voice. Timbre controls a low-pass filter cutoff, shaping brightness. Modulation adds vibrato and FM depth.</p>
 
       <p>Three drawing tools follow different mark-making traditions: the pen lays down a clean, hard-edged line; calligraphy produces a pressure-sensitive stroke that varies in width with drawing speed, echoing the reed and the brush; airbrush builds up soft, diffuse clouds of pigment that accumulate with repeated passes. Shapes can be drawn separately — line, ellipse, rectangle, sine curve, or flat line — using the shape selector, which previews your mark as a ghost before committing it. The zoom controls let you work in finer detail without affecting playback, which always reads the full canvas. Try the randomise button to generate Oramics-style shapes and hear how they sound before drawing your own.</p>
 
@@ -1018,6 +1037,11 @@ const LAYER_SCALES = {
   mod:    { top: '100%',    mid: '50%',     bot: '0%'     },
 };
 
+/* Max independent voices (fixed pool) */
+const MAX_VOICES = 5;
+/* Gap threshold in logical pixels: runs separated by fewer pixels merge */
+const CLUSTER_GAP = 6;
+
 /* ════════════════════════════════════════
    MOBILE DETECTION
 ════════════════════════════════════════ */
@@ -1027,9 +1051,23 @@ function isMobile() { return window.innerWidth <= 600; }
    AUDIO ENGINE
 ════════════════════════════════════════ */
 let AC = null, masterGain;
-const voices = [];
-let numVoices = 1, waveType = 'sine', analogOn = false;
-let analogLFO = null, analogLFOGain = null;
+const voices = []; // fixed pool of MAX_VOICES
+let waveType = 'sine', analogOn = false;
+
+/* Analog drift: a slowly-wandering value rather than per-frame noise */
+let analogDriftVal   = 0;     // current drift (-1..1)
+let analogDriftTarget = 0;    // slowly random-walk target
+let analogDriftTimer  = 0;    // countdown frames until next target
+
+function updateAnalogDrift() {
+  analogDriftTimer--;
+  if (analogDriftTimer <= 0) {
+    analogDriftTarget = (Math.random() - 0.5) * 2;
+    analogDriftTimer  = 60 + Math.floor(Math.random() * 80); // ~1–2.3s at 60fps
+  }
+  // Lerp toward target — low-pass the walk
+  analogDriftVal += (analogDriftTarget - analogDriftVal) * 0.008;
+}
 
 function initAudio() {
   if (AC) return;
@@ -1041,33 +1079,45 @@ function initAudio() {
   limiter.ratio.value = 10; limiter.attack.value = 0.005; limiter.release.value = 0.1;
   masterGain.connect(limiter);
   limiter.connect(AC.destination);
-  analogLFO = AC.createOscillator();
-  analogLFOGain = AC.createGain();
-  analogLFO.type = 'sine'; analogLFO.frequency.value = 0.7;
-  analogLFOGain.gain.value = 0;
-  analogLFO.connect(analogLFOGain); analogLFO.start();
   buildVoices();
 }
 
 function buildVoices() {
-  voices.forEach(v => { try{v.osc.stop();}catch(e){} try{v.vibLFO.stop();}catch(e){} try{v.fmLFO.stop();}catch(e){} });
+  /* Tear down any existing voices */
+  voices.forEach(v => {
+    try { v.osc.stop(); }    catch(e) {}
+    try { v.vibLFO.stop(); } catch(e) {}
+    try { v.fmLFO.stop(); }  catch(e) {}
+  });
   voices.length = 0;
-  for (let i = 0; i < numVoices; i++) {
-    const osc = AC.createOscillator(), oscGain = AC.createGain();
-    const filter = AC.createBiquadFilter(), vGain = AC.createGain();
-    const vibLFO = AC.createOscillator(), vibGain = AC.createGain();
+
+  for (let i = 0; i < MAX_VOICES; i++) {
+    const osc     = AC.createOscillator();
+    const oscGain = AC.createGain();   // per-voice amp
+    const filter  = AC.createBiquadFilter();
+
+    /* Vibrato LFO */
+    const vibLFO  = AC.createOscillator();
+    const vibGain = AC.createGain();
     vibLFO.type = 'sine'; vibLFO.frequency.value = 5.5; vibGain.gain.value = 0;
     vibLFO.connect(vibGain); vibGain.connect(osc.frequency);
-    const fmLFO = AC.createOscillator(), fmGain = AC.createGain();
+
+    /* FM LFO */
+    const fmLFO  = AC.createOscillator();
+    const fmGain = AC.createGain();
     fmLFO.type = 'sine'; fmLFO.frequency.value = 2.3; fmGain.gain.value = 0;
     fmLFO.connect(fmGain); fmGain.connect(osc.frequency);
-    if (analogLFOGain) analogLFOGain.connect(osc.frequency);
+
     filter.type = 'lowpass'; filter.frequency.value = 2000; filter.Q.value = 1.2;
     osc.type = waveType; osc.frequency.value = 220;
-    oscGain.gain.value = 0; vGain.gain.value = 0;
-    osc.connect(oscGain); oscGain.connect(filter); filter.connect(vGain); vGain.connect(masterGain);
+    oscGain.gain.value = 0;
+
+    osc.connect(oscGain);
+    oscGain.connect(filter);
+    filter.connect(masterGain);
+
     osc.start(); vibLFO.start(); fmLFO.start();
-    voices.push({ osc, oscGain, filter, vGain, vibLFO, vibGain, fmLFO, fmGain });
+    voices.push({ osc, oscGain, filter, vibLFO, vibGain, fmLFO, fmGain });
   }
 }
 
@@ -1078,65 +1128,46 @@ function ramp(param, val, tc) {
 
 /* ════════════════════════════════════════
    CANVAS & ZOOM STATE
-
-   Architecture:
-   - Each layer canvas (pitch, amp, timbre, mod) is the LOGICAL canvas size (LW × LH).
-     These are NEVER displayed directly by CSS — they are off-screen drawing surfaces.
-   - The UI/overlay/draw canvases are the VIEWPORT size (VW × VH) and are what the user sees.
-   - drawUI() composites the layer canvases into the UI canvas using drawImage with
-     src rect = [panX, panY, LW/zoom, LH/zoom] → dst rect = [0, 0, VW, VH].
-   - Mouse events on the draw canvas are converted from viewport coords to logical canvas
-     coords before any drawing operation.
-   - Playback ALWAYS samples the logical canvases at full resolution regardless of zoom.
 ════════════════════════════════════════ */
+let LW = 0, LH = 0; // logical canvas dimensions
+let VW = 0, VH = 0; // viewport dimensions
 
-/* Logical (full) canvas dimensions */
-let LW = 0, LH = 0;
-/* Viewport dimensions */
-let VW = 0, VH = 0;
-
-const layerCanvases = {}; // off-screen, logical size
-const layerCtxs = {};
+const layerCanvases = {};
+const layerCtxs     = {};
 let gridCanvas = null, gridCtx = null;
 let uiCtx = null, overlayCtx = null;
 let drawCanvas = null;
 
-/* Zoom state */
+/* Zoom */
 const ZOOM_STEPS = [1, 1.5, 2, 3, 4];
 let zoomIdx = 0;
-/* panX/panY = top-left corner of the viewport in LOGICAL canvas pixels */
 let panX = 0, panY = 0;
-function zoom() { return ZOOM_STEPS[zoomIdx]; }
-/* How many logical pixels fit in the viewport */
-function vpLogW() { return VW / zoom(); }
-function vpLogH() { return VH / zoom(); }
+function zoom()    { return ZOOM_STEPS[zoomIdx]; }
+function vpLogW()  { return VW / zoom(); }
+function vpLogH()  { return VH / zoom(); }
 
-/* Convert viewport (screen) coords → logical canvas coords */
+/* Viewport → logical coords */
 function vToL(sx, sy) {
-  if (isMobile()) {
-    // mobile: time=Y, value=X
-    return { x: sx,         y: panY + sy / zoom() };
-  } else {
-    return { x: panX + sx / zoom(), y: sy };
-  }
+  if (isMobile()) return { x: sx,              y: panY + sy / zoom() };
+  else            return { x: panX + sx / zoom(), y: sy };
 }
-
-/* Convert logical canvas pos → viewport (screen) pos */
+/* Logical time pos → viewport screen pos */
 function lToV_time(logicalTimePos) {
-  // logicalTimePos: position along the TIME axis
-  if (isMobile()) {
-    return (logicalTimePos - panY) * zoom(); // screen Y
-  } else {
-    return (logicalTimePos - panX) * zoom(); // screen X
-  }
+  if (isMobile()) return (logicalTimePos - panY) * zoom();
+  else            return (logicalTimePos - panX) * zoom();
+}
+/* Logical coord → viewport for overlay */
+function logToVP(lc) {
+  if (isMobile()) return { x: lc.x, y: (lc.y - panY) * zoom() };
+  else            return { x: (lc.x - panX) * zoom(), y: lc.y };
 }
 
 /* ════════════════════════════════════════
    PLAYBACK STATE
 ════════════════════════════════════════ */
 let playing = false, looping = true;
-let playheadPos = 0; // position along TIME axis in LOGICAL pixels (0..LW or 0..LH)
-let playheadT = 0;
+let playheadPos = 0; // logical pixels along the time axis
+let playheadT   = 0;
 let lastRafT = 0, rafId = null, speed = 0.8;
 const PIXELS_PER_SECOND = 80;
 
@@ -1144,13 +1175,12 @@ const PIXELS_PER_SECOND = 80;
    DRAWING STATE
 ════════════════════════════════════════ */
 let activeLayer = 'pitch';
-let tool = 'pen';    // 'pen' | 'calligraphy' | 'airbrush' | 'erase'
-let activeShape = 'none'; // 'none' | 'line' | 'circle' | 'rect' | 'sine' | 'flat'
-let brushSize = 4;
+let tool        = 'pen';
+let activeShape = 'none';
+let brushSize   = 4;
 let drawing = false, shapeStart = null, lastLogical = null;
 let visibleLayers = { pitch: true, amp: true, timbre: true, mod: true };
 
-/* airbrush interval */
 let airbrushInterval = null;
 let lastAirPos = null;
 
@@ -1158,9 +1188,9 @@ let lastAirPos = null;
    UNDO
 ════════════════════════════════════════ */
 const MAX_UNDO = 30;
-const undoStack = {};
+const undoStack     = {};
+const layerSnapshots = {};
 Object.keys(LAYERS).forEach(k => { undoStack[k] = []; });
-const layerSnapshots = {}; // persists across resize
 
 function pushUndo(k) {
   if (!LW || !LH) return;
@@ -1181,23 +1211,19 @@ function restoreAll() {
    INIT
 ════════════════════════════════════════ */
 function init() {
-  // Create off-screen layer canvases
   Object.keys(LAYERS).forEach(k => {
     const c = document.createElement('canvas');
     layerCanvases[k] = c;
-    layerCtxs[k] = c.getContext('2d');
+    layerCtxs[k]     = c.getContext('2d');
   });
 
-  // Grid canvas (also off-screen, logical size)
   gridCanvas = document.createElement('canvas');
-  gridCtx = gridCanvas.getContext('2d');
+  gridCtx    = gridCanvas.getContext('2d');
 
-  // On-screen UI/overlay/draw canvases
   uiCtx      = document.getElementById('oc-ui').getContext('2d');
   overlayCtx = document.getElementById('oc-overlay').getContext('2d');
   drawCanvas = document.getElementById('oc-draw');
 
-  // Hide the on-screen layer canvas elements — we use off-screen ones
   ['oc-pitch','oc-amp','oc-timbre','oc-mod','oc-grid'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
@@ -1229,7 +1255,6 @@ function normTouch(e) {
 function resize() {
   const area  = document.getElementById('ormCanvasArea');
   const inner = document.getElementById('ormCanvasInner');
-
   if (isMobile()) {
     requestAnimationFrame(() => doResize(area, inner));
   } else {
@@ -1238,28 +1263,18 @@ function resize() {
 }
 
 function doResize(area, inner) {
-  /* Desktop canvas height */
-  if (!isMobile()) {
-    const h = Math.round(Math.min(Math.max(400, window.innerHeight * 0.52), 640));
-    area.style.height = h + 'px';
-  }
-
-  /* Viewport size = what the user sees */
   VW = inner.clientWidth  || 600;
   VH = inner.clientHeight || 300;
   if (VW <= 0 || VH <= 0) return;
 
-  /* Logical canvas: always the full 10-second drawing surface */
-  /* On mobile the time axis is vertical so LH = time dimension */
   if (isMobile()) {
-    LW = VW;          // value axis fills width
-    LH = 10 * PIXELS_PER_SECOND; // 10 seconds of time always available
+    LW = VW;
+    LH = 10 * PIXELS_PER_SECOND;
   } else {
-    LW = 10 * PIXELS_PER_SECOND; // 10 seconds
-    LH = VH;          // value axis fills height
+    LW = 10 * PIXELS_PER_SECOND;
+    LH = VH;
   }
 
-  /* Size off-screen layer canvases to LOGICAL size */
   Object.keys(LAYERS).forEach(k => {
     layerCanvases[k].width  = LW;
     layerCanvases[k].height = LH;
@@ -1267,7 +1282,6 @@ function doResize(area, inner) {
   gridCanvas.width  = LW;
   gridCanvas.height = LH;
 
-  /* Size on-screen UI/overlay/draw canvases to VIEWPORT size */
   ['oc-ui','oc-overlay','oc-draw'].forEach(id => {
     const c = document.getElementById(id);
     if (c) { c.width = VW; c.height = VH; }
@@ -1280,7 +1294,7 @@ function doResize(area, inner) {
 }
 
 /* ════════════════════════════════════════
-   PAN / ZOOM HELPERS
+   PAN / ZOOM
 ════════════════════════════════════════ */
 function clampPan() {
   if (isMobile()) {
@@ -1293,7 +1307,7 @@ function clampPan() {
 }
 
 /* ════════════════════════════════════════
-   GRID (drawn onto off-screen gridCanvas)
+   GRID
 ════════════════════════════════════════ */
 function drawGrid() {
   if (!gridCtx || !LW || !LH) return;
@@ -1302,7 +1316,6 @@ function drawGrid() {
   gridCtx.fillRect(0, 0, LW, LH);
 
   if (isMobile()) {
-    // Time = Y, value = X
     gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
     for (let s = 0; s <= LH / PIXELS_PER_SECOND; s++) {
       const y = s * PIXELS_PER_SECOND;
@@ -1328,7 +1341,6 @@ function drawGrid() {
     gridCtx.beginPath(); gridCtx.moveTo(LW/2,0); gridCtx.lineTo(LW/2,LH); gridCtx.stroke();
     gridCtx.setLineDash([]);
   } else {
-    // Time = X, value = Y
     gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
     for (let s = 0; s <= LW / PIXELS_PER_SECOND; s++) {
       const x = s * PIXELS_PER_SECOND;
@@ -1378,25 +1390,20 @@ function xToHz_m(x) {
 }
 
 /* ════════════════════════════════════════
-   DRAW UI (composites into viewport)
-   This is the ONLY place we read from off-screen layer canvases to display.
-   src rect = logical slice = [panX, panY, vpLogW, vpLogH]
-   dst rect = full viewport = [0, 0, VW, VH]
+   DRAW UI
 ════════════════════════════════════════ */
 function drawUI() {
   if (!uiCtx || !VW || !VH) return;
   uiCtx.clearRect(0, 0, VW, VH);
 
-  const srcX = isMobile() ? 0    : panX;
-  const srcY = isMobile() ? panY : 0;
-  const srcW = isMobile() ? LW   : vpLogW();
+  const srcX = isMobile() ? 0      : panX;
+  const srcY = isMobile() ? panY   : 0;
+  const srcW = isMobile() ? LW     : vpLogW();
   const srcH = isMobile() ? vpLogH() : LH;
 
-  // Draw grid
   uiCtx.globalAlpha = 1;
   uiCtx.drawImage(gridCanvas, srcX, srcY, srcW, srcH, 0, 0, VW, VH);
 
-  // Draw layers
   Object.keys(LAYERS).forEach(k => {
     if (!visibleLayers[k]) return;
     uiCtx.globalAlpha = (k === activeLayer) ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
@@ -1404,7 +1411,7 @@ function drawUI() {
   });
   uiCtx.globalAlpha = 1;
 
-  // Playhead: convert logical time pos → viewport screen pos
+  /* Playhead */
   const screenPos = lToV_time(playheadPos);
   uiCtx.strokeStyle = 'rgba(176,58,46,0.9)';
   uiCtx.lineWidth = 2;
@@ -1433,22 +1440,13 @@ function clearOverlay() {
 }
 
 /* ════════════════════════════════════════
-   OVERLAY PREVIEWS (shape ghosts in viewport coords)
+   OVERLAY PREVIEWS
 ════════════════════════════════════════ */
 function overlayStyle() {
   overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
   overlayCtx.lineWidth   = Math.max(1, brushSize * zoom());
   overlayCtx.lineCap     = 'round';
   overlayCtx.setLineDash([6,4]);
-}
-
-/* Convert a logical coord to viewport for overlay drawing */
-function logToVP(lc) {
-  if (isMobile()) {
-    return { x: lc.x, y: (lc.y - panY) * zoom() };
-  } else {
-    return { x: (lc.x - panX) * zoom(), y: lc.y };
-  }
 }
 
 function drawOverlay(a, b) {
@@ -1492,71 +1490,168 @@ function drawOverlay(a, b) {
 }
 
 /* ════════════════════════════════════════
-   CANVAS SAMPLING (always reads LOGICAL canvas at full resolution)
+   CLUSTER SAMPLING
+   Returns array of { normPos, weight } sorted by weight desc.
+   normPos: 0..1 along the VALUE axis (0=top/high, 1=bottom/low on desktop)
+   weight:  mean alpha of the cluster, 0..1
 ════════════════════════════════════════ */
-function sampleLayer(k, timePos) {
+function sampleLayerClusters(k, timePos) {
   const ctx = layerCtxs[k];
-  if (!ctx) return -1;
+  if (!ctx) return [];
+
+  let pixels, axisLen;
   if (isMobile()) {
-    // time=Y, value=X
-    const py = Math.max(0,Math.min(LH-1,Math.round(timePos)));
+    const py = Math.max(0, Math.min(LH-1, Math.round(timePos)));
     const d  = ctx.getImageData(0, py, LW, 1).data;
-    let wx=0, wt=0;
-    for(let col=0;col<LW;col++){const a=d[col*4+3];if(a>8){const w=a/255;wx+=col*w;wt+=w;}}
-    if(wt===0)return -1;
-    return (wx/wt)/LW; // 0=left=80Hz, 1=right=2000Hz
+    axisLen  = LW;
+    pixels   = new Uint8Array(axisLen);
+    for (let i = 0; i < axisLen; i++) pixels[i] = d[i*4+3];
   } else {
-    // time=X, value=Y
-    const px = Math.max(0,Math.min(LW-1,Math.round(timePos)));
+    const px = Math.max(0, Math.min(LW-1, Math.round(timePos)));
     const d  = ctx.getImageData(px, 0, 1, LH).data;
-    let wy=0, wt=0;
-    for(let row=0;row<LH;row++){const a=d[row*4+3];if(a>8){const w=a/255;wy+=row*w;wt+=w;}}
-    if(wt===0)return -1;
-    return (wy/wt)/LH; // 0=top=2000Hz, 1=bottom=80Hz
+    axisLen  = LH;
+    pixels   = new Uint8Array(axisLen);
+    for (let i = 0; i < axisLen; i++) pixels[i] = d[i*4+3];
   }
+
+  /* Find contiguous runs (gap ≤ CLUSTER_GAP merges into same cluster) */
+  const clusters = [];
+  let inRun   = false;
+  let runStart = 0;
+  let gapCount = 0;
+  let runAlphaSum = 0, runWeightPos = 0, runAlphaCount = 0;
+
+  for (let i = 0; i <= axisLen; i++) {
+    const a = (i < axisLen) ? pixels[i] : 0;
+    if (a > 8) {
+      if (!inRun) { inRun = true; runStart = i; runAlphaSum = 0; runWeightPos = 0; runAlphaCount = 0; }
+      gapCount = 0;
+      const w = a / 255;
+      runAlphaSum  += w;
+      runWeightPos += i * w;
+      runAlphaCount++;
+    } else {
+      if (inRun) {
+        gapCount++;
+        if (gapCount > CLUSTER_GAP || i >= axisLen) {
+          /* Commit the run as a cluster */
+          if (runAlphaSum > 0) {
+            const centroid = runWeightPos / runAlphaSum;
+            const weight   = Math.min(1, runAlphaSum / runAlphaCount); // mean alpha
+            clusters.push({ normPos: centroid / axisLen, weight });
+          }
+          inRun    = false;
+          gapCount = 0;
+        }
+      }
+    }
+  }
+
+  /* Sort by weight descending, cap at MAX_VOICES */
+  clusters.sort((a,b) => b.weight - a.weight);
+  return clusters.slice(0, MAX_VOICES);
 }
 
+/* ════════════════════════════════════════
+   SAMPLE AND APPLY (polyphonic)
+════════════════════════════════════════ */
 function sampleAndApply() {
   if (!AC) return;
-  const pN=sampleLayer('pitch',playheadPos), aN=sampleLayer('amp',playheadPos);
-  const tN=sampleLayer('timbre',playheadPos), mN=sampleLayer('mod',playheadPos);
-  const tc=0.06;
 
-  let tPitch, tAmp, tFilter, tMod;
-  if (isMobile()) {
-    tPitch  = pN>=0 ? 80*Math.pow(2000/80, pN)      : 0;
-    tAmp    = aN>=0 ? aN                             : (pN>=0?0.6:0);
-    tFilter = tN>=0 ? 200*Math.pow(8000/200, tN)    : 2000;
-    tMod    = mN>=0 ? mN                             : 0;
-  } else {
-    tPitch  = pN>=0 ? 80*Math.pow(2000/80, 1-pN)    : 0;
-    tAmp    = aN>=0 ? (1-aN)                         : (pN>=0?0.6:0);
-    tFilter = tN>=0 ? 200*Math.pow(8000/200, 1-tN)  : 2000;
-    tMod    = mN>=0 ? (1-mN)                         : 0;
+  const pitchClusters  = sampleLayerClusters('pitch',  playheadPos);
+  const ampClusters    = sampleLayerClusters('amp',    playheadPos);
+  const timbreClusters = sampleLayerClusters('timbre', playheadPos);
+  const modClusters    = sampleLayerClusters('mod',    playheadPos);
+  const tc = 0.06;
+
+  /* Update analog drift */
+  if (analogOn) updateAnalogDrift();
+
+  /* For each voice slot */
+  for (let i = 0; i < MAX_VOICES; i++) {
+    const v = voices[i];
+    if (!v) continue;
+
+    if (i >= pitchClusters.length) {
+      /* No pitch cluster for this slot — silence it */
+      ramp(v.oscGain.gain, 0, tc);
+      continue;
+    }
+
+    const pc = pitchClusters[i];
+
+    /* Map pitch cluster normPos → Hz (desktop: 0=top=2000Hz, 1=bottom=80Hz) */
+    let hz;
+    if (isMobile()) {
+      hz = 80 * Math.pow(2000/80, pc.normPos);
+    } else {
+      hz = 80 * Math.pow(2000/80, 1 - pc.normPos);
+    }
+
+    /* Analog drift: slow wow offset proportional to pitch */
+    const drift = analogOn ? analogDriftVal * hz * 0.003 : 0;
+    hz = Math.max(20, hz + drift);
+
+    /* Find closest amp cluster by normPos proximity */
+    let ampVal = 0.6; // default if no amp drawing
+    if (ampClusters.length > 0) {
+      const nearest = ampClusters.reduce((best, c) =>
+        Math.abs(c.normPos - pc.normPos) < Math.abs(best.normPos - pc.normPos) ? c : best
+      );
+      ampVal = isMobile() ? nearest.normPos : (1 - nearest.normPos);
+    }
+
+    /* Find closest timbre cluster */
+    let filterHz = 2000;
+    if (timbreClusters.length > 0) {
+      const nearest = timbreClusters.reduce((best, c) =>
+        Math.abs(c.normPos - pc.normPos) < Math.abs(best.normPos - pc.normPos) ? c : best
+      );
+      const tNorm = isMobile() ? nearest.normPos : (1 - nearest.normPos);
+      filterHz = 200 * Math.pow(8000/200, tNorm);
+    }
+
+    /* Find closest mod cluster */
+    let modVal = 0;
+    if (modClusters.length > 0) {
+      const nearest = modClusters.reduce((best, c) =>
+        Math.abs(c.normPos - pc.normPos) < Math.abs(best.normPos - pc.normPos) ? c : best
+      );
+      modVal = isMobile() ? nearest.normPos : (1 - nearest.normPos);
+    }
+
+    ramp(v.osc.frequency, hz, tc);
+    ramp(v.oscGain.gain,  ampVal * 0.6, tc);
+    ramp(v.filter.frequency, filterHz, tc * 2);
+    ramp(v.vibGain.gain, modVal * 25, tc);
+    ramp(v.fmGain.gain,  modVal * hz * 0.08, tc);
+    v.fmLFO.frequency.setTargetAtTime(2 + modVal * 8, AC.currentTime, tc);
+    v.osc.type = waveType;
   }
 
-  const drift = analogOn ? (Math.random()-.5)*tPitch*0.004 : 0;
-  voices.forEach((v,i) => {
-    const intervals=[0,1.5,1.2,-1.2,1.7,-1.5];
-    const pOff = numVoices>1 ? (intervals[i]||0)*50 : 0;
-    if(tPitch>0 && tAmp>0){
-      ramp(v.osc.frequency, Math.max(20,tPitch+pOff+drift), tc);
-      ramp(v.oscGain.gain, tAmp*0.6, tc);
-    } else {
-      ramp(v.oscGain.gain, 0, tc);
-    }
-    ramp(v.filter.frequency, tFilter, tc*2);
-    ramp(v.vGain.gain, 1, tc);
-    ramp(v.vibGain.gain, tMod*25, tc);
-    ramp(v.fmGain.gain, tMod*tPitch*0.08, tc);
-    v.fmLFO.frequency.setTargetAtTime(2+tMod*8, AC.currentTime, tc);
-    v.osc.type = waveType;
-  });
+  /* Status bar: show primary voice */
+  const p0 = pitchClusters[0];
+  const a0 = ampClusters[0];
+  const t0 = timbreClusters[0];
+  const pHz = p0
+    ? (isMobile() ? 80*Math.pow(2000/80, p0.normPos) : 80*Math.pow(2000/80, 1-p0.normPos))
+    : 0;
+  const aVal = a0
+    ? (isMobile() ? a0.normPos : (1-a0.normPos))
+    : (p0 ? 0.6 : 0);
+  const fHz = t0
+    ? 200*Math.pow(8000/200, isMobile() ? t0.normPos : (1-t0.normPos))
+    : 2000;
+
+  const voiceCount = pitchClusters.length;
+  const pitchStr = pHz > 0
+    ? pHz.toFixed(0) + ' Hz' + (voiceCount > 1 ? ` (+${voiceCount-1})` : '')
+    : '—';
 
   document.getElementById('ost-pos').textContent    = playheadT.toFixed(2)+'s';
-  document.getElementById('ost-pitch').textContent  = tPitch>0 ? tPitch.toFixed(0)+' Hz':'—';
-  document.getElementById('ost-amp').textContent    = tAmp>0   ? (tAmp*100).toFixed(0)+'%':'—';
-  document.getElementById('ost-filter').textContent = tFilter.toFixed(0)+' Hz';
+  document.getElementById('ost-pitch').textContent  = pitchStr;
+  document.getElementById('ost-amp').textContent    = aVal > 0 ? (aVal*100).toFixed(0)+'%' : '—';
+  document.getElementById('ost-filter').textContent = fHz.toFixed(0)+' Hz';
 }
 
 /* ════════════════════════════════════════
@@ -1564,27 +1659,30 @@ function sampleAndApply() {
 ════════════════════════════════════════ */
 function raf(ts) {
   if (!playing) return;
-  const dt = lastRafT ? (ts-lastRafT)/1000 : 0;
+  const dt = lastRafT ? (ts - lastRafT) / 1000 : 0;
   lastRafT = ts;
   const timeAxisLen = isMobile() ? LH : LW;
   playheadPos += dt * speed * PIXELS_PER_SECOND;
   playheadT    = playheadPos / PIXELS_PER_SECOND;
+
   if (playheadPos >= timeAxisLen) {
-    if (looping) { playheadPos=0; playheadT=0; }
+    if (looping) { playheadPos = 0; playheadT = 0; }
     else { ORM.stop(); return; }
   }
-  // Auto-pan to keep playhead in view
+
+  /* Auto-pan to keep playhead visible when zoomed */
   if (zoom() > 1) {
     if (isMobile()) {
-      const sy = (playheadPos-panY)*zoom();
-      if (sy>VH*0.75) panY = Math.min(LH-vpLogH(), panY+(sy-VH*0.75)/zoom());
-      if (sy<VH*0.25) panY = Math.max(0, panY-(VH*0.25-sy)/zoom());
+      const sy = (playheadPos - panY) * zoom();
+      if (sy > VH * 0.75) panY = Math.min(LH - vpLogH(), panY + (sy - VH*0.75) / zoom());
+      if (sy < VH * 0.25) panY = Math.max(0, panY - (VH*0.25 - sy) / zoom());
     } else {
-      const sx = (playheadPos-panX)*zoom();
-      if (sx>VW*0.75) panX = Math.min(LW-vpLogW(), panX+(sx-VW*0.75)/zoom());
-      if (sx<VW*0.25) panX = Math.max(0, panX-(VW*0.25-sx)/zoom());
+      const sx = (playheadPos - panX) * zoom();
+      if (sx > VW * 0.75) panX = Math.min(LW - vpLogW(), panX + (sx - VW*0.75) / zoom());
+      if (sx < VW * 0.25) panX = Math.max(0, panX - (VW*0.25 - sx) / zoom());
     }
   }
+
   sampleAndApply();
   drawUI();
   rafId = requestAnimationFrame(raf);
@@ -1604,9 +1702,7 @@ function onDrawStart(e) {
   const lc = vToL(vp.x, vp.y);
 
   if (activeShape !== 'none') {
-    shapeStart = lc;
-    drawing = true;
-    return;
+    shapeStart = lc; drawing = true; return;
   }
 
   drawing = true; lastLogical = null;
@@ -1630,11 +1726,10 @@ function onDrawMove(e) {
   const vp = getVP(e);
   const lc = vToL(vp.x, vp.y);
 
-  // Status tip
-  const valStr = (activeLayer==='pitch')
+  const valStr = (activeLayer === 'pitch')
     ? (isMobile() ? xToHz_m(lc.x) : yToHz_d(lc.y)).toFixed(0)+' Hz'
     : ((isMobile() ? lc.x/LW : 1-lc.y/LH)*100).toFixed(0)+'%';
-  const timeVal = (isMobile() ? lc.y : lc.x)/PIXELS_PER_SECOND;
+  const timeVal = (isMobile() ? lc.y : lc.x) / PIXELS_PER_SECOND;
   document.getElementById('ost-tip').textContent = `${activeLayer}: ${valStr} · t=${timeVal.toFixed(2)}s`;
 
   if (!drawing) return;
@@ -1674,30 +1769,33 @@ function onDrawEnd(e) {
 
   drawing = false; lastLogical = null; lastAirPos = null;
 
-  if (AC && voices.length && activeLayer==='pitch' && !playing) {
+  if (AC && voices.length && activeLayer === 'pitch' && !playing) {
     clearTimeout(ORM._previewTimeout);
     ORM._previewTimeout = setTimeout(() => {
-      voices[0].oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08);
+      voices.forEach(v => v.oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08));
     }, 120);
   }
 }
 
 function onDrawLeave() {
   if (tool !== 'airbrush') onDrawEnd(null);
-  else { clearInterval(airbrushInterval); airbrushInterval=null; drawing=false; lastAirPos=null; backupLayer(activeLayer); drawUI(); }
+  else {
+    clearInterval(airbrushInterval); airbrushInterval = null;
+    drawing = false; lastAirPos = null;
+    backupLayer(activeLayer); drawUI();
+  }
   document.getElementById('ost-tip').textContent = 'Draw on the canvas · left→right = time · up/down = value';
 }
 
 function previewPitch(lc) {
-  if (activeLayer==='pitch' && AC && voices.length) {
+  if (activeLayer === 'pitch' && AC && voices.length) {
     const hz = isMobile() ? xToHz_m(lc.x) : yToHz_d(lc.y);
     voices[0].osc.frequency.setTargetAtTime(hz, AC.currentTime, 0.02);
     voices[0].oscGain.gain.setTargetAtTime(0.35, AC.currentTime, 0.02);
-    voices[0].vGain.gain.value = 1;
   }
 }
 
-/* ── MARK DRAWING ONTO LOGICAL LAYER CANVAS ── */
+/* ── MARK DRAWING ── */
 function drawMark(lc) {
   const ctx   = layerCtxs[activeLayer];
   const color = LAYERS[activeLayer].color;
@@ -1706,7 +1804,7 @@ function drawMark(lc) {
   if (tool === 'erase') {
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
-    ctx.arc(x, y, brushSize*1.8, 0, Math.PI*2);
+    ctx.arc(x, y, brushSize * 1.8, 0, Math.PI*2);
     ctx.fillStyle = 'rgba(0,0,0,1)';
     ctx.fill();
     ctx.globalCompositeOperation = 'source-over';
@@ -1714,7 +1812,6 @@ function drawMark(lc) {
   }
 
   if (tool === 'pen') {
-    // Hard-edged, consistent width
     if (lastLogical) {
       ctx.strokeStyle = color+'ee';
       ctx.lineWidth   = brushSize;
@@ -1726,38 +1823,34 @@ function drawMark(lc) {
       ctx.stroke();
     } else {
       ctx.fillStyle = color+'ee';
-      ctx.beginPath(); ctx.arc(x,y,brushSize/2,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, y, brushSize/2, 0, Math.PI*2); ctx.fill();
     }
     return;
   }
 
   if (tool === 'calligraphy') {
-    // Width varies with speed — faster = thinner
     let speed_px = 0;
-    if (lastLogical) {
-      speed_px = Math.hypot(x-lastLogical.x, y-lastLogical.y);
-    }
-    const minW = Math.max(1, brushSize*0.2);
+    if (lastLogical) speed_px = Math.hypot(x - lastLogical.x, y - lastLogical.y);
+    const minW = Math.max(1, brushSize * 0.2);
     const maxW = brushSize * 1.8;
     const w    = Math.max(minW, maxW - speed_px * 0.4);
-    // Calligraphy angle: stroke along 45° nib
-    const angle = Math.PI/4;
+    const angle = Math.PI / 4;
+
     if (lastLogical) {
-      // Draw a quadrilateral along the path at the nib angle
-      const dx=x-lastLogical.x, dy=y-lastLogical.y;
-      const len=Math.hypot(dx,dy)||1;
-      const nx=-dy/len, ny=dx/len; // normal
-      const hw=w/2;
+      const dx = x - lastLogical.x, dy = y - lastLogical.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const nx = -dy/len, ny = dx/len;
+      const hw = w / 2;
       ctx.fillStyle = color+'cc';
       ctx.beginPath();
-      ctx.moveTo(lastLogical.x+nx*hw*Math.cos(angle), lastLogical.y+ny*hw*Math.cos(angle));
-      ctx.lineTo(lastLogical.x-nx*hw*Math.cos(angle), lastLogical.y-ny*hw*Math.cos(angle));
-      ctx.lineTo(x-nx*hw*Math.cos(angle),             y-ny*hw*Math.cos(angle));
-      ctx.lineTo(x+nx*hw*Math.cos(angle),             y+ny*hw*Math.cos(angle));
+      ctx.moveTo(lastLogical.x + nx*hw*Math.cos(angle), lastLogical.y + ny*hw*Math.cos(angle));
+      ctx.lineTo(lastLogical.x - nx*hw*Math.cos(angle), lastLogical.y - ny*hw*Math.cos(angle));
+      ctx.lineTo(x - nx*hw*Math.cos(angle),             y - ny*hw*Math.cos(angle));
+      ctx.lineTo(x + nx*hw*Math.cos(angle),             y + ny*hw*Math.cos(angle));
       ctx.closePath(); ctx.fill();
     } else {
       ctx.fillStyle = color+'cc';
-      ctx.beginPath(); ctx.arc(x,y,w/2,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, y, w/2, 0, Math.PI*2); ctx.fill();
     }
     return;
   }
@@ -1767,22 +1860,21 @@ function applyAirbrush(lc) {
   const ctx   = layerCtxs[activeLayer];
   const color = LAYERS[activeLayer].color;
   const r     = brushSize * 3;
-  // Scatter particles in the radius
   const count = Math.ceil(brushSize * 1.2);
-  for (let i=0; i<count; i++) {
-    const angle = Math.random()*Math.PI*2;
-    const dist  = Math.pow(Math.random(), 0.5) * r; // cluster toward center
-    const px    = lc.x + Math.cos(angle)*dist;
-    const py    = lc.y + Math.sin(angle)*dist;
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist  = Math.pow(Math.random(), 0.5) * r;
+    const px    = lc.x + Math.cos(angle) * dist;
+    const py    = lc.y + Math.sin(angle) * dist;
     const alpha = (1 - dist/r) * 0.18;
     ctx.fillStyle = color + Math.round(alpha*255).toString(16).padStart(2,'0');
-    ctx.beginPath(); ctx.arc(px,py,1,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(px, py, 1, 0, Math.PI*2); ctx.fill();
   }
   backupLayer(activeLayer);
   drawUI();
 }
 
-/* ── SHAPE COMMIT (to logical canvas) ── */
+/* ── SHAPE COMMIT ── */
 function commitShape(a, b) {
   const ctx   = layerCtxs[activeLayer];
   const color = LAYERS[activeLayer].color;
@@ -1827,89 +1919,185 @@ function updateBrushPreview() {
   const box = document.getElementById('ormBrushPreview');
   if (!dot || !box) return;
   const boxW = box.offsetWidth || 32;
-  const d = Math.min(boxW-4, brushSize * 2.2);
-  dot.style.width  = d+'px';
-  dot.style.height = d+'px';
-  dot.style.background = LAYERS[activeLayer].color;
+  const color = LAYERS[activeLayer].color;
+  dot.style.background = color;
+
   if (tool === 'calligraphy') {
-    dot.style.borderRadius = '2px';
-    dot.style.transform = 'rotate(45deg)';
-    dot.style.filter = 'none';
+    /* Slanted nib: a narrow rectangle at 45° */
+    const nibW = Math.max(2, Math.min(boxW - 6, brushSize * 0.35));
+    const nibH = Math.max(6, Math.min(boxW - 4, brushSize * 1.1));
+    dot.style.width        = nibW + 'px';
+    dot.style.height       = nibH + 'px';
+    dot.style.borderRadius = '1px';
+    dot.style.transform    = 'rotate(45deg)';
+    dot.style.filter       = 'none';
   } else if (tool === 'airbrush') {
+    const d = Math.min(boxW - 4, brushSize * 1.8);
+    dot.style.width        = d + 'px';
+    dot.style.height       = d + 'px';
     dot.style.borderRadius = '50%';
-    dot.style.transform = '';
-    dot.style.filter = `blur(${(brushSize*0.3).toFixed(1)}px)`;
+    dot.style.transform    = '';
+    dot.style.filter       = `blur(${(brushSize * 0.35).toFixed(1)}px)`;
   } else {
+    const d = Math.min(boxW - 4, brushSize * 2);
+    dot.style.width        = d + 'px';
+    dot.style.height       = d + 'px';
     dot.style.borderRadius = '50%';
-    dot.style.transform = '';
-    dot.style.filter = 'none';
+    dot.style.transform    = '';
+    dot.style.filter       = 'none';
   }
 }
 
 /* ── KEYBOARD SHORTCUTS ── */
 function onKeyDown(e) {
   const tag = (e.target||e.srcElement).tagName;
-  if (tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA') return;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
   switch(e.key) {
-    case ' ':  e.preventDefault(); playing?ORM.stop():ORM.play(); break;
+    case ' ': e.preventDefault(); playing ? ORM.stop() : ORM.play(); break;
     case 'z': case 'Z':
-      if(e.metaKey||e.ctrlKey){e.preventDefault();ORM.undo();} break;
+      if (e.metaKey || e.ctrlKey) { e.preventDefault(); ORM.undo(); } break;
     case 'p': case 'P': ORM.setTool('pen');         break;
     case 'k': case 'K': ORM.setTool('calligraphy'); break;
     case 'a': case 'A': ORM.setTool('airbrush');    break;
-    case 'e': case 'E': ORM.setTool('erase');        break;
+    case 'e': case 'E': ORM.setTool('erase');       break;
     case '1': ORM.setLayer('pitch');  break;
     case '2': ORM.setLayer('amp');    break;
     case '3': ORM.setLayer('timbre'); break;
     case '4': ORM.setLayer('mod');    break;
-    case '[': ORM.setBrushSize(Math.max(1,  brushSize-2)); break;
-    case ']': ORM.setBrushSize(Math.min(60, brushSize+2)); break;
+    case '[': ORM.setBrushSize(Math.max(1,  brushSize - 2)); break;
+    case ']': ORM.setBrushSize(Math.min(60, brushSize + 2)); break;
   }
 }
 
 /* ════════════════════════════════════════
-   RANDOM GENERATORS
+   RANDOMIZE — musically coherent shapes
 ════════════════════════════════════════ */
-function genOrganicCurve(ctx, color, points) {
-  const pts=[];
-  for(let i=0;i<=points;i++){
-    if(isMobile()) pts.push({y:(i/points)*LH, x:0.15*LW+Math.random()*0.7*LW});
-    else           pts.push({x:(i/points)*LW, y:0.15*LH+Math.random()*0.7*LH});
-  }
-  ctx.strokeStyle=color+'cc'; ctx.lineWidth=8; ctx.lineCap='round'; ctx.lineJoin='round';
-  ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
-  for(let i=1;i<pts.length-1;i++){
-    const xc=(pts[i].x+pts[i+1].x)/2, yc=(pts[i].y+pts[i+1].y)/2;
-    ctx.quadraticCurveTo(pts[i].x,pts[i].y,xc,yc);
-  }
-  ctx.lineTo(pts[pts.length-1].x,pts[pts.length-1].y); ctx.stroke();
-  for(let i=0;i<points*3;i++){
-    const t=Math.random(), idx=Math.floor(t*(pts.length-1));
-    const base=pts[Math.min(idx,pts.length-1)];
-    const bx=base.x+(Math.random()-.5)*30, by=base.y+(Math.random()-.5)*30, r=12+Math.random()*20;
-    const g=ctx.createRadialGradient(bx,by,0,bx,by,r);
-    g.addColorStop(0,color+'66'); g.addColorStop(1,color+'00');
-    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(bx,by,r,0,Math.PI*2); ctx.fill();
+
+/* Smooth bezier melodic curve across part or all of the time axis */
+function genMelodicCurve(ctx, color, lw, lh, mobile) {
+  /* Choose 2–3 arching gestures */
+  const numArches = 1 + Math.floor(Math.random() * 2);
+  ctx.strokeStyle = color + 'dd';
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+  ctx.lineWidth   = 6 + Math.random() * 6;
+
+  for (let a = 0; a < numArches; a++) {
+    /* Time span: a portion or all of the axis */
+    const tStart = (a / numArches) * 0.85;
+    const tEnd   = tStart + 0.25 + Math.random() * (0.75 / numArches);
+
+    /* Value positions (0=top=high, 1=bottom=low) — keep in musical mid-range */
+    const vA  = 0.1 + Math.random() * 0.5;
+    const vB  = 0.1 + Math.random() * 0.5;
+    const vC1 = Math.max(0.05, Math.min(0.95, vA + (Math.random() - 0.5) * 0.6));
+    const vC2 = Math.max(0.05, Math.min(0.95, vB + (Math.random() - 0.5) * 0.6));
+
+    ctx.beginPath();
+    if (mobile) {
+      ctx.moveTo(vA * lw, tStart * lh);
+      ctx.bezierCurveTo(
+        vC1 * lw, (tStart + (tEnd-tStart)*0.33) * lh,
+        vC2 * lw, (tStart + (tEnd-tStart)*0.66) * lh,
+        vB  * lw, tEnd * lh
+      );
+    } else {
+      ctx.moveTo(tStart * lw, vA * lh);
+      ctx.bezierCurveTo(
+        (tStart + (tEnd-tStart)*0.33) * lw, vC1 * lh,
+        (tStart + (tEnd-tStart)*0.66) * lw, vC2 * lh,
+        tEnd * lw, vB * lh
+      );
+    }
+    ctx.stroke();
   }
 }
-function genSwells(ctx, color, count) {
-  for(let i=0;i<count;i++){
-    let cx,cy,rw,rh;
-    if(isMobile()){cy=(i+0.5+Math.random()*0.4-0.2)/count*LH;rh=(0.06+Math.random()*0.12)*LH;cx=LW*(0.1+Math.random()*0.3);rw=rh;}
-    else{cx=(i+0.5+Math.random()*0.4-0.2)/count*LW;rw=(0.06+Math.random()*0.12)*LW;cy=LH*(0.1+Math.random()*0.3);rh=rw*0.7;}
-    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(rw,rh));
-    g.addColorStop(0,color+'dd'); g.addColorStop(0.5,color+'88'); g.addColorStop(1,color+'00');
-    ctx.fillStyle=g; ctx.beginPath(); ctx.ellipse(cx,cy,Math.max(1,rw),Math.max(1,rh),0,0,Math.PI*2); ctx.fill();
+
+/* Amplitude envelope: ramp up → sustain → ramp down, possibly multiple */
+function genAmpEnvelope(ctx, color, lw, lh, mobile) {
+  const numEnv = 1 + Math.floor(Math.random() * 2);
+  ctx.lineCap   = 'round';
+  ctx.lineJoin  = 'round';
+
+  for (let e = 0; e < numEnv; e++) {
+    const tStart   = (e / numEnv) * 0.9;
+    const tEnd     = tStart + 0.3 + Math.random() * (0.6 / numEnv);
+    const tAttack  = tStart + (tEnd - tStart) * (0.05 + Math.random() * 0.2);
+    const tRelease = tEnd   - (tEnd - tStart) * (0.1  + Math.random() * 0.25);
+    /* Peak height (0=top=loud, so inverted: peak=low y value) */
+    const peak = 0.05 + Math.random() * 0.35;
+    const floor = 0.92 + Math.random() * 0.07; // near-silence
+
+    ctx.strokeStyle = color + 'cc';
+    ctx.lineWidth   = 8 + Math.random() * 8;
+    ctx.beginPath();
+
+    if (mobile) {
+      // Time=Y, value=X; high X = loud (right)
+      const xPeak  = (1 - peak)  * lw;
+      const xFloor = (1 - floor) * lw;
+      ctx.moveTo(xFloor, tStart * lh);
+      ctx.lineTo(xPeak,  tAttack * lh);
+      ctx.lineTo(xPeak,  tRelease * lh);
+      ctx.lineTo(xFloor, tEnd * lh);
+    } else {
+      // Time=X; low y = loud
+      const yPeak  = peak  * lh;
+      const yFloor = floor * lh;
+      ctx.moveTo(tStart   * lw, yFloor);
+      ctx.lineTo(tAttack  * lw, yPeak);
+      ctx.lineTo(tRelease * lw, yPeak);
+      ctx.lineTo(tEnd     * lw, yFloor);
+    }
+    ctx.stroke();
   }
 }
-function genSparseMarks(ctx, color) {
-  const n=4+Math.floor(Math.random()*6);
-  for(let i=0;i<n;i++){
-    let x1,y1,x2,y2;
-    if(isMobile()){x1=Math.random()*LW*0.5;y1=Math.random()*LH;const l=(0.04+Math.random()*0.12)*LH;x2=x1+(Math.random()-.5)*LW*0.2;y2=y1+l;}
-    else{x1=Math.random()*LW;y1=Math.random()*LH*0.5;const l=(0.04+Math.random()*0.12)*LW;x2=x1+l;y2=y1+(Math.random()-.5)*LH*0.2;}
-    ctx.strokeStyle=color+'bb'; ctx.lineWidth=4+Math.random()*10; ctx.lineCap='round';
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+
+/* Timbre: a single slow sweep — one long bezier staying in a reasonable range */
+function genTimbreSweep(ctx, color, lw, lh, mobile) {
+  ctx.strokeStyle = color + 'bb';
+  ctx.lineWidth   = 5 + Math.random() * 5;
+  ctx.lineCap     = 'round';
+
+  const vA  = 0.15 + Math.random() * 0.4;
+  const vB  = 0.15 + Math.random() * 0.4;
+  const vC1 = Math.max(0.05, Math.min(0.9, vA + (Math.random()-0.5)*0.5));
+  const vC2 = Math.max(0.05, Math.min(0.9, vB + (Math.random()-0.5)*0.5));
+
+  ctx.beginPath();
+  if (mobile) {
+    ctx.moveTo(vA*lw, 0);
+    ctx.bezierCurveTo(vC1*lw, lh*0.33, vC2*lw, lh*0.66, vB*lw, lh);
+  } else {
+    ctx.moveTo(0, vA*lh);
+    ctx.bezierCurveTo(lw*0.33, vC1*lh, lw*0.66, vC2*lh, lw, vB*lh);
+  }
+  ctx.stroke();
+}
+
+/* Modulation: 1–2 short horizontal strokes suggesting steady vibrato regions */
+function genModStrokes(ctx, color, lw, lh, mobile) {
+  const n = 1 + Math.floor(Math.random() * 2);
+  ctx.lineCap   = 'round';
+  ctx.lineWidth = 6 + Math.random() * 8;
+
+  for (let i = 0; i < n; i++) {
+    const depth   = 0.2 + Math.random() * 0.4; // mod depth (mid-range)
+    const tCenter = 0.15 + Math.random() * 0.65;
+    const tSpan   = 0.08 + Math.random() * 0.2;
+    const tA = Math.max(0, tCenter - tSpan);
+    const tB = Math.min(1, tCenter + tSpan);
+
+    ctx.strokeStyle = color + 'bb';
+    ctx.beginPath();
+    if (mobile) {
+      const x = (1 - depth) * lw;
+      ctx.moveTo(x, tA*lh); ctx.lineTo(x, tB*lh);
+    } else {
+      const y = (1 - depth) * lh;
+      ctx.moveTo(tA*lw, y); ctx.lineTo(tB*lw, y);
+    }
+    ctx.stroke();
   }
 }
 
@@ -1919,134 +2107,135 @@ function genSparseMarks(ctx, color) {
 const ORM = window.ORM = {
   _previewTimeout: null,
 
-  togglePlay() { playing?ORM.stop():ORM.play(); },
+  togglePlay() { playing ? ORM.stop() : ORM.play(); },
 
   play() {
-    if(!AC) initAudio();
-    if(AC.state==='suspended') AC.resume();
-    playing=true; lastRafT=0;
-    const btn=document.getElementById('orm-play');
-    btn.innerHTML='<svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" style="margin-right:3px;vertical-align:middle"><rect width="9" height="9"/></svg>stop';
+    if (!AC) initAudio();
+    if (AC.state === 'suspended') AC.resume();
+    playing = true; lastRafT = 0;
+    const btn = document.getElementById('orm-play');
+    btn.innerHTML = '<svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" style="margin-right:3px;vertical-align:middle"><rect width="9" height="9"/></svg>stop';
     btn.classList.add('active');
-    rafId=requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
   },
 
   stop() {
-    playing=false; cancelAnimationFrame(rafId);
-    if(AC) voices.forEach(v=>v.oscGain.gain.setTargetAtTime(0,AC.currentTime,0.08));
-    const btn=document.getElementById('orm-play');
-    btn.innerHTML='<svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px;vertical-align:middle"><path d="M0 0l9 5.5L0 11z"/></svg>play';
+    playing = false; cancelAnimationFrame(rafId);
+    if (AC) voices.forEach(v => v.oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08));
+    const btn = document.getElementById('orm-play');
+    btn.innerHTML = '<svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px;vertical-align:middle"><path d="M0 0l9 5.5L0 11z"/></svg>play';
     btn.classList.remove('active');
     drawUI();
   },
 
   toggleLoop() {
-    looping=!looping;
-    document.getElementById('orm-loop').classList.toggle('active',looping);
+    looping = !looping;
+    document.getElementById('orm-loop').classList.toggle('active', looping);
   },
 
   setSpeed(v) {
-    speed=v;
-    document.getElementById('orm-speed-val').textContent=v.toFixed(2)+'×';
+    speed = v;
+    document.getElementById('orm-speed-val').textContent = v.toFixed(2) + '×';
   },
 
   setWave(w) {
-    waveType=w; voices.forEach(v=>{v.osc.type=w;});
-  },
-
-  setVoices(n) {
-    numVoices=n; if(AC) buildVoices();
+    waveType = w;
+    voices.forEach(v => { v.osc.type = w; });
   },
 
   setAnalog(on) {
-    analogOn=on;
-    if(analogLFOGain&&AC) analogLFOGain.gain.setTargetAtTime(on?8:0,AC.currentTime,0.3);
+    analogOn = on;
+    if (!on) analogDriftVal = 0; // reset drift when switched off
   },
 
   setLayer(k) {
-    activeLayer=k;
-    document.querySelectorAll('.orm-layer-tab').forEach(el=>el.classList.remove('active'));
+    activeLayer = k;
+    document.querySelectorAll('.orm-layer-tab').forEach(el => el.classList.remove('active'));
     document.getElementById('ltab-'+k).classList.add('active');
-    document.getElementById('orm-layer-hint').textContent=LAYERS[k].hint;
-    const sc=LAYER_SCALES[k];
-    document.getElementById('orm-scale-top').textContent=sc.top;
-    document.getElementById('orm-scale-mid').textContent=sc.mid;
-    document.getElementById('orm-scale-bot').textContent=sc.bot;
+    document.getElementById('orm-layer-hint').textContent = LAYERS[k].hint;
+    const sc = LAYER_SCALES[k];
+    document.getElementById('orm-scale-top').textContent = sc.top;
+    document.getElementById('orm-scale-mid').textContent = sc.mid;
+    document.getElementById('orm-scale-bot').textContent = sc.bot;
     updateBrushPreview();
   },
 
-  toggleVis(k,e) {
+  toggleVis(k, e) {
     e.stopPropagation();
-    visibleLayers[k]=!visibleLayers[k];
-    const v=document.querySelector(`#ltab-${k} .orm-layer-vis`);
-    if(v) v.style.opacity=visibleLayers[k]?'1':'0.2';
+    visibleLayers[k] = !visibleLayers[k];
+    const v = document.querySelector(`#ltab-${k} .orm-layer-vis`);
+    if (v) v.style.opacity = visibleLayers[k] ? '1' : '0.2';
     drawUI();
   },
 
   setTool(t) {
-    tool=t;
-    document.querySelectorAll('.orm-tool-btn').forEach(b=>b.classList.remove('active'));
-    const btn=document.getElementById('tool-'+t);
-    if(btn) btn.classList.add('active');
-    drawCanvas.style.cursor = t==='erase'?'cell':'crosshair';
+    tool = t;
+    /* Sync desktop buttons */
+    document.querySelectorAll('.orm-tool-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('tool-'+t);
+    if (btn) btn.classList.add('active');
+    /* Sync mobile dropdown */
+    const mob = document.getElementById('tool-mobile-select');
+    if (mob) mob.value = t;
+    drawCanvas.style.cursor = t === 'erase' ? 'cell' : 'crosshair';
     updateBrushPreview();
   },
 
   setShape(s) {
-    activeShape=s;
-    drawCanvas.style.cursor = s!=='none'?'crosshair':(tool==='erase'?'cell':'crosshair');
+    activeShape = s;
   },
 
   setBrushSize(v) {
-    brushSize=v;
-    document.getElementById('orm-bsize-val').textContent=v;
-    document.getElementById('orm-bsize').value=v;
+    brushSize = v;
+    document.getElementById('orm-bsize-val').textContent = v;
+    document.getElementById('orm-bsize').value = v;
     updateBrushPreview();
   },
 
   clearAll() {
-    Object.keys(LAYERS).forEach(k=>{
-      layerCtxs[k].clearRect(0,0,LW,LH);
+    Object.keys(LAYERS).forEach(k => {
+      layerCtxs[k].clearRect(0, 0, LW, LH);
       delete layerSnapshots[k];
-      undoStack[k]=[];
+      undoStack[k] = [];
     });
     drawGrid(); drawUI(); ORM.stop();
   },
 
   undo() {
-    const stack=undoStack[activeLayer];
-    if(!stack.length) return;
-    const img=stack.pop();
-    layerCtxs[activeLayer].putImageData(img,0,0);
-    layerSnapshots[activeLayer]=layerCtxs[activeLayer].getImageData(0,0,LW,LH);
+    const stack = undoStack[activeLayer];
+    if (!stack.length) return;
+    const img = stack.pop();
+    layerCtxs[activeLayer].putImageData(img, 0, 0);
+    layerSnapshots[activeLayer] = layerCtxs[activeLayer].getImageData(0, 0, LW, LH);
     drawUI();
   },
 
   randomize() {
-    Object.keys(LAYERS).forEach(k=>{
+    const mobile = isMobile();
+    Object.keys(LAYERS).forEach(k => {
       pushUndo(k);
-      layerCtxs[k].clearRect(0,0,LW,LH);
-      if(k==='pitch')       genOrganicCurve(layerCtxs[k],LAYERS[k].color,3);
-      else if(k==='amp')    genSwells(layerCtxs[k],LAYERS[k].color,4);
-      else if(k==='timbre') genOrganicCurve(layerCtxs[k],LAYERS[k].color,5);
-      else if(k==='mod')    genSparseMarks(layerCtxs[k],LAYERS[k].color);
-      backupLayer(k);
+      layerCtxs[k].clearRect(0, 0, LW, LH);
     });
+    genMelodicCurve(layerCtxs['pitch'],  LAYERS['pitch'].color,  LW, LH, mobile);
+    genAmpEnvelope (layerCtxs['amp'],    LAYERS['amp'].color,    LW, LH, mobile);
+    genTimbreSweep (layerCtxs['timbre'], LAYERS['timbre'].color, LW, LH, mobile);
+    genModStrokes  (layerCtxs['mod'],    LAYERS['mod'].color,    LW, LH, mobile);
+    Object.keys(LAYERS).forEach(k => backupLayer(k));
     drawUI();
   },
 
   zoomIn() {
-    if(zoomIdx<ZOOM_STEPS.length-1){
+    if (zoomIdx < ZOOM_STEPS.length - 1) {
       zoomIdx++;
-      document.getElementById('orm-zoom-level').textContent=ZOOM_STEPS[zoomIdx]+'×';
+      document.getElementById('orm-zoom-level').textContent = ZOOM_STEPS[zoomIdx] + '×';
       clampPan(); drawUI();
     }
   },
 
   zoomOut() {
-    if(zoomIdx>0){
+    if (zoomIdx > 0) {
       zoomIdx--;
-      document.getElementById('orm-zoom-level').textContent=ZOOM_STEPS[zoomIdx]+'×';
+      document.getElementById('orm-zoom-level').textContent = ZOOM_STEPS[zoomIdx] + '×';
       clampPan(); drawUI();
     }
   },
