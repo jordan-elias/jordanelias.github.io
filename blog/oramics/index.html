@@ -6,93 +6,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oramics Machine: drawing sound</title>
+  <meta name="description" content="An interactive recreation of Daphne Oram's Oramics machine — draw on a canvas to compose sound directly in your browser.">
 
-  <title>Oramics: drawing sound</title>
-  <meta name="description" content="Draw directly onto a moving canvas. Your shapes become sound — pitch, amplitude, timbre, modulation — inspired by Daphne Oram's machine from 1957.">
-  <meta name="author" content="Jordan Elias">
-
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://jordanelias.de/blog/oramics/">
-
-  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
-
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="Jordan Elias Music Therapy">
-  <meta property="og:url" content="https://jordanelias.de/blog/oramics/">
-  <meta property="og:title" content="Oramics: drawing sound">
-  <meta property="og:description" content="Draw directly onto a moving canvas. Your shapes become sound — pitch, amplitude, timbre, modulation — inspired by Daphne Oram's machine from 1957.">
-  <meta property="og:image" content="https://jordanelias.de/images/hero.jpg">
-  <meta property="article:published_time" content="2026-06-26">
-  <meta property="article:author" content="https://jordanelias.de/about/">
-  <meta property="article:section" content="Music Therapy">
-  <meta property="article:tag" content="Electronic music">
-
+  <!-- FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <!-- MAIN STYLESHEET -->
   <link rel="stylesheet" href="/css/styles.css">
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "honorificSuffix": "MT-BC",
-        "jobTitle": "Board-Certified Music Therapist",
-        "url": "https://jordanelias.de/",
-        "image": "https://jordanelias.de/images/headshot.jpg",
-        "email": "jordanelias@proton.me",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Berlin",
-          "postalCode": "12047",
-          "addressCountry": "DE"
-        },
-        "worksFor": { "@id": "https://jordanelias.de/#service" },
-        "alumniOf": [
-          { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
-          { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
-        ],
-        "hasCredential": {
-          "@type": "EducationalOccupationalCredential",
-          "name": "Board Certified Music Therapist (MT-BC)",
-          "credentialCategory": "Professional Certification",
-          "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
-        },
-        "knowsAbout": ["Music Therapy","Electronic Music","Music Technology","Sound Design","Creative Coding","Interactive Audio","Neuroscience of Music","Auditory Perception","Creativity","Digital Musical Instruments"],
-        "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
-      },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://jordanelias.de/#service",
-        "name": "Jordan Elias Music Therapy",
-        "url": "https://jordanelias.de/",
-        "founder": { "@id": "https://jordanelias.de/#person" }
-      },
-      {
-        "@type": "BlogPosting",
-        "@id": "https://jordanelias.de/blog/oramics/#post",
-        "headline": "Oramics: drawing sound",
-        "description": "Explore Daphne Oram's revolutionary drawing-based synthesizer through an interactive browser instrument.",
-        "url": "https://jordanelias.de/blog/oramics/",
-        "datePublished": "2026-06-26",
-        "dateModified": "2026-06-26",
-        "inLanguage": "en",
-        "author": { "@id": "https://jordanelias.de/#person" },
-        "publisher": { "@id": "https://jordanelias.de/#service" },
-        "image": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
-        "isPartOf": { "@type": "Blog", "@id": "https://jordanelias.de/blog/#blog" },
-        "mainEntityOfPage": { "@id": "https://jordanelias.de/blog/oramics/#webpage" }
-      }
-    ]
-  }
-  </script>
-
   <style>
-    /* ── PAGE LAYOUT ── */
+    /* ─── CHANNEL COLORS ─── */
+    :root {
+      --ch-pitch:  #4F6EF7;
+      --ch-amp:    #2D8A5E;
+      --ch-mod:    #C4622D;
+      --ch-timbre: #8B5CF6;
+    }
+
     body { padding-top: 64px; }
 
+
+    /* ─── PAGE LAYOUT ─── */
     .page-wrap {
       display: flex;
       align-items: flex-start;
@@ -129,576 +63,268 @@
     .page-content {
       flex: 1;
       min-width: 0;
-      padding: 1em 2em 5em;
+      padding: 0.5em 2em 5em;
       max-width: 960px;
       margin-left: 72px;
       width: calc(100% - 72px);
     }
 
-    /* ── LAYER COLORS ── */
-    :root {
-      --layer-pitch:  #b85c38;
-      --layer-amp:    #4a7c59;
-      --layer-timbre: #c49a2a;
-      --layer-mod:    #7a3f6e;
-    }
 
-    /* ── ORAMICS APP ── */
-    .orm-app {
+    /* ─── LAB SECTION WRAPPER ─── */
+    .lab-section {
       border: 1px solid var(--text);
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      margin: 1.5em 0 1em;
+      padding: 1.25em 1.25em 1em;
+      margin: 2em 0;
     }
-
-    /* ── TRANSPORT BAR ── */
-    .orm-transport {
-      display: flex;
-      align-items: center;
-      gap: .35rem;
-      padding: .5rem .75rem;
-      border-bottom: 1px solid var(--text);
-      flex-wrap: wrap;
-      background: var(--bg);
-      flex-shrink: 0;
-    }
-
-    .orm-sep {
-      width: 1px;
-      height: 18px;
-      background: var(--text);
-      opacity: .25;
-      flex-shrink: 0;
-      margin: 0 .1rem;
-    }
-
-    .orm-btn {
+    .lab-section-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: .72rem;
-      font-weight: 600;
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--text);
-      padding: .32rem .75rem;
-      cursor: pointer;
-      letter-spacing: .03em;
-      transition: background .12s, color .12s;
-      white-space: nowrap;
-      line-height: 1.4;
-      touch-action: manipulation;
-    }
-    .orm-btn:hover  { background: var(--text); color: var(--bg); }
-    .orm-btn.active { background: var(--text); color: var(--bg); }
-    .orm-btn.danger:hover { background: #b03a2e; border-color: #b03a2e; color: #fff; }
-    .orm-btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
-
-    .orm-select {
-      font-family: 'Inter', sans-serif;
-      font-size: .72rem;
-      background: var(--bg);
-      color: var(--text);
-      border: 1px solid var(--text);
-      padding: .3rem .45rem;
-      cursor: pointer;
-      outline: none;
-    }
-
-    .orm-speed-row {
-      display: flex;
-      align-items: center;
-      gap: .35rem;
-    }
-    .orm-speed-label {
-      font-family: 'Inter', sans-serif;
-      font-size: .62rem;
-      letter-spacing: .08em;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text);
-      opacity: .65;
-      white-space: nowrap;
+      margin: 0 0 1em;
     }
-    .orm-speed-val {
+
+    /* ─── CHANNEL LEGEND ─── */
+    .channel-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1em;
+      align-items: center;
+    }
+    .channel-legend-label {
       font-family: 'Inter', sans-serif;
-      font-size: .7rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       color: var(--text);
-      min-width: 32px;
+      margin-right: 4px;
     }
-    input[type=range].orm-slider {
-      -webkit-appearance: none;
-      width: 64px; height: 2px;
-      background: var(--text);
-      outline: none; cursor: pointer; opacity: .6;
-    }
-    input[type=range].orm-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 13px; height: 13px;
-      border-radius: 50%; background: var(--text); cursor: pointer;
-    }
-    input[type=range].orm-slider::-moz-range-thumb {
-      width: 13px; height: 13px;
-      border-radius: 50%; background: var(--text); border: none; cursor: pointer;
-    }
-
-    /* analog toggle */
-    .orm-toggle-wrap { display: flex; align-items: center; gap: .35rem; }
-    .orm-toggle-label { font-family: 'Inter', sans-serif; font-size: .68rem; color: var(--text); opacity: .65; }
-    .orm-toggle { position: relative; width: 30px; height: 17px; }
-    .orm-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
-    .orm-toggle-track {
-      position: absolute; inset: 0;
-      background: transparent;
-      border: 1px solid var(--text);
-      border-radius: 17px;
+    .ch-swatch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text);
       cursor: pointer;
-      transition: background .15s;
+      padding: 3px 10px 3px 8px;
+      border: 1px solid transparent;
+      transition: border-color 0.12s;
+      user-select: none;
     }
-    .orm-toggle-track::before {
-      content: '';
-      position: absolute;
-      width: 11px; height: 11px;
-      left: 2px; top: 2px;
-      background: var(--text);
+    .ch-swatch.active {
+      border-color: var(--text);
+    }
+    .ch-swatch:hover { border-color: var(--accent-hover); }
+    .ch-dot {
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
-      transition: transform .15s;
-      opacity: .4;
+      flex-shrink: 0;
     }
-    .orm-toggle input:checked + .orm-toggle-track { background: var(--text); }
-    .orm-toggle input:checked + .orm-toggle-track::before { transform: translateX(13px); background: var(--bg); opacity: 1; }
 
-    /* ── CANVAS AREA ── */
-    .orm-canvas-area {
+    /* ─── CANVAS WRAP ─── */
+    .canvas-wrap {
       position: relative;
       width: 100%;
-      /* height set by JS to match logical canvas exactly */
-      background: #fff;
+      border: 1px solid var(--text);
+      background: #ffffff;
+      margin-bottom: 1em;
       overflow: hidden;
+      cursor: crosshair;
+    }
+    #oram-canvas {
+      display: block;
+      width: 100%;
+      height: 220px;
+      touch-action: none;
+    }
+    /* Scan line overlay (CSS animated, JS drives position via custom prop) */
+    .scan-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    #scan-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255,80,0,0.65);
+      pointer-events: none;
+      box-shadow: 0 0 6px rgba(255,80,0,0.4);
+      left: 0;
+      display: none;
+    }
+
+    /* ─── TOOLBAR ─── */
+    .oram-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 0.9em;
+    }
+
+    .oram-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      background: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 0.38em 1em;
+      cursor: pointer;
+      border-radius: 0;
+      white-space: nowrap;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .oram-btn:hover {
+      background: var(--accent-hover);
+      color: var(--bg);
+      border-color: var(--accent-hover);
+    }
+    .oram-btn.active {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+    .oram-btn.active:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+    .oram-btn.ghost {
+      border-width: 1px;
+      font-size: 0.78rem;
+      padding: 0.3em 0.85em;
+    }
+
+    .toolbar-sep {
+      width: 1px;
+      height: 28px;
+      background: var(--text);
+      opacity: 0.25;
       flex-shrink: 0;
     }
 
-    .orm-canvas-inner {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-    }
-    .orm-canvas-inner canvas {
-      position: absolute;
-      top: 0; left: 0;
-      display: block;
-    }
-    #oc-grid    { z-index: 1; pointer-events: none; }
-    #oc-pitch   { z-index: 2; pointer-events: none; }
-    #oc-amp     { z-index: 3; pointer-events: none; }
-    #oc-timbre  { z-index: 4; pointer-events: none; }
-    #oc-mod     { z-index: 5; pointer-events: none; }
-    #oc-ui      { z-index: 6; pointer-events: none; }
-    #oc-overlay { z-index: 7; pointer-events: none; }
-    #oc-draw    { z-index: 8; cursor: crosshair; }
-
-    /* ── STATUS BAR ── */
-    .orm-status {
+    /* ─── TEMPO CONTROL ─── */
+    .tempo-ctrl {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: .3rem .75rem;
-      border-top: 1px solid var(--text);
-      border-bottom: 1px solid var(--text);
+      gap: 8px;
+      flex: 1;
+      min-width: 120px;
+    }
+    .tempo-ctrl label {
       font-family: 'Inter', sans-serif;
-      font-size: .62rem;
-      color: var(--text);
-      opacity: .75;
-      flex-wrap: wrap;
-      gap: .35rem;
-      background: var(--bg);
-      flex-shrink: 0;
-    }
-    .orm-status-pos { font-weight: 500; opacity: 1; }
-    .orm-status-tip { font-style: italic; }
-
-    /* ── BOTTOM CONTROLS ── */
-    .orm-controls {
-      display: flex;
-      flex-direction: row;
-      background: var(--bg);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      flex-shrink: 0;
-    }
-    .orm-controls::-webkit-scrollbar { display: none; }
-
-    .orm-ctrl-section {
-      border-right: 1px solid var(--text);
-      padding: .6rem .8rem;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: .45rem;
-    }
-    .orm-ctrl-section:last-child { border-right: none; }
-
-    .orm-ctrl-title {
-      font-family: 'Inter', sans-serif;
-      font-size: .55rem;
-      font-weight: 500;
-      letter-spacing: .12em;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text);
-      opacity: .5;
       white-space: nowrap;
     }
-
-    /* Layer tabs */
-    .orm-layer-tabs { display: flex; gap: .3rem; }
-    .orm-layer-tab {
-      display: flex;
-      align-items: center;
-      gap: .3rem;
-      padding: .35rem .6rem;
-      border: 1px solid var(--text);
-      cursor: pointer;
-      transition: background .1s;
-      touch-action: manipulation;
-      white-space: nowrap;
-      opacity: .55;
-    }
-    .orm-layer-tab:hover  { opacity: .8; }
-    .orm-layer-tab.active { background: var(--text); opacity: 1; }
-    .orm-layer-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .orm-layer-name {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: .68rem; font-weight: 600;
-      color: var(--text);
-    }
-    .orm-layer-tab.active .orm-layer-name { color: var(--bg); }
-    .orm-layer-vis {
-      font-size: .6rem; cursor: pointer;
-      padding: 2px 3px; color: var(--text); line-height: 1;
-    }
-    .orm-layer-tab.active .orm-layer-vis { color: var(--bg); }
-
-    /* Layer scale + hint */
-    .orm-scale-row {
-      display: flex; gap: .6rem;
-      font-family: 'Inter', sans-serif; font-size: .6rem;
-    }
-    .orm-scale-entry { display: flex; flex-direction: column; align-items: center; gap: 1px; }
-    .orm-scale-entry .sk { font-size: .52rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text); opacity: .5; }
-    .orm-scale-entry .sv { color: var(--text); font-size: .65rem; font-weight: 500; }
-    .orm-layer-hint {
-      font-family: 'Inter', sans-serif; font-size: .64rem;
-      color: var(--text); opacity: .55; font-style: italic; max-width: 280px;
-    }
-
-    /* ── TOOL BUTTONS (desktop) ── */
-    .orm-tool-group {
-      display: flex;
-      flex-direction: column;
-      gap: .3rem;
-    }
-    .orm-tool-row {
-      display: flex;
-      gap: .25rem;
-    }
-    .orm-tool-btn {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: .66rem; font-weight: 600;
-      padding: .32rem .6rem;
-      border: 1px solid var(--text);
-      background: transparent; color: var(--text);
-      cursor: pointer;
-      transition: background .1s, color .1s;
-      white-space: nowrap;
-      touch-action: manipulation;
-    }
-    .orm-tool-btn:hover  { background: var(--text); color: var(--bg); }
-    .orm-tool-btn.active { background: var(--text); color: var(--bg); }
-
-    /* shape select dropdown */
-    .orm-shape-select {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: .66rem; font-weight: 600;
-      background: var(--bg); color: var(--text);
-      border: 1px solid var(--text);
-      padding: .3rem .4rem;
-      cursor: pointer; outline: none;
-    }
-    .orm-shape-select:focus { outline: 1px solid var(--text); }
-
-    /* Brush controls */
-    .orm-brush-row { display: flex; align-items: center; gap: .45rem; }
-    .orm-brush-label {
-      font-family: 'Inter', sans-serif;
-      font-size: .6rem; letter-spacing: .06em; text-transform: uppercase;
-      color: var(--text); opacity: .55; width: 26px; flex-shrink: 0;
-    }
-    .orm-brush-val {
-      font-family: 'Inter', sans-serif; font-size: .62rem;
-      color: var(--text); min-width: 24px;
-    }
-    input[type=range].orm-brush-slider {
+    .tempo-ctrl input[type=range] {
+      flex: 1;
       -webkit-appearance: none;
-      width: 100px; height: 2px;
-      background: var(--text); outline: none; cursor: pointer; opacity: .6; flex-shrink: 0;
+      appearance: none;
+      height: 2px;
+      background: var(--text);
+      outline: none;
+      cursor: pointer;
     }
-    input[type=range].orm-brush-slider::-webkit-slider-thumb {
+    .tempo-ctrl input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 13px; height: 13px; border-radius: 50%; background: var(--text); cursor: pointer;
-    }
-    input[type=range].orm-brush-slider::-moz-range-thumb {
-      width: 13px; height: 13px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
-    }
-    .orm-brush-preview {
-      width: 32px; height: 32px;
-      border: 1px solid var(--text);
-      display: flex; align-items: center; justify-content: center;
-      background: #fff; flex-shrink: 0; overflow: hidden;
-    }
-    .orm-brush-dot {
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
-      transition: width .1s, height .1s, border-radius .1s, transform .1s;
+      background: var(--text);
+      cursor: pointer;
     }
-
-    /* ── KEYBOARD HINTS ── */
-    .orm-kbd-section {
-      margin: 1.5em 0;
-      border: 1px solid var(--text);
-      padding: .85em 1em;
-      background: var(--bg);
+    .tempo-ctrl input[type=range]::-moz-range-thumb {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--text);
+      border: none;
+      cursor: pointer;
     }
-    .orm-kbd-title {
+    .tempo-val {
       font-family: 'Inter', sans-serif;
-      font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--text); opacity: .55; margin-bottom: .6em;
+      font-size: 0.75rem;
+      color: var(--text);
+      min-width: 32px;
+      text-align: right;
     }
-    .orm-kbd-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: .3rem .75rem;
-    }
-    .orm-kbd-row {
-      display: flex; align-items: baseline; gap: .4rem;
-      font-family: 'Inter', sans-serif; font-size: .72rem; color: var(--text);
-    }
-    .orm-kbd {
-      font-family: 'Inter', sans-serif; font-size: .6rem;
-      background: var(--text); color: var(--bg);
-      padding: .1rem .35rem; border-radius: 2px; white-space: nowrap; flex-shrink: 0;
-    }
-    .orm-kbd-desc { opacity: .7; }
 
-    /* ═══════════════════════════
-       MOBILE LAYOUT
-    ═══════════════════════════ */
+    .lab-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text);
+      opacity: 0.65;
+      text-align: center;
+      margin-top: 0.25em;
+    }
+
+    /* ─── EXERCISES ─── */
+    .lab-exercise {
+      border-left: 3px solid var(--text);
+      padding: 1em 1.25em;
+      margin: 1.5em 0;
+    }
+    .lab-exercise h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin: 0 0 0.5em;
+    }
+    .lab-exercise p { margin-bottom: 0.6em; }
+    .lab-exercise p:last-child { margin-bottom: 0; }
+
+
+    /* ─── MOBILE ─── */
     @media (max-width: 600px) {
-      body { padding-top: 64px; }
-
       .vertical-title {
-        width: 36px; top: 64px;
-        height: calc(100dvh - 64px); padding-top: 1rem;
+        width: 36px;
+        padding-top: 1rem;
       }
-      .vertical-title span { font-size: .8rem; letter-spacing: .18em; }
-
+      .vertical-title span { font-size: 0.8rem; letter-spacing: 0.18em; }
       .page-content {
         margin-left: 44px;
         width: calc(100% - 44px);
-        padding: 0 0 4em;
+        padding: 0.5em 0.75em 4em;
       }
+      footer { margin-left: 36px; }
 
-      /* App fills the viewport minus header */
-      .orm-app {
-        height: calc(100dvh - 64px);
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-        border-left: none;
-        border-right: none;
-        border-top: none;
+      /* On mobile the canvas is taller and scanned top→bottom */
+      #oram-canvas {
+        height: 340px;
       }
-
-      /* Transport: compact single row, no wrap, scrollable */
-      .orm-transport {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        scrollbar-width: none;
-        gap: .2rem;
-        padding: .3rem .4rem;
-        flex-shrink: 0;
-      }
-      .orm-transport::-webkit-scrollbar { display: none; }
-      .orm-btn { padding: .28rem .5rem; font-size: .64rem; }
-      .orm-sep { display: none; }
-      .orm-speed-label { display: none; }
-      input[type=range].orm-slider { width: 46px; }
-      .orm-toggle-label { display: none; }
-
-      /* Canvas: scrollable container, grows to fill space */
-      .orm-canvas-area {
-        flex: 1;
-        min-height: 0;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
-        position: relative;
-        /* scrollbar visible */
-        scrollbar-width: thin;
-        scrollbar-color: rgba(0,0,0,0.25) transparent;
-      }
-      .orm-canvas-area::-webkit-scrollbar { width: 4px; }
-      .orm-canvas-area::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.25); border-radius: 2px; }
-
-      /* The inner div is position:relative, sized to the logical canvas height */
-      .orm-canvas-inner {
-        position: relative;
+      #scan-line {
+        /* On mobile, scan-line is horizontal */
         width: 100%;
-        /* height set by JS: LH px */
-        overflow: hidden;
-      }
-      /* On mobile canvases are position:absolute within the inner div */
-      .orm-canvas-inner canvas {
-        position: absolute;
-        top: 0; left: 0;
+        height: 2px;
+        bottom: auto;
+        left: 0;
+        right: 0;
+        top: 0;
       }
 
-      /* Status: single compact line */
-      .orm-status {
-        padding: .18rem .4rem;
-        font-size: .58rem;
-        flex-shrink: 0;
+      .oram-toolbar {
+        gap: 5px;
       }
-      .orm-status-tip { display: none; }
-
-      /* Controls: two compact rows, no overflow */
-      .orm-controls {
-        flex-direction: column;
-        overflow: visible;
-        flex-shrink: 0;
-        border-top: 1px solid var(--text);
+      .oram-btn {
+        font-size: 0.75rem;
+        padding: 0.35em 0.7em;
       }
-
-      /* Row 1: layers + tool + brush */
-      .orm-ctrl-row-1,
-      .orm-ctrl-row-2 {
-        display: flex;
-        align-items: center;
-        gap: .3rem;
-        padding: .3rem .4rem;
-        border-bottom: 1px solid var(--text);
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        scrollbar-width: none;
-      }
-      .orm-ctrl-row-1::-webkit-scrollbar,
-      .orm-ctrl-row-2::-webkit-scrollbar { display: none; }
-      .orm-ctrl-row-2 { border-bottom: none; }
-
-      /* Hide desktop-only sections */
-      .orm-ctrl-section { display: none; }
-
-      /* Layer dots */
-      .orm-layer-dot-btn {
-        width: 28px; height: 28px;
-        border-radius: 50%;
-        border: 2px solid transparent;
-        cursor: pointer;
-        flex-shrink: 0;
-        touch-action: manipulation;
-        display: flex; align-items: center; justify-content: center;
-        transition: border-color .1s, opacity .1s;
-        opacity: .5;
-      }
-      .orm-layer-dot-btn.active { border-color: var(--text); opacity: 1; }
-      .orm-layer-dot-inner { width: 16px; height: 16px; border-radius: 50%; }
-
-      /* Mobile tool buttons */
-      .orm-m-tool-btn {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: .62rem; font-weight: 600;
-        padding: .25rem .45rem;
-        border: 1px solid var(--text);
-        background: transparent; color: var(--text);
-        cursor: pointer; white-space: nowrap;
-        touch-action: manipulation;
-        flex-shrink: 0;
-        transition: background .1s, color .1s;
-      }
-      .orm-m-tool-btn.active { background: var(--text); color: var(--bg); }
-
-      /* Mobile shape select */
-      .orm-m-shape-sel {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: .62rem; font-weight: 600;
-        background: var(--bg); color: var(--text);
-        border: 1px solid var(--text);
-        padding: .22rem .3rem;
-        cursor: pointer; outline: none; flex-shrink: 0;
-      }
-
-      /* Mobile brush slider */
-      input[type=range].orm-m-brush-slider {
-        -webkit-appearance: none;
-        width: 70px; height: 2px;
-        background: var(--text); outline: none; cursor: pointer; opacity: .6;
-        flex-shrink: 0;
-      }
-      input[type=range].orm-m-brush-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        width: 13px; height: 13px; border-radius: 50%; background: var(--text); cursor: pointer;
-      }
-      .orm-m-label {
-        font-family: 'Inter', sans-serif; font-size: .58rem;
-        color: var(--text); opacity: .55; white-space: nowrap; flex-shrink: 0;
-      }
-      .orm-m-sep {
-        width: 1px; height: 18px;
-        background: var(--text); opacity: .2; flex-shrink: 0;
-      }
-
-      /* Mobile wave select */
-      .orm-m-wave-sel {
-        font-family: 'Inter', sans-serif;
-        font-size: .62rem;
-        background: var(--bg); color: var(--text);
-        border: 1px solid var(--text);
-        padding: .22rem .3rem;
-        cursor: pointer; outline: none; flex-shrink: 0;
-      }
-
-      /* Keyboard hints hidden on mobile */
-      .orm-kbd-section { display: none; }
+      .toolbar-sep { height: 22px; }
     }
-
-    /* ── ESSAY STYLES ── */
-    .physics-chain {
-      display: flex; flex-wrap: wrap; align-items: center;
-      gap: 6px; padding: 1em 0; margin: 1.5em 0;
-      border-top: 1px solid var(--text); border-bottom: 1px solid var(--text);
-    }
-    .chain-step {
-      font-family: 'Inter', sans-serif; font-size: .78rem;
-      color: var(--text); border: 1px solid var(--text);
-      padding: 3px 10px; border-radius: 2px;
-    }
-    .chain-arrow { font-size: .75rem; color: var(--text); }
-
-    .pull-quote {
-      border-left: 3px solid var(--text);
-      padding: .75rem 1rem; margin: 1.5rem 0;
-    }
-    .pull-quote p { font-size: .9rem; font-style: italic; line-height: 1.65; }
-    .pull-quote cite { display: block; font-size: .72rem; opacity: .65; font-style: normal; margin-top: .35rem; }
-
-    .cta-wrap { text-align: center; margin: 2em 0 1em; }
-    .cta-btn {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: .9rem; font-weight: 500;
-      background: transparent; color: var(--text);
-      border: 2px solid var(--text);
-      padding: .65em 1.6em;
-      cursor: pointer; text-decoration: none; display: inline-block;
-      transition: background .15s, color .15s;
-    }
-    .cta-btn:hover { background: var(--text); color: var(--bg); }
   </style>
 </head>
 <body>
@@ -712,309 +338,196 @@
   </h1>
 
   <main class="page-content">
-  <article>
+    <article>
 
-    <section>
-      <div class="orm-app" id="ormApp">
+      <!-- ══ THE ORAMICS MACHINE ══ -->
+      <section>
+        <div class="lab-section">
+          <p class="lab-section-title">Oramics Machine</p>
 
-        <!-- Transport -->
-        <div class="orm-transport" id="ormToolbar">
-          <button class="orm-btn" id="orm-play" onclick="ORM.togglePlay()">
-            <svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px;vertical-align:middle"><path d="M0 0l9 5.5L0 11z"/></svg>play
-          </button>
-          <button class="orm-btn" id="orm-loop" onclick="ORM.toggleLoop()" title="Loop">↺ loop</button>
-
-          <div class="orm-sep"></div>
-
-          <div class="orm-speed-row">
-            <span class="orm-speed-label">speed</span>
-            <input type="range" class="orm-slider" id="orm-speed" min="0.1" max="3" step="0.05" value="0.8"
-              oninput="ORM.setSpeed(+this.value)">
-            <span class="orm-speed-val" id="orm-speed-val">0.80×</span>
+          <!-- Channel selector (acts as active drawing color) -->
+          <div class="channel-legend">
+            <span class="channel-legend-label">channel →</span>
+            <button class="ch-swatch active" data-ch="pitch"  title="Pitch: vertical position maps to frequency">
+              <span class="ch-dot" style="background:var(--ch-pitch)"></span>pitch
+            </button>
+            <button class="ch-swatch" data-ch="amp"    title="Amplitude: vertical position maps to volume">
+              <span class="ch-dot" style="background:var(--ch-amp)"></span>amplitude
+            </button>
+            <button class="ch-swatch" data-ch="mod"    title="Modulation: vertical position maps to vibrato rate">
+              <span class="ch-dot" style="background:var(--ch-mod)"></span>modulation
+            </button>
+            <button class="ch-swatch" data-ch="timbre" title="Timbre: vertical position maps to filter brightness">
+              <span class="ch-dot" style="background:var(--ch-timbre)"></span>timbre
+            </button>
           </div>
 
-          <div class="orm-sep"></div>
-
-          <select class="orm-select" id="orm-wave" onchange="ORM.setWave(this.value)">
-            <option value="sine">sine</option>
-            <option value="triangle">triangle</option>
-            <option value="sawtooth">sawtooth</option>
-            <option value="square">square</option>
-          </select>
-
-          <div class="orm-sep"></div>
-
-          <div class="orm-toggle-wrap">
-            <label class="orm-toggle" title="Analog — adds wow, flutter, drift">
-              <input type="checkbox" id="orm-analog" onchange="ORM.setAnalog(this.checked)">
-              <span class="orm-toggle-track"></span>
-            </label>
-            <span class="orm-toggle-label">analog</span>
+          <!-- Canvas with axis labels -->
+          <div style="display:flex;align-items:stretch;gap:6px;margin-bottom:1em;">
+            <!-- Y-axis label -->
+            <div style="display:flex;flex-direction:column;justify-content:space-between;padding:2px 0;min-width:28px;">
+              <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;writing-mode:horizontal-tb;">high</span>
+              <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;">low</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;">
+              <div class="canvas-wrap" style="margin-bottom:0;flex:1;">
+                <canvas id="oram-canvas"></canvas>
+                <div class="scan-overlay">
+                  <div id="scan-line"></div>
+                </div>
+              </div>
+              <!-- X-axis label -->
+              <div style="display:flex;justify-content:space-between;padding:3px 0 0;">
+                <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;">start</span>
+                <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;">→ time →</span>
+                <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;">end</span>
+              </div>
+            </div>
           </div>
 
-          <div class="orm-sep"></div>
+          <!-- Toolbar row 1: play + tools + undo/clear -->
+          <div class="oram-toolbar">
+            <button class="oram-btn" id="btn-play">▶&#xFE0E; play</button>
+            <div class="toolbar-sep"></div>
+            <button class="oram-btn active" id="btn-round"  title="Round pen">● round</button>
+            <button class="oram-btn"        id="btn-cal"    title="Calligraphy pen (45° nib)">╱ nib</button>
+            <button class="oram-btn"        id="btn-eraser" title="Eraser">◻ erase</button>
+            <div class="toolbar-sep"></div>
+            <button class="oram-btn ghost"  id="btn-undo">↩ undo</button>
+            <button class="oram-btn ghost"  id="btn-clear">✕ clear</button>
+          </div>
 
-          <button class="orm-btn" onclick="ORM.undo()" id="orm-undo" title="Undo (Cmd/Ctrl+Z)">undo</button>
-          <button class="orm-btn" onclick="ORM.randomize()" title="Random Oramics shapes">✦ random</button>
-          <button class="orm-btn danger" onclick="ORM.clearAll()">clear</button>
+          <!-- Toolbar row 2: tempo -->
+          <div class="oram-toolbar">
+            <div class="tempo-ctrl">
+              <label for="tempo-slider">loop</label>
+              <input type="range" id="tempo-slider" min="3" max="20" value="8" step="1">
+              <span class="tempo-val" id="tempo-val">8s</span>
+            </div>
+            <div class="toolbar-sep"></div>
+            <div class="tempo-ctrl" style="min-width:90px">
+              <label for="size-slider">size</label>
+              <input type="range" id="size-slider" min="2" max="24" value="8" step="1">
+              <span class="tempo-val" id="size-val">8</span>
+            </div>
+          </div>
+
+          <p class="lab-hint">draw on the canvas · higher strokes = higher pitch · the orange line scans left → right · on mobile: draw anywhere, scan moves top → bottom</p>
+        </div>
+      </section>
+
+      <!-- ══ ARTICLE ══ -->
+      <section>
+        <h2>Oramics: drawing sound into being</h2>
+        <p class="post-meta"><time datetime="2026-05-04">May 4, 2026</time></p>
+        <p>Written by Jordan Elias, MT-BC</p>
+
+        <p class="post-intro">
+          In 1957, a BBC radiophonic engineer named Daphne Oram left her job to build a machine that could translate drawn marks into music. She called it the Oramics machine. This is a browser-based version of that idea.
+        </p>
+      </section>
+
+      <section>
+        <h2>Who was Daphne Oram?</h2>
+
+        <p>Daphne Oram was born in Wiltshire in 1925. She taught herself to play piano and organ as a child and arrived at the BBC in 1943 as a music balancer, one of the people who sat in a glass booth and adjusted the levels of live orchestra recordings going out on air. She was good at the technical work, and she was also somewhere else in her head entirely: imagining a music that did not yet have to be performed, that could be created from first principles by manipulating the physical properties of sound itself.</p>
+
+        <p>In 1958 she co-founded the BBC Radiophonic Workshop, the unit that would go on to make the Doctor Who theme, among many other things. She left within months. The Workshop was being used for sound effects and incidental music. Oram had something much stranger in mind.</p>
+
+        <p>She moved into an oast house in Kent with a collection of salvaged electronics and began building her machine. The Oramics machine was completed in the early 1960s and used for the next two decades. It is now in the Science Museum in London.</p>
+      </section>
+
+      <section>
+        <h2>How the original machine worked</h2>
+
+        <p>The Oramics machine used ten strips of 35mm film running in parallel through a light-reading mechanism. Each strip controlled a different parameter of the sound: pitch, amplitude, timbre, speed, reverberation. Oram would draw directly onto the film with black paint or chinagraph pencil. As the film moved through the machine, a photocell read the drawn marks and converted the varying amounts of light passing through the film into varying voltages, which in turn shaped the sound being generated by oscillators.</p>
+
+        <p>The relationship between mark and sound was direct and physical. A line drawn higher or lower on the film translated to a higher or lower frequency. A thicker mark produced a different amplitude envelope than a thin one. The drawn gesture was not a score to be interpreted by a performer; it was the sound itself, encoded graphically.</p>
+
+        <p>Oram described what she was after as a music in which the composer had complete control over every parameter of every note: not just pitch and duration, as in conventional notation, but the precise shape of the attack and decay, the exact spectral content of each sound, the texture and movement of the whole. She called the underlying theory Oramics, and she believed it would eventually allow composers to work directly in the language of sound rather than through the intermediary of musical notation and human performance.</p>
+      </section>
+
+      <section>
+        <h2>What the machine in your browser does</h2>
+
+        <p>This is a simplified version of Oram's idea. The canvas represents time from left to right (or top to bottom on a phone, following the shape of the screen). The vertical position of marks on each channel corresponds to a different parameter.</p>
+
+        <p>The four channels work as follows. The blue pitch channel maps vertical position to frequency: marks higher on the canvas produce higher-pitched tones, marks lower produce lower ones. The range spans roughly two octaves around A220. The green amplitude channel maps vertical position to volume: high marks are louder, low marks are quieter. If no amplitude mark is present at a given moment, the sound defaults to a moderate fixed volume. The amber modulation channel introduces vibrato: marks higher on the canvas produce faster, deeper frequency modulation, marks lower slow it down or remove it. The red timbre channel drives a lowpass filter: marks high on the canvas open the filter and allow the full spectrum through, producing a brighter sound, while marks low close the filter for a warmer, darker timbre.</p>
+
+        <p>When you press play, the orange scan line moves across the canvas at the speed you have set with the loop control. At each position, the machine reads the topmost mark in each channel and uses it to set the corresponding audio parameter. The result is played continuously in a loop.</p>
+      </section>
+
+      <section>
+        <h2>Experiments</h2>
+
+        <div class="lab-exercise">
+          <h3>1. a single pitch line</h3>
+          <p>Select the pitch channel and draw a horizontal line across the middle of the canvas. Press play. You are hearing a continuous tone at a fixed frequency. Now draw the same line at the top of the canvas and listen to the pitch rise. Now curve the line, dipping and rising, and hear the pitch follow the contour of your mark. This is what Oram was doing on film: drawing pitch as a spatial curve.</p>
         </div>
 
-        <!-- Canvas -->
-        <div class="orm-canvas-area" id="ormCanvasArea">
-          <div class="orm-canvas-inner" id="ormCanvasInner">
-            <canvas id="oc-grid"></canvas>
-            <canvas id="oc-pitch"></canvas>
-            <canvas id="oc-amp"></canvas>
-            <canvas id="oc-timbre"></canvas>
-            <canvas id="oc-mod"></canvas>
-            <canvas id="oc-ui"></canvas>
-            <canvas id="oc-overlay"></canvas>
-            <canvas id="oc-draw"></canvas>
-          </div>
+        <div class="lab-exercise">
+          <h3>2. amplitude shaping</h3>
+          <p>Clear the canvas. Select the amplitude channel and draw a shape that starts low on the left, rises toward the center, and falls again at the right. Press play. You are shaping the volume envelope of the loop with a drawn gesture. Try making sharp peaks, slow curves, irregular mountains. Each shape produces a different rhythmic feel.</p>
         </div>
 
-        <!-- Status bar -->
-        <div class="orm-status">
-          <span>
-            pos: <strong class="orm-status-pos" id="ost-pos">0.00s</strong> ·
-            pitch: <span id="ost-pitch">—</span> ·
-            amp: <span id="ost-amp">—</span> ·
-            filter: <span id="ost-filter">—</span>
-          </span>
-          <span class="orm-status-tip" id="ost-tip">Draw on the canvas · left→right = time · up/down = value</span>
+        <div class="lab-exercise">
+          <h3>3. layering channels</h3>
+          <p>Draw a gentle pitch curve first. Then switch to amplitude and draw an independent shape. Then add some timbre. Listen to how the channels interact. You are composing multiparametrically, in the way Oram intended: pitch, loudness, and spectral character moving independently through time, each driven by its own drawn gesture.</p>
         </div>
 
-        <!-- Bottom controls: desktop version -->
-        <div class="orm-controls" id="ormControls">
+        <div class="lab-exercise">
+          <h3>4. the calligraphy nib</h3>
+          <p>Switch to the nib pen and try drawing. The slanted tip naturally produces thicker strokes on diagonals and thinner strokes on horizontal lines, in the same way a real calligraphy pen responds to the angle of the stroke. This changes the character of the marks on the canvas. Experiment with drawing the same shape with both the round pen and the nib and listen for any difference in how the scanner reads them.</p>
+        </div>
 
-          <!-- Layers -->
-          <div class="orm-ctrl-section">
-            <div class="orm-ctrl-title">layer</div>
-            <div class="orm-layer-tabs" id="ormLayerTabs">
-              <div class="orm-layer-tab active" id="ltab-pitch" onclick="ORM.setLayer('pitch')">
-                <span class="orm-layer-dot" style="background:var(--layer-pitch)"></span>
-                <span class="orm-layer-name">Pitch</span>
-                <span class="orm-layer-vis" onclick="ORM.toggleVis('pitch',event)">●</span>
-              </div>
-              <div class="orm-layer-tab" id="ltab-amp" onclick="ORM.setLayer('amp')">
-                <span class="orm-layer-dot" style="background:var(--layer-amp)"></span>
-                <span class="orm-layer-name">Amp</span>
-                <span class="orm-layer-vis" onclick="ORM.toggleVis('amp',event)">●</span>
-              </div>
-              <div class="orm-layer-tab" id="ltab-timbre" onclick="ORM.setLayer('timbre')">
-                <span class="orm-layer-dot" style="background:var(--layer-timbre)"></span>
-                <span class="orm-layer-name">Timbre</span>
-                <span class="orm-layer-vis" onclick="ORM.toggleVis('timbre',event)">●</span>
-              </div>
-              <div class="orm-layer-tab" id="ltab-mod" onclick="ORM.setLayer('mod')">
-                <span class="orm-layer-dot" style="background:var(--layer-mod)"></span>
-                <span class="orm-layer-name">Mod</span>
-                <span class="orm-layer-vis" onclick="ORM.toggleVis('mod',event)">●</span>
-              </div>
-            </div>
-            <div class="orm-layer-hint" id="orm-layer-hint">Vertical position = frequency. Top = 2000 Hz · Bottom = 80 Hz.</div>
-            <div class="orm-scale-row">
-              <div class="orm-scale-entry"><span class="sk">top</span><span class="sv" id="orm-scale-top">2000 Hz</span></div>
-              <div class="orm-scale-entry"><span class="sk">mid</span><span class="sv" id="orm-scale-mid">600 Hz</span></div>
-              <div class="orm-scale-entry"><span class="sk">bot</span><span class="sv" id="orm-scale-bot">80 Hz</span></div>
-            </div>
-          </div>
+        <div class="lab-exercise">
+          <h3>5. modulation as ornament</h3>
+          <p>Draw a pitch line. Then switch to the modulation channel and draw a short mark only in the middle section of the canvas, high up. Press play. The vibrato appears and disappears as the scan line crosses your mark, as if the performer is choosing where to add expression. Try placing modulation marks at the ends of phrases, or layering fast and slow modulation marks at different vertical positions.</p>
+        </div>
 
-          <!-- Draw tools -->
-          <div class="orm-ctrl-section">
-            <div class="orm-ctrl-title">draw</div>
-            <div class="orm-tool-group">
-              <div class="orm-tool-row">
-                <button class="orm-tool-btn active" id="tool-pen"         onclick="ORM.setTool('pen')">pen</button>
-                <button class="orm-tool-btn"        id="tool-calligraphy" onclick="ORM.setTool('calligraphy')">calligraphy</button>
-                <button class="orm-tool-btn"        id="tool-erase"       onclick="ORM.setTool('erase')">erase</button>
-              </div>
-              <div class="orm-tool-row">
-                <span class="orm-ctrl-title" style="align-self:center;margin-right:.25rem;">shape</span>
-                <select class="orm-shape-select" id="orm-shape" onchange="ORM.setShape(this.value)">
-                  <option value="none">— none —</option>
-                  <option value="line">line</option>
-                  <option value="circle">circle / ellipse</option>
-                  <option value="rect">rectangle</option>
-                </select>
-              </div>
-            </div>
-          </div>
+        <div class="lab-exercise">
+          <h3>6. graphic score as composition</h3>
+          <p>Forget the individual channels for a moment. Draw whatever you would draw if this were a blank page and you were making a drawing, not programming a synthesiser. Then press play. Oram believed the drawn gesture had an inherent musical logic, that the hand moving across a surface and the voice or instrument moving through pitch-time were related kinds of motion. Listen to what your drawing sounds like. Does the shape of it correspond to what you hear?</p>
+        </div>
+      </section>
 
-          <!-- Brush size -->
-          <div class="orm-ctrl-section">
-            <div class="orm-ctrl-title">brush</div>
-            <div class="orm-brush-row">
-              <div class="orm-brush-preview" id="ormBrushPreview">
-                <div class="orm-brush-dot" id="ormBrushDot"></div>
-              </div>
-            </div>
-            <div class="orm-brush-row">
-              <span class="orm-brush-label">size</span>
-              <input type="range" class="orm-brush-slider" min="1" max="60" value="4" id="orm-bsize"
-                oninput="ORM.setBrushSize(+this.value)">
-              <span class="orm-brush-val" id="orm-bsize-val">4</span>
-            </div>
-          </div>
+      <section>
+        <h2>Oram and the sonic imagination</h2>
 
-        </div><!-- /orm-controls (desktop) -->
+        <p>One of the things that is striking about Oram's project, looking back at it now, is how completely she committed to it without any certainty that it would work or that anyone would care. She spent her own money building the machine. She maintained it, repaired it, continued developing it for two decades. She gave lectures and wrote theoretical papers that were received with polite bafflement. She published a book, <em>An Individual Note of Music, Sound and Electronics</em>, in 1972, which remained largely unknown.</p>
 
-        <!-- Mobile controls: two rows, always visible -->
-        <div id="ormMobileControls" style="display:none; flex-direction:column; flex-shrink:0; border-top:1px solid var(--text);">
-          <!-- Row 1: Layers · Tool · Shape · Brush -->
-          <div class="orm-ctrl-row-1">
-            <!-- Layer dots -->
-            <button class="orm-layer-dot-btn active" id="mltab-pitch" onclick="ORM.setLayer('pitch')" title="Pitch">
-              <span class="orm-layer-dot-inner" style="background:var(--layer-pitch)"></span>
-            </button>
-            <button class="orm-layer-dot-btn" id="mltab-amp" onclick="ORM.setLayer('amp')" title="Amp">
-              <span class="orm-layer-dot-inner" style="background:var(--layer-amp)"></span>
-            </button>
-            <button class="orm-layer-dot-btn" id="mltab-timbre" onclick="ORM.setLayer('timbre')" title="Timbre">
-              <span class="orm-layer-dot-inner" style="background:var(--layer-timbre)"></span>
-            </button>
-            <button class="orm-layer-dot-btn" id="mltab-mod" onclick="ORM.setLayer('mod')" title="Mod">
-              <span class="orm-layer-dot-inner" style="background:var(--layer-mod)"></span>
-            </button>
+        <p>The work she produced on the machine is strange. It does not sound like electronic music from the 1960s and 1970s, which tends toward either academic serialism or science-fiction texture. It sounds like something being drawn into existence by hand: imprecise in a way that feels intentional, with a particular quality of hesitation and intention that you can imagine coming from the drawn mark on film.</p>
 
-            <div class="orm-m-sep"></div>
+        <p>From a music therapy perspective, there is something worth attending to in the idea that the gesture of drawing and the gesture of making music might be related at some fundamental level. Oram was not the only person working in this territory. Graphic scores appeared across experimental music in the same period, Morton Feldman's coordinate paper scores, Cardew's <em>Treatise</em>, Cage's various experiments. But Oram's approach was different in that she was not writing instructions for a performer to interpret. She was directly encoding sound. The drawing was the composition and the composition was the drawing, without any layer of interpretation in between.</p>
 
-            <!-- Tool buttons -->
-            <button class="orm-m-tool-btn active" id="mtool-pen" onclick="ORM.setTool('pen')">pen</button>
-            <button class="orm-m-tool-btn" id="mtool-calligraphy" onclick="ORM.setTool('calligraphy')">calli</button>
-            <button class="orm-m-tool-btn" id="mtool-erase" onclick="ORM.setTool('erase')">erase</button>
+        <p>There is also something worth noting about what kind of composer Oram was able to be with this machine. She had no formal training in composition. She had taught herself music from the piano and the organ. The Oramics system was explicitly designed to bypass the gatekeeping function of traditional musical training: if you could draw, you could compose. This is not a trivial thing. The history of who gets to be a composer, who gets to make music that is taken seriously as art rather than dismissed as amateur, is partly a history of access to notation systems and the institutions that teach them.</p>
+      </section>
 
-            <div class="orm-m-sep"></div>
+      <section>
+        <h2>Sound and the body</h2>
 
-            <!-- Shape -->
-            <select class="orm-m-shape-sel" id="orm-m-shape" onchange="ORM.setShape(this.value)">
-              <option value="none">— shape —</option>
-              <option value="line">line</option>
-              <option value="circle">ellipse</option>
-              <option value="rect">rect</option>
-            </select>
+        <p>The Oramics machine was a physical object. You bent over it, you touched the film, you painted on it. There was a bodily engagement with the material of sound-making that is largely absent from working with a digital audio workstation. When Oram drew a pitch curve on the film, her hand was moving through space in a way that had a direct relationship to the pitch movement she was creating: higher on the film meant higher in frequency, and her arm was actually moving upward to make it.</p>
 
-            <div class="orm-m-sep"></div>
+        <p>This spatial mapping between gesture and sound is something that a few music therapists have become interested in, not as a historical curiosity but as a working principle. The body's spatial sense is deeply connected to musical perception. We talk about high and low notes as though they occupy physical space. We feel rhythm in the body before we conceptualize it. The experience of making sound through a gesture that is spatially continuous with the sound's parameters may have a different quality than the experience of programming the same sound through a menu.</p>
 
-            <!-- Brush size -->
-            <span class="orm-m-label">size</span>
-            <input type="range" class="orm-m-brush-slider" min="1" max="60" value="4" id="orm-m-bsize"
-              oninput="ORM.setBrushSize(+this.value)">
-            <span class="orm-m-label" id="orm-m-bsize-val">4</span>
-          </div>
+        <p>Draw something. Listen to it. Notice whether the shape of what you drew corresponds to what you hear, and whether that correspondence feels meaningful or arbitrary. This is the question Oram was working on for twenty years in a converted oast house in Kent.</p>
 
-          <!-- Row 2: Undo · Random · Clear · Wave · Analog · Speed -->
-          <div class="orm-ctrl-row-2">
-            <button class="orm-m-tool-btn" onclick="ORM.undo()">undo</button>
-            <button class="orm-m-tool-btn" onclick="ORM.randomize()">✦ random</button>
-            <button class="orm-m-tool-btn" onclick="ORM.clearAll()">clear</button>
+        <p>If you are interested in the therapeutic dimensions of creative sound-making, embodied listening, or working with sound and creativity in a music therapy context, please visit the <a href="/contact/">contact page</a>.</p>
 
-            <div class="orm-m-sep"></div>
+        <div class="cta-wrap">
+          <a href="/contact/" class="cta-btn">Book an intro call</a>
+        </div>
 
-            <select class="orm-m-wave-sel" id="orm-m-wave" onchange="ORM.setWave(this.value)">
-              <option value="sine">sine</option>
-              <option value="triangle">triangle</option>
-              <option value="sawtooth">saw</option>
-              <option value="square">square</option>
-            </select>
+        <p>Further reading and listening:</p>
+        <ul>
+          <li><em>An Individual Note of Music, Sound and Electronics</em> — Daphne Oram (1972)</li>
+          <li><em>Daphne Oram: Oramics</em> — Trunk Records reissue of her recorded works</li>
+          <li><em>The Radiophonic Workshop</em> — BBC archive documentary</li>
+          <li>Daphne Oram collection, Goldsmiths University of London</li>
+        </ul>
+      </section>
 
-            <div class="orm-m-sep"></div>
-
-            <span class="orm-m-label">analog</span>
-            <label class="orm-toggle" title="Analog drift">
-              <input type="checkbox" id="orm-m-analog" onchange="ORM.setAnalog(this.checked)">
-              <span class="orm-toggle-track"></span>
-            </label>
-
-            <div class="orm-m-sep"></div>
-
-            <span class="orm-m-label">speed</span>
-            <input type="range" class="orm-m-brush-slider" min="0.1" max="3" step="0.05" value="0.8" id="orm-m-speed"
-              oninput="ORM.setSpeed(+this.value)">
-          </div>
-        </div><!-- /ormMobileControls -->
-
-      </div><!-- /orm-app -->
-    </section>
-
-    <!-- KEYBOARD SHORTCUTS -->
-    <div class="orm-kbd-section">
-      <div class="orm-kbd-title">Keyboard shortcuts</div>
-      <div class="orm-kbd-grid">
-        <div class="orm-kbd-row"><span class="orm-kbd">space</span><span class="orm-kbd-desc">play / stop</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">⌘Z / Ctrl Z</span><span class="orm-kbd-desc">undo</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">P</span><span class="orm-kbd-desc">pen</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">K</span><span class="orm-kbd-desc">calligraphy</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">E</span><span class="orm-kbd-desc">erase</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">1 – 4</span><span class="orm-kbd-desc">switch layer</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">[ ]</span><span class="orm-kbd-desc">brush size −/+</span></div>
-      </div>
-    </div>
-
-    <!-- ESSAY -->
-    <section>
-      <h2>Sound drawn onto film</h2>
-      <p class="post-meta"><time datetime="2026-06-26">June 26, 2026</time></p>
-      <p>Written by Jordan Elias, MT-BC</p>
-
-      <p>In 1957 Daphne Oram left the BBC, where she had worked as a sound engineer and composer for over a decade, and set up a studio in a converted oast house in Kent. There, over the following years, she built a machine unlike anything that existed: the Oramics machine. A set of ten synchronised strips of 35mm film ran horizontally through the device. The composer drew directly onto the film — shapes, curves, lines, marks — and as the film moved through a photoelectric cell, the light transmitted through the drawn marks was converted into control voltages, which in turn controlled oscillators, filters, and amplifiers. The drawing was the score. The score was the sound.</p>
-
-      <p>Oramics was not notation. It was not a description of sound intended for a performer to realise. It was a direct physical encoding of sound itself: the shape on the film was the sound you heard, with no intermediary, no interpretation, no performance. The composer drew in time and heard time drawn back. This was a genuinely new relationship between the act of inscription and the act of sounding — one that most electronic music systems of the period, which used keyboards, punch cards, or written parameter sheets, did not offer.</p>
-
-      <div class="physics-chain">
-        <span class="chain-step">mark on film</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">light transmission</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">photoelectric cell</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">control voltage</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">oscillator / filter</span>
-        <span class="chain-arrow">→</span>
-        <span class="chain-step">sound</span>
-      </div>
-
-      <h2>From the BBC to the oast house</h2>
-      <p>Daphne Oram was born in Wiltshire in 1925. She taught herself composition and showed exceptional ability young; at eighteen she joined the BBC as a music balancer, one of the few women in technical roles in the corporation at that time. Over the following decade she worked in studios, composed incidental music for radio programmes, and became increasingly convinced that electronic sound offered compositional possibilities unavailable through conventional instruments and notation. In 1957 she co-founded the BBC Radiophonic Workshop — alongside Desmond Briscoe — and became its first studio manager. She left the following year, frustrated by the institutional constraints placed on the Workshop's work and determined to pursue her own research independently.</p>
-
-      <p>The Oramics machine occupied much of the next two decades. It was an enormously laborious undertaking — designing, constructing, and refining a bespoke electronic instrument with minimal funding and institutional support, largely alone. Oram applied for patents, sought grants, and gave demonstrations, but the machine never received the recognition or resources that might have allowed it to develop into something widely used. She continued working in her studio in Fairseat, Kent, composing, teaching, and writing — her book <em>An Individual Note of Music, Sound and Electronics</em> (1972) remains one of the most distinctive accounts of electronic music's possibilities — until her death in 2003.</p>
-
-      <div class="pull-quote">
-        <p>The Oramics machine was trying to escape the tyranny of the note — to give composers direct, continuous, unquantised control over sound in time, in the same way a painter has continuous control over mark and surface.</p>
-        <cite>— paraphrased from Daphne Oram, <em>An Individual Note</em>, 1972</cite>
-      </div>
-
-      <h2>The machine and its logic</h2>
-      <p>The Oramics machine worked through photoelectric cells reading the opacity of marks drawn on clear film. A dense, opaque mark blocked more light; a thin or faint mark allowed more through. The amount of light reaching the cell determined the voltage output, which in turn determined the parameter being controlled — frequency on one strip, amplitude on another, filter settings on a third. Multiple strips ran simultaneously, so a composer could draw different control curves for different parameters on different strips, all advancing in synchrony through the machine.</p>
-
-      <p>The spatial logic of the system was immediate and intuitive: drawing a line that moved upward on the pitch strip produced a rising pitch. A dense, heavy mark on the amplitude strip produced a loud sound. A curved, organic shape produced a curved, organic modulation. The act of drawing was compositional; the visual shape of the drawing was the sonic shape of the music. Oram called this "visualising sound" — and it remains one of the most direct translations of visual mark-making into sonic experience that electronic music has produced.</p>
-
-      <h2>Recognition, legacy, and the archive</h2>
-      <p>For much of her career, Oram worked in near-obscurity. The Radiophonic Workshop's output — the sounds she had helped shape — reached millions of listeners through BBC drama and documentary, but the technical and compositional work behind it went largely uncredited, as was common for studio employees of the period. Women in technical roles in the early years of British broadcasting faced particular barriers to attribution. Oram's decision to leave and work independently was partly a refusal of that institutional erasure, but independence came with its own costs: chronic underfunding, no institutional infrastructure, and the difficulty of maintaining and developing a complex bespoke machine without support.</p>
-
-      <p>The reassessment of Oram's work has gathered pace since her death. The Daphne Oram Collection, now held at Goldsmiths, University of London, contains her correspondence, patents, scores, and technical drawings, as well as the Oramics machine itself — restored to working condition after years of deterioration. Scholars, curators, and electronic musicians have returned to her work and found in it a sophistication and radicalism that was never adequately recognised in her lifetime. Her refusal to separate the act of composition from the act of inscription — to insist that drawing <em>was</em> music, not merely a description of it — places her squarely in a lineage of ideas that would later animate graphic notation, live electronics, and interactive computer music. The Oramics machine was not a curiosity or a failed prototype. It was a coherent and original vision of what composing could be.</p>
-
-      <h2>How this instrument works</h2>
-      <p>This browser-based Oramics instrument follows the logic of the original machine as closely as a digital medium allows. You draw on four independent layers — pitch, amplitude, timbre, and modulation — and as the playhead moves across your drawing, the pixel values it reads are converted into audio parameters in real time. The pitch layer maps vertical position to frequency: marks drawn high produce high pitches, marks drawn low produce low ones. Crucially, each separate mark on the pitch layer produces an independent voice — two strokes at different heights sound simultaneously, just as two separate film strips would have driven two separate oscillators on the original machine. The amplitude layer reads pixel density to set volume per voice. Timbre controls a low-pass filter cutoff, shaping brightness. Modulation adds vibrato and FM depth.</p>
-
-      <p>Two drawing tools follow different mark-making traditions: the pen lays down a clean, hard-edged line; calligraphy produces strokes whose width varies with the angle of travel relative to a fixed 45° nib — moving horizontally produces a thin line, moving vertically a thick one, exactly as a real calligraphy pen behaves. Shapes can be drawn separately — line, ellipse, or rectangle — using the shape selector, which previews your mark as a ghost before committing it. Try the randomise button to generate Oramics-style shapes and hear how they sound before drawing your own.</p>
-
-      <p>If you're curious about working with sound, creativity, and the body in music therapy, feel free to get in touch.</p>
-
-      <div class="cta-wrap">
-        <a href="/contact/" class="cta-btn">Book an intro call</a>
-      </div>
-
-      <p>Further reading:</p>
-      <ul>
-        <li><em>An Individual Note of Music, Sound and Electronics</em> — Daphne Oram (1972)</li>
-        <li><em>Daphne Oram: An Individual Note</em> — Shulman, ed. (2021)</li>
-        <li>The <a href="https://www.goldsmiths.ac.uk/oram/" target="_blank" rel="noopener">Daphne Oram Collection</a> at Goldsmiths, University of London</li>
-      </ul>
-    </section>
-
-  </article>
+    </article>
   </main>
 </div>
 
@@ -1022,1273 +535,405 @@
   <p>© 2025–2026 Jordan Elias</p>
 </footer>
 
-<script src="/js/header.js"></script>
-
+<!-- ══════════════════════════════════════════════
+     ORAMICS ENGINE
+══════════════════════════════════════════════════ -->
 <script>
 (function () {
-'use strict';
+  'use strict';
 
-/* ════════════════════════════════════════
-   LAYER CONFIG
-════════════════════════════════════════ */
-const LAYERS = {
-  pitch:  { id: 'oc-pitch',  color: '#b85c38', alpha: 0.85,
-            hint: 'Vertical position = frequency. Top = 2000 Hz · Bottom = 80 Hz.' },
-  amp:    { id: 'oc-amp',    color: '#4a7c59', alpha: 0.75,
-            hint: 'Pixel density = amplitude. Dense marks = louder output.' },
-  timbre: { id: 'oc-timbre', color: '#c49a2a', alpha: 0.75,
-            hint: 'Vertical position = filter cutoff. Top = bright · Bottom = muffled.' },
-  mod:    { id: 'oc-mod',    color: '#7a3f6e', alpha: 0.75,
-            hint: 'Vertical position = modulation depth. Top = heavy vibrato / FM.' },
-};
-const LAYER_SCALES = {
-  pitch:  { top: '2000 Hz', mid: '600 Hz',  bot: '80 Hz'  },
-  amp:    { top: '100%',    mid: '50%',     bot: '0%'     },
-  timbre: { top: '8000 Hz', mid: '2000 Hz', bot: '200 Hz' },
-  mod:    { top: '100%',    mid: '50%',     bot: '0%'     },
-};
+  // ── DOM refs ──────────────────────────────────────────────
+  const canvas      = document.getElementById('oram-canvas');
+  const ctx         = canvas.getContext('2d');
+  const scanLine    = document.getElementById('scan-line');
+  const btnPlay     = document.getElementById('btn-play');
+  const btnRound    = document.getElementById('btn-round');
+  const btnCal      = document.getElementById('btn-cal');
+  const btnEraser   = document.getElementById('btn-eraser');
+  const btnUndo     = document.getElementById('btn-undo');
+  const btnClear    = document.getElementById('btn-clear');
+  const tempoSlider = document.getElementById('tempo-slider');
+  const tempoVal    = document.getElementById('tempo-val');
+  const sizeSlider  = document.getElementById('size-slider');
+  const sizeVal     = document.getElementById('size-val');
+  const chSwatches  = document.querySelectorAll('.ch-swatch');
 
-const MAX_VOICES = 5;
-const CLUSTER_GAP = 6;
+  // ── State ─────────────────────────────────────────────────
+  const CHANNELS = {
+    pitch:  '#4F6EF7',
+    amp:    '#2D8A5E',
+    mod:    '#C4622D',
+    timbre: '#8B5CF6',
+  };
 
-/* ════════════════════════════════════════
-   MOBILE DETECTION
-════════════════════════════════════════ */
-function isMobile() { return window.innerWidth <= 600; }
+  // RGB breakdown for fast pixel sampling
+  const chColors = {
+    pitch:  [79,  110, 247],
+    amp:    [45,  138,  94],
+    mod:    [196,  98,  45],
+    timbre: [139,  92, 246],
+  };
 
-/* ════════════════════════════════════════
-   AUDIO ENGINE
-════════════════════════════════════════ */
-let AC = null, masterGain;
-const voices = [];
-let waveType = 'sine', analogOn = false;
+  let activeChannel = 'pitch';
+  let activeTool    = 'round';  // 'round' | 'cal' | 'eraser'
+  let penSize       = 8;
+  let loopSecs      = 8;
+  let isPlaying     = false;
+  let isDrawing     = false;
+  let lastX = 0, lastY = 0;
 
-let analogDriftVal    = 0;
-let analogDriftTarget = 0;
-let analogDriftTimer  = 0;
+  // Undo stack — array of ImageData snapshots
+  const MAX_UNDO = 30;
+  const undoStack = [];
 
-function updateAnalogDrift() {
-  analogDriftTimer--;
-  if (analogDriftTimer <= 0) {
-    analogDriftTarget = (Math.random() - 0.5) * 2;
-    analogDriftTimer  = 60 + Math.floor(Math.random() * 80);
+  // ── Canvas sizing ─────────────────────────────────────────
+  function isMobile() { return window.innerWidth <= 600; }
+
+  function resizeCanvas() {
+    const wrap = canvas.parentElement;
+    const W = wrap.clientWidth;
+    const H = isMobile() ? 340 : 220;
+    // Only resize if needed to avoid clearing
+    if (canvas.width === W && canvas.height === H) return;
+    // Save content
+    const saved = canvas.width > 0 ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
+    canvas.width  = W;
+    canvas.height = H;
+    canvas.style.height = H + 'px';
+    // Canvas stays transparent; white bg comes from CSS on .canvas-wrap
+    // Restore content (best-effort; rescale not attempted)
+    if (saved) ctx.putImageData(saved, 0, 0);
   }
-  analogDriftVal += (analogDriftTarget - analogDriftVal) * 0.008;
-}
 
-function initAudio() {
-  if (AC) return;
-  AC = new (window.AudioContext || window.webkitAudioContext)();
-  masterGain = AC.createGain();
-  masterGain.gain.value = 0.7;
-  const limiter = AC.createDynamicsCompressor();
-  limiter.threshold.value = -8; limiter.knee.value = 6;
-  limiter.ratio.value = 10; limiter.attack.value = 0.005; limiter.release.value = 0.1;
-  masterGain.connect(limiter);
-  limiter.connect(AC.destination);
-  buildVoices();
-}
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
-function buildVoices() {
-  voices.forEach(v => {
-    try { v.osc.stop(); }    catch(e) {}
-    try { v.vibLFO.stop(); } catch(e) {}
-    try { v.fmLFO.stop(); }  catch(e) {}
-  });
-  voices.length = 0;
-
-  for (let i = 0; i < MAX_VOICES; i++) {
-    const osc     = AC.createOscillator();
-    const oscGain = AC.createGain();
-    const filter  = AC.createBiquadFilter();
-
-    const vibLFO  = AC.createOscillator();
-    const vibGain = AC.createGain();
-    vibLFO.type = 'sine'; vibLFO.frequency.value = 5.5; vibGain.gain.value = 0;
-    vibLFO.connect(vibGain); vibGain.connect(osc.frequency);
-
-    const fmLFO  = AC.createOscillator();
-    const fmGain = AC.createGain();
-    fmLFO.type = 'sine'; fmLFO.frequency.value = 2.3; fmGain.gain.value = 0;
-    fmLFO.connect(fmGain); fmGain.connect(osc.frequency);
-
-    filter.type = 'lowpass'; filter.frequency.value = 2000; filter.Q.value = 1.2;
-    osc.type = waveType; osc.frequency.value = 220;
-    oscGain.gain.value = 0;
-
-    osc.connect(oscGain);
-    oscGain.connect(filter);
-    filter.connect(masterGain);
-
-    osc.start(); vibLFO.start(); fmLFO.start();
-    voices.push({ osc, oscGain, filter, vibLFO, vibGain, fmLFO, fmGain });
+  // ── Undo ─────────────────────────────────────────────────
+  function saveUndoState() {
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+    if (undoStack.length > MAX_UNDO) undoStack.shift();
   }
-}
 
-function ramp(param, val, tc) {
-  if (!AC) return;
-  param.setTargetAtTime(val, AC.currentTime, tc || 0.04);
-}
-
-/* ════════════════════════════════════════
-   CANVAS & DIMENSION STATE
-════════════════════════════════════════ */
-/*
-  Desktop: time axis = X (left→right), value axis = Y (top=high)
-    LW = 10s × PIXELS_PER_SECOND, LH = viewport height
-    canvas area height = LH (matches logical canvas exactly)
-    no scrolling needed
-
-  Mobile: time axis = Y (top→bottom), value axis = X (right=high)
-    LW = viewport width, LH = 10s × PIXELS_PER_SECOND
-    canvas area is a CSS-scrollable container; inner div is LH px tall
-    scrolling follows the playhead natively
-*/
-const PIXELS_PER_SECOND = 80;
-const DURATION_SECONDS  = 10;
-
-let LW = 0, LH = 0;  // logical canvas size
-let VW = 0, VH = 0;  // viewport (visible) size
-
-const layerCanvases = {};
-const layerCtxs     = {};
-let gridCanvas = null, gridCtx = null;
-let uiCtx = null, overlayCtx = null;
-let drawCanvas = null;
-
-/* ════════════════════════════════════════
-   PLAYBACK STATE
-════════════════════════════════════════ */
-let playing = false, looping = true;
-let playheadPos = 0;
-let playheadT   = 0;
-let lastRafT = 0, rafId = null, speed = 0.8;
-
-/* ════════════════════════════════════════
-   DRAWING STATE
-════════════════════════════════════════ */
-let activeLayer = 'pitch';
-let tool        = 'pen';
-let activeShape = 'none';
-let brushSize   = 4;
-let drawing = false, shapeStart = null, lastLogical = null;
-let visibleLayers = { pitch: true, amp: true, timbre: true, mod: true };
-
-/* ════════════════════════════════════════
-   UNDO
-════════════════════════════════════════ */
-const MAX_UNDO = 30;
-const undoStack      = {};
-const layerSnapshots = {};
-Object.keys(LAYERS).forEach(k => { undoStack[k] = []; });
-
-function pushUndo(k) {
-  if (!LW || !LH) return;
-  undoStack[k].push(layerCtxs[k].getImageData(0, 0, LW, LH));
-  if (undoStack[k].length > MAX_UNDO) undoStack[k].shift();
-}
-function backupLayer(k) {
-  if (!LW || !LH) return;
-  layerSnapshots[k] = layerCtxs[k].getImageData(0, 0, LW, LH);
-}
-function restoreAll() {
-  Object.keys(LAYERS).forEach(k => {
-    if (layerSnapshots[k]) layerCtxs[k].putImageData(layerSnapshots[k], 0, 0);
-  });
-}
-
-/* ════════════════════════════════════════
-   INIT
-════════════════════════════════════════ */
-function init() {
-  Object.keys(LAYERS).forEach(k => {
-    const c = document.createElement('canvas');
-    layerCanvases[k] = c;
-    layerCtxs[k]     = c.getContext('2d');
+  btnUndo.addEventListener('click', () => {
+    if (undoStack.length === 0) return;
+    ctx.putImageData(undoStack.pop(), 0, 0);
   });
 
-  gridCanvas = document.createElement('canvas');
-  gridCtx    = gridCanvas.getContext('2d');
-
-  uiCtx      = document.getElementById('oc-ui').getContext('2d');
-  overlayCtx = document.getElementById('oc-overlay').getContext('2d');
-  drawCanvas = document.getElementById('oc-draw');
-
-  /* Show/hide mobile vs desktop controls */
-  if (isMobile()) {
-    document.getElementById('ormControls').style.display       = 'none';
-    document.getElementById('ormMobileControls').style.display = 'flex';
-  }
-
-  resize();
-  window.addEventListener('resize', resize);
-
-  drawCanvas.addEventListener('mousedown',  onDrawStart);
-  drawCanvas.addEventListener('mousemove',  onDrawMove);
-  drawCanvas.addEventListener('mouseup',    onDrawEnd);
-  drawCanvas.addEventListener('mouseleave', onDrawLeave);
-  drawCanvas.addEventListener('touchstart',  e => { e.preventDefault(); onDrawStart(normTouch(e)); }, { passive: false });
-  drawCanvas.addEventListener('touchmove',   e => { e.preventDefault(); onDrawMove(normTouch(e));  }, { passive: false });
-  drawCanvas.addEventListener('touchend',    e => { e.preventDefault(); onDrawEnd(normTouch(e));   }, { passive: false });
-  drawCanvas.addEventListener('touchcancel', e => { e.preventDefault(); onDrawLeave(); },             { passive: false });
-
-  document.addEventListener('keydown', onKeyDown);
-
-  updateBrushPreview();
-  document.getElementById('orm-loop').classList.add('active');
-}
-
-function normTouch(e) {
-  const t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]);
-  return t ? { clientX: t.clientX, clientY: t.clientY } : e;
-}
-
-/* ════════════════════════════════════════
-   RESIZE — key fix: canvas area height = LH on desktop
-════════════════════════════════════════ */
-function resize() {
-  const mobile = isMobile();
-
-  /* Show/hide control panels */
-  document.getElementById('ormControls').style.display       = mobile ? 'none' : 'flex';
-  document.getElementById('ormMobileControls').style.display = mobile ? 'flex' : 'none';
-
-  const inner = document.getElementById('ormCanvasInner');
-  const area  = document.getElementById('ormCanvasArea');
-
-  if (mobile) {
-    /* Viewport width = canvas width */
-    VW = inner.clientWidth || window.innerWidth - 44;
-    /* The canvas area is flex:1, so its visible height is whatever CSS gives */
-    VH = area.clientHeight || 300; /* visible scroll window */
-
-    LW = VW;
-    LH = DURATION_SECONDS * PIXELS_PER_SECOND; /* 800px logical height */
-
-    /* Size the inner scroll container to the full logical height */
-    inner.style.position = 'relative';
-    inner.style.width    = LW + 'px';
-    inner.style.height   = LH + 'px';
-
-    /* All canvases in the inner div: logical size */
-    ['oc-grid','oc-pitch','oc-amp','oc-timbre','oc-mod','oc-ui','oc-overlay','oc-draw'].forEach(id => {
-      const c = document.getElementById(id);
-      if (c) { c.width = LW; c.height = LH; c.style.width = LW+'px'; c.style.height = LH+'px'; }
-    });
-
-  } else {
-    /* Desktop: viewport fills the container */
-    VW = inner.clientWidth  || 700;
-    VH = inner.clientHeight || 300;
-
-    LW = DURATION_SECONDS * PIXELS_PER_SECOND; /* 800px logical width */
-    LH = VH;
-
-    /* Canvas area height = LH so there's no blank space */
-    area.style.height = LH + 'px';
-
-    inner.style.position = 'absolute';
-    inner.style.inset    = '0';
-    inner.style.width    = '';
-    inner.style.height   = '';
-
-    /* UI/overlay/draw canvases = viewport size (VW × VH) */
-    ['oc-ui','oc-overlay','oc-draw'].forEach(id => {
-      const c = document.getElementById(id);
-      if (c) { c.width = VW; c.height = VH; c.style.width = ''; c.style.height = ''; }
-    });
-  }
-
-  /* Logical layer + grid canvases */
-  Object.keys(LAYERS).forEach(k => {
-    layerCanvases[k].width  = LW;
-    layerCanvases[k].height = LH;
+  btnClear.addEventListener('click', () => {
+    saveUndoState();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   });
-  gridCanvas.width  = LW;
-  gridCanvas.height = LH;
 
-  drawGrid();
-  restoreAll();
-  drawUI();
-}
-
-/* ════════════════════════════════════════
-   COORDINATE HELPERS
-════════════════════════════════════════ */
-
-/* Screen coords → logical coords */
-function getLogical(vpX, vpY) {
-  if (isMobile()) {
-    /* On mobile, vpX is direct logical X; vpY needs the scroll offset */
-    const scrollTop = document.getElementById('ormCanvasArea').scrollTop;
-    return { x: vpX, y: vpY + scrollTop };
-  } else {
-    return { x: vpX, y: vpY };
-  }
-}
-
-/* Logical time-axis position → screen Y (mobile) or screen X (desktop) */
-function timeToScreen(logicalTimePos) {
-  if (isMobile()) {
-    const scrollTop = document.getElementById('ormCanvasArea').scrollTop;
-    return logicalTimePos - scrollTop;
-  } else {
-    return logicalTimePos;
-  }
-}
-
-/* Logical coords → screen coords for overlay */
-function logToScreen(lc) {
-  if (isMobile()) {
-    const scrollTop = document.getElementById('ormCanvasArea').scrollTop;
-    return { x: lc.x, y: lc.y - scrollTop };
-  } else {
-    return { x: lc.x, y: lc.y };
-  }
-}
-
-function hzToY_d(hz) {
-  const t = (Math.log(hz)-Math.log(80))/(Math.log(2000)-Math.log(80));
-  return LH - t*LH;
-}
-function yToHz_d(y) {
-  const t = 1 - y/LH;
-  return 80*Math.pow(2000/80, Math.max(0,Math.min(1,t)));
-}
-function hzToX_m(hz) {
-  const t = (Math.log(hz)-Math.log(80))/(Math.log(2000)-Math.log(80));
-  return t*LW;
-}
-function xToHz_m(x) {
-  const t = x/LW;
-  return 80*Math.pow(2000/80, Math.max(0,Math.min(1,t)));
-}
-
-/* ════════════════════════════════════════
-   GRID
-════════════════════════════════════════ */
-function drawGrid() {
-  if (!gridCtx || !LW || !LH) return;
-  gridCtx.clearRect(0, 0, LW, LH);
-  gridCtx.fillStyle = '#ffffff';
-  gridCtx.fillRect(0, 0, LW, LH);
-
-  if (isMobile()) {
-    /* Second gridlines */
-    gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
-    for (let s = 0; s <= DURATION_SECONDS; s++) {
-      const y = s * PIXELS_PER_SECOND;
-      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
-      if (s > 0) {
-        gridCtx.fillStyle='rgba(32,38,157,.22)'; gridCtx.font='8px Inter,sans-serif';
-        gridCtx.fillText(s+'s', 3, y-2);
-      }
-    }
-    /* Quarter-second gridlines */
-    gridCtx.strokeStyle = 'rgba(0,0,0,.03)';
-    for (let q = 0; q <= DURATION_SECONDS*4; q++) {
-      const y = q * PIXELS_PER_SECOND/4;
-      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
-    }
-    /* Pitch reference lines */
-    [80,160,320,640,1280].forEach(hz => {
-      const x = hzToX_m(hz);
-      gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.lineWidth=1;
-      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
-      gridCtx.fillStyle='rgba(32,38,157,.3)'; gridCtx.font='8px Inter,sans-serif';
-      gridCtx.fillText(hz+'Hz', x+2, LH-4);
-    });
-    gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.setLineDash([4,4]);
-    gridCtx.beginPath(); gridCtx.moveTo(LW/2,0); gridCtx.lineTo(LW/2,LH); gridCtx.stroke();
-    gridCtx.setLineDash([]);
-  } else {
-    gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
-    for (let s = 0; s <= DURATION_SECONDS; s++) {
-      const x = s * PIXELS_PER_SECOND;
-      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
-      if (s > 0) {
-        gridCtx.fillStyle='rgba(32,38,157,.22)'; gridCtx.font='8px Inter,sans-serif';
-        gridCtx.fillText(s+'s', x+3, LH-4);
-      }
-    }
-    gridCtx.strokeStyle = 'rgba(0,0,0,.03)';
-    for (let q = 0; q <= DURATION_SECONDS*4; q++) {
-      const x = q * PIXELS_PER_SECOND/4;
-      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
-    }
-    [80,160,320,640,1280].forEach(hz => {
-      const y = hzToY_d(hz);
-      if (y<0||y>LH) return;
-      gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.lineWidth=1;
-      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
-      gridCtx.fillStyle='rgba(32,38,157,.3)'; gridCtx.font='8px Inter,sans-serif';
-      gridCtx.fillText(hz+'Hz', 4, y-2);
-    });
-    gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.setLineDash([4,4]);
-    gridCtx.beginPath(); gridCtx.moveTo(0,LH/2); gridCtx.lineTo(LW,LH/2); gridCtx.stroke();
-    gridCtx.setLineDash([]);
-  }
-}
-
-/* ════════════════════════════════════════
-   DRAW UI  (composites layers onto ui canvas)
-════════════════════════════════════════ */
-function drawUI() {
-  if (!uiCtx) return;
-
-  const mobile = isMobile();
-
-  if (mobile) {
-    /* On mobile: ui canvas is the full logical LW×LH size.
-       We draw everything onto it, then CSS scroll handles the viewport. */
-    if (!LW || !LH) return;
-    const uc = document.getElementById('oc-ui');
-    if (uc.width !== LW || uc.height !== LH) {
-      uc.width = LW; uc.height = LH;
-    }
-    uiCtx.clearRect(0, 0, LW, LH);
-    uiCtx.globalAlpha = 1;
-    uiCtx.drawImage(gridCanvas, 0, 0);
-
-    Object.keys(LAYERS).forEach(k => {
-      if (!visibleLayers[k]) return;
-      uiCtx.globalAlpha = (k === activeLayer) ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
-      uiCtx.drawImage(layerCanvases[k], 0, 0);
-    });
-    uiCtx.globalAlpha = 1;
-
-    /* Playhead: horizontal line across full logical width */
-    uiCtx.strokeStyle = 'rgba(176,58,46,0.9)';
-    uiCtx.lineWidth = 2;
-    uiCtx.shadowColor = '#b03a2e'; uiCtx.shadowBlur = 5;
-    uiCtx.beginPath();
-    uiCtx.moveTo(0, playheadPos); uiCtx.lineTo(LW, playheadPos);
-    uiCtx.stroke();
-    uiCtx.shadowBlur = 0;
-
-    uiCtx.fillStyle = '#b03a2e';
-    uiCtx.font = '8px Inter,sans-serif';
-    uiCtx.fillText(playheadT.toFixed(2)+'s', 4, Math.max(10, playheadPos - 3));
-
-  } else {
-    /* Desktop: ui canvas is VW×VH; source from logical canvas */
-    if (!VW || !VH) return;
-    const uc = document.getElementById('oc-ui');
-    if (uc.width !== VW || uc.height !== VH) {
-      uc.width = VW; uc.height = VH;
-    }
-    uiCtx.clearRect(0, 0, VW, VH);
-
-    /* On desktop, LW = 800 and we show all of it if VW >= LW,
-       or just the first VW pixels if the canvas is wider than the viewport */
-    const srcW = Math.min(LW, VW);
-    const srcH = LH; /* = VH */
-
-    uiCtx.globalAlpha = 1;
-    uiCtx.drawImage(gridCanvas, 0, 0, srcW, srcH, 0, 0, srcW, srcH);
-
-    Object.keys(LAYERS).forEach(k => {
-      if (!visibleLayers[k]) return;
-      uiCtx.globalAlpha = (k === activeLayer) ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
-      uiCtx.drawImage(layerCanvases[k], 0, 0, srcW, srcH, 0, 0, srcW, srcH);
-    });
-    uiCtx.globalAlpha = 1;
-
-    /* Playhead */
-    const screenPos = playheadPos; /* 1:1 on desktop */
-    uiCtx.strokeStyle = 'rgba(176,58,46,0.9)';
-    uiCtx.lineWidth = 2;
-    uiCtx.shadowColor = '#b03a2e'; uiCtx.shadowBlur = 5;
-    uiCtx.beginPath();
-    uiCtx.moveTo(screenPos, 0); uiCtx.lineTo(screenPos, VH);
-    uiCtx.stroke();
-    uiCtx.shadowBlur = 0;
-
-    uiCtx.fillStyle = '#b03a2e';
-    uiCtx.font = '8px Inter,sans-serif';
-    const lx = screenPos+4 + (screenPos>VW-40 ? -44:0);
-    uiCtx.fillText(playheadT.toFixed(2)+'s', lx, 11);
-  }
-}
-
-/* On mobile the overlay and draw canvases are full logical size too,
-   so we draw overlay in logical space */
-function clearOverlay() {
-  if (!overlayCtx) return;
-  const mobile = isMobile();
-  overlayCtx.clearRect(0, 0, mobile ? LW : VW, mobile ? LH : VH);
-}
-
-/* ════════════════════════════════════════
-   OVERLAY PREVIEWS
-════════════════════════════════════════ */
-function overlayStyle() {
-  overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
-  overlayCtx.lineWidth   = brushSize;
-  overlayCtx.lineCap     = 'round';
-  overlayCtx.setLineDash([6,4]);
-}
-
-function drawOverlay(a, b) {
-  /* a, b are logical coords */
-  if (!overlayCtx || !a || !b) return;
-  const mobile = isMobile();
-  const w = mobile ? LW : VW;
-  const h = mobile ? LH : VH;
-  overlayCtx.clearRect(0, 0, w, h);
-  overlayCtx.save();
-  overlayStyle();
-
-  if (activeShape === 'line') {
-    overlayCtx.beginPath(); overlayCtx.moveTo(a.x,a.y); overlayCtx.lineTo(b.x,b.y); overlayCtx.stroke();
-  } else if (activeShape === 'circle') {
-    const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
-    const rx=Math.max(1,Math.abs(b.x-a.x)/2), ry=Math.max(1,Math.abs(b.y-a.y)/2);
-    overlayCtx.beginPath(); overlayCtx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); overlayCtx.stroke();
-    overlayCtx.strokeStyle = LAYERS[activeLayer].color+'33'; overlayCtx.lineWidth=1;
-    overlayCtx.strokeRect(a.x,a.y,b.x-a.x,b.y-a.y);
-  } else if (activeShape === 'rect') {
-    overlayCtx.beginPath(); overlayCtx.strokeRect(a.x,a.y,b.x-a.x,b.y-a.y); overlayCtx.stroke();
-  }
-  overlayCtx.setLineDash([]); overlayCtx.restore();
-}
-
-/* ════════════════════════════════════════
-   CLUSTER SAMPLING
-════════════════════════════════════════ */
-function sampleLayerClusters(k, timePos) {
-  const ctx = layerCtxs[k];
-  if (!ctx) return [];
-
-  let pixels, axisLen;
-  if (isMobile()) {
-    const py = Math.max(0, Math.min(LH-1, Math.round(timePos)));
-    const d  = ctx.getImageData(0, py, LW, 1).data;
-    axisLen  = LW;
-    pixels   = new Uint8Array(axisLen);
-    for (let i = 0; i < axisLen; i++) pixels[i] = d[i*4+3];
-  } else {
-    const px = Math.max(0, Math.min(LW-1, Math.round(timePos)));
-    const d  = ctx.getImageData(px, 0, 1, LH).data;
-    axisLen  = LH;
-    pixels   = new Uint8Array(axisLen);
-    for (let i = 0; i < axisLen; i++) pixels[i] = d[i*4+3];
+  // ── Drawing ───────────────────────────────────────────────
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width  / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const src = e.touches ? e.touches[0] : e;
+    return {
+      x: (src.clientX - rect.left)  * scaleX,
+      y: (src.clientY - rect.top)   * scaleY,
+    };
   }
 
-  const clusters = [];
-  let inRun   = false;
-  let gapCount = 0;
-  let runAlphaSum = 0, runWeightPos = 0, runAlphaCount = 0;
-
-  for (let i = 0; i <= axisLen; i++) {
-    const a = (i < axisLen) ? pixels[i] : 0;
-    if (a > 8) {
-      if (!inRun) { inRun = true; runAlphaSum = 0; runWeightPos = 0; runAlphaCount = 0; }
-      gapCount = 0;
-      const w = a / 255;
-      runAlphaSum  += w;
-      runWeightPos += i * w;
-      runAlphaCount++;
-    } else {
-      if (inRun) {
-        gapCount++;
-        if (gapCount > CLUSTER_GAP || i >= axisLen) {
-          if (runAlphaSum > 0) {
-            const centroid = runWeightPos / runAlphaSum;
-            const weight   = Math.min(1, runAlphaSum / runAlphaCount);
-            clusters.push({ normPos: centroid / axisLen, weight });
-          }
-          inRun    = false;
-          gapCount = 0;
-        }
-      }
-    }
-  }
-
-  clusters.sort((a,b) => b.weight - a.weight);
-  return clusters.slice(0, MAX_VOICES);
-}
-
-/* ════════════════════════════════════════
-   SAMPLE AND APPLY
-════════════════════════════════════════ */
-function sampleAndApply() {
-  if (!AC) return;
-
-  const pitchClusters  = sampleLayerClusters('pitch',  playheadPos);
-  const ampClusters    = sampleLayerClusters('amp',    playheadPos);
-  const timbreClusters = sampleLayerClusters('timbre', playheadPos);
-  const modClusters    = sampleLayerClusters('mod',    playheadPos);
-  const tc = 0.06;
-
-  if (analogOn) updateAnalogDrift();
-
-  for (let i = 0; i < MAX_VOICES; i++) {
-    const v = voices[i];
-    if (!v) continue;
-
-    if (i >= pitchClusters.length) {
-      ramp(v.oscGain.gain, 0, tc);
-      continue;
-    }
-
-    const pc = pitchClusters[i];
-
-    let hz;
-    if (isMobile()) {
-      hz = 80 * Math.pow(2000/80, pc.normPos);
-    } else {
-      hz = 80 * Math.pow(2000/80, 1 - pc.normPos);
-    }
-
-    const drift = analogOn ? analogDriftVal * hz * 0.003 : 0;
-    hz = Math.max(20, hz + drift);
-
-    let ampVal = 0.6;
-    if (ampClusters.length > 0) {
-      const nearest = ampClusters.reduce((best, c) =>
-        Math.abs(c.normPos - pc.normPos) < Math.abs(best.normPos - pc.normPos) ? c : best
-      );
-      ampVal = isMobile() ? nearest.normPos : (1 - nearest.normPos);
-    }
-
-    let filterHz = 2000;
-    if (timbreClusters.length > 0) {
-      const nearest = timbreClusters.reduce((best, c) =>
-        Math.abs(c.normPos - pc.normPos) < Math.abs(best.normPos - pc.normPos) ? c : best
-      );
-      const tNorm = isMobile() ? nearest.normPos : (1 - nearest.normPos);
-      filterHz = 200 * Math.pow(8000/200, tNorm);
-    }
-
-    let modVal = 0;
-    if (modClusters.length > 0) {
-      const nearest = modClusters.reduce((best, c) =>
-        Math.abs(c.normPos - pc.normPos) < Math.abs(best.normPos - pc.normPos) ? c : best
-      );
-      modVal = isMobile() ? nearest.normPos : (1 - nearest.normPos);
-    }
-
-    ramp(v.osc.frequency, hz, tc);
-    ramp(v.oscGain.gain,  ampVal * 0.6, tc);
-    ramp(v.filter.frequency, filterHz, tc * 2);
-    ramp(v.vibGain.gain, modVal * 25, tc);
-    ramp(v.fmGain.gain,  modVal * hz * 0.08, tc);
-    v.fmLFO.frequency.setTargetAtTime(2 + modVal * 8, AC.currentTime, tc);
-    v.osc.type = waveType;
-  }
-
-  /* Status bar */
-  const p0 = pitchClusters[0];
-  const a0 = ampClusters[0];
-  const t0 = timbreClusters[0];
-  const pHz = p0
-    ? (isMobile() ? 80*Math.pow(2000/80, p0.normPos) : 80*Math.pow(2000/80, 1-p0.normPos))
-    : 0;
-  const aVal = a0
-    ? (isMobile() ? a0.normPos : (1-a0.normPos))
-    : (p0 ? 0.6 : 0);
-  const fHz = t0
-    ? 200*Math.pow(8000/200, isMobile() ? t0.normPos : (1-t0.normPos))
-    : 2000;
-
-  const voiceCount = pitchClusters.length;
-  const pitchStr = pHz > 0
-    ? pHz.toFixed(0) + ' Hz' + (voiceCount > 1 ? ` (+${voiceCount-1})` : '')
-    : '—';
-
-  document.getElementById('ost-pos').textContent    = playheadT.toFixed(2)+'s';
-  document.getElementById('ost-pitch').textContent  = pitchStr;
-  document.getElementById('ost-amp').textContent    = aVal > 0 ? (aVal*100).toFixed(0)+'%' : '—';
-  document.getElementById('ost-filter').textContent = fHz.toFixed(0)+' Hz';
-}
-
-/* ════════════════════════════════════════
-   RAF LOOP
-════════════════════════════════════════ */
-function raf(ts) {
-  if (!playing) return;
-  const dt = lastRafT ? (ts - lastRafT) / 1000 : 0;
-  lastRafT = ts;
-  const timeAxisLen = isMobile() ? LH : LW;
-  playheadPos += dt * speed * PIXELS_PER_SECOND;
-  playheadT    = playheadPos / PIXELS_PER_SECOND;
-
-  if (playheadPos >= timeAxisLen) {
-    if (looping) { playheadPos = 0; playheadT = 0; }
-    else { ORM.stop(); return; }
-  }
-
-  /* On mobile: scroll the canvas area to follow the playhead */
-  if (isMobile()) {
-    const area = document.getElementById('ormCanvasArea');
-    const areaH = area.clientHeight;
-    const margin = areaH * 0.3;
-    const currentScroll = area.scrollTop;
-    const targetScroll  = playheadPos - areaH * 0.4;
-    /* Only nudge if playhead is outside the comfortable band */
-    if (playheadPos - currentScroll > areaH - margin) {
-      area.scrollTop = playheadPos - areaH + margin;
-    } else if (playheadPos - currentScroll < margin) {
-      area.scrollTop = Math.max(0, playheadPos - margin);
-    }
-  }
-
-  sampleAndApply();
-  drawUI();
-  rafId = requestAnimationFrame(raf);
-}
-
-/* ════════════════════════════════════════
-   DRAWING
-════════════════════════════════════════ */
-function getVP(e) {
-  const r = drawCanvas.getBoundingClientRect();
-  return { x: (e.clientX||0)-r.left, y: (e.clientY||0)-r.top };
-}
-
-function onDrawStart(e) {
-  if (!AC) initAudio();
-  const vp = getVP(e);
-  const lc = getLogical(vp.x, vp.y);
-
-  if (activeShape !== 'none') {
-    shapeStart = lc; drawing = true; return;
-  }
-
-  drawing = true; lastLogical = null;
-  pushUndo(activeLayer);
-  drawMark(lc);
-  backupLayer(activeLayer);
-  drawUI();
-  previewPitch(lc);
-  lastLogical = lc;
-}
-
-function onDrawMove(e) {
-  const vp = getVP(e);
-  const lc = getLogical(vp.x, vp.y);
-
-  const valStr = (activeLayer === 'pitch')
-    ? (isMobile() ? xToHz_m(lc.x) : yToHz_d(lc.y)).toFixed(0)+' Hz'
-    : ((isMobile() ? lc.x/LW : 1-lc.y/LH)*100).toFixed(0)+'%';
-  const timeVal = (isMobile() ? lc.y : lc.x) / PIXELS_PER_SECOND;
-  document.getElementById('ost-tip').textContent = `${activeLayer}: ${valStr} · t=${timeVal.toFixed(2)}s`;
-
-  if (!drawing) return;
-
-  if (activeShape !== 'none' && shapeStart) {
-    drawOverlay(shapeStart, lc); return;
-  }
-
-  if (tool === 'erase' || tool === 'pen' || tool === 'calligraphy') {
-    drawMark(lc);
-    backupLayer(activeLayer);
-    drawUI();
-    previewPitch(lc);
-    lastLogical = lc;
-  }
-}
-
-function onDrawEnd(e) {
-  if (!drawing) return;
-  const vp = e ? getVP(e) : null;
-  clearOverlay();
-
-  if (activeShape !== 'none' && shapeStart && vp) {
-    const lc = getLogical(vp.x, vp.y);
-    pushUndo(activeLayer);
-    commitShape(shapeStart, lc);
-    shapeStart = null;
-    backupLayer(activeLayer);
-    drawUI();
-  }
-
-  drawing = false; lastLogical = null;
-
-  if (AC && voices.length && activeLayer === 'pitch' && !playing) {
-    clearTimeout(ORM._previewTimeout);
-    ORM._previewTimeout = setTimeout(() => {
-      voices.forEach(v => v.oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08));
-    }, 120);
-  }
-}
-
-function onDrawLeave() {
-  onDrawEnd(null);
-  document.getElementById('ost-tip').textContent = 'Draw on the canvas · left→right = time · up/down = value';
-}
-
-function previewPitch(lc) {
-  if (activeLayer === 'pitch' && AC && voices.length) {
-    const hz = isMobile() ? xToHz_m(lc.x) : yToHz_d(lc.y);
-    voices[0].osc.frequency.setTargetAtTime(hz, AC.currentTime, 0.02);
-    voices[0].oscGain.gain.setTargetAtTime(0.35, AC.currentTime, 0.02);
-  }
-}
-
-/* ════════════════════════════════════════
-   MARK DRAWING
-════════════════════════════════════════ */
-
-/*
-  CALLIGRAPHY NIB LOGIC:
-  The nib is fixed at 45°. Stroke width = brushSize × |sin(θ - 45°)|
-  where θ is the angle of movement.
-  - Moving at 45°  → same as nib → very thin (sin ≈ 0)
-  - Moving at 135° → perpendicular → thick (sin = 1)
-  - Moving at 0° (horizontal) → sin(0 - 45°) = sin(−45°) = 0.707 → medium
-  - Moving at 90° (vertical)  → sin(90° - 45°) = sin(45°) = 0.707 → medium
-  The minimum width is a fraction of brushSize so the stroke never disappears.
-  We draw a filled quadrilateral between the previous and current point,
-  offset perpendicular to the nib angle (fixed 45°).
-*/
-const NIB_ANGLE = Math.PI / 4; /* 45° */
-const NIB_DIR   = { x: Math.cos(NIB_ANGLE), y: Math.sin(NIB_ANGLE) }; /* nib long axis */
-
-function calligraphyWidth(dx, dy) {
-  /* Angle of movement */
-  const len = Math.hypot(dx, dy);
-  if (len < 0.001) return brushSize * 0.15; /* stationary */
-  const moveAngle = Math.atan2(dy, dx);
-  /* Width = full brushSize × |sin(movement_angle - nib_angle)| */
-  const s = Math.abs(Math.sin(moveAngle - NIB_ANGLE));
-  return Math.max(brushSize * 0.08, brushSize * s);
-}
-
-function drawMark(lc) {
-  const ctx   = layerCtxs[activeLayer];
-  const color = LAYERS[activeLayer].color;
-  const x = lc.x, y = lc.y;
-
-  if (tool === 'erase') {
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(x, y, brushSize * 1.8, 0, Math.PI*2);
-    ctx.fillStyle = 'rgba(0,0,0,1)';
-    ctx.fill();
-    ctx.globalCompositeOperation = 'source-over';
-    return;
-  }
-
-  if (tool === 'pen') {
-    if (lastLogical) {
-      ctx.strokeStyle = color+'ee';
-      ctx.lineWidth   = brushSize;
-      ctx.lineCap     = 'round';
-      ctx.lineJoin    = 'round';
+  function drawStroke(x1, y1, x2, y2) {
+    ctx.save();
+    if (activeTool === 'eraser') {
+      ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
-      ctx.moveTo(lastLogical.x, lastLogical.y);
-      ctx.lineTo(x, y);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = penSize * 3;
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    } else if (activeTool === 'round') {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.beginPath();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = penSize;
+      ctx.strokeStyle = CHANNELS[activeChannel];
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
       ctx.stroke();
     } else {
-      ctx.fillStyle = color+'ee';
-      ctx.beginPath(); ctx.arc(x, y, brushSize/2, 0, Math.PI*2); ctx.fill();
+      // Calligraphy nib: slanted 45° ellipse
+      // We draw a series of thin ellipses along the stroke path
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = CHANNELS[activeChannel];
+      const dist = Math.hypot(x2 - x1, y2 - y1);
+      const steps = Math.max(1, Math.ceil(dist));
+      for (let i = 0; i <= steps; i++) {
+        const t  = i / steps;
+        const px = x1 + (x2 - x1) * t;
+        const py = y1 + (y2 - y1) * t;
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(-Math.PI / 4); // 45° nib
+        ctx.beginPath();
+        ctx.ellipse(0, 0, penSize * 0.35, penSize * 1.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
     }
-    return;
+    ctx.restore();
   }
 
-  if (tool === 'calligraphy') {
-    if (lastLogical) {
-      const dx = x - lastLogical.x;
-      const dy = y - lastLogical.y;
-      const w  = calligraphyWidth(dx, dy);
-      const hw = w / 2;
-
-      /* The nib is perpendicular to NIB_DIR; offset strokes along NIB_DIR */
-      /* NIB_DIR = (cos45, sin45), perpendicular = (-sin45, cos45) */
-      const nibPerp = { x: -NIB_DIR.y, y: NIB_DIR.x };
-
-      /* Four corners of the ink rectangle */
-      const ax = lastLogical.x + NIB_DIR.x * hw;
-      const ay = lastLogical.y + NIB_DIR.y * hw;
-      const bx = lastLogical.x - NIB_DIR.x * hw;
-      const by = lastLogical.y - NIB_DIR.y * hw;
-      const cx2 = x - NIB_DIR.x * hw;
-      const cy2 = y - NIB_DIR.y * hw;
-      const dx2 = x + NIB_DIR.x * hw;
-      const dy2 = y + NIB_DIR.y * hw;
-
-      ctx.fillStyle = color + 'dd';
-      ctx.beginPath();
-      ctx.moveTo(ax, ay);
-      ctx.lineTo(bx, by);
-      ctx.lineTo(cx2, cy2);
-      ctx.lineTo(dx2, dy2);
-      ctx.closePath();
-      ctx.fill();
-    } else {
-      /* First dot: a small nib-shaped mark */
-      const hw = brushSize * 0.15;
-      ctx.fillStyle = color + 'dd';
-      ctx.beginPath();
-      ctx.moveTo(x + NIB_DIR.x * hw, y + NIB_DIR.y * hw);
-      ctx.lineTo(x - NIB_DIR.x * hw, y - NIB_DIR.y * hw);
-      ctx.lineTo(x - NIB_DIR.x * hw + 1, y - NIB_DIR.y * hw + 1);
-      ctx.closePath();
-      ctx.fill();
-    }
-    return;
+  function onStart(e) {
+    e.preventDefault();
+    saveUndoState();
+    isDrawing = true;
+    const { x, y } = getPos(e);
+    lastX = x; lastY = y;
+    // Place a dot
+    drawStroke(x, y, x, y);
   }
-}
 
-/* ════════════════════════════════════════
-   SHAPE COMMIT
-════════════════════════════════════════ */
-function commitShape(a, b) {
-  const ctx   = layerCtxs[activeLayer];
-  const color = LAYERS[activeLayer].color;
-  ctx.strokeStyle = color+'cc';
-  ctx.lineWidth   = brushSize;
-  ctx.lineCap     = 'round';
-  ctx.lineJoin    = 'round';
-
-  if (activeShape === 'line') {
-    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-  } else if (activeShape === 'circle') {
-    const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
-    const rx=Math.max(1,Math.abs(b.x-a.x)/2), ry=Math.max(1,Math.abs(b.y-a.y)/2);
-    ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke();
-  } else if (activeShape === 'rect') {
-    ctx.beginPath(); ctx.strokeRect(a.x, a.y, b.x-a.x, b.y-a.y);
+  function onMove(e) {
+    e.preventDefault();
+    if (!isDrawing) return;
+    const { x, y } = getPos(e);
+    drawStroke(lastX, lastY, x, y);
+    lastX = x; lastY = y;
   }
-}
 
-/* ════════════════════════════════════════
-   BRUSH PREVIEW
-════════════════════════════════════════ */
-function updateBrushPreview() {
-  const dot = document.getElementById('ormBrushDot');
-  const box = document.getElementById('ormBrushPreview');
-  if (!dot || !box) return;
-  const boxW = box.offsetWidth || 32;
-  const color = LAYERS[activeLayer].color;
-  dot.style.background = color;
-
-  if (tool === 'calligraphy') {
-    const nibW = Math.max(2, Math.min(boxW - 6, brushSize * 0.35));
-    const nibH = Math.max(6, Math.min(boxW - 4, brushSize * 1.1));
-    dot.style.width        = nibW + 'px';
-    dot.style.height       = nibH + 'px';
-    dot.style.borderRadius = '1px';
-    dot.style.transform    = 'rotate(45deg)';
-    dot.style.filter       = 'none';
-  } else {
-    const d = Math.min(boxW - 4, brushSize * 2);
-    dot.style.width        = d + 'px';
-    dot.style.height       = d + 'px';
-    dot.style.borderRadius = '50%';
-    dot.style.transform    = '';
-    dot.style.filter       = 'none';
+  function onEnd(e) {
+    e.preventDefault();
+    isDrawing = false;
   }
-}
 
-/* ════════════════════════════════════════
-   KEYBOARD SHORTCUTS
-════════════════════════════════════════ */
-function onKeyDown(e) {
-  const tag = (e.target||e.srcElement).tagName;
-  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
-  switch(e.key) {
-    case ' ': e.preventDefault(); playing ? ORM.stop() : ORM.play(); break;
-    case 'z': case 'Z':
-      if (e.metaKey || e.ctrlKey) { e.preventDefault(); ORM.undo(); } break;
-    case 'p': case 'P': ORM.setTool('pen');         break;
-    case 'k': case 'K': ORM.setTool('calligraphy'); break;
-    case 'e': case 'E': ORM.setTool('erase');       break;
-    case '1': ORM.setLayer('pitch');  break;
-    case '2': ORM.setLayer('amp');    break;
-    case '3': ORM.setLayer('timbre'); break;
-    case '4': ORM.setLayer('mod');    break;
-    case '[': ORM.setBrushSize(Math.max(1,  brushSize - 2)); break;
-    case ']': ORM.setBrushSize(Math.min(60, brushSize + 2)); break;
+  canvas.addEventListener('mousedown',  onStart);
+  canvas.addEventListener('mousemove',  onMove);
+  canvas.addEventListener('mouseup',    onEnd);
+  canvas.addEventListener('mouseleave', onEnd);
+  canvas.addEventListener('touchstart', onStart, { passive: false });
+  canvas.addEventListener('touchmove',  onMove,  { passive: false });
+  canvas.addEventListener('touchend',   onEnd,   { passive: false });
+
+  // ── Tool buttons ──────────────────────────────────────────
+  function setTool(tool) {
+    activeTool = tool;
+    btnRound .classList.toggle('active', tool === 'round');
+    btnCal   .classList.toggle('active', tool === 'cal');
+    btnEraser.classList.toggle('active', tool === 'eraser');
   }
-}
+  btnRound .addEventListener('click', () => setTool('round'));
+  btnCal   .addEventListener('click', () => setTool('cal'));
+  btnEraser.addEventListener('click', () => setTool('eraser'));
 
-/* ════════════════════════════════════════
-   RANDOMIZE
-════════════════════════════════════════ */
-function genMelodicCurve(ctx, color, lw, lh, mobile) {
-  const numArches = 1 + Math.floor(Math.random() * 2);
-  ctx.strokeStyle = color + 'dd';
-  ctx.lineCap     = 'round';
-  ctx.lineJoin    = 'round';
-  ctx.lineWidth   = 6 + Math.random() * 6;
-
-  for (let a = 0; a < numArches; a++) {
-    const tStart = (a / numArches) * 0.85;
-    const tEnd   = tStart + 0.25 + Math.random() * (0.75 / numArches);
-    const vA  = 0.1 + Math.random() * 0.5;
-    const vB  = 0.1 + Math.random() * 0.5;
-    const vC1 = Math.max(0.05, Math.min(0.95, vA + (Math.random() - 0.5) * 0.6));
-    const vC2 = Math.max(0.05, Math.min(0.95, vB + (Math.random() - 0.5) * 0.6));
-
-    ctx.beginPath();
-    if (mobile) {
-      ctx.moveTo(vA * lw, tStart * lh);
-      ctx.bezierCurveTo(
-        vC1 * lw, (tStart + (tEnd-tStart)*0.33) * lh,
-        vC2 * lw, (tStart + (tEnd-tStart)*0.66) * lh,
-        vB  * lw, tEnd * lh
-      );
-    } else {
-      ctx.moveTo(tStart * lw, vA * lh);
-      ctx.bezierCurveTo(
-        (tStart + (tEnd-tStart)*0.33) * lw, vC1 * lh,
-        (tStart + (tEnd-tStart)*0.66) * lw, vC2 * lh,
-        tEnd * lw, vB * lh
-      );
-    }
-    ctx.stroke();
-  }
-}
-
-function genAmpEnvelope(ctx, color, lw, lh, mobile) {
-  const numEnv = 1 + Math.floor(Math.random() * 2);
-  ctx.lineCap   = 'round';
-  ctx.lineJoin  = 'round';
-
-  for (let e = 0; e < numEnv; e++) {
-    const tStart   = (e / numEnv) * 0.9;
-    const tEnd     = tStart + 0.3 + Math.random() * (0.6 / numEnv);
-    const tAttack  = tStart + (tEnd - tStart) * (0.05 + Math.random() * 0.2);
-    const tRelease = tEnd   - (tEnd - tStart) * (0.1  + Math.random() * 0.25);
-    const peak  = 0.05 + Math.random() * 0.35;
-    const floor = 0.92 + Math.random() * 0.07;
-
-    ctx.strokeStyle = color + 'cc';
-    ctx.lineWidth   = 8 + Math.random() * 8;
-    ctx.beginPath();
-
-    if (mobile) {
-      const xPeak  = (1 - peak)  * lw;
-      const xFloor = (1 - floor) * lw;
-      ctx.moveTo(xFloor, tStart * lh);
-      ctx.lineTo(xPeak,  tAttack * lh);
-      ctx.lineTo(xPeak,  tRelease * lh);
-      ctx.lineTo(xFloor, tEnd * lh);
-    } else {
-      const yPeak  = peak  * lh;
-      const yFloor = floor * lh;
-      ctx.moveTo(tStart   * lw, yFloor);
-      ctx.lineTo(tAttack  * lw, yPeak);
-      ctx.lineTo(tRelease * lw, yPeak);
-      ctx.lineTo(tEnd     * lw, yFloor);
-    }
-    ctx.stroke();
-  }
-}
-
-function genTimbreSweep(ctx, color, lw, lh, mobile) {
-  ctx.strokeStyle = color + 'bb';
-  ctx.lineWidth   = 5 + Math.random() * 5;
-  ctx.lineCap     = 'round';
-
-  const vA  = 0.15 + Math.random() * 0.4;
-  const vB  = 0.15 + Math.random() * 0.4;
-  const vC1 = Math.max(0.05, Math.min(0.9, vA + (Math.random()-0.5)*0.5));
-  const vC2 = Math.max(0.05, Math.min(0.9, vB + (Math.random()-0.5)*0.5));
-
-  ctx.beginPath();
-  if (mobile) {
-    ctx.moveTo(vA*lw, 0);
-    ctx.bezierCurveTo(vC1*lw, lh*0.33, vC2*lw, lh*0.66, vB*lw, lh);
-  } else {
-    ctx.moveTo(0, vA*lh);
-    ctx.bezierCurveTo(lw*0.33, vC1*lh, lw*0.66, vC2*lh, lw, vB*lh);
-  }
-  ctx.stroke();
-}
-
-function genModStrokes(ctx, color, lw, lh, mobile) {
-  const n = 1 + Math.floor(Math.random() * 2);
-  ctx.lineCap   = 'round';
-  ctx.lineWidth = 6 + Math.random() * 8;
-
-  for (let i = 0; i < n; i++) {
-    const depth   = 0.2 + Math.random() * 0.4;
-    const tCenter = 0.15 + Math.random() * 0.65;
-    const tSpan   = 0.08 + Math.random() * 0.2;
-    const tA = Math.max(0, tCenter - tSpan);
-    const tB = Math.min(1, tCenter + tSpan);
-
-    ctx.strokeStyle = color + 'bb';
-    ctx.beginPath();
-    if (mobile) {
-      const x = (1 - depth) * lw;
-      ctx.moveTo(x, tA*lh); ctx.lineTo(x, tB*lh);
-    } else {
-      const y = (1 - depth) * lh;
-      ctx.moveTo(tA*lw, y); ctx.lineTo(tB*lw, y);
-    }
-    ctx.stroke();
-  }
-}
-
-/* ════════════════════════════════════════
-   PUBLIC CONTROLLER
-════════════════════════════════════════ */
-const ORM = window.ORM = {
-  _previewTimeout: null,
-
-  togglePlay() { playing ? ORM.stop() : ORM.play(); },
-
-  play() {
-    if (!AC) initAudio();
-    if (AC.state === 'suspended') AC.resume();
-    playing = true; lastRafT = 0;
-    const btn = document.getElementById('orm-play');
-    btn.innerHTML = '<svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" style="margin-right:3px;vertical-align:middle"><rect width="9" height="9"/></svg>stop';
-    btn.classList.add('active');
-    rafId = requestAnimationFrame(raf);
-  },
-
-  stop() {
-    playing = false; cancelAnimationFrame(rafId);
-    if (AC) voices.forEach(v => v.oscGain.gain.setTargetAtTime(0, AC.currentTime, 0.08));
-    const btn = document.getElementById('orm-play');
-    btn.innerHTML = '<svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor" style="margin-right:3px;vertical-align:middle"><path d="M0 0l9 5.5L0 11z"/></svg>play';
-    btn.classList.remove('active');
-    drawUI();
-  },
-
-  toggleLoop() {
-    looping = !looping;
-    document.getElementById('orm-loop').classList.toggle('active', looping);
-  },
-
-  setSpeed(v) {
-    speed = v;
-    document.getElementById('orm-speed-val').textContent = v.toFixed(2) + '×';
-    const ms = document.getElementById('orm-m-speed');
-    if (ms) ms.value = v;
-  },
-
-  setWave(w) {
-    waveType = w;
-    voices.forEach(v => { v.osc.type = w; });
-    /* Sync both wave selects */
-    const dw = document.getElementById('orm-wave');
-    const mw = document.getElementById('orm-m-wave');
-    if (dw) dw.value = w;
-    if (mw) mw.value = w;
-  },
-
-  setAnalog(on) {
-    analogOn = on;
-    if (!on) analogDriftVal = 0;
-    const da = document.getElementById('orm-analog');
-    const ma = document.getElementById('orm-m-analog');
-    if (da) da.checked = on;
-    if (ma) ma.checked = on;
-  },
-
-  setLayer(k) {
-    activeLayer = k;
-    /* Desktop tabs */
-    document.querySelectorAll('.orm-layer-tab').forEach(el => el.classList.remove('active'));
-    const dt = document.getElementById('ltab-'+k);
-    if (dt) dt.classList.add('active');
-    /* Mobile dots */
-    document.querySelectorAll('.orm-layer-dot-btn').forEach(el => el.classList.remove('active'));
-    const mb = document.getElementById('mltab-'+k);
-    if (mb) mb.classList.add('active');
-    /* Hint + scale */
-    const hint = document.getElementById('orm-layer-hint');
-    if (hint) hint.textContent = LAYERS[k].hint;
-    const sc = LAYER_SCALES[k];
-    const st = document.getElementById('orm-scale-top');
-    const sm = document.getElementById('orm-scale-mid');
-    const sb = document.getElementById('orm-scale-bot');
-    if (st) st.textContent = sc.top;
-    if (sm) sm.textContent = sc.mid;
-    if (sb) sb.textContent = sc.bot;
-    updateBrushPreview();
-  },
-
-  toggleVis(k, e) {
-    e.stopPropagation();
-    visibleLayers[k] = !visibleLayers[k];
-    const v = document.querySelector(`#ltab-${k} .orm-layer-vis`);
-    if (v) v.style.opacity = visibleLayers[k] ? '1' : '0.2';
-    drawUI();
-  },
-
-  setTool(t) {
-    tool = t;
-    /* Desktop buttons */
-    document.querySelectorAll('.orm-tool-btn').forEach(b => b.classList.remove('active'));
-    const db = document.getElementById('tool-'+t);
-    if (db) db.classList.add('active');
-    /* Mobile buttons */
-    document.querySelectorAll('.orm-m-tool-btn').forEach(b => {
-      /* only deactivate tool buttons, not undo/random/clear */
-      if (b.id && b.id.startsWith('mtool-')) b.classList.remove('active');
+  // ── Channel buttons ───────────────────────────────────────
+  chSwatches.forEach(btn => {
+    btn.addEventListener('click', () => {
+      chSwatches.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeChannel = btn.dataset.ch;
+      // Deactivate eraser when channel is picked
+      if (activeTool === 'eraser') setTool('round');
     });
-    const mb = document.getElementById('mtool-'+t);
-    if (mb) mb.classList.add('active');
-    drawCanvas.style.cursor = t === 'erase' ? 'cell' : 'crosshair';
-    updateBrushPreview();
-  },
+  });
 
-  setShape(s) {
-    activeShape = s;
-    /* Sync both shape selects */
-    const ds = document.getElementById('orm-shape');
-    const ms = document.getElementById('orm-m-shape');
-    if (ds) ds.value = s;
-    if (ms) ms.value = s;
-  },
+  // ── Sliders ───────────────────────────────────────────────
+  tempoSlider.addEventListener('input', () => {
+    loopSecs = parseInt(tempoSlider.value);
+    tempoVal.textContent = loopSecs + 's';
+  });
+  sizeSlider.addEventListener('input', () => {
+    penSize = parseInt(sizeSlider.value);
+    sizeVal.textContent = penSize;
+  });
 
-  setBrushSize(v) {
-    brushSize = v;
-    const dv = document.getElementById('orm-bsize-val');
-    const db = document.getElementById('orm-bsize');
-    const mv = document.getElementById('orm-m-bsize-val');
-    const mb = document.getElementById('orm-m-bsize');
-    if (dv) dv.textContent = v;
-    if (db) db.value = v;
-    if (mv) mv.textContent = v;
-    if (mb) mb.value = v;
-    updateBrushPreview();
-  },
+  // ── WebAudio engine ───────────────────────────────────────
+  let audioCtx = null;
+  let osc = null, gainNode = null, lfo = null, lfoGain = null, filter = null;
+  let animFrame = null;
+  let startTime = 0;
 
-  clearAll() {
-    Object.keys(LAYERS).forEach(k => {
-      layerCtxs[k].clearRect(0, 0, LW, LH);
-      delete layerSnapshots[k];
-      undoStack[k] = [];
-    });
-    drawGrid(); drawUI(); ORM.stop();
-  },
+  function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-  undo() {
-    const stack = undoStack[activeLayer];
-    if (!stack.length) return;
-    const img = stack.pop();
-    layerCtxs[activeLayer].putImageData(img, 0, 0);
-    layerSnapshots[activeLayer] = layerCtxs[activeLayer].getImageData(0, 0, LW, LH);
-    drawUI();
-  },
+    // Signal chain: osc → filter → gainNode → destination
+    osc      = audioCtx.createOscillator();
+    lfo      = audioCtx.createOscillator();
+    lfoGain  = audioCtx.createGain();
+    filter   = audioCtx.createBiquadFilter();
+    gainNode = audioCtx.createGain();
 
-  randomize() {
+    osc.type    = 'sawtooth';
+    osc.frequency.value = 220;
+
+    lfo.type    = 'sine';
+    lfo.frequency.value = 0;
+
+    lfoGain.gain.value  = 0;
+
+    filter.type            = 'lowpass';
+    filter.frequency.value = 2000;
+    filter.Q.value         = 1;
+
+    gainNode.gain.value = 0;
+
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc.frequency);
+    osc.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    osc.start();
+    lfo.start();
+  }
+
+
+  // Instead of getImageData per pixel (slow), sample column once
+  function sampleColumnFast(progress) {
+    const W = canvas.width;
+    const H = canvas.height;
     const mobile = isMobile();
-    Object.keys(LAYERS).forEach(k => {
-      pushUndo(k);
-      layerCtxs[k].clearRect(0, 0, LW, LH);
-    });
-    genMelodicCurve(layerCtxs['pitch'],  LAYERS['pitch'].color,  LW, LH, mobile);
-    genAmpEnvelope (layerCtxs['amp'],    LAYERS['amp'].color,    LW, LH, mobile);
-    genTimbreSweep (layerCtxs['timbre'], LAYERS['timbre'].color, LW, LH, mobile);
-    genModStrokes  (layerCtxs['mod'],    LAYERS['mod'].color,    LW, LH, mobile);
-    Object.keys(LAYERS).forEach(k => backupLayer(k));
-    drawUI();
-  },
-};
 
-window.addEventListener('load', init);
+    let colData;
+    if (mobile) {
+      const row = Math.min(H - 1, Math.floor(progress * H));
+      colData = ctx.getImageData(0, row, W, 1).data;
+      // colData: pixel i is at colData[i*4..i*4+3], position along X
+    } else {
+      const col = Math.min(W - 1, Math.floor(progress * W));
+      colData = ctx.getImageData(col, 0, 1, H).data;
+      // colData: pixel i is at colData[i*4..i*4+3], position along Y
+    }
 
-}());
+    const perpSize = mobile ? W : H;
+    const result = {};
+
+    for (const [ch, [r, g, b]] of Object.entries(chColors)) {
+      let bestValue = null;
+      let bestMatch = 0;
+
+      for (let p = 0; p < perpSize; p++) {
+        const base = p * 4;
+        const alpha = colData[base + 3] / 255;
+        if (alpha < 0.15) continue;
+
+        const dr = colData[base]     - r;
+        const dg = colData[base + 1] - g;
+        const db_  = colData[base + 2] - b;
+        const dist = Math.sqrt(dr*dr + dg*dg + db_*db_);
+        const match = alpha * (1 - dist / 441.7);
+
+        if (match > bestMatch) {
+          bestMatch = match;
+          const normPos = p / perpSize;
+          bestValue = mobile ? normPos : (1 - normPos);
+        }
+      }
+      result[ch] = (bestMatch > 0.08) ? bestValue : null;
+    }
+    return result;
+  }
+
+  // Audio update loop
+  function audioLoop() {
+    if (!isPlaying) return;
+
+    const now      = audioCtx.currentTime;
+    const elapsed  = (now - startTime) % loopSecs;
+    const progress = elapsed / loopSecs;
+
+    // Move scan line
+    const W = canvas.width;
+    const H = canvas.height;
+    const mobile = isMobile();
+
+    if (mobile) {
+      const py = progress * H;
+      scanLine.style.top  = py + 'px';
+      scanLine.style.left = '0';
+    } else {
+      const px = progress * W;
+      scanLine.style.left = px + 'px';
+    }
+
+    // Sample channels
+    const vals = sampleColumnFast(progress);
+
+    // Apply to audio (with smoothing)
+    const t = now + 0.02; // schedule slightly ahead
+
+    // Pitch: 0→1 maps to ~110Hz → ~880Hz (log)
+    const pitchVal = vals.pitch !== null ? vals.pitch : 0.5;
+    const freq = 110 * Math.pow(8, pitchVal);
+    osc.frequency.setTargetAtTime(freq, t, 0.05);
+
+    // Amplitude: 0→1 maps to 0 → 0.7
+    const ampVal = vals.amp !== null ? vals.amp : 0.5;
+    gainNode.gain.setTargetAtTime(ampVal * 0.7, t, 0.04);
+
+    // Modulation: vibrato rate 0→8Hz, depth 0→12
+    const modVal = vals.mod !== null ? vals.mod : 0;
+    lfo.frequency.setTargetAtTime(modVal * 8,   t, 0.05);
+    lfoGain.gain.setTargetAtTime (modVal * 12,  t, 0.05);
+
+    // Timbre: filter cutoff 200→8000Hz
+    const timbreVal = vals.timbre !== null ? vals.timbre : 0.7;
+    const cutoff = 200 * Math.pow(40, timbreVal);
+    filter.frequency.setTargetAtTime(cutoff, t, 0.05);
+
+    animFrame = requestAnimationFrame(audioLoop);
+  }
+
+  // ── Play / Stop ───────────────────────────────────────────
+  btnPlay.addEventListener('click', () => {
+    if (isPlaying) {
+      // Stop
+      isPlaying = false;
+      cancelAnimationFrame(animFrame);
+      gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+      scanLine.style.display = 'none';
+      btnPlay.textContent = '▶\uFE0E play';
+      btnPlay.classList.remove('active');
+    } else {
+      // Start
+      initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      isPlaying = true;
+      startTime = audioCtx.currentTime;
+      scanLine.style.display = 'block';
+      // Reset scan line position
+      if (isMobile()) {
+        scanLine.style.top  = '0';
+        scanLine.style.left = '0';
+        scanLine.style.width  = '100%';
+        scanLine.style.height = '2px';
+      } else {
+        scanLine.style.left   = '0';
+        scanLine.style.top    = '0';
+        scanLine.style.width  = '2px';
+        scanLine.style.height = '100%';
+      }
+      btnPlay.textContent = '■\uFE0E stop';
+      btnPlay.classList.add('active');
+      audioLoop();
+    }
+  });
+
+  // Ensure scan line orientation is correct on resize
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    if (isPlaying) {
+      if (isMobile()) {
+        scanLine.style.width  = '100%';
+        scanLine.style.height = '2px';
+        scanLine.style.left   = '0';
+      } else {
+        scanLine.style.width  = '2px';
+        scanLine.style.height = '100%';
+        scanLine.style.top    = '0';
+      }
+    }
+  });
+
+})();
 </script>
 
 </body>
