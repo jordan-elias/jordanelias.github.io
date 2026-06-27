@@ -30,168 +30,65 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 
-  <!-- STRUCTURED DATA -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      "@id": "https://jordanelias.de/#person",
-      "name": "Jordan Elias",
-      "honorificSuffix": "MT-BC",
-      "jobTitle": "Board-Certified Music Therapist",
-      "url": "https://jordanelias.de/",
-      "image": "https://jordanelias.de/images/headshot.jpg",
-      "email": "jordanelias@proton.me",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Berlin",
-        "postalCode": "12047",
-        "addressCountry": "DE"
-      },
-      "worksFor": {
-        "@id": "https://jordanelias.de/#service"
-      },
-      "alumniOf": [
-        {
-          "@type": "EducationalOrganization",
-          "name": "Freie Universität Berlin",
-          "sameAs": "https://www.fu-berlin.de/"
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Board-Certified Music Therapist",
+        "url": "https://jordanelias.de/",
+        "image": "https://jordanelias.de/images/headshot.jpg",
+        "email": "jordanelias@proton.me",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Berlin",
+          "postalCode": "12047",
+          "addressCountry": "DE"
         },
-        {
-          "@type": "EducationalOrganization",
-          "name": "Berklee College of Music",
-          "sameAs": "https://www.berklee.edu/"
-        }
-      ],
-      "hasCredential": {
-        "@type": "EducationalOccupationalCredential",
-        "name": "Board Certified Music Therapist (MT-BC)",
-        "credentialCategory": "Professional Certification",
-        "recognizedBy": {
-          "@type": "Organization",
-          "name": "Certification Board for Music Therapists",
-          "url": "https://www.cbmt.org/"
-        }
+        "worksFor": { "@id": "https://jordanelias.de/#service" },
+        "alumniOf": [
+          { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+          { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+        ],
+        "hasCredential": {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Board Certified Music Therapist (MT-BC)",
+          "credentialCategory": "Professional Certification",
+          "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
+        },
+        "knowsAbout": ["Music Therapy","Electronic Music","Music Technology","Sound Design","Creative Coding","Interactive Audio","Neuroscience of Music","Auditory Perception","Creativity","Digital Musical Instruments"],
+        "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
       },
-      "knowsAbout": [
-        "Music Therapy",
-        "Electronic Music",
-        "Music Technology",
-        "Sound Design",
-        "Creative Coding",
-        "Interactive Audio",
-        "Neuroscience of Music",
-        "Auditory Perception",
-        "Creativity",
-        "Digital Musical Instruments"
-      ],
-      "sameAs": [
-        "https://www.instagram.com/music_therapy_berlin/"
-      ]
-    },
-    {
-      "@type": "ProfessionalService",
-      "@id": "https://jordanelias.de/#service",
-      "name": "Jordan Elias Music Therapy",
-      "url": "https://jordanelias.de/",
-      "founder": {
-        "@id": "https://jordanelias.de/#person"
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://jordanelias.de/#service",
+        "name": "Jordan Elias Music Therapy",
+        "url": "https://jordanelias.de/",
+        "founder": { "@id": "https://jordanelias.de/#person" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://jordanelias.de/blog/oramics/#post",
+        "headline": "Oramics: drawing sound",
+        "description": "Explore Daphne Oram's revolutionary drawing-based synthesizer through an interactive browser instrument.",
+        "url": "https://jordanelias.de/blog/oramics/",
+        "datePublished": "2026-06-26",
+        "dateModified": "2026-06-26",
+        "inLanguage": "en",
+        "author": { "@id": "https://jordanelias.de/#person" },
+        "publisher": { "@id": "https://jordanelias.de/#service" },
+        "image": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+        "isPartOf": { "@type": "Blog", "@id": "https://jordanelias.de/blog/#blog" },
+        "mainEntityOfPage": { "@id": "https://jordanelias.de/blog/oramics/#webpage" }
       }
-    },
-    {
-      "@type": "BlogPosting",
-      "@id": "https://jordanelias.de/blog/oramics/#post",
-      "headline": "Oramics: drawing sound",
-      "description": "Explore Daphne Oram's revolutionary drawing-based synthesizer through an interactive browser instrument. Learn how Oramics transformed visual marks into sound and experiment with pitch, amplitude, timbre, and modulation by drawing directly onto a moving canvas.",
-      "url": "https://jordanelias.de/blog/oramics/",
-      "datePublished": "2026-06-26",
-      "dateModified": "2026-06-26",
-      "inLanguage": "en",
-      "author": {
-        "@id": "https://jordanelias.de/#person"
-      },
-      "publisher": {
-        "@id": "https://jordanelias.de/#service"
-      },
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://jordanelias.de/images/hero.jpg"
-      },
-      "isPartOf": {
-        "@type": "Blog",
-        "@id": "https://jordanelias.de/blog/#blog"
-      },
-      "mainEntityOfPage": {
-        "@id": "https://jordanelias.de/blog/oramics/#webpage"
-      },
-      "about": [
-        {
-          "@type": "Person",
-          "name": "Daphne Oram"
-        },
-        {
-          "@type": "CreativeWork",
-          "name": "Oramics"
-        },
-        {
-          "@type": "Thing",
-          "name": "Electronic music"
-        },
-        {
-          "@type": "Thing",
-          "name": "Sound synthesis"
-        }
-      ],
-      "keywords": "Oramics, Daphne Oram, electronic music, sound synthesis, drawing sound, browser synthesizer, music technology, interactive audio, music history"
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://jordanelias.de/blog/oramics/#webpage",
-      "url": "https://jordanelias.de/blog/oramics/",
-      "name": "Oramics: drawing sound | Jordan Elias",
-      "description": "Draw directly onto a moving canvas. Your shapes become sound — pitch, amplitude, timbre, and modulation — inspired by Daphne Oram's pioneering Oramics machine.",
-      "author": {
-        "@id": "https://jordanelias.de/#person"
-      },
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "url": "https://jordanelias.de/images/hero.jpg"
-      },
-      "isPartOf": {
-        "@type": "WebSite",
-        "@id": "https://jordanelias.de/#website"
-      }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://jordanelias.de/blog/oramics/#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://jordanelias.de/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Blog",
-          "item": "https://jordanelias.de/blog/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Oramics",
-          "item": "https://jordanelias.de/blog/oramics/"
-        }
-      ]
-    }
-  ]
-}
-</script>
-  
+    ]
+  }
+  </script>
+
   <style>
     /* ── PAGE LAYOUT ── */
     body { padding-top: 64px; }
@@ -373,45 +270,10 @@
     .orm-canvas-area {
       position: relative;
       width: 100%;
-      /* Scales with viewport: taller on bigger screens */
-      height: clamp(380px, 60vh, 720px);
+      /* height set by JS to match logical canvas exactly */
       background: #fff;
       overflow: hidden;
       flex-shrink: 0;
-    }
-
-    /* zoom indicator + controls */
-    .orm-zoom-controls {
-      position: absolute;
-      top: 6px; right: 6px;
-      z-index: 30;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .orm-zoom-btn {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: .8rem;
-      font-weight: 600;
-      width: 26px; height: 26px;
-      border: 1px solid var(--text);
-      background: var(--bg);
-      color: var(--text);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      line-height: 1;
-      transition: background .1s, color .1s;
-      touch-action: manipulation;
-      padding: 0;
-    }
-    .orm-zoom-btn:hover { background: var(--text); color: var(--bg); }
-    .orm-zoom-level {
-      font-family: 'Inter', sans-serif;
-      font-size: .55rem;
-      text-align: center;
-      color: var(--text);
-      opacity: .55;
-      line-height: 1.4;
     }
 
     .orm-canvas-inner {
@@ -552,10 +414,7 @@
     .orm-tool-btn:hover  { background: var(--text); color: var(--bg); }
     .orm-tool-btn.active { background: var(--text); color: var(--bg); }
 
-    /* Mobile tool dropdown — hidden on desktop */
-    .orm-tool-mobile-wrap { display: none; }
-
-    /* shape select dropdown in controls */
+    /* shape select dropdown */
     .orm-shape-select {
       font-family: 'Space Grotesk', sans-serif;
       font-size: .66rem; font-weight: 600;
@@ -595,10 +454,9 @@
       display: flex; align-items: center; justify-content: center;
       background: #fff; flex-shrink: 0; overflow: hidden;
     }
-    /* Calligraphy nib: a slanted rectangle, not a dot */
     .orm-brush-dot {
       border-radius: 50%;
-      transition: width .1s, height .1s, filter .1s, border-radius .1s, transform .1s;
+      transition: width .1s, height .1s, border-radius .1s, transform .1s;
     }
 
     /* ── KEYBOARD HINTS ── */
@@ -633,31 +491,39 @@
        MOBILE LAYOUT
     ═══════════════════════════ */
     @media (max-width: 600px) {
+      body { padding-top: 64px; }
+
       .vertical-title {
         width: 36px; top: 64px;
-        height: calc(100vh - 64px); padding-top: 1rem;
+        height: calc(100dvh - 64px); padding-top: 1rem;
       }
       .vertical-title span { font-size: .8rem; letter-spacing: .18em; }
 
       .page-content {
         margin-left: 44px;
         width: calc(100% - 44px);
-        padding: .4em .5em 4em;
+        padding: 0 0 4em;
       }
 
-      /* App is normal block flow on mobile — page scrolls */
+      /* App fills the viewport minus header */
       .orm-app {
-        height: auto;
-        display: block;
+        height: calc(100dvh - 64px);
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        border-left: none;
+        border-right: none;
+        border-top: none;
       }
 
-      /* Transport: compact single scrollable row */
+      /* Transport: compact single row, no wrap, scrollable */
       .orm-transport {
         flex-wrap: nowrap;
         overflow-x: auto;
         scrollbar-width: none;
         gap: .2rem;
         padding: .3rem .4rem;
+        flex-shrink: 0;
       }
       .orm-transport::-webkit-scrollbar { display: none; }
       .orm-btn { padding: .28rem .5rem; font-size: .64rem; }
@@ -666,47 +532,137 @@
       input[type=range].orm-slider { width: 46px; }
       .orm-toggle-label { display: none; }
 
-      /* Canvas: fixed height, internal pan only */
+      /* Canvas: scrollable container, grows to fill space */
       .orm-canvas-area {
-        height: 45vh;
+        flex: 1;
+        min-height: 0;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        /* scrollbar visible */
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0,0,0,0.25) transparent;
+      }
+      .orm-canvas-area::-webkit-scrollbar { width: 4px; }
+      .orm-canvas-area::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.25); border-radius: 2px; }
+
+      /* The inner div is position:relative, sized to the logical canvas height */
+      .orm-canvas-inner {
+        position: relative;
+        width: 100%;
+        /* height set by JS: LH px */
+        overflow: hidden;
+      }
+      /* On mobile canvases are position:absolute within the inner div */
+      .orm-canvas-inner canvas {
+        position: absolute;
+        top: 0; left: 0;
+      }
+
+      /* Status: single compact line */
+      .orm-status {
+        padding: .18rem .4rem;
+        font-size: .58rem;
         flex-shrink: 0;
       }
-
-      /* Status: single line */
-      .orm-status { padding: .18rem .4rem; font-size: .58rem; }
       .orm-status-tip { display: none; }
 
-      /* Controls: normal block flow, wraps */
+      /* Controls: two compact rows, no overflow */
       .orm-controls {
-        flex-wrap: wrap;
-        overflow-x: visible;
+        flex-direction: column;
+        overflow: visible;
+        flex-shrink: 0;
+        border-top: 1px solid var(--text);
       }
-      .orm-ctrl-section {
-        padding: .35rem .45rem;
-        gap: .25rem;
+
+      /* Row 1: layers + tool + brush */
+      .orm-ctrl-row-1,
+      .orm-ctrl-row-2 {
+        display: flex;
+        align-items: center;
+        gap: .3rem;
+        padding: .3rem .4rem;
         border-bottom: 1px solid var(--text);
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
       }
-      .orm-ctrl-section:last-child { border-bottom: none; }
-      .orm-ctrl-title { display: none; }
+      .orm-ctrl-row-1::-webkit-scrollbar,
+      .orm-ctrl-row-2::-webkit-scrollbar { display: none; }
+      .orm-ctrl-row-2 { border-bottom: none; }
 
-      /* Hide desktop tool buttons, show dropdown */
-      .orm-tool-desktop { display: none !important; }
-      .orm-tool-mobile-wrap { display: flex; align-items: center; gap: .35rem; }
+      /* Hide desktop-only sections */
+      .orm-ctrl-section { display: none; }
 
-      .orm-layer-tabs { gap: .18rem; }
-      .orm-layer-tab { padding: .25rem .38rem; }
-      .orm-layer-name { font-size: .6rem; }
-      .orm-layer-vis { display: none; }
-      .orm-layer-hint { display: none; }
-      .orm-scale-row { display: none; }
-      .orm-tool-btn { padding: .25rem .42rem; font-size: .6rem; }
-      .orm-shape-select { font-size: .6rem; padding: .22rem .3rem; }
-      input[type=range].orm-brush-slider { width: 70px; }
-      .orm-brush-preview { width: 22px; height: 22px; }
-      .orm-brush-label { display: none; }
-      .orm-zoom-controls { top: 4px; right: 4px; }
-      .orm-zoom-btn { width: 22px; height: 22px; font-size: .7rem; }
-      .orm-zoom-level { font-size: .5rem; }
+      /* Layer dots */
+      .orm-layer-dot-btn {
+        width: 28px; height: 28px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        cursor: pointer;
+        flex-shrink: 0;
+        touch-action: manipulation;
+        display: flex; align-items: center; justify-content: center;
+        transition: border-color .1s, opacity .1s;
+        opacity: .5;
+      }
+      .orm-layer-dot-btn.active { border-color: var(--text); opacity: 1; }
+      .orm-layer-dot-inner { width: 16px; height: 16px; border-radius: 50%; }
+
+      /* Mobile tool buttons */
+      .orm-m-tool-btn {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: .62rem; font-weight: 600;
+        padding: .25rem .45rem;
+        border: 1px solid var(--text);
+        background: transparent; color: var(--text);
+        cursor: pointer; white-space: nowrap;
+        touch-action: manipulation;
+        flex-shrink: 0;
+        transition: background .1s, color .1s;
+      }
+      .orm-m-tool-btn.active { background: var(--text); color: var(--bg); }
+
+      /* Mobile shape select */
+      .orm-m-shape-sel {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: .62rem; font-weight: 600;
+        background: var(--bg); color: var(--text);
+        border: 1px solid var(--text);
+        padding: .22rem .3rem;
+        cursor: pointer; outline: none; flex-shrink: 0;
+      }
+
+      /* Mobile brush slider */
+      input[type=range].orm-m-brush-slider {
+        -webkit-appearance: none;
+        width: 70px; height: 2px;
+        background: var(--text); outline: none; cursor: pointer; opacity: .6;
+        flex-shrink: 0;
+      }
+      input[type=range].orm-m-brush-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 13px; height: 13px; border-radius: 50%; background: var(--text); cursor: pointer;
+      }
+      .orm-m-label {
+        font-family: 'Inter', sans-serif; font-size: .58rem;
+        color: var(--text); opacity: .55; white-space: nowrap; flex-shrink: 0;
+      }
+      .orm-m-sep {
+        width: 1px; height: 18px;
+        background: var(--text); opacity: .2; flex-shrink: 0;
+      }
+
+      /* Mobile wave select */
+      .orm-m-wave-sel {
+        font-family: 'Inter', sans-serif;
+        font-size: .62rem;
+        background: var(--bg); color: var(--text);
+        border: 1px solid var(--text);
+        padding: .22rem .3rem;
+        cursor: pointer; outline: none; flex-shrink: 0;
+      }
 
       /* Keyboard hints hidden on mobile */
       .orm-kbd-section { display: none; }
@@ -805,12 +761,6 @@
 
         <!-- Canvas -->
         <div class="orm-canvas-area" id="ormCanvasArea">
-          <div class="orm-zoom-controls">
-            <button class="orm-zoom-btn" onclick="ORM.zoomIn()"  title="Zoom in">+</button>
-            <div class="orm-zoom-level" id="orm-zoom-level">1×</div>
-            <button class="orm-zoom-btn" onclick="ORM.zoomOut()" title="Zoom out">−</button>
-          </div>
-
           <div class="orm-canvas-inner" id="ormCanvasInner">
             <canvas id="oc-grid"></canvas>
             <canvas id="oc-pitch"></canvas>
@@ -834,7 +784,7 @@
           <span class="orm-status-tip" id="ost-tip">Draw on the canvas · left→right = time · up/down = value</span>
         </div>
 
-        <!-- Bottom controls -->
+        <!-- Bottom controls: desktop version -->
         <div class="orm-controls" id="ormControls">
 
           <!-- Layers -->
@@ -874,23 +824,11 @@
           <div class="orm-ctrl-section">
             <div class="orm-ctrl-title">draw</div>
             <div class="orm-tool-group">
-              <!-- Desktop: individual buttons -->
-              <div class="orm-tool-row orm-tool-desktop">
+              <div class="orm-tool-row">
                 <button class="orm-tool-btn active" id="tool-pen"         onclick="ORM.setTool('pen')">pen</button>
                 <button class="orm-tool-btn"        id="tool-calligraphy" onclick="ORM.setTool('calligraphy')">calligraphy</button>
-                <button class="orm-tool-btn"        id="tool-airbrush"    onclick="ORM.setTool('airbrush')">airbrush</button>
                 <button class="orm-tool-btn"        id="tool-erase"       onclick="ORM.setTool('erase')">erase</button>
               </div>
-              <!-- Mobile: dropdown -->
-              <div class="orm-tool-mobile-wrap">
-                <select class="orm-select" id="tool-mobile-select" onchange="ORM.setTool(this.value)">
-                  <option value="pen">pen</option>
-                  <option value="calligraphy">calligraphy</option>
-                  <option value="airbrush">airbrush</option>
-                  <option value="erase">erase</option>
-                </select>
-              </div>
-              <!-- Shape row (both) -->
               <div class="orm-tool-row">
                 <span class="orm-ctrl-title" style="align-self:center;margin-right:.25rem;">shape</span>
                 <select class="orm-shape-select" id="orm-shape" onchange="ORM.setShape(this.value)">
@@ -898,8 +836,6 @@
                   <option value="line">line</option>
                   <option value="circle">circle / ellipse</option>
                   <option value="rect">rectangle</option>
-                  <option value="sine">∿ sine curve</option>
-                  <option value="flat">― flat line</option>
                 </select>
               </div>
             </div>
@@ -921,7 +857,83 @@
             </div>
           </div>
 
-        </div><!-- /orm-controls -->
+        </div><!-- /orm-controls (desktop) -->
+
+        <!-- Mobile controls: two rows, always visible -->
+        <div id="ormMobileControls" style="display:none; flex-direction:column; flex-shrink:0; border-top:1px solid var(--text);">
+          <!-- Row 1: Layers · Tool · Shape · Brush -->
+          <div class="orm-ctrl-row-1">
+            <!-- Layer dots -->
+            <button class="orm-layer-dot-btn active" id="mltab-pitch" onclick="ORM.setLayer('pitch')" title="Pitch">
+              <span class="orm-layer-dot-inner" style="background:var(--layer-pitch)"></span>
+            </button>
+            <button class="orm-layer-dot-btn" id="mltab-amp" onclick="ORM.setLayer('amp')" title="Amp">
+              <span class="orm-layer-dot-inner" style="background:var(--layer-amp)"></span>
+            </button>
+            <button class="orm-layer-dot-btn" id="mltab-timbre" onclick="ORM.setLayer('timbre')" title="Timbre">
+              <span class="orm-layer-dot-inner" style="background:var(--layer-timbre)"></span>
+            </button>
+            <button class="orm-layer-dot-btn" id="mltab-mod" onclick="ORM.setLayer('mod')" title="Mod">
+              <span class="orm-layer-dot-inner" style="background:var(--layer-mod)"></span>
+            </button>
+
+            <div class="orm-m-sep"></div>
+
+            <!-- Tool buttons -->
+            <button class="orm-m-tool-btn active" id="mtool-pen" onclick="ORM.setTool('pen')">pen</button>
+            <button class="orm-m-tool-btn" id="mtool-calligraphy" onclick="ORM.setTool('calligraphy')">calli</button>
+            <button class="orm-m-tool-btn" id="mtool-erase" onclick="ORM.setTool('erase')">erase</button>
+
+            <div class="orm-m-sep"></div>
+
+            <!-- Shape -->
+            <select class="orm-m-shape-sel" id="orm-m-shape" onchange="ORM.setShape(this.value)">
+              <option value="none">— shape —</option>
+              <option value="line">line</option>
+              <option value="circle">ellipse</option>
+              <option value="rect">rect</option>
+            </select>
+
+            <div class="orm-m-sep"></div>
+
+            <!-- Brush size -->
+            <span class="orm-m-label">size</span>
+            <input type="range" class="orm-m-brush-slider" min="1" max="60" value="4" id="orm-m-bsize"
+              oninput="ORM.setBrushSize(+this.value)">
+            <span class="orm-m-label" id="orm-m-bsize-val">4</span>
+          </div>
+
+          <!-- Row 2: Undo · Random · Clear · Wave · Analog · Speed -->
+          <div class="orm-ctrl-row-2">
+            <button class="orm-m-tool-btn" onclick="ORM.undo()">undo</button>
+            <button class="orm-m-tool-btn" onclick="ORM.randomize()">✦ random</button>
+            <button class="orm-m-tool-btn" onclick="ORM.clearAll()">clear</button>
+
+            <div class="orm-m-sep"></div>
+
+            <select class="orm-m-wave-sel" id="orm-m-wave" onchange="ORM.setWave(this.value)">
+              <option value="sine">sine</option>
+              <option value="triangle">triangle</option>
+              <option value="sawtooth">saw</option>
+              <option value="square">square</option>
+            </select>
+
+            <div class="orm-m-sep"></div>
+
+            <span class="orm-m-label">analog</span>
+            <label class="orm-toggle" title="Analog drift">
+              <input type="checkbox" id="orm-m-analog" onchange="ORM.setAnalog(this.checked)">
+              <span class="orm-toggle-track"></span>
+            </label>
+
+            <div class="orm-m-sep"></div>
+
+            <span class="orm-m-label">speed</span>
+            <input type="range" class="orm-m-brush-slider" min="0.1" max="3" step="0.05" value="0.8" id="orm-m-speed"
+              oninput="ORM.setSpeed(+this.value)">
+          </div>
+        </div><!-- /ormMobileControls -->
+
       </div><!-- /orm-app -->
     </section>
 
@@ -933,7 +945,6 @@
         <div class="orm-kbd-row"><span class="orm-kbd">⌘Z / Ctrl Z</span><span class="orm-kbd-desc">undo</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">P</span><span class="orm-kbd-desc">pen</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">K</span><span class="orm-kbd-desc">calligraphy</span></div>
-        <div class="orm-kbd-row"><span class="orm-kbd">A</span><span class="orm-kbd-desc">airbrush</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">E</span><span class="orm-kbd-desc">erase</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">1 – 4</span><span class="orm-kbd-desc">switch layer</span></div>
         <div class="orm-kbd-row"><span class="orm-kbd">[ ]</span><span class="orm-kbd-desc">brush size −/+</span></div>
@@ -987,7 +998,7 @@
       <h2>How this instrument works</h2>
       <p>This browser-based Oramics instrument follows the logic of the original machine as closely as a digital medium allows. You draw on four independent layers — pitch, amplitude, timbre, and modulation — and as the playhead moves across your drawing, the pixel values it reads are converted into audio parameters in real time. The pitch layer maps vertical position to frequency: marks drawn high produce high pitches, marks drawn low produce low ones. Crucially, each separate mark on the pitch layer produces an independent voice — two strokes at different heights sound simultaneously, just as two separate film strips would have driven two separate oscillators on the original machine. The amplitude layer reads pixel density to set volume per voice. Timbre controls a low-pass filter cutoff, shaping brightness. Modulation adds vibrato and FM depth.</p>
 
-      <p>Three drawing tools follow different mark-making traditions: the pen lays down a clean, hard-edged line; calligraphy produces a pressure-sensitive stroke that varies in width with drawing speed, echoing the reed and the brush; airbrush builds up soft, diffuse clouds of pigment that accumulate with repeated passes. Shapes can be drawn separately — line, ellipse, rectangle, sine curve, or flat line — using the shape selector, which previews your mark as a ghost before committing it. The zoom controls let you work in finer detail without affecting playback, which always reads the full canvas. Try the randomise button to generate Oramics-style shapes and hear how they sound before drawing your own.</p>
+      <p>Two drawing tools follow different mark-making traditions: the pen lays down a clean, hard-edged line; calligraphy produces strokes whose width varies with the angle of travel relative to a fixed 45° nib — moving horizontally produces a thin line, moving vertically a thick one, exactly as a real calligraphy pen behaves. Shapes can be drawn separately — line, ellipse, or rectangle — using the shape selector, which previews your mark as a ghost before committing it. Try the randomise button to generate Oramics-style shapes and hear how they sound before drawing your own.</p>
 
       <p>If you're curious about working with sound, creativity, and the body in music therapy, feel free to get in touch.</p>
 
@@ -1037,9 +1048,7 @@ const LAYER_SCALES = {
   mod:    { top: '100%',    mid: '50%',     bot: '0%'     },
 };
 
-/* Max independent voices (fixed pool) */
 const MAX_VOICES = 5;
-/* Gap threshold in logical pixels: runs separated by fewer pixels merge */
 const CLUSTER_GAP = 6;
 
 /* ════════════════════════════════════════
@@ -1051,21 +1060,19 @@ function isMobile() { return window.innerWidth <= 600; }
    AUDIO ENGINE
 ════════════════════════════════════════ */
 let AC = null, masterGain;
-const voices = []; // fixed pool of MAX_VOICES
+const voices = [];
 let waveType = 'sine', analogOn = false;
 
-/* Analog drift: a slowly-wandering value rather than per-frame noise */
-let analogDriftVal   = 0;     // current drift (-1..1)
-let analogDriftTarget = 0;    // slowly random-walk target
-let analogDriftTimer  = 0;    // countdown frames until next target
+let analogDriftVal    = 0;
+let analogDriftTarget = 0;
+let analogDriftTimer  = 0;
 
 function updateAnalogDrift() {
   analogDriftTimer--;
   if (analogDriftTimer <= 0) {
     analogDriftTarget = (Math.random() - 0.5) * 2;
-    analogDriftTimer  = 60 + Math.floor(Math.random() * 80); // ~1–2.3s at 60fps
+    analogDriftTimer  = 60 + Math.floor(Math.random() * 80);
   }
-  // Lerp toward target — low-pass the walk
   analogDriftVal += (analogDriftTarget - analogDriftVal) * 0.008;
 }
 
@@ -1083,7 +1090,6 @@ function initAudio() {
 }
 
 function buildVoices() {
-  /* Tear down any existing voices */
   voices.forEach(v => {
     try { v.osc.stop(); }    catch(e) {}
     try { v.vibLFO.stop(); } catch(e) {}
@@ -1093,16 +1099,14 @@ function buildVoices() {
 
   for (let i = 0; i < MAX_VOICES; i++) {
     const osc     = AC.createOscillator();
-    const oscGain = AC.createGain();   // per-voice amp
+    const oscGain = AC.createGain();
     const filter  = AC.createBiquadFilter();
 
-    /* Vibrato LFO */
     const vibLFO  = AC.createOscillator();
     const vibGain = AC.createGain();
     vibLFO.type = 'sine'; vibLFO.frequency.value = 5.5; vibGain.gain.value = 0;
     vibLFO.connect(vibGain); vibGain.connect(osc.frequency);
 
-    /* FM LFO */
     const fmLFO  = AC.createOscillator();
     const fmGain = AC.createGain();
     fmLFO.type = 'sine'; fmLFO.frequency.value = 2.3; fmGain.gain.value = 0;
@@ -1127,10 +1131,24 @@ function ramp(param, val, tc) {
 }
 
 /* ════════════════════════════════════════
-   CANVAS & ZOOM STATE
+   CANVAS & DIMENSION STATE
 ════════════════════════════════════════ */
-let LW = 0, LH = 0; // logical canvas dimensions
-let VW = 0, VH = 0; // viewport dimensions
+/*
+  Desktop: time axis = X (left→right), value axis = Y (top=high)
+    LW = 10s × PIXELS_PER_SECOND, LH = viewport height
+    canvas area height = LH (matches logical canvas exactly)
+    no scrolling needed
+
+  Mobile: time axis = Y (top→bottom), value axis = X (right=high)
+    LW = viewport width, LH = 10s × PIXELS_PER_SECOND
+    canvas area is a CSS-scrollable container; inner div is LH px tall
+    scrolling follows the playhead natively
+*/
+const PIXELS_PER_SECOND = 80;
+const DURATION_SECONDS  = 10;
+
+let LW = 0, LH = 0;  // logical canvas size
+let VW = 0, VH = 0;  // viewport (visible) size
 
 const layerCanvases = {};
 const layerCtxs     = {};
@@ -1138,38 +1156,13 @@ let gridCanvas = null, gridCtx = null;
 let uiCtx = null, overlayCtx = null;
 let drawCanvas = null;
 
-/* Zoom */
-const ZOOM_STEPS = [1, 1.5, 2, 3, 4];
-let zoomIdx = 0;
-let panX = 0, panY = 0;
-function zoom()    { return ZOOM_STEPS[zoomIdx]; }
-function vpLogW()  { return VW / zoom(); }
-function vpLogH()  { return VH / zoom(); }
-
-/* Viewport → logical coords */
-function vToL(sx, sy) {
-  if (isMobile()) return { x: sx,              y: panY + sy / zoom() };
-  else            return { x: panX + sx / zoom(), y: sy };
-}
-/* Logical time pos → viewport screen pos */
-function lToV_time(logicalTimePos) {
-  if (isMobile()) return (logicalTimePos - panY) * zoom();
-  else            return (logicalTimePos - panX) * zoom();
-}
-/* Logical coord → viewport for overlay */
-function logToVP(lc) {
-  if (isMobile()) return { x: lc.x, y: (lc.y - panY) * zoom() };
-  else            return { x: (lc.x - panX) * zoom(), y: lc.y };
-}
-
 /* ════════════════════════════════════════
    PLAYBACK STATE
 ════════════════════════════════════════ */
 let playing = false, looping = true;
-let playheadPos = 0; // logical pixels along the time axis
+let playheadPos = 0;
 let playheadT   = 0;
 let lastRafT = 0, rafId = null, speed = 0.8;
-const PIXELS_PER_SECOND = 80;
 
 /* ════════════════════════════════════════
    DRAWING STATE
@@ -1181,14 +1174,11 @@ let brushSize   = 4;
 let drawing = false, shapeStart = null, lastLogical = null;
 let visibleLayers = { pitch: true, amp: true, timbre: true, mod: true };
 
-let airbrushInterval = null;
-let lastAirPos = null;
-
 /* ════════════════════════════════════════
    UNDO
 ════════════════════════════════════════ */
 const MAX_UNDO = 30;
-const undoStack     = {};
+const undoStack      = {};
 const layerSnapshots = {};
 Object.keys(LAYERS).forEach(k => { undoStack[k] = []; });
 
@@ -1224,10 +1214,11 @@ function init() {
   overlayCtx = document.getElementById('oc-overlay').getContext('2d');
   drawCanvas = document.getElementById('oc-draw');
 
-  ['oc-pitch','oc-amp','oc-timbre','oc-mod','oc-grid'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
+  /* Show/hide mobile vs desktop controls */
+  if (isMobile()) {
+    document.getElementById('ormControls').style.display       = 'none';
+    document.getElementById('ormMobileControls').style.display = 'flex';
+  }
 
   resize();
   window.addEventListener('resize', resize);
@@ -1252,29 +1243,63 @@ function normTouch(e) {
   return t ? { clientX: t.clientX, clientY: t.clientY } : e;
 }
 
+/* ════════════════════════════════════════
+   RESIZE — key fix: canvas area height = LH on desktop
+════════════════════════════════════════ */
 function resize() {
-  const area  = document.getElementById('ormCanvasArea');
+  const mobile = isMobile();
+
+  /* Show/hide control panels */
+  document.getElementById('ormControls').style.display       = mobile ? 'none' : 'flex';
+  document.getElementById('ormMobileControls').style.display = mobile ? 'flex' : 'none';
+
   const inner = document.getElementById('ormCanvasInner');
-  if (isMobile()) {
-    requestAnimationFrame(() => doResize(area, inner));
-  } else {
-    doResize(area, inner);
-  }
-}
+  const area  = document.getElementById('ormCanvasArea');
 
-function doResize(area, inner) {
-  VW = inner.clientWidth  || 600;
-  VH = inner.clientHeight || 300;
-  if (VW <= 0 || VH <= 0) return;
+  if (mobile) {
+    /* Viewport width = canvas width */
+    VW = inner.clientWidth || window.innerWidth - 44;
+    /* The canvas area is flex:1, so its visible height is whatever CSS gives */
+    VH = area.clientHeight || 300; /* visible scroll window */
 
-  if (isMobile()) {
     LW = VW;
-    LH = 10 * PIXELS_PER_SECOND;
+    LH = DURATION_SECONDS * PIXELS_PER_SECOND; /* 800px logical height */
+
+    /* Size the inner scroll container to the full logical height */
+    inner.style.position = 'relative';
+    inner.style.width    = LW + 'px';
+    inner.style.height   = LH + 'px';
+
+    /* All canvases in the inner div: logical size */
+    ['oc-grid','oc-pitch','oc-amp','oc-timbre','oc-mod','oc-ui','oc-overlay','oc-draw'].forEach(id => {
+      const c = document.getElementById(id);
+      if (c) { c.width = LW; c.height = LH; c.style.width = LW+'px'; c.style.height = LH+'px'; }
+    });
+
   } else {
-    LW = 10 * PIXELS_PER_SECOND;
+    /* Desktop: viewport fills the container */
+    VW = inner.clientWidth  || 700;
+    VH = inner.clientHeight || 300;
+
+    LW = DURATION_SECONDS * PIXELS_PER_SECOND; /* 800px logical width */
     LH = VH;
+
+    /* Canvas area height = LH so there's no blank space */
+    area.style.height = LH + 'px';
+
+    inner.style.position = 'absolute';
+    inner.style.inset    = '0';
+    inner.style.width    = '';
+    inner.style.height   = '';
+
+    /* UI/overlay/draw canvases = viewport size (VW × VH) */
+    ['oc-ui','oc-overlay','oc-draw'].forEach(id => {
+      const c = document.getElementById(id);
+      if (c) { c.width = VW; c.height = VH; c.style.width = ''; c.style.height = ''; }
+    });
   }
 
+  /* Logical layer + grid canvases */
   Object.keys(LAYERS).forEach(k => {
     layerCanvases[k].width  = LW;
     layerCanvases[k].height = LH;
@@ -1282,96 +1307,46 @@ function doResize(area, inner) {
   gridCanvas.width  = LW;
   gridCanvas.height = LH;
 
-  ['oc-ui','oc-overlay','oc-draw'].forEach(id => {
-    const c = document.getElementById(id);
-    if (c) { c.width = VW; c.height = VH; }
-  });
-
-  clampPan();
   drawGrid();
   restoreAll();
   drawUI();
 }
 
 /* ════════════════════════════════════════
-   PAN / ZOOM
-════════════════════════════════════════ */
-function clampPan() {
-  if (isMobile()) {
-    panX = 0;
-    panY = Math.max(0, Math.min(LH - vpLogH(), panY));
-  } else {
-    panY = 0;
-    panX = Math.max(0, Math.min(LW - vpLogW(), panX));
-  }
-}
-
-/* ════════════════════════════════════════
-   GRID
-════════════════════════════════════════ */
-function drawGrid() {
-  if (!gridCtx || !LW || !LH) return;
-  gridCtx.clearRect(0, 0, LW, LH);
-  gridCtx.fillStyle = '#ffffff';
-  gridCtx.fillRect(0, 0, LW, LH);
-
-  if (isMobile()) {
-    gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
-    for (let s = 0; s <= LH / PIXELS_PER_SECOND; s++) {
-      const y = s * PIXELS_PER_SECOND;
-      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
-      if (s > 0) {
-        gridCtx.fillStyle='rgba(32,38,157,.22)'; gridCtx.font='8px Inter,sans-serif';
-        gridCtx.fillText(s+'s', 3, y-2);
-      }
-    }
-    gridCtx.strokeStyle = 'rgba(0,0,0,.03)';
-    for (let q = 0; q <= (LH/PIXELS_PER_SECOND)*4; q++) {
-      const y = q * PIXELS_PER_SECOND/4;
-      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
-    }
-    [80,160,320,640,1280].forEach(hz => {
-      const x = hzToX_m(hz);
-      gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.lineWidth=1;
-      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
-      gridCtx.fillStyle='rgba(32,38,157,.3)'; gridCtx.font='8px Inter,sans-serif';
-      gridCtx.fillText(hz+'Hz', x+2, LH-4);
-    });
-    gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.setLineDash([4,4]);
-    gridCtx.beginPath(); gridCtx.moveTo(LW/2,0); gridCtx.lineTo(LW/2,LH); gridCtx.stroke();
-    gridCtx.setLineDash([]);
-  } else {
-    gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
-    for (let s = 0; s <= LW / PIXELS_PER_SECOND; s++) {
-      const x = s * PIXELS_PER_SECOND;
-      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
-      if (s > 0) {
-        gridCtx.fillStyle='rgba(32,38,157,.22)'; gridCtx.font='8px Inter,sans-serif';
-        gridCtx.fillText(s+'s', x+3, LH-4);
-      }
-    }
-    gridCtx.strokeStyle = 'rgba(0,0,0,.03)';
-    for (let q = 0; q <= (LW/PIXELS_PER_SECOND)*4; q++) {
-      const x = q * PIXELS_PER_SECOND/4;
-      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
-    }
-    [80,160,320,640,1280].forEach(hz => {
-      const y = hzToY_d(hz);
-      if (y<0||y>LH) return;
-      gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.lineWidth=1;
-      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
-      gridCtx.fillStyle='rgba(32,38,157,.3)'; gridCtx.font='8px Inter,sans-serif';
-      gridCtx.fillText(hz+'Hz', 4, y-2);
-    });
-    gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.setLineDash([4,4]);
-    gridCtx.beginPath(); gridCtx.moveTo(0,LH/2); gridCtx.lineTo(LW,LH/2); gridCtx.stroke();
-    gridCtx.setLineDash([]);
-  }
-}
-
-/* ════════════════════════════════════════
    COORDINATE HELPERS
 ════════════════════════════════════════ */
+
+/* Screen coords → logical coords */
+function getLogical(vpX, vpY) {
+  if (isMobile()) {
+    /* On mobile, vpX is direct logical X; vpY needs the scroll offset */
+    const scrollTop = document.getElementById('ormCanvasArea').scrollTop;
+    return { x: vpX, y: vpY + scrollTop };
+  } else {
+    return { x: vpX, y: vpY };
+  }
+}
+
+/* Logical time-axis position → screen Y (mobile) or screen X (desktop) */
+function timeToScreen(logicalTimePos) {
+  if (isMobile()) {
+    const scrollTop = document.getElementById('ormCanvasArea').scrollTop;
+    return logicalTimePos - scrollTop;
+  } else {
+    return logicalTimePos;
+  }
+}
+
+/* Logical coords → screen coords for overlay */
+function logToScreen(lc) {
+  if (isMobile()) {
+    const scrollTop = document.getElementById('ormCanvasArea').scrollTop;
+    return { x: lc.x, y: lc.y - scrollTop };
+  } else {
+    return { x: lc.x, y: lc.y };
+  }
+}
+
 function hzToY_d(hz) {
   const t = (Math.log(hz)-Math.log(80))/(Math.log(2000)-Math.log(80));
   return LH - t*LH;
@@ -1390,53 +1365,158 @@ function xToHz_m(x) {
 }
 
 /* ════════════════════════════════════════
-   DRAW UI
+   GRID
+════════════════════════════════════════ */
+function drawGrid() {
+  if (!gridCtx || !LW || !LH) return;
+  gridCtx.clearRect(0, 0, LW, LH);
+  gridCtx.fillStyle = '#ffffff';
+  gridCtx.fillRect(0, 0, LW, LH);
+
+  if (isMobile()) {
+    /* Second gridlines */
+    gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
+    for (let s = 0; s <= DURATION_SECONDS; s++) {
+      const y = s * PIXELS_PER_SECOND;
+      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
+      if (s > 0) {
+        gridCtx.fillStyle='rgba(32,38,157,.22)'; gridCtx.font='8px Inter,sans-serif';
+        gridCtx.fillText(s+'s', 3, y-2);
+      }
+    }
+    /* Quarter-second gridlines */
+    gridCtx.strokeStyle = 'rgba(0,0,0,.03)';
+    for (let q = 0; q <= DURATION_SECONDS*4; q++) {
+      const y = q * PIXELS_PER_SECOND/4;
+      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
+    }
+    /* Pitch reference lines */
+    [80,160,320,640,1280].forEach(hz => {
+      const x = hzToX_m(hz);
+      gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.lineWidth=1;
+      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
+      gridCtx.fillStyle='rgba(32,38,157,.3)'; gridCtx.font='8px Inter,sans-serif';
+      gridCtx.fillText(hz+'Hz', x+2, LH-4);
+    });
+    gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.setLineDash([4,4]);
+    gridCtx.beginPath(); gridCtx.moveTo(LW/2,0); gridCtx.lineTo(LW/2,LH); gridCtx.stroke();
+    gridCtx.setLineDash([]);
+  } else {
+    gridCtx.strokeStyle = 'rgba(0,0,0,.07)'; gridCtx.lineWidth = 1;
+    for (let s = 0; s <= DURATION_SECONDS; s++) {
+      const x = s * PIXELS_PER_SECOND;
+      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
+      if (s > 0) {
+        gridCtx.fillStyle='rgba(32,38,157,.22)'; gridCtx.font='8px Inter,sans-serif';
+        gridCtx.fillText(s+'s', x+3, LH-4);
+      }
+    }
+    gridCtx.strokeStyle = 'rgba(0,0,0,.03)';
+    for (let q = 0; q <= DURATION_SECONDS*4; q++) {
+      const x = q * PIXELS_PER_SECOND/4;
+      gridCtx.beginPath(); gridCtx.moveTo(x,0); gridCtx.lineTo(x,LH); gridCtx.stroke();
+    }
+    [80,160,320,640,1280].forEach(hz => {
+      const y = hzToY_d(hz);
+      if (y<0||y>LH) return;
+      gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.lineWidth=1;
+      gridCtx.beginPath(); gridCtx.moveTo(0,y); gridCtx.lineTo(LW,y); gridCtx.stroke();
+      gridCtx.fillStyle='rgba(32,38,157,.3)'; gridCtx.font='8px Inter,sans-serif';
+      gridCtx.fillText(hz+'Hz', 4, y-2);
+    });
+    gridCtx.strokeStyle='rgba(32,38,157,.1)'; gridCtx.setLineDash([4,4]);
+    gridCtx.beginPath(); gridCtx.moveTo(0,LH/2); gridCtx.lineTo(LW,LH/2); gridCtx.stroke();
+    gridCtx.setLineDash([]);
+  }
+}
+
+/* ════════════════════════════════════════
+   DRAW UI  (composites layers onto ui canvas)
 ════════════════════════════════════════ */
 function drawUI() {
-  if (!uiCtx || !VW || !VH) return;
-  uiCtx.clearRect(0, 0, VW, VH);
+  if (!uiCtx) return;
 
-  const srcX = isMobile() ? 0      : panX;
-  const srcY = isMobile() ? panY   : 0;
-  const srcW = isMobile() ? LW     : vpLogW();
-  const srcH = isMobile() ? vpLogH() : LH;
+  const mobile = isMobile();
 
-  uiCtx.globalAlpha = 1;
-  uiCtx.drawImage(gridCanvas, srcX, srcY, srcW, srcH, 0, 0, VW, VH);
+  if (mobile) {
+    /* On mobile: ui canvas is the full logical LW×LH size.
+       We draw everything onto it, then CSS scroll handles the viewport. */
+    if (!LW || !LH) return;
+    const uc = document.getElementById('oc-ui');
+    if (uc.width !== LW || uc.height !== LH) {
+      uc.width = LW; uc.height = LH;
+    }
+    uiCtx.clearRect(0, 0, LW, LH);
+    uiCtx.globalAlpha = 1;
+    uiCtx.drawImage(gridCanvas, 0, 0);
 
-  Object.keys(LAYERS).forEach(k => {
-    if (!visibleLayers[k]) return;
-    uiCtx.globalAlpha = (k === activeLayer) ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
-    uiCtx.drawImage(layerCanvases[k], srcX, srcY, srcW, srcH, 0, 0, VW, VH);
-  });
-  uiCtx.globalAlpha = 1;
+    Object.keys(LAYERS).forEach(k => {
+      if (!visibleLayers[k]) return;
+      uiCtx.globalAlpha = (k === activeLayer) ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
+      uiCtx.drawImage(layerCanvases[k], 0, 0);
+    });
+    uiCtx.globalAlpha = 1;
 
-  /* Playhead */
-  const screenPos = lToV_time(playheadPos);
-  uiCtx.strokeStyle = 'rgba(176,58,46,0.9)';
-  uiCtx.lineWidth = 2;
-  uiCtx.shadowColor = '#b03a2e'; uiCtx.shadowBlur = 5;
-  uiCtx.beginPath();
-  if (isMobile()) {
-    uiCtx.moveTo(0, screenPos); uiCtx.lineTo(VW, screenPos);
+    /* Playhead: horizontal line across full logical width */
+    uiCtx.strokeStyle = 'rgba(176,58,46,0.9)';
+    uiCtx.lineWidth = 2;
+    uiCtx.shadowColor = '#b03a2e'; uiCtx.shadowBlur = 5;
+    uiCtx.beginPath();
+    uiCtx.moveTo(0, playheadPos); uiCtx.lineTo(LW, playheadPos);
+    uiCtx.stroke();
+    uiCtx.shadowBlur = 0;
+
+    uiCtx.fillStyle = '#b03a2e';
+    uiCtx.font = '8px Inter,sans-serif';
+    uiCtx.fillText(playheadT.toFixed(2)+'s', 4, Math.max(10, playheadPos - 3));
+
   } else {
+    /* Desktop: ui canvas is VW×VH; source from logical canvas */
+    if (!VW || !VH) return;
+    const uc = document.getElementById('oc-ui');
+    if (uc.width !== VW || uc.height !== VH) {
+      uc.width = VW; uc.height = VH;
+    }
+    uiCtx.clearRect(0, 0, VW, VH);
+
+    /* On desktop, LW = 800 and we show all of it if VW >= LW,
+       or just the first VW pixels if the canvas is wider than the viewport */
+    const srcW = Math.min(LW, VW);
+    const srcH = LH; /* = VH */
+
+    uiCtx.globalAlpha = 1;
+    uiCtx.drawImage(gridCanvas, 0, 0, srcW, srcH, 0, 0, srcW, srcH);
+
+    Object.keys(LAYERS).forEach(k => {
+      if (!visibleLayers[k]) return;
+      uiCtx.globalAlpha = (k === activeLayer) ? LAYERS[k].alpha : LAYERS[k].alpha * 0.35;
+      uiCtx.drawImage(layerCanvases[k], 0, 0, srcW, srcH, 0, 0, srcW, srcH);
+    });
+    uiCtx.globalAlpha = 1;
+
+    /* Playhead */
+    const screenPos = playheadPos; /* 1:1 on desktop */
+    uiCtx.strokeStyle = 'rgba(176,58,46,0.9)';
+    uiCtx.lineWidth = 2;
+    uiCtx.shadowColor = '#b03a2e'; uiCtx.shadowBlur = 5;
+    uiCtx.beginPath();
     uiCtx.moveTo(screenPos, 0); uiCtx.lineTo(screenPos, VH);
-  }
-  uiCtx.stroke();
-  uiCtx.shadowBlur = 0;
+    uiCtx.stroke();
+    uiCtx.shadowBlur = 0;
 
-  uiCtx.fillStyle = '#b03a2e';
-  uiCtx.font = '8px Inter,sans-serif';
-  if (isMobile()) {
-    uiCtx.fillText(playheadT.toFixed(2)+'s', 4, Math.max(10, screenPos-3));
-  } else {
+    uiCtx.fillStyle = '#b03a2e';
+    uiCtx.font = '8px Inter,sans-serif';
     const lx = screenPos+4 + (screenPos>VW-40 ? -44:0);
     uiCtx.fillText(playheadT.toFixed(2)+'s', lx, 11);
   }
 }
 
+/* On mobile the overlay and draw canvases are full logical size too,
+   so we draw overlay in logical space */
 function clearOverlay() {
-  if (overlayCtx) overlayCtx.clearRect(0,0,VW,VH);
+  if (!overlayCtx) return;
+  const mobile = isMobile();
+  overlayCtx.clearRect(0, 0, mobile ? LW : VW, mobile ? LH : VH);
 }
 
 /* ════════════════════════════════════════
@@ -1444,56 +1524,37 @@ function clearOverlay() {
 ════════════════════════════════════════ */
 function overlayStyle() {
   overlayCtx.strokeStyle = LAYERS[activeLayer].color + '88';
-  overlayCtx.lineWidth   = Math.max(1, brushSize * zoom());
+  overlayCtx.lineWidth   = brushSize;
   overlayCtx.lineCap     = 'round';
   overlayCtx.setLineDash([6,4]);
 }
 
 function drawOverlay(a, b) {
+  /* a, b are logical coords */
   if (!overlayCtx || !a || !b) return;
-  const va = logToVP(a), vb = logToVP(b);
-  overlayCtx.clearRect(0,0,VW,VH);
+  const mobile = isMobile();
+  const w = mobile ? LW : VW;
+  const h = mobile ? LH : VH;
+  overlayCtx.clearRect(0, 0, w, h);
   overlayCtx.save();
   overlayStyle();
 
   if (activeShape === 'line') {
-    overlayCtx.beginPath(); overlayCtx.moveTo(va.x,va.y); overlayCtx.lineTo(vb.x,vb.y); overlayCtx.stroke();
+    overlayCtx.beginPath(); overlayCtx.moveTo(a.x,a.y); overlayCtx.lineTo(b.x,b.y); overlayCtx.stroke();
   } else if (activeShape === 'circle') {
-    const cx=(va.x+vb.x)/2, cy=(va.y+vb.y)/2;
-    const rx=Math.max(1,Math.abs(vb.x-va.x)/2), ry=Math.max(1,Math.abs(vb.y-va.y)/2);
+    const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
+    const rx=Math.max(1,Math.abs(b.x-a.x)/2), ry=Math.max(1,Math.abs(b.y-a.y)/2);
     overlayCtx.beginPath(); overlayCtx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); overlayCtx.stroke();
     overlayCtx.strokeStyle = LAYERS[activeLayer].color+'33'; overlayCtx.lineWidth=1;
-    overlayCtx.strokeRect(va.x,va.y,vb.x-va.x,vb.y-va.y);
+    overlayCtx.strokeRect(a.x,a.y,b.x-a.x,b.y-a.y);
   } else if (activeShape === 'rect') {
-    overlayCtx.beginPath(); overlayCtx.strokeRect(va.x,va.y,vb.x-va.x,vb.y-va.y); overlayCtx.stroke();
-  } else if (activeShape === 'sine') {
-    const dx=vb.x-va.x, dy=vb.y-va.y;
-    const steps=Math.max(4,Math.abs(isMobile()?dy:dx));
-    overlayCtx.beginPath();
-    for(let i=0;i<=steps;i++){
-      const t=i/steps;
-      const x=va.x+dx*t, amp2=dy/2;
-      const y=va.y+amp2+Math.sin(t*2*Math.PI*2)*amp2;
-      i===0?overlayCtx.moveTo(x,y):overlayCtx.lineTo(x,y);
-    }
-    overlayCtx.stroke();
-  } else if (activeShape === 'flat') {
-    if (isMobile()) {
-      const mx=(va.x+vb.x)/2;
-      overlayCtx.beginPath(); overlayCtx.moveTo(mx,va.y); overlayCtx.lineTo(mx,vb.y); overlayCtx.stroke();
-    } else {
-      const my=(va.y+vb.y)/2;
-      overlayCtx.beginPath(); overlayCtx.moveTo(va.x,my); overlayCtx.lineTo(vb.x,my); overlayCtx.stroke();
-    }
+    overlayCtx.beginPath(); overlayCtx.strokeRect(a.x,a.y,b.x-a.x,b.y-a.y); overlayCtx.stroke();
   }
   overlayCtx.setLineDash([]); overlayCtx.restore();
 }
 
 /* ════════════════════════════════════════
    CLUSTER SAMPLING
-   Returns array of { normPos, weight } sorted by weight desc.
-   normPos: 0..1 along the VALUE axis (0=top/high, 1=bottom/low on desktop)
-   weight:  mean alpha of the cluster, 0..1
 ════════════════════════════════════════ */
 function sampleLayerClusters(k, timePos) {
   const ctx = layerCtxs[k];
@@ -1514,17 +1575,15 @@ function sampleLayerClusters(k, timePos) {
     for (let i = 0; i < axisLen; i++) pixels[i] = d[i*4+3];
   }
 
-  /* Find contiguous runs (gap ≤ CLUSTER_GAP merges into same cluster) */
   const clusters = [];
   let inRun   = false;
-  let runStart = 0;
   let gapCount = 0;
   let runAlphaSum = 0, runWeightPos = 0, runAlphaCount = 0;
 
   for (let i = 0; i <= axisLen; i++) {
     const a = (i < axisLen) ? pixels[i] : 0;
     if (a > 8) {
-      if (!inRun) { inRun = true; runStart = i; runAlphaSum = 0; runWeightPos = 0; runAlphaCount = 0; }
+      if (!inRun) { inRun = true; runAlphaSum = 0; runWeightPos = 0; runAlphaCount = 0; }
       gapCount = 0;
       const w = a / 255;
       runAlphaSum  += w;
@@ -1534,10 +1593,9 @@ function sampleLayerClusters(k, timePos) {
       if (inRun) {
         gapCount++;
         if (gapCount > CLUSTER_GAP || i >= axisLen) {
-          /* Commit the run as a cluster */
           if (runAlphaSum > 0) {
             const centroid = runWeightPos / runAlphaSum;
-            const weight   = Math.min(1, runAlphaSum / runAlphaCount); // mean alpha
+            const weight   = Math.min(1, runAlphaSum / runAlphaCount);
             clusters.push({ normPos: centroid / axisLen, weight });
           }
           inRun    = false;
@@ -1547,13 +1605,12 @@ function sampleLayerClusters(k, timePos) {
     }
   }
 
-  /* Sort by weight descending, cap at MAX_VOICES */
   clusters.sort((a,b) => b.weight - a.weight);
   return clusters.slice(0, MAX_VOICES);
 }
 
 /* ════════════════════════════════════════
-   SAMPLE AND APPLY (polyphonic)
+   SAMPLE AND APPLY
 ════════════════════════════════════════ */
 function sampleAndApply() {
   if (!AC) return;
@@ -1564,23 +1621,19 @@ function sampleAndApply() {
   const modClusters    = sampleLayerClusters('mod',    playheadPos);
   const tc = 0.06;
 
-  /* Update analog drift */
   if (analogOn) updateAnalogDrift();
 
-  /* For each voice slot */
   for (let i = 0; i < MAX_VOICES; i++) {
     const v = voices[i];
     if (!v) continue;
 
     if (i >= pitchClusters.length) {
-      /* No pitch cluster for this slot — silence it */
       ramp(v.oscGain.gain, 0, tc);
       continue;
     }
 
     const pc = pitchClusters[i];
 
-    /* Map pitch cluster normPos → Hz (desktop: 0=top=2000Hz, 1=bottom=80Hz) */
     let hz;
     if (isMobile()) {
       hz = 80 * Math.pow(2000/80, pc.normPos);
@@ -1588,12 +1641,10 @@ function sampleAndApply() {
       hz = 80 * Math.pow(2000/80, 1 - pc.normPos);
     }
 
-    /* Analog drift: slow wow offset proportional to pitch */
     const drift = analogOn ? analogDriftVal * hz * 0.003 : 0;
     hz = Math.max(20, hz + drift);
 
-    /* Find closest amp cluster by normPos proximity */
-    let ampVal = 0.6; // default if no amp drawing
+    let ampVal = 0.6;
     if (ampClusters.length > 0) {
       const nearest = ampClusters.reduce((best, c) =>
         Math.abs(c.normPos - pc.normPos) < Math.abs(best.normPos - pc.normPos) ? c : best
@@ -1601,7 +1652,6 @@ function sampleAndApply() {
       ampVal = isMobile() ? nearest.normPos : (1 - nearest.normPos);
     }
 
-    /* Find closest timbre cluster */
     let filterHz = 2000;
     if (timbreClusters.length > 0) {
       const nearest = timbreClusters.reduce((best, c) =>
@@ -1611,7 +1661,6 @@ function sampleAndApply() {
       filterHz = 200 * Math.pow(8000/200, tNorm);
     }
 
-    /* Find closest mod cluster */
     let modVal = 0;
     if (modClusters.length > 0) {
       const nearest = modClusters.reduce((best, c) =>
@@ -1629,7 +1678,7 @@ function sampleAndApply() {
     v.osc.type = waveType;
   }
 
-  /* Status bar: show primary voice */
+  /* Status bar */
   const p0 = pitchClusters[0];
   const a0 = ampClusters[0];
   const t0 = timbreClusters[0];
@@ -1670,16 +1719,18 @@ function raf(ts) {
     else { ORM.stop(); return; }
   }
 
-  /* Auto-pan to keep playhead visible when zoomed */
-  if (zoom() > 1) {
-    if (isMobile()) {
-      const sy = (playheadPos - panY) * zoom();
-      if (sy > VH * 0.75) panY = Math.min(LH - vpLogH(), panY + (sy - VH*0.75) / zoom());
-      if (sy < VH * 0.25) panY = Math.max(0, panY - (VH*0.25 - sy) / zoom());
-    } else {
-      const sx = (playheadPos - panX) * zoom();
-      if (sx > VW * 0.75) panX = Math.min(LW - vpLogW(), panX + (sx - VW*0.75) / zoom());
-      if (sx < VW * 0.25) panX = Math.max(0, panX - (VW*0.25 - sx) / zoom());
+  /* On mobile: scroll the canvas area to follow the playhead */
+  if (isMobile()) {
+    const area = document.getElementById('ormCanvasArea');
+    const areaH = area.clientHeight;
+    const margin = areaH * 0.3;
+    const currentScroll = area.scrollTop;
+    const targetScroll  = playheadPos - areaH * 0.4;
+    /* Only nudge if playhead is outside the comfortable band */
+    if (playheadPos - currentScroll > areaH - margin) {
+      area.scrollTop = playheadPos - areaH + margin;
+    } else if (playheadPos - currentScroll < margin) {
+      area.scrollTop = Math.max(0, playheadPos - margin);
     }
   }
 
@@ -1699,7 +1750,7 @@ function getVP(e) {
 function onDrawStart(e) {
   if (!AC) initAudio();
   const vp = getVP(e);
-  const lc = vToL(vp.x, vp.y);
+  const lc = getLogical(vp.x, vp.y);
 
   if (activeShape !== 'none') {
     shapeStart = lc; drawing = true; return;
@@ -1707,15 +1758,7 @@ function onDrawStart(e) {
 
   drawing = true; lastLogical = null;
   pushUndo(activeLayer);
-
-  if (tool === 'airbrush') {
-    lastAirPos = lc;
-    applyAirbrush(lc);
-    airbrushInterval = setInterval(() => { if(lastAirPos) applyAirbrush(lastAirPos); }, 40);
-  } else {
-    drawMark(lc);
-  }
-
+  drawMark(lc);
   backupLayer(activeLayer);
   drawUI();
   previewPitch(lc);
@@ -1724,7 +1767,7 @@ function onDrawStart(e) {
 
 function onDrawMove(e) {
   const vp = getVP(e);
-  const lc = vToL(vp.x, vp.y);
+  const lc = getLogical(vp.x, vp.y);
 
   const valStr = (activeLayer === 'pitch')
     ? (isMobile() ? xToHz_m(lc.x) : yToHz_d(lc.y)).toFixed(0)+' Hz'
@@ -1738,7 +1781,6 @@ function onDrawMove(e) {
     drawOverlay(shapeStart, lc); return;
   }
 
-  if (tool === 'airbrush') { lastAirPos = lc; return; }
   if (tool === 'erase' || tool === 'pen' || tool === 'calligraphy') {
     drawMark(lc);
     backupLayer(activeLayer);
@@ -1753,13 +1795,8 @@ function onDrawEnd(e) {
   const vp = e ? getVP(e) : null;
   clearOverlay();
 
-  if (tool === 'airbrush') {
-    clearInterval(airbrushInterval); airbrushInterval = null;
-    backupLayer(activeLayer); drawUI();
-  }
-
   if (activeShape !== 'none' && shapeStart && vp) {
-    const lc = vToL(vp.x, vp.y);
+    const lc = getLogical(vp.x, vp.y);
     pushUndo(activeLayer);
     commitShape(shapeStart, lc);
     shapeStart = null;
@@ -1767,7 +1804,7 @@ function onDrawEnd(e) {
     drawUI();
   }
 
-  drawing = false; lastLogical = null; lastAirPos = null;
+  drawing = false; lastLogical = null;
 
   if (AC && voices.length && activeLayer === 'pitch' && !playing) {
     clearTimeout(ORM._previewTimeout);
@@ -1778,12 +1815,7 @@ function onDrawEnd(e) {
 }
 
 function onDrawLeave() {
-  if (tool !== 'airbrush') onDrawEnd(null);
-  else {
-    clearInterval(airbrushInterval); airbrushInterval = null;
-    drawing = false; lastAirPos = null;
-    backupLayer(activeLayer); drawUI();
-  }
+  onDrawEnd(null);
   document.getElementById('ost-tip').textContent = 'Draw on the canvas · left→right = time · up/down = value';
 }
 
@@ -1795,7 +1827,35 @@ function previewPitch(lc) {
   }
 }
 
-/* ── MARK DRAWING ── */
+/* ════════════════════════════════════════
+   MARK DRAWING
+════════════════════════════════════════ */
+
+/*
+  CALLIGRAPHY NIB LOGIC:
+  The nib is fixed at 45°. Stroke width = brushSize × |sin(θ - 45°)|
+  where θ is the angle of movement.
+  - Moving at 45°  → same as nib → very thin (sin ≈ 0)
+  - Moving at 135° → perpendicular → thick (sin = 1)
+  - Moving at 0° (horizontal) → sin(0 - 45°) = sin(−45°) = 0.707 → medium
+  - Moving at 90° (vertical)  → sin(90° - 45°) = sin(45°) = 0.707 → medium
+  The minimum width is a fraction of brushSize so the stroke never disappears.
+  We draw a filled quadrilateral between the previous and current point,
+  offset perpendicular to the nib angle (fixed 45°).
+*/
+const NIB_ANGLE = Math.PI / 4; /* 45° */
+const NIB_DIR   = { x: Math.cos(NIB_ANGLE), y: Math.sin(NIB_ANGLE) }; /* nib long axis */
+
+function calligraphyWidth(dx, dy) {
+  /* Angle of movement */
+  const len = Math.hypot(dx, dy);
+  if (len < 0.001) return brushSize * 0.15; /* stationary */
+  const moveAngle = Math.atan2(dy, dx);
+  /* Width = full brushSize × |sin(movement_angle - nib_angle)| */
+  const s = Math.abs(Math.sin(moveAngle - NIB_ANGLE));
+  return Math.max(brushSize * 0.08, brushSize * s);
+}
+
 function drawMark(lc) {
   const ctx   = layerCtxs[activeLayer];
   const color = LAYERS[activeLayer].color;
@@ -1829,52 +1889,52 @@ function drawMark(lc) {
   }
 
   if (tool === 'calligraphy') {
-    let speed_px = 0;
-    if (lastLogical) speed_px = Math.hypot(x - lastLogical.x, y - lastLogical.y);
-    const minW = Math.max(1, brushSize * 0.2);
-    const maxW = brushSize * 1.8;
-    const w    = Math.max(minW, maxW - speed_px * 0.4);
-    const angle = Math.PI / 4;
-
     if (lastLogical) {
-      const dx = x - lastLogical.x, dy = y - lastLogical.y;
-      const len = Math.hypot(dx, dy) || 1;
-      const nx = -dy/len, ny = dx/len;
+      const dx = x - lastLogical.x;
+      const dy = y - lastLogical.y;
+      const w  = calligraphyWidth(dx, dy);
       const hw = w / 2;
-      ctx.fillStyle = color+'cc';
+
+      /* The nib is perpendicular to NIB_DIR; offset strokes along NIB_DIR */
+      /* NIB_DIR = (cos45, sin45), perpendicular = (-sin45, cos45) */
+      const nibPerp = { x: -NIB_DIR.y, y: NIB_DIR.x };
+
+      /* Four corners of the ink rectangle */
+      const ax = lastLogical.x + NIB_DIR.x * hw;
+      const ay = lastLogical.y + NIB_DIR.y * hw;
+      const bx = lastLogical.x - NIB_DIR.x * hw;
+      const by = lastLogical.y - NIB_DIR.y * hw;
+      const cx2 = x - NIB_DIR.x * hw;
+      const cy2 = y - NIB_DIR.y * hw;
+      const dx2 = x + NIB_DIR.x * hw;
+      const dy2 = y + NIB_DIR.y * hw;
+
+      ctx.fillStyle = color + 'dd';
       ctx.beginPath();
-      ctx.moveTo(lastLogical.x + nx*hw*Math.cos(angle), lastLogical.y + ny*hw*Math.cos(angle));
-      ctx.lineTo(lastLogical.x - nx*hw*Math.cos(angle), lastLogical.y - ny*hw*Math.cos(angle));
-      ctx.lineTo(x - nx*hw*Math.cos(angle),             y - ny*hw*Math.cos(angle));
-      ctx.lineTo(x + nx*hw*Math.cos(angle),             y + ny*hw*Math.cos(angle));
-      ctx.closePath(); ctx.fill();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(bx, by);
+      ctx.lineTo(cx2, cy2);
+      ctx.lineTo(dx2, dy2);
+      ctx.closePath();
+      ctx.fill();
     } else {
-      ctx.fillStyle = color+'cc';
-      ctx.beginPath(); ctx.arc(x, y, w/2, 0, Math.PI*2); ctx.fill();
+      /* First dot: a small nib-shaped mark */
+      const hw = brushSize * 0.15;
+      ctx.fillStyle = color + 'dd';
+      ctx.beginPath();
+      ctx.moveTo(x + NIB_DIR.x * hw, y + NIB_DIR.y * hw);
+      ctx.lineTo(x - NIB_DIR.x * hw, y - NIB_DIR.y * hw);
+      ctx.lineTo(x - NIB_DIR.x * hw + 1, y - NIB_DIR.y * hw + 1);
+      ctx.closePath();
+      ctx.fill();
     }
     return;
   }
 }
 
-function applyAirbrush(lc) {
-  const ctx   = layerCtxs[activeLayer];
-  const color = LAYERS[activeLayer].color;
-  const r     = brushSize * 3;
-  const count = Math.ceil(brushSize * 1.2);
-  for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const dist  = Math.pow(Math.random(), 0.5) * r;
-    const px    = lc.x + Math.cos(angle) * dist;
-    const py    = lc.y + Math.sin(angle) * dist;
-    const alpha = (1 - dist/r) * 0.18;
-    ctx.fillStyle = color + Math.round(alpha*255).toString(16).padStart(2,'0');
-    ctx.beginPath(); ctx.arc(px, py, 1, 0, Math.PI*2); ctx.fill();
-  }
-  backupLayer(activeLayer);
-  drawUI();
-}
-
-/* ── SHAPE COMMIT ── */
+/* ════════════════════════════════════════
+   SHAPE COMMIT
+════════════════════════════════════════ */
 function commitShape(a, b) {
   const ctx   = layerCtxs[activeLayer];
   const color = LAYERS[activeLayer].color;
@@ -1891,29 +1951,12 @@ function commitShape(a, b) {
     ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke();
   } else if (activeShape === 'rect') {
     ctx.beginPath(); ctx.strokeRect(a.x, a.y, b.x-a.x, b.y-a.y);
-  } else if (activeShape === 'sine') {
-    const dx=b.x-a.x, dy=b.y-a.y;
-    const steps=Math.max(4,Math.abs(isMobile()?dy:dx));
-    ctx.beginPath();
-    for(let i=0;i<=steps;i++){
-      const t=i/steps;
-      const x=a.x+dx*t, amp2=dy/2;
-      const y=a.y+amp2+Math.sin(t*2*Math.PI*2)*amp2;
-      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-    }
-    ctx.stroke();
-  } else if (activeShape === 'flat') {
-    if (isMobile()) {
-      const mx=(a.x+b.x)/2;
-      ctx.beginPath(); ctx.moveTo(mx,a.y); ctx.lineTo(mx,b.y); ctx.stroke();
-    } else {
-      const my=(a.y+b.y)/2;
-      ctx.beginPath(); ctx.moveTo(a.x,my); ctx.lineTo(b.x,my); ctx.stroke();
-    }
   }
 }
 
-/* ── BRUSH PREVIEW ── */
+/* ════════════════════════════════════════
+   BRUSH PREVIEW
+════════════════════════════════════════ */
 function updateBrushPreview() {
   const dot = document.getElementById('ormBrushDot');
   const box = document.getElementById('ormBrushPreview');
@@ -1923,7 +1966,6 @@ function updateBrushPreview() {
   dot.style.background = color;
 
   if (tool === 'calligraphy') {
-    /* Slanted nib: a narrow rectangle at 45° */
     const nibW = Math.max(2, Math.min(boxW - 6, brushSize * 0.35));
     const nibH = Math.max(6, Math.min(boxW - 4, brushSize * 1.1));
     dot.style.width        = nibW + 'px';
@@ -1931,13 +1973,6 @@ function updateBrushPreview() {
     dot.style.borderRadius = '1px';
     dot.style.transform    = 'rotate(45deg)';
     dot.style.filter       = 'none';
-  } else if (tool === 'airbrush') {
-    const d = Math.min(boxW - 4, brushSize * 1.8);
-    dot.style.width        = d + 'px';
-    dot.style.height       = d + 'px';
-    dot.style.borderRadius = '50%';
-    dot.style.transform    = '';
-    dot.style.filter       = `blur(${(brushSize * 0.35).toFixed(1)}px)`;
   } else {
     const d = Math.min(boxW - 4, brushSize * 2);
     dot.style.width        = d + 'px';
@@ -1948,7 +1983,9 @@ function updateBrushPreview() {
   }
 }
 
-/* ── KEYBOARD SHORTCUTS ── */
+/* ════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+════════════════════════════════════════ */
 function onKeyDown(e) {
   const tag = (e.target||e.srcElement).tagName;
   if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
@@ -1958,7 +1995,6 @@ function onKeyDown(e) {
       if (e.metaKey || e.ctrlKey) { e.preventDefault(); ORM.undo(); } break;
     case 'p': case 'P': ORM.setTool('pen');         break;
     case 'k': case 'K': ORM.setTool('calligraphy'); break;
-    case 'a': case 'A': ORM.setTool('airbrush');    break;
     case 'e': case 'E': ORM.setTool('erase');       break;
     case '1': ORM.setLayer('pitch');  break;
     case '2': ORM.setLayer('amp');    break;
@@ -1970,12 +2006,9 @@ function onKeyDown(e) {
 }
 
 /* ════════════════════════════════════════
-   RANDOMIZE — musically coherent shapes
+   RANDOMIZE
 ════════════════════════════════════════ */
-
-/* Smooth bezier melodic curve across part or all of the time axis */
 function genMelodicCurve(ctx, color, lw, lh, mobile) {
-  /* Choose 2–3 arching gestures */
   const numArches = 1 + Math.floor(Math.random() * 2);
   ctx.strokeStyle = color + 'dd';
   ctx.lineCap     = 'round';
@@ -1983,11 +2016,8 @@ function genMelodicCurve(ctx, color, lw, lh, mobile) {
   ctx.lineWidth   = 6 + Math.random() * 6;
 
   for (let a = 0; a < numArches; a++) {
-    /* Time span: a portion or all of the axis */
     const tStart = (a / numArches) * 0.85;
     const tEnd   = tStart + 0.25 + Math.random() * (0.75 / numArches);
-
-    /* Value positions (0=top=high, 1=bottom=low) — keep in musical mid-range */
     const vA  = 0.1 + Math.random() * 0.5;
     const vB  = 0.1 + Math.random() * 0.5;
     const vC1 = Math.max(0.05, Math.min(0.95, vA + (Math.random() - 0.5) * 0.6));
@@ -2013,7 +2043,6 @@ function genMelodicCurve(ctx, color, lw, lh, mobile) {
   }
 }
 
-/* Amplitude envelope: ramp up → sustain → ramp down, possibly multiple */
 function genAmpEnvelope(ctx, color, lw, lh, mobile) {
   const numEnv = 1 + Math.floor(Math.random() * 2);
   ctx.lineCap   = 'round';
@@ -2024,16 +2053,14 @@ function genAmpEnvelope(ctx, color, lw, lh, mobile) {
     const tEnd     = tStart + 0.3 + Math.random() * (0.6 / numEnv);
     const tAttack  = tStart + (tEnd - tStart) * (0.05 + Math.random() * 0.2);
     const tRelease = tEnd   - (tEnd - tStart) * (0.1  + Math.random() * 0.25);
-    /* Peak height (0=top=loud, so inverted: peak=low y value) */
-    const peak = 0.05 + Math.random() * 0.35;
-    const floor = 0.92 + Math.random() * 0.07; // near-silence
+    const peak  = 0.05 + Math.random() * 0.35;
+    const floor = 0.92 + Math.random() * 0.07;
 
     ctx.strokeStyle = color + 'cc';
     ctx.lineWidth   = 8 + Math.random() * 8;
     ctx.beginPath();
 
     if (mobile) {
-      // Time=Y, value=X; high X = loud (right)
       const xPeak  = (1 - peak)  * lw;
       const xFloor = (1 - floor) * lw;
       ctx.moveTo(xFloor, tStart * lh);
@@ -2041,7 +2068,6 @@ function genAmpEnvelope(ctx, color, lw, lh, mobile) {
       ctx.lineTo(xPeak,  tRelease * lh);
       ctx.lineTo(xFloor, tEnd * lh);
     } else {
-      // Time=X; low y = loud
       const yPeak  = peak  * lh;
       const yFloor = floor * lh;
       ctx.moveTo(tStart   * lw, yFloor);
@@ -2053,7 +2079,6 @@ function genAmpEnvelope(ctx, color, lw, lh, mobile) {
   }
 }
 
-/* Timbre: a single slow sweep — one long bezier staying in a reasonable range */
 function genTimbreSweep(ctx, color, lw, lh, mobile) {
   ctx.strokeStyle = color + 'bb';
   ctx.lineWidth   = 5 + Math.random() * 5;
@@ -2075,14 +2100,13 @@ function genTimbreSweep(ctx, color, lw, lh, mobile) {
   ctx.stroke();
 }
 
-/* Modulation: 1–2 short horizontal strokes suggesting steady vibrato regions */
 function genModStrokes(ctx, color, lw, lh, mobile) {
   const n = 1 + Math.floor(Math.random() * 2);
   ctx.lineCap   = 'round';
   ctx.lineWidth = 6 + Math.random() * 8;
 
   for (let i = 0; i < n; i++) {
-    const depth   = 0.2 + Math.random() * 0.4; // mod depth (mid-range)
+    const depth   = 0.2 + Math.random() * 0.4;
     const tCenter = 0.15 + Math.random() * 0.65;
     const tSpan   = 0.08 + Math.random() * 0.2;
     const tA = Math.max(0, tCenter - tSpan);
@@ -2136,27 +2160,49 @@ const ORM = window.ORM = {
   setSpeed(v) {
     speed = v;
     document.getElementById('orm-speed-val').textContent = v.toFixed(2) + '×';
+    const ms = document.getElementById('orm-m-speed');
+    if (ms) ms.value = v;
   },
 
   setWave(w) {
     waveType = w;
     voices.forEach(v => { v.osc.type = w; });
+    /* Sync both wave selects */
+    const dw = document.getElementById('orm-wave');
+    const mw = document.getElementById('orm-m-wave');
+    if (dw) dw.value = w;
+    if (mw) mw.value = w;
   },
 
   setAnalog(on) {
     analogOn = on;
-    if (!on) analogDriftVal = 0; // reset drift when switched off
+    if (!on) analogDriftVal = 0;
+    const da = document.getElementById('orm-analog');
+    const ma = document.getElementById('orm-m-analog');
+    if (da) da.checked = on;
+    if (ma) ma.checked = on;
   },
 
   setLayer(k) {
     activeLayer = k;
+    /* Desktop tabs */
     document.querySelectorAll('.orm-layer-tab').forEach(el => el.classList.remove('active'));
-    document.getElementById('ltab-'+k).classList.add('active');
-    document.getElementById('orm-layer-hint').textContent = LAYERS[k].hint;
+    const dt = document.getElementById('ltab-'+k);
+    if (dt) dt.classList.add('active');
+    /* Mobile dots */
+    document.querySelectorAll('.orm-layer-dot-btn').forEach(el => el.classList.remove('active'));
+    const mb = document.getElementById('mltab-'+k);
+    if (mb) mb.classList.add('active');
+    /* Hint + scale */
+    const hint = document.getElementById('orm-layer-hint');
+    if (hint) hint.textContent = LAYERS[k].hint;
     const sc = LAYER_SCALES[k];
-    document.getElementById('orm-scale-top').textContent = sc.top;
-    document.getElementById('orm-scale-mid').textContent = sc.mid;
-    document.getElementById('orm-scale-bot').textContent = sc.bot;
+    const st = document.getElementById('orm-scale-top');
+    const sm = document.getElementById('orm-scale-mid');
+    const sb = document.getElementById('orm-scale-bot');
+    if (st) st.textContent = sc.top;
+    if (sm) sm.textContent = sc.mid;
+    if (sb) sb.textContent = sc.bot;
     updateBrushPreview();
   },
 
@@ -2170,25 +2216,40 @@ const ORM = window.ORM = {
 
   setTool(t) {
     tool = t;
-    /* Sync desktop buttons */
+    /* Desktop buttons */
     document.querySelectorAll('.orm-tool-btn').forEach(b => b.classList.remove('active'));
-    const btn = document.getElementById('tool-'+t);
-    if (btn) btn.classList.add('active');
-    /* Sync mobile dropdown */
-    const mob = document.getElementById('tool-mobile-select');
-    if (mob) mob.value = t;
+    const db = document.getElementById('tool-'+t);
+    if (db) db.classList.add('active');
+    /* Mobile buttons */
+    document.querySelectorAll('.orm-m-tool-btn').forEach(b => {
+      /* only deactivate tool buttons, not undo/random/clear */
+      if (b.id && b.id.startsWith('mtool-')) b.classList.remove('active');
+    });
+    const mb = document.getElementById('mtool-'+t);
+    if (mb) mb.classList.add('active');
     drawCanvas.style.cursor = t === 'erase' ? 'cell' : 'crosshair';
     updateBrushPreview();
   },
 
   setShape(s) {
     activeShape = s;
+    /* Sync both shape selects */
+    const ds = document.getElementById('orm-shape');
+    const ms = document.getElementById('orm-m-shape');
+    if (ds) ds.value = s;
+    if (ms) ms.value = s;
   },
 
   setBrushSize(v) {
     brushSize = v;
-    document.getElementById('orm-bsize-val').textContent = v;
-    document.getElementById('orm-bsize').value = v;
+    const dv = document.getElementById('orm-bsize-val');
+    const db = document.getElementById('orm-bsize');
+    const mv = document.getElementById('orm-m-bsize-val');
+    const mb = document.getElementById('orm-m-bsize');
+    if (dv) dv.textContent = v;
+    if (db) db.value = v;
+    if (mv) mv.textContent = v;
+    if (mb) mb.value = v;
     updateBrushPreview();
   },
 
@@ -2222,22 +2283,6 @@ const ORM = window.ORM = {
     genModStrokes  (layerCtxs['mod'],    LAYERS['mod'].color,    LW, LH, mobile);
     Object.keys(LAYERS).forEach(k => backupLayer(k));
     drawUI();
-  },
-
-  zoomIn() {
-    if (zoomIdx < ZOOM_STEPS.length - 1) {
-      zoomIdx++;
-      document.getElementById('orm-zoom-level').textContent = ZOOM_STEPS[zoomIdx] + '×';
-      clampPan(); drawUI();
-    }
-  },
-
-  zoomOut() {
-    if (zoomIdx > 0) {
-      zoomIdx--;
-      document.getElementById('orm-zoom-level').textContent = ZOOM_STEPS[zoomIdx] + '×';
-      clampPan(); drawUI();
-    }
   },
 };
 
