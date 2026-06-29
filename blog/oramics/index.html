@@ -8,230 +8,240 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oramics Machine: drawing sound</title>
   <meta name="description" content="An interactive recreation of Daphne Oram's Oramics machine — draw on a canvas to compose sound directly in your browser.">
-
-  <!-- FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
-  <!-- MAIN STYLESHEET -->
-  <link rel="stylesheet" href="/css/styles.css">
 
   <style>
-    /* ─── CHANNEL COLORS ─── */
     :root {
-      --ch-pitch:  #20269D;
-      --ch-amp:    #20269D;
-      --ch-mod:    #5560C8;
-      --ch-timbre: #9DA4E8;
+      --text: #1a1a1a;
+      --bg: #ffffff;
+      --accent-hover: #333;
+
+      /* Channel palette — inky, considered, anchored to the blog's navy */
+      --ch-pitch:  #1E2FA8;   /* deep indigo — home color */
+      --ch-pitch2: #B8223A;   /* pressroom crimson */
+      --ch-amp:    #1A7A6E;   /* teal-green */
+      --ch-mod:    #A0471F;   /* burnt sienna */
+      --ch-timbre: #5C4FA3;   /* slate violet */
     }
 
-    body { padding-top: 64px; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-
-    /* ─── PAGE LAYOUT ─── */
-    .page-wrap {
-      display: flex;
-      align-items: flex-start;
-      min-height: calc(100vh - 64px);
-    }
-
-    .vertical-title {
-      width: 64px;
-      flex-shrink: 0;
-      position: fixed;
-      top: 64px;
-      height: calc(100vh - 64px);
-      border-right: 1px solid var(--text);
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding-top: 2rem;
-      overflow: hidden;
-    }
-    .vertical-title span {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: .22em;
-      text-transform: uppercase;
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
       color: var(--text);
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      transform: rotate(180deg);
-      white-space: nowrap;
-      user-select: none;
+      padding: 1.5em;
+      max-width: 860px;
+      margin: 0 auto;
     }
 
-    .page-content {
-      flex: 1;
-      min-width: 0;
-      padding: 0.5em 2em 5em;
-      max-width: 960px;
-      margin-left: 72px;
-      width: calc(100% - 72px);
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      margin-bottom: 0.25em;
+    }
+    .subtitle {
+      font-size: 0.78rem;
+      opacity: 0.55;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25em;
     }
 
-
-    /* ─── LAB SECTION WRAPPER ─── */
+    /* ── LAB SECTION ── */
     .lab-section {
       border: 1px solid var(--text);
-      padding: 1em 1em 1em;
-      margin: 2em 0;
-    }
-    .lab-section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text);
-      margin: 0 0 1em;
+      padding: 0.85em;
     }
 
-    /* ─── CHANNEL LEGEND ─── */
-    .channel-legend {
+    /* ── STATUS BAR ── */
+    .status-bar {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 1em;
+      justify-content: space-between;
       align-items: center;
+      margin-bottom: 0.6em;
+      min-height: 18px;
     }
-    .channel-legend-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.68rem;
+    .status-note {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
       letter-spacing: 0.1em;
+      color: var(--text);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .status-note.visible { opacity: 1; }
+    .status-mode {
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text);
-      margin-right: 4px;
+      opacity: 0.45;
+    }
+
+    /* ── CHANNEL LEGEND ── */
+    .channel-legend {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      margin-bottom: 0.6em;
+      align-items: center;
+      overflow-x: auto;
+    }
+    .channel-legend-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.5;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
     .ch-swatch {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       color: var(--text);
       cursor: pointer;
-      padding: 3px 10px 3px 8px;
+      padding: 3px 7px 3px 6px;
       border: 1px solid transparent;
       transition: border-color 0.12s;
       user-select: none;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .ch-swatch.active {
-      border-color: var(--text);
-    }
+    .ch-swatch.active { border-color: var(--text); }
     .ch-swatch:hover { border-color: var(--accent-hover); }
     .ch-dot {
-      width: 12px;
-      height: 12px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
-    /* ─── CANVAS WRAP ─── */
+    /* ── CANVAS ── */
+    .canvas-outer {
+      display: flex;
+      align-items: stretch;
+      gap: 5px;
+      margin-bottom: 0.7em;
+    }
+    .y-axis {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2px 0;
+      flex-shrink: 0;
+    }
+    .y-axis span {
+      font-size: 0.58rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.4;
+    }
+    .canvas-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
     .canvas-wrap {
       position: relative;
       width: 100%;
       border: 1px solid var(--text);
-      background: #ffffff;
-      margin-bottom: 1em;
+      background: #fff;
       overflow: hidden;
       cursor: crosshair;
+      flex: 1;
     }
     #oram-canvas {
       display: block;
       width: 100%;
-      height: 220px;
+      height: 280px;
       touch-action: none;
-    }
-    /* Scan line overlay (CSS animated, JS drives position via custom prop) */
-    .scan-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
     }
     #scan-line {
       position: absolute;
-      top: 0;
-      bottom: 0;
+      top: 0; bottom: 0;
       width: 2px;
-      background: rgba(255,80,0,0.65);
+      background: rgba(255, 90, 20, 0.75);
       pointer-events: none;
-      box-shadow: 0 0 6px rgba(255,80,0,0.4);
-      left: 0;
+      box-shadow: 0 0 8px rgba(255, 90, 20, 0.45);
+      left: -4px;
       display: none;
     }
-
-    /* ─── TOOLBAR ─── */
-    .oram-toolbar {
+    .x-axis {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 0.9em;
+      justify-content: space-between;
+      padding: 2px 0 0;
     }
+    .x-axis span {
+      font-size: 0.58rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.4;
+    }
+
+    /* ── TOOLBARS ── */
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 0.5em;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+    .toolbar-row:last-child { margin-bottom: 0; }
 
     .oram-btn {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 500;
       background: transparent;
       color: var(--text);
       border: 2px solid var(--text);
-      padding: 0.38em 1em;
+      padding: 0.32em 0.85em;
       cursor: pointer;
       border-radius: 0;
       white-space: nowrap;
       transition: background 0.12s, color 0.12s, border-color 0.12s;
       -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
     }
-    .oram-btn:hover {
-      background: var(--accent-hover);
-      color: var(--bg);
-      border-color: var(--accent-hover);
-    }
-    .oram-btn.active {
-      background: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-    }
-    .oram-btn.active:hover {
-      background: var(--accent-hover);
-      border-color: var(--accent-hover);
-    }
-    .oram-btn.ghost {
-      border-width: 1px;
-      font-size: 0.78rem;
-      padding: 0.3em 0.85em;
-    }
+    .oram-btn:hover { background: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .oram-btn.active { background: var(--text); color: var(--bg); }
+    .oram-btn.active:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .oram-btn.ghost { border-width: 1px; font-size: 0.72rem; padding: 0.28em 0.7em; }
 
     .toolbar-sep {
       width: 1px;
-      height: 28px;
+      height: 22px;
       background: var(--text);
-      opacity: 0.25;
+      opacity: 0.2;
       flex-shrink: 0;
     }
 
-    /* ─── TEMPO CONTROL ─── */
-    .tempo-ctrl {
+    /* ── SLIDERS ── */
+    .slider-ctrl {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex: 1;
-      min-width: 120px;
+      min-width: 0;
     }
-    .tempo-ctrl label {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
+    .slider-ctrl label {
+      font-size: 0.63rem;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
       color: var(--text);
       white-space: nowrap;
+      flex-shrink: 0;
     }
-    .tempo-ctrl input[type=range] {
+    .slider-ctrl input[type=range] {
       flex: 1;
+      min-width: 0;
       -webkit-appearance: none;
       appearance: none;
       height: 2px;
@@ -239,309 +249,175 @@
       outline: none;
       cursor: pointer;
     }
-    .tempo-ctrl input[type=range]::-webkit-slider-thumb {
+    .slider-ctrl input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
+      width: 12px; height: 12px;
       border-radius: 50%;
       background: var(--text);
       cursor: pointer;
     }
-    .tempo-ctrl input[type=range]::-moz-range-thumb {
-      width: 14px; height: 14px;
+    .slider-ctrl input[type=range]::-moz-range-thumb {
+      width: 12px; height: 12px;
       border-radius: 50%;
       background: var(--text);
       border: none;
       cursor: pointer;
     }
-    .tempo-val {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
+    .slider-val {
+      font-size: 0.7rem;
       color: var(--text);
-      min-width: 32px;
+      min-width: 28px;
       text-align: right;
+      flex-shrink: 0;
     }
 
-    .lab-hint {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
+    /* ── PRESET ROW ── */
+    .preset-row {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 0.6em;
+      padding-top: 0.6em;
+      border-top: 1px solid rgba(0,0,0,0.12);
+    }
+    .preset-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
       color: var(--text);
-      opacity: 0.65;
-      text-align: center;
-      margin-top: 0.25em;
+      opacity: 0.5;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
     }
 
-    /* ─── EXERCISES ─── */
-    .lab-exercise {
-      border-left: 3px solid var(--text);
-      padding: 1em 1.25em;
-      margin: 1.5em 0;
-    }
-    .lab-exercise h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text);
-      margin: 0 0 0.5em;
-    }
-    .lab-exercise p { margin-bottom: 0.6em; }
-    .lab-exercise p:last-child { margin-bottom: 0; }
-
-
-    /* ─── MOBILE ─── */
+    /* ── MOBILE ── */
     @media (max-width: 600px) {
-      .vertical-title {
-        width: 36px;
-        padding-top: 1rem;
-      }
-      .vertical-title span { font-size: 0.8rem; letter-spacing: 0.18em; }
-      .page-content {
-        margin-left: 44px;
-        width: calc(100% - 44px);
-        padding: 0.5em 0.75em 4em;
-      }
-      footer { margin-left: 36px; }
+      body { padding: 0.75em; }
 
-      /* On mobile the canvas is taller and scanned top→bottom */
-      #oram-canvas {
-        height: 340px;
-      }
+      #oram-canvas { height: 200px; }
+
+      /* Horizontal scan on mobile */
       #scan-line {
-        /* On mobile, scan-line is horizontal */
         width: 100%;
         height: 2px;
-        bottom: auto;
-        left: 0;
-        right: 0;
-        top: 0;
+        left: 0; right: 0;
+        top: -4px; bottom: auto;
       }
 
-      .oram-toolbar {
-        gap: 5px;
-      }
-      .oram-btn {
-        font-size: 0.75rem;
-        padding: 0.35em 0.7em;
-      }
-      .toolbar-sep { height: 22px; }
+      .oram-btn { font-size: 0.72rem; padding: 0.3em 0.6em; }
+      .oram-btn.ghost { font-size: 0.68rem; padding: 0.25em 0.55em; }
+      .toolbar-sep { height: 18px; }
+      .preset-row { display: none; }
     }
   </style>
 </head>
 <body>
 
-{% include header.html %}
+<h1>Oramics Machine</h1>
+<p class="subtitle">draw sound · Daphne Oram, 1962</p>
 
-<div class="page-wrap">
+<div class="lab-section">
 
-  <h1 class="vertical-title" aria-hidden="true">
-    <span>Oramics</span>
-  </h1>
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="status-note" id="status-note"></span>
+    <span class="status-mode" id="waveform-label">sawtooth</span>
+  </div>
 
-  <main class="page-content">
-    <article>
+  <!-- Channel selector -->
+  <div class="channel-legend">
+    <span class="channel-legend-label">draw →</span>
+    <button class="ch-swatch active" data-ch="pitch"  title="Pitch voice 1 — vertical = frequency">
+      <span class="ch-dot" style="background:var(--ch-pitch)"></span>pitch 1
+    </button>
+    <button class="ch-swatch" data-ch="pitch2" title="Pitch voice 2 — independent oscillator">
+      <span class="ch-dot" style="background:var(--ch-pitch2)"></span>pitch 2
+    </button>
+    <button class="ch-swatch" data-ch="amp"    title="Amplitude — vertical = volume">
+      <span class="ch-dot" style="background:var(--ch-amp)"></span>amp
+    </button>
+    <button class="ch-swatch" data-ch="mod"    title="Modulation — vertical = vibrato depth">
+      <span class="ch-dot" style="background:var(--ch-mod)"></span>mod
+    </button>
+    <button class="ch-swatch" data-ch="timbre" title="Timbre — vertical = filter brightness">
+      <span class="ch-dot" style="background:var(--ch-timbre)"></span>timbre
+    </button>
+  </div>
 
-      <!-- ══ THE ORAMICS MACHINE ══ -->
-      <section>
-        <div class="lab-section">
-     
+  <!-- Canvas -->
+  <div class="canvas-outer">
+    <div class="y-axis">
+      <span>high</span>
+      <span>low</span>
+    </div>
+    <div class="canvas-col">
+      <div class="canvas-wrap">
+        <canvas id="oram-canvas"></canvas>
+        <div id="scan-line"></div>
+      </div>
+      <div class="x-axis">
+        <span>start</span>
+        <span>→ time →</span>
+        <span>end</span>
+      </div>
+    </div>
+  </div>
 
-          <!-- Channel selector (acts as active drawing color) -->
-          <div class="channel-legend">
-            <span class="channel-legend-label">channel →</span>
-            <button class="ch-swatch active" data-ch="pitch"  title="Pitch: vertical position maps to frequency">
-              <span class="ch-dot" style="background:var(--ch-pitch)"></span>pitch
-            </button>
-            <button class="ch-swatch" data-ch="amp"    title="Amplitude: vertical position maps to volume">
-              <span class="ch-dot" style="background:var(--ch-amp)"></span>amplitude
-            </button>
-            <button class="ch-swatch" data-ch="mod"    title="Modulation: vertical position maps to vibrato rate">
-              <span class="ch-dot" style="background:var(--ch-mod)"></span>modulation
-            </button>
-            <button class="ch-swatch" data-ch="timbre" title="Timbre: vertical position maps to filter brightness">
-              <span class="ch-dot" style="background:var(--ch-timbre)"></span>timbre
-            </button>
-          </div>
+  <!-- Row 1: play + pen tools + undo/clear -->
+  <div class="toolbar-row">
+    <button class="oram-btn" id="btn-play">▶&#xFE0E; play</button>
+    <div class="toolbar-sep"></div>
+    <button class="oram-btn active" id="btn-round">round</button>
+    <button class="oram-btn"        id="btn-cal">nib</button>
+    <button class="oram-btn"        id="btn-eraser">erase</button>
+    <div class="toolbar-sep"></div>
+    <button class="oram-btn ghost"  id="btn-undo">undo</button>
+    <button class="oram-btn ghost"  id="btn-clear">clear</button>
+  </div>
 
-          <!-- Canvas with axis labels -->
-          <div style="display:flex;align-items:stretch;gap:6px;margin-bottom:1em;">
-            <!-- Y-axis label -->
-            <div style="display:flex;flex-direction:column;justify-content:space-between;padding:2px 0;min-width:28px;">
-              <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;writing-mode:horizontal-tb;">high</span>
-              <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;">low</span>
-            </div>
-            <div style="flex:1;display:flex;flex-direction:column;">
-              <div class="canvas-wrap" style="margin-bottom:0;flex:1;">
-                <canvas id="oram-canvas"></canvas>
-                <div class="scan-overlay">
-                  <div id="scan-line"></div>
-                </div>
-              </div>
-              <!-- X-axis label -->
-              <div style="display:flex;justify-content:space-between;padding:3px 0 0;">
-                <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;">start</span>
-                <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;">→ time →</span>
-                <span style="font-family:'Inter',sans-serif;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);opacity:0.5;">end</span>
-              </div>
-            </div>
-          </div>
+  <!-- Row 2: waveform + voice mix slider -->
+  <div class="toolbar-row">
+    <button class="oram-btn ghost" id="btn-wave" title="Cycle waveform: sawtooth → square → triangle → sine">wave: saw</button>
+    <div class="toolbar-sep"></div>
+    <div class="slider-ctrl">
+      <label for="mix-slider">v2 mix</label>
+      <input type="range" id="mix-slider" min="0" max="100" value="70" step="1">
+      <span class="slider-val" id="mix-val">70%</span>
+    </div>
+  </div>
 
-          <!-- Toolbar row 1: play + tools + undo/clear -->
-          <div class="oram-toolbar">
-            <button class="oram-btn" id="btn-play">play</button>
-            <div class="toolbar-sep"></div>
-            <button class="oram-btn active" id="btn-round"  title="Round pen">round</button>
-            <button class="oram-btn"        id="btn-cal"    title="Calligraphy pen (45° nib)">nib</button>
-            <button class="oram-btn"        id="btn-eraser" title="Eraser">erase</button>
-            <div class="toolbar-sep"></div>
-            <button class="oram-btn ghost"  id="btn-undo">undo</button>
-            <button class="oram-btn ghost"  id="btn-clear">clear</button>
-          </div>
+  <!-- Row 3: loop + size sliders -->
+  <div class="toolbar-row">
+    <div class="slider-ctrl">
+      <label for="tempo-slider">loop</label>
+      <input type="range" id="tempo-slider" min="3" max="20" value="8" step="1">
+      <span class="slider-val" id="tempo-val">8s</span>
+    </div>
+    <div class="toolbar-sep"></div>
+    <div class="slider-ctrl">
+      <label for="size-slider">size</label>
+      <input type="range" id="size-slider" min="2" max="24" value="8" step="1">
+      <span class="slider-val" id="size-val">8</span>
+    </div>
+  </div>
 
-          <!-- Toolbar row 2: tempo -->
-          <div class="oram-toolbar">
-            <div class="tempo-ctrl">
-              <label for="tempo-slider">loop</label>
-              <input type="range" id="tempo-slider" min="3" max="20" value="8" step="1">
-              <span class="tempo-val" id="tempo-val">8s</span>
-            </div>
-            <div class="toolbar-sep"></div>
-            <div class="tempo-ctrl" style="min-width:90px">
-              <label for="size-slider">size</label>
-              <input type="range" id="size-slider" min="2" max="24" value="8" step="1">
-              <span class="tempo-val" id="size-val">8</span>
-            </div>
-          </div>
+  <!-- Presets (desktop only) -->
+  <div class="preset-row">
+    <span class="preset-label">try →</span>
+    <button class="oram-btn ghost" data-preset="rise">rising phrase</button>
+    <button class="oram-btn ghost" data-preset="wave">slow wave</button>
+    <button class="oram-btn ghost" data-preset="rhythm">rhythm</button>
+    <button class="oram-btn ghost" data-preset="drone">drone + mod</button>
+  </div>
 
-        </div>
-      </section>
-
-      <!-- ══ ARTICLE ══ -->
-      <section>
-        <h2>Oramics: drawing sound into being</h2>
-        <p class="post-meta"><time datetime="2026-05-04">May 4, 2026</time></p>
-        <p>Written by Jordan Elias, MT-BC</p>
-
-        <p class="post-intro">
-          In 1957, a BBC radiophonic engineer named Daphne Oram left her job to build a machine that could translate drawn marks into music. She called it the Oramics machine. This is a browser-based version of that idea.
-        </p>
-      </section>
-
-      <section>
-        <h2>Who was Daphne Oram?</h2>
-
-        <p>Daphne Oram was born in Wiltshire in 1925. She taught herself to play piano and organ as a child and arrived at the BBC in 1943 as a music balancer, one of the people who sat in a glass booth and adjusted the levels of live orchestra recordings going out on air. She was good at the technical work, and she was also somewhere else in her head entirely: imagining a music that did not yet have to be performed, that could be created from first principles by manipulating the physical properties of sound itself.</p>
-
-        <p>In 1958 she co-founded the BBC Radiophonic Workshop, the unit that would go on to make the Doctor Who theme, among many other things. She left within months. The Workshop was being used for sound effects and incidental music. Oram had something much stranger in mind.</p>
-
-        <p>She moved into an oast house in Kent with a collection of salvaged electronics and began building her machine. The Oramics machine was completed in the early 1960s and used for the next two decades. It is now in the Science Museum in London.</p>
-      </section>
-
-      <section>
-        <h2>How the original machine worked</h2>
-
-        <p>The Oramics machine used ten strips of 35mm film running in parallel through a light-reading mechanism. Each strip controlled a different parameter of the sound: pitch, amplitude, timbre, speed, reverberation. Oram would draw directly onto the film with black paint or chinagraph pencil. As the film moved through the machine, a photocell read the drawn marks and converted the varying amounts of light passing through the film into varying voltages, which in turn shaped the sound being generated by oscillators.</p>
-
-        <p>The relationship between mark and sound was direct and physical. A line drawn higher or lower on the film translated to a higher or lower frequency. A thicker mark produced a different amplitude envelope than a thin one. The drawn gesture was not a score to be interpreted by a performer; it was the sound itself, encoded graphically.</p>
-
-        <p>Oram described what she was after as a music in which the composer had complete control over every parameter of every note: not just pitch and duration, as in conventional notation, but the precise shape of the attack and decay, the exact spectral content of each sound, the texture and movement of the whole. She called the underlying theory Oramics, and she believed it would eventually allow composers to work directly in the language of sound rather than through the intermediary of musical notation and human performance.</p>
-      </section>
-
-      <section>
-        <h2>What the machine in your browser does</h2>
-
-        <p>This is a simplified version of Oram's idea. The canvas represents time from left to right (or top to bottom on a phone, following the shape of the screen). The vertical position of marks on each channel corresponds to a different parameter.</p>
-
-        <p>The four channels work as follows. The blue pitch channel maps vertical position to frequency: marks higher on the canvas produce higher-pitched tones, marks lower produce lower ones. The range spans roughly two octaves around A220. The green amplitude channel maps vertical position to volume: high marks are louder, low marks are quieter. If no amplitude mark is present at a given moment, the sound defaults to a moderate fixed volume. The amber modulation channel introduces vibrato: marks higher on the canvas produce faster, deeper frequency modulation, marks lower slow it down or remove it. The red timbre channel drives a lowpass filter: marks high on the canvas open the filter and allow the full spectrum through, producing a brighter sound, while marks low close the filter for a warmer, darker timbre.</p>
-
-        <p>When you press play, the orange scan line moves across the canvas at the speed you have set with the loop control. At each position, the machine reads the topmost mark in each channel and uses it to set the corresponding audio parameter. The result is played continuously in a loop.</p>
-      </section>
-
-      <section>
-        <h2>Experiments</h2>
-
-        <div class="lab-exercise">
-          <h3>1. a single pitch line</h3>
-          <p>Select the pitch channel and draw a horizontal line across the middle of the canvas. Press play. You are hearing a continuous tone at a fixed frequency. Now draw the same line at the top of the canvas and listen to the pitch rise. Now curve the line, dipping and rising, and hear the pitch follow the contour of your mark. This is what Oram was doing on film: drawing pitch as a spatial curve.</p>
-        </div>
-
-        <div class="lab-exercise">
-          <h3>2. amplitude shaping</h3>
-          <p>Clear the canvas. Select the amplitude channel and draw a shape that starts low on the left, rises toward the center, and falls again at the right. Press play. You are shaping the volume envelope of the loop with a drawn gesture. Try making sharp peaks, slow curves, irregular mountains. Each shape produces a different rhythmic feel.</p>
-        </div>
-
-        <div class="lab-exercise">
-          <h3>3. layering channels</h3>
-          <p>Draw a gentle pitch curve first. Then switch to amplitude and draw an independent shape. Then add some timbre. Listen to how the channels interact. You are composing multiparametrically, in the way Oram intended: pitch, loudness, and spectral character moving independently through time, each driven by its own drawn gesture.</p>
-        </div>
-
-        <div class="lab-exercise">
-          <h3>4. the calligraphy nib</h3>
-          <p>Switch to the nib pen and try drawing. The slanted tip naturally produces thicker strokes on diagonals and thinner strokes on horizontal lines, in the same way a real calligraphy pen responds to the angle of the stroke. This changes the character of the marks on the canvas. Experiment with drawing the same shape with both the round pen and the nib and listen for any difference in how the scanner reads them.</p>
-        </div>
-
-        <div class="lab-exercise">
-          <h3>5. modulation as ornament</h3>
-          <p>Draw a pitch line. Then switch to the modulation channel and draw a short mark only in the middle section of the canvas, high up. Press play. The vibrato appears and disappears as the scan line crosses your mark, as if the performer is choosing where to add expression. Try placing modulation marks at the ends of phrases, or layering fast and slow modulation marks at different vertical positions.</p>
-        </div>
-
-        <div class="lab-exercise">
-          <h3>6. graphic score as composition</h3>
-          <p>Forget the individual channels for a moment. Draw whatever you would draw if this were a blank page and you were making a drawing, not programming a synthesiser. Then press play. Oram believed the drawn gesture had an inherent musical logic, that the hand moving across a surface and the voice or instrument moving through pitch-time were related kinds of motion. Listen to what your drawing sounds like. Does the shape of it correspond to what you hear?</p>
-        </div>
-      </section>
-
-      <section>
-        <h2>Oram and the sonic imagination</h2>
-
-        <p>One of the things that is striking about Oram's project, looking back at it now, is how completely she committed to it without any certainty that it would work or that anyone would care. She spent her own money building the machine. She maintained it, repaired it, continued developing it for two decades. She gave lectures and wrote theoretical papers that were received with polite bafflement. She published a book, <em>An Individual Note of Music, Sound and Electronics</em>, in 1972, which remained largely unknown.</p>
-
-        <p>The work she produced on the machine is strange. It does not sound like electronic music from the 1960s and 1970s, which tends toward either academic serialism or science-fiction texture. It sounds like something being drawn into existence by hand: imprecise in a way that feels intentional, with a particular quality of hesitation and intention that you can imagine coming from the drawn mark on film.</p>
-
-        <p>From a music therapy perspective, there is something worth attending to in the idea that the gesture of drawing and the gesture of making music might be related at some fundamental level. Oram was not the only person working in this territory. Graphic scores appeared across experimental music in the same period, Morton Feldman's coordinate paper scores, Cardew's <em>Treatise</em>, Cage's various experiments. But Oram's approach was different in that she was not writing instructions for a performer to interpret. She was directly encoding sound. The drawing was the composition and the composition was the drawing, without any layer of interpretation in between.</p>
-
-        <p>There is also something worth noting about what kind of composer Oram was able to be with this machine. She had no formal training in composition. She had taught herself music from the piano and the organ. The Oramics system was explicitly designed to bypass the gatekeeping function of traditional musical training: if you could draw, you could compose. This is not a trivial thing. The history of who gets to be a composer, who gets to make music that is taken seriously as art rather than dismissed as amateur, is partly a history of access to notation systems and the institutions that teach them.</p>
-      </section>
-
-      <section>
-        <h2>Sound and the body</h2>
-
-        <p>The Oramics machine was a physical object. You bent over it, you touched the film, you painted on it. There was a bodily engagement with the material of sound-making that is largely absent from working with a digital audio workstation. When Oram drew a pitch curve on the film, her hand was moving through space in a way that had a direct relationship to the pitch movement she was creating: higher on the film meant higher in frequency, and her arm was actually moving upward to make it.</p>
-
-        <p>This spatial mapping between gesture and sound is something that a few music therapists have become interested in, not as a historical curiosity but as a working principle. The body's spatial sense is deeply connected to musical perception. We talk about high and low notes as though they occupy physical space. We feel rhythm in the body before we conceptualize it. The experience of making sound through a gesture that is spatially continuous with the sound's parameters may have a different quality than the experience of programming the same sound through a menu.</p>
-
-        <p>Draw something. Listen to it. Notice whether the shape of what you drew corresponds to what you hear, and whether that correspondence feels meaningful or arbitrary. This is the question Oram was working on for twenty years in a converted oast house in Kent.</p>
-
-        <p>If you are interested in the therapeutic dimensions of creative sound-making, embodied listening, or working with sound and creativity in a music therapy context, please visit the <a href="/contact/">contact page</a>.</p>
-
-        <div class="cta-wrap">
-          <a href="/contact/" class="cta-btn">Book an intro call</a>
-        </div>
-
-        <p>Further reading and listening:</p>
-        <ul>
-          <li><em>An Individual Note of Music, Sound and Electronics</em> — Daphne Oram (1972)</li>
-          <li><em>Daphne Oram: Oramics</em> — Trunk Records reissue of her recorded works</li>
-          <li><em>The Radiophonic Workshop</em> — BBC archive documentary</li>
-          <li>Daphne Oram collection, Goldsmiths University of London</li>
-        </ul>
-      </section>
-
-    </article>
-  </main>
 </div>
 
-<footer>
-  <p>© 2025–2026 Jordan Elias</p>
-</footer>
-
-<!-- ══════════════════════════════════════════════
-     ORAMICS ENGINE
-══════════════════════════════════════════════════ -->
 <script>
 (function () {
   'use strict';
 
-  // ── DOM refs ──────────────────────────────────────────────
+  // ── DOM ───────────────────────────────────────────────────
   const canvas      = document.getElementById('oram-canvas');
   const ctx         = canvas.getContext('2d');
   const scanLine    = document.getElementById('scan-line');
@@ -551,39 +427,64 @@
   const btnEraser   = document.getElementById('btn-eraser');
   const btnUndo     = document.getElementById('btn-undo');
   const btnClear    = document.getElementById('btn-clear');
+  const btnWave     = document.getElementById('btn-wave');
   const tempoSlider = document.getElementById('tempo-slider');
   const tempoVal    = document.getElementById('tempo-val');
   const sizeSlider  = document.getElementById('size-slider');
   const sizeVal     = document.getElementById('size-val');
+  const mixSlider   = document.getElementById('mix-slider');
+  const mixVal      = document.getElementById('mix-val');
   const chSwatches  = document.querySelectorAll('.ch-swatch');
+  const statusNote  = document.getElementById('status-note');
+  const waveformLabel = document.getElementById('waveform-label');
+
+  // ── Channel colors — MUST match CSS vars exactly ──────────
+  const CHANNELS = {
+    pitch:  '#1E2FA8',
+    pitch2: '#B8223A',
+    amp:    '#1A7A6E',
+    mod:    '#A0471F',
+    timbre: '#5C4FA3',
+  };
+
+  // RGB for pixel sampling — derived from same hex values
+  const CH_RGB = {
+    pitch:  [ 30,  47, 168],
+    pitch2: [184,  34,  58],
+    amp:    [ 26, 122, 110],
+    mod:    [160,  71,  31],
+    timbre: [ 92,  79, 163],
+  };
 
   // ── State ─────────────────────────────────────────────────
-  const CHANNELS = {
-    pitch:  '#4F6EF7',
-    amp:    '#2D8A5E',
-    mod:    '#C4622D',
-    timbre: '#8B5CF6',
-  };
-
-  // RGB breakdown for fast pixel sampling
-  const chColors = {
-    pitch:  [79,  110, 247],
-    amp:    [45,  138,  94],
-    mod:    [196,  98,  45],
-    timbre: [139,  92, 246],
-  };
-
   let activeChannel = 'pitch';
-  let activeTool    = 'round';  // 'round' | 'cal' | 'eraser'
+  let activeTool    = 'round';
   let penSize       = 8;
   let loopSecs      = 8;
   let isPlaying     = false;
   let isDrawing     = false;
   let lastX = 0, lastY = 0;
+  let voice2Mix     = 0.7;
 
-  // Undo stack — array of ImageData snapshots
-  const MAX_UNDO = 30;
-  const undoStack = [];
+  const WAVEFORMS = ['sawtooth','square','triangle','sine'];
+  const WAVE_LABELS = ['saw','sqr','tri','sin'];
+  let waveIdx = 0;
+
+  // Note name for status display
+  const NOTE_NAMES = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
+  function freqToNote(freq) {
+    const s = Math.round(12 * Math.log2(freq / 440));
+    return NOTE_NAMES[((s % 12) + 12) % 12] + (Math.floor(s / 12) + 4);
+  }
+
+  // ── Status ────────────────────────────────────────────────
+  let statusTimer;
+  function showStatus(msg) {
+    statusNote.textContent = msg;
+    statusNote.classList.add('visible');
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(() => statusNote.classList.remove('visible'), 2000);
+  }
 
   // ── Canvas sizing ─────────────────────────────────────────
   function isMobile() { return window.innerWidth <= 600; }
@@ -591,47 +492,47 @@
   function resizeCanvas() {
     const wrap = canvas.parentElement;
     const W = wrap.clientWidth;
-    const H = isMobile() ? 340 : 220;
-    // Only resize if needed to avoid clearing
+    const H = isMobile() ? 200 : 280;
     if (canvas.width === W && canvas.height === H) return;
-    // Save content
     const saved = canvas.width > 0 ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
     canvas.width  = W;
     canvas.height = H;
     canvas.style.height = H + 'px';
-    // Canvas stays transparent; white bg comes from CSS on .canvas-wrap
-    // Restore content (best-effort; rescale not attempted)
     if (saved) ctx.putImageData(saved, 0, 0);
   }
 
-  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('resize', () => { resizeCanvas(); updateScanOrientation(); });
   resizeCanvas();
 
   // ── Undo ─────────────────────────────────────────────────
-  function saveUndoState() {
+  const undoStack = [];
+  const MAX_UNDO  = 30;
+
+  function saveUndo() {
     undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
     if (undoStack.length > MAX_UNDO) undoStack.shift();
   }
 
   btnUndo.addEventListener('click', () => {
-    if (undoStack.length === 0) return;
+    if (!undoStack.length) return;
     ctx.putImageData(undoStack.pop(), 0, 0);
   });
 
   btnClear.addEventListener('click', () => {
-    saveUndoState();
+    saveUndo();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    showStatus('canvas cleared');
   });
 
   // ── Drawing ───────────────────────────────────────────────
   function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
+    const rect  = canvas.getBoundingClientRect();
     const scaleX = canvas.width  / rect.width;
     const scaleY = canvas.height / rect.height;
     const src = e.touches ? e.touches[0] : e;
     return {
-      x: (src.clientX - rect.left)  * scaleX,
-      y: (src.clientY - rect.top)   * scaleY,
+      x: (src.clientX - rect.left) * scaleX,
+      y: (src.clientY - rect.top)  * scaleY,
     };
   }
 
@@ -640,8 +541,8 @@
     if (activeTool === 'eraser') {
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+      ctx.lineCap   = 'round';
+      ctx.lineJoin  = 'round';
       ctx.lineWidth = penSize * 3;
       ctx.strokeStyle = 'rgba(0,0,0,1)';
       ctx.moveTo(x1, y1);
@@ -650,19 +551,18 @@
     } else if (activeTool === 'round') {
       ctx.globalCompositeOperation = 'source-over';
       ctx.beginPath();
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+      ctx.lineCap   = 'round';
+      ctx.lineJoin  = 'round';
       ctx.lineWidth = penSize;
       ctx.strokeStyle = CHANNELS[activeChannel];
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
       ctx.stroke();
     } else {
-      // Calligraphy nib: slanted 45° ellipse
-      // We draw a series of thin ellipses along the stroke path
+      // Calligraphy nib — 45° ellipse stamp along path
       ctx.globalCompositeOperation = 'source-over';
       ctx.fillStyle = CHANNELS[activeChannel];
-      const dist = Math.hypot(x2 - x1, y2 - y1);
+      const dist  = Math.hypot(x2 - x1, y2 - y1);
       const steps = Math.max(1, Math.ceil(dist));
       for (let i = 0; i <= steps; i++) {
         const t  = i / steps;
@@ -670,7 +570,7 @@
         const py = y1 + (y2 - y1) * t;
         ctx.save();
         ctx.translate(px, py);
-        ctx.rotate(-Math.PI / 4); // 45° nib
+        ctx.rotate(-Math.PI / 4);
         ctx.beginPath();
         ctx.ellipse(0, 0, penSize * 0.35, penSize * 1.2, 0, 0, Math.PI * 2);
         ctx.fill();
@@ -682,14 +582,12 @@
 
   function onStart(e) {
     e.preventDefault();
-    saveUndoState();
+    saveUndo();
     isDrawing = true;
     const { x, y } = getPos(e);
     lastX = x; lastY = y;
-    // Place a dot
     drawStroke(x, y, x, y);
   }
-
   function onMove(e) {
     e.preventDefault();
     if (!isDrawing) return;
@@ -697,11 +595,7 @@
     drawStroke(lastX, lastY, x, y);
     lastX = x; lastY = y;
   }
-
-  function onEnd(e) {
-    e.preventDefault();
-    isDrawing = false;
-  }
+  function onEnd(e) { e.preventDefault(); isDrawing = false; }
 
   canvas.addEventListener('mousedown',  onStart);
   canvas.addEventListener('mousemove',  onMove);
@@ -712,11 +606,11 @@
   canvas.addEventListener('touchend',   onEnd,   { passive: false });
 
   // ── Tool buttons ──────────────────────────────────────────
-  function setTool(tool) {
-    activeTool = tool;
-    btnRound .classList.toggle('active', tool === 'round');
-    btnCal   .classList.toggle('active', tool === 'cal');
-    btnEraser.classList.toggle('active', tool === 'eraser');
+  function setTool(t) {
+    activeTool = t;
+    btnRound .classList.toggle('active', t === 'round');
+    btnCal   .classList.toggle('active', t === 'cal');
+    btnEraser.classList.toggle('active', t === 'eraser');
   }
   btnRound .addEventListener('click', () => setTool('round'));
   btnCal   .addEventListener('click', () => setTool('cal'));
@@ -728,9 +622,19 @@
       chSwatches.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeChannel = btn.dataset.ch;
-      // Deactivate eraser when channel is picked
       if (activeTool === 'eraser') setTool('round');
     });
+  });
+
+  // ── Waveform cycle ────────────────────────────────────────
+  btnWave.addEventListener('click', () => {
+    waveIdx = (waveIdx + 1) % WAVEFORMS.length;
+    const w = WAVEFORMS[waveIdx];
+    btnWave.textContent  = 'wave: ' + WAVE_LABELS[waveIdx];
+    waveformLabel.textContent = w;
+    if (osc1) osc1.type = w;
+    if (osc2) osc2.type = w;
+    showStatus('waveform: ' + w);
   });
 
   // ── Sliders ───────────────────────────────────────────────
@@ -742,10 +646,150 @@
     penSize = parseInt(sizeSlider.value);
     sizeVal.textContent = penSize;
   });
+  mixSlider.addEventListener('input', () => {
+    voice2Mix = parseInt(mixSlider.value) / 100;
+    mixVal.textContent = mixSlider.value + '%';
+    if (gain2) gain2.gain.setTargetAtTime(voice2Mix * 0.35, audioCtx.currentTime, 0.05);
+  });
 
-  // ── WebAudio engine ───────────────────────────────────────
-  let audioCtx = null;
-  let osc = null, gainNode = null, lfo = null, lfoGain = null, filter = null;
+  // ── Presets ───────────────────────────────────────────────
+  document.querySelectorAll('[data-preset]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      saveUndo();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawPreset(btn.dataset.preset);
+      showStatus('preset: ' + btn.dataset.preset);
+    });
+  });
+
+  function drawPreset(name) {
+    const W = canvas.width, H = canvas.height;
+    ctx.save();
+    ctx.lineCap  = 'round';
+    ctx.lineJoin = 'round';
+
+    if (name === 'rise') {
+      // Pitch 1: rises from low-mid to high with gentle wobble
+      ctx.strokeStyle = CHANNELS.pitch;
+      ctx.lineWidth   = 10;
+      ctx.beginPath();
+      for (let i = 0; i <= 80; i++) {
+        const t  = i / 80;
+        const y  = H * (0.75 - t * 0.58 + Math.sin(t * Math.PI * 5) * 0.03);
+        if (i === 0) ctx.moveTo(W * 0.04, y); else ctx.lineTo(W * (0.04 + t * 0.92), y);
+      }
+      ctx.stroke();
+      // Amp: swell in and out
+      ctx.strokeStyle = CHANNELS.amp;
+      ctx.lineWidth   = 8;
+      ctx.beginPath();
+      for (let i = 0; i <= 60; i++) {
+        const t = i / 60;
+        const y = H * (1 - Math.sin(t * Math.PI) * 0.78);
+        if (i === 0) ctx.moveTo(W * 0.04, y); else ctx.lineTo(W * (0.04 + t * 0.92), y);
+      }
+      ctx.stroke();
+
+    } else if (name === 'wave') {
+      // Pitch 1: slow sine wave
+      ctx.strokeStyle = CHANNELS.pitch;
+      ctx.lineWidth   = 10;
+      ctx.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const t = i / 100;
+        const y = H * (0.5 + Math.sin(t * Math.PI * 2) * 0.3);
+        if (i === 0) ctx.moveTo(W * t, y); else ctx.lineTo(W * t, y);
+      }
+      ctx.stroke();
+      // Pitch 2: offset wave, slightly tighter amplitude
+      ctx.strokeStyle = CHANNELS.pitch2;
+      ctx.lineWidth   = 8;
+      ctx.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const t = i / 100;
+        const y = H * (0.5 + Math.sin(t * Math.PI * 2 + 0.9) * 0.21);
+        if (i === 0) ctx.moveTo(W * t, y); else ctx.lineTo(W * t, y);
+      }
+      ctx.stroke();
+      // Timbre: opens at wave crest
+      ctx.strokeStyle = CHANNELS.timbre;
+      ctx.lineWidth   = 7;
+      ctx.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const t = i / 100;
+        const y = H * (0.32 + Math.sin(t * Math.PI * 2 + Math.PI) * 0.22);
+        if (i === 0) ctx.moveTo(W * t, y); else ctx.lineTo(W * t, y);
+      }
+      ctx.stroke();
+
+    } else if (name === 'rhythm') {
+      // Three amplitude bursts
+      ctx.strokeStyle = CHANNELS.amp;
+      ctx.lineWidth   = 13;
+      [[0.08, 0.28],[0.38, 0.58],[0.65, 0.88]].forEach(([s, e]) => {
+        const mid = (s + e) / 2;
+        ctx.beginPath();
+        ctx.moveTo(W * s,   H * 0.18);
+        ctx.lineTo(W * mid, H * 0.10);
+        ctx.lineTo(W * e,   H * 0.18);
+        ctx.stroke();
+      });
+      // Fixed mid pitch
+      ctx.strokeStyle = CHANNELS.pitch;
+      ctx.lineWidth   = 9;
+      ctx.beginPath();
+      ctx.moveTo(W * 0.04, H * 0.44);
+      ctx.lineTo(W * 0.96, H * 0.44);
+      ctx.stroke();
+      // Light vibrato throughout
+      ctx.strokeStyle = CHANNELS.mod;
+      ctx.lineWidth   = 7;
+      ctx.beginPath();
+      for (let i = 0; i <= 80; i++) {
+        const t = i / 80;
+        const y = H * (0.74 + Math.sin(t * Math.PI * 9) * 0.07);
+        if (i === 0) ctx.moveTo(W * t, y); else ctx.lineTo(W * t, y);
+      }
+      ctx.stroke();
+
+    } else if (name === 'drone') {
+      // Low steady pitch
+      ctx.strokeStyle = CHANNELS.pitch;
+      ctx.lineWidth   = 11;
+      ctx.beginPath();
+      ctx.moveTo(W * 0.02, H * 0.68);
+      ctx.lineTo(W * 0.98, H * 0.68);
+      ctx.stroke();
+      // Slow deep modulation
+      ctx.strokeStyle = CHANNELS.mod;
+      ctx.lineWidth   = 9;
+      ctx.beginPath();
+      for (let i = 0; i <= 80; i++) {
+        const t = i / 80;
+        const y = H * (0.28 + Math.sin(t * Math.PI * 1.5) * 0.19);
+        if (i === 0) ctx.moveTo(W * t, y); else ctx.lineTo(W * t, y);
+      }
+      ctx.stroke();
+      // Timbre gradually opens
+      ctx.strokeStyle = CHANNELS.timbre;
+      ctx.lineWidth   = 8;
+      ctx.beginPath();
+      for (let i = 0; i <= 60; i++) {
+        const t = i / 60;
+        const y = H * (0.88 - t * 0.68);
+        if (i === 0) ctx.moveTo(W * t, y); else ctx.lineTo(W * t, y);
+      }
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  // ── Audio engine ──────────────────────────────────────────
+  let audioCtx  = null;
+  let osc1, osc2, gain1, gain2, masterGain;
+  let lfo, lfoGain;
+  let filter1, filter2;
   let animFrame = null;
   let startTime = 0;
 
@@ -753,183 +797,202 @@
     if (audioCtx) return;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Signal chain: osc → filter → gainNode → destination
-    osc      = audioCtx.createOscillator();
-    lfo      = audioCtx.createOscillator();
-    lfoGain  = audioCtx.createGain();
-    filter   = audioCtx.createBiquadFilter();
-    gainNode = audioCtx.createGain();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 1;
+    masterGain.connect(audioCtx.destination);
 
-    osc.type    = 'sawtooth';
-    osc.frequency.value = 220;
-
-    lfo.type    = 'sine';
+    // Shared LFO for vibrato
+    lfo     = audioCtx.createOscillator();
+    lfoGain = audioCtx.createGain();
+    lfo.type = 'sine';
     lfo.frequency.value = 0;
-
     lfoGain.gain.value  = 0;
-
-    filter.type            = 'lowpass';
-    filter.frequency.value = 2000;
-    filter.Q.value         = 1;
-
-    gainNode.gain.value = 0;
-
     lfo.connect(lfoGain);
-    lfoGain.connect(osc.frequency);
-    osc.connect(filter);
-    filter.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
 
-    osc.start();
-    lfo.start();
+    // Voice 1
+    osc1    = audioCtx.createOscillator();
+    filter1 = audioCtx.createBiquadFilter();
+    gain1   = audioCtx.createGain();
+    osc1.type = WAVEFORMS[waveIdx];
+    osc1.frequency.value = 220;
+    filter1.type = 'lowpass';
+    filter1.frequency.value = 1200;
+    filter1.Q.value = 0.8;
+    gain1.gain.value = 0;
+    lfoGain.connect(osc1.frequency);
+    osc1.connect(filter1);
+    filter1.connect(gain1);
+    gain1.connect(masterGain);
+    osc1.start();
+
+    // Voice 2 — slight detune for natural width
+    osc2    = audioCtx.createOscillator();
+    filter2 = audioCtx.createBiquadFilter();
+    gain2   = audioCtx.createGain();
+    osc2.type = WAVEFORMS[waveIdx];
+    osc2.frequency.value = 220;
+    osc2.detune.value = 7;
+    filter2.type = 'lowpass';
+    filter2.frequency.value = 1200;
+    filter2.Q.value = 0.8;
+    gain2.gain.value = 0;
+    lfoGain.connect(osc2.frequency);
+    osc2.connect(filter2);
+    filter2.connect(gain2);
+    gain2.connect(masterGain);
+    osc2.start();
   }
 
-
-  // Instead of getImageData per pixel (slow), sample column once
-  function sampleColumnFast(progress) {
-    const W = canvas.width;
-    const H = canvas.height;
+  // ── Column sampler ────────────────────────────────────────
+  function sampleColumn(progress) {
+    const W = canvas.width, H = canvas.height;
     const mobile = isMobile();
 
     let colData;
     if (mobile) {
       const row = Math.min(H - 1, Math.floor(progress * H));
       colData = ctx.getImageData(0, row, W, 1).data;
-      // colData: pixel i is at colData[i*4..i*4+3], position along X
     } else {
       const col = Math.min(W - 1, Math.floor(progress * W));
       colData = ctx.getImageData(col, 0, 1, H).data;
-      // colData: pixel i is at colData[i*4..i*4+3], position along Y
     }
 
-    const perpSize = mobile ? W : H;
+    const size   = mobile ? W : H;
     const result = {};
 
-    for (const [ch, [r, g, b]] of Object.entries(chColors)) {
-      let bestValue = null;
-      let bestMatch = 0;
-
-      for (let p = 0; p < perpSize; p++) {
-        const base = p * 4;
+    for (const [ch, [r, g, b]] of Object.entries(CH_RGB)) {
+      let bestVal = null, bestMatch = 0;
+      for (let p = 0; p < size; p++) {
+        const base  = p * 4;
         const alpha = colData[base + 3] / 255;
         if (alpha < 0.15) continue;
-
         const dr = colData[base]     - r;
         const dg = colData[base + 1] - g;
-        const db_  = colData[base + 2] - b;
-        const dist = Math.sqrt(dr*dr + dg*dg + db_*db_);
+        const db = colData[base + 2] - b;
+        const dist  = Math.sqrt(dr*dr + dg*dg + db*db);
         const match = alpha * (1 - dist / 441.7);
-
         if (match > bestMatch) {
           bestMatch = match;
-          const normPos = p / perpSize;
-          bestValue = mobile ? normPos : (1 - normPos);
+          const norm = p / size;
+          bestVal = mobile ? norm : (1 - norm);
         }
       }
-      result[ch] = (bestMatch > 0.08) ? bestValue : null;
+      result[ch] = (bestMatch > 0.08) ? bestVal : null;
     }
     return result;
   }
 
-  // Audio update loop
+  // ── Audio/animation loop ──────────────────────────────────
   function audioLoop() {
     if (!isPlaying) return;
 
     const now      = audioCtx.currentTime;
     const elapsed  = (now - startTime) % loopSecs;
     const progress = elapsed / loopSecs;
+    const t        = now + 0.02;
+
+    const W = canvas.width, H = canvas.height;
 
     // Move scan line
-    const W = canvas.width;
-    const H = canvas.height;
-    const mobile = isMobile();
-
-    if (mobile) {
-      const py = progress * H;
-      scanLine.style.top  = py + 'px';
-      scanLine.style.left = '0';
+    if (isMobile()) {
+      scanLine.style.top  = (progress * H) + 'px';
     } else {
-      const px = progress * W;
-      scanLine.style.left = px + 'px';
+      scanLine.style.left = (progress * W) + 'px';
     }
 
-    // Sample channels
-    const vals = sampleColumnFast(progress);
+    const vals = sampleColumn(progress);
 
-    // Apply to audio (with smoothing)
-    const t = now + 0.02; // schedule slightly ahead
+    // ── Voice 1 ───────────────────────────────────────────
+    if (vals.pitch !== null) {
+      const freq1 = 110 * Math.pow(8, vals.pitch);
+      osc1.frequency.setTargetAtTime(freq1, t, 0.04);
+      gain1.gain.setTargetAtTime(0.38, t, 0.04);
+      statusNote.textContent = freqToNote(freq1);
+      statusNote.classList.add('visible');
+    } else {
+      gain1.gain.setTargetAtTime(0, t, 0.08);
+      statusNote.classList.remove('visible');
+    }
 
-    // Pitch: 0→1 maps to ~110Hz → ~880Hz (log)
-    const pitchVal = vals.pitch !== null ? vals.pitch : 0.5;
-    const freq = 110 * Math.pow(8, pitchVal);
-    osc.frequency.setTargetAtTime(freq, t, 0.05);
+    // ── Voice 2 ───────────────────────────────────────────
+    if (vals.pitch2 !== null) {
+      const freq2 = 110 * Math.pow(8, vals.pitch2);
+      osc2.frequency.setTargetAtTime(freq2, t, 0.04);
+      gain2.gain.setTargetAtTime(voice2Mix * 0.35, t, 0.04);
+    } else {
+      gain2.gain.setTargetAtTime(0, t, 0.08);
+    }
 
-    // Amplitude: 0→1 maps to 0 → 0.7
-    const ampVal = vals.amp !== null ? vals.amp : 0.5;
-    gainNode.gain.setTargetAtTime(ampVal * 0.7, t, 0.04);
+    // ── Amplitude (overrides default gain when drawn) ─────
+    if (vals.amp !== null) {
+      gain1.gain.setTargetAtTime(vals.amp * 0.55, t, 0.03);
+      if (vals.pitch2 !== null) {
+        gain2.gain.setTargetAtTime(vals.amp * voice2Mix * 0.35, t, 0.03);
+      }
+    }
 
-    // Modulation: vibrato rate 0→8Hz, depth 0→12
+    // ── Modulation ────────────────────────────────────────
     const modVal = vals.mod !== null ? vals.mod : 0;
-    lfo.frequency.setTargetAtTime(modVal * 8,   t, 0.05);
-    lfoGain.gain.setTargetAtTime (modVal * 12,  t, 0.05);
+    lfo.frequency.setTargetAtTime(modVal * 7,  t, 0.05);
+    lfoGain.gain.setTargetAtTime (modVal * 14, t, 0.05);
 
-    // Timbre: filter cutoff 200→8000Hz
-    const timbreVal = vals.timbre !== null ? vals.timbre : 0.7;
-    const cutoff = 200 * Math.pow(40, timbreVal);
-    filter.frequency.setTargetAtTime(cutoff, t, 0.05);
+    // ── Timbre ────────────────────────────────────────────
+    const timbreVal = vals.timbre !== null ? vals.timbre : 0.65;
+    const cutoff = 180 * Math.pow(45, timbreVal);
+    filter1.frequency.setTargetAtTime(cutoff, t, 0.04);
+    filter2.frequency.setTargetAtTime(cutoff, t, 0.04);
 
     animFrame = requestAnimationFrame(audioLoop);
+  }
+
+  // ── Scan line orientation ─────────────────────────────────
+  function updateScanOrientation() {
+    if (!isPlaying) return;
+    if (isMobile()) {
+      scanLine.style.cssText += ';width:100%;height:2px;left:0;bottom:auto;';
+    } else {
+      scanLine.style.cssText += ';width:2px;height:100%;top:0;bottom:0;';
+    }
   }
 
   // ── Play / Stop ───────────────────────────────────────────
   btnPlay.addEventListener('click', () => {
     if (isPlaying) {
-      // Stop
       isPlaying = false;
       cancelAnimationFrame(animFrame);
-      gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+      animFrame = null;
+
+      const now = audioCtx.currentTime;
+      gain1.gain.cancelScheduledValues(now);
+      gain1.gain.setTargetAtTime(0, now, 0.05);
+      gain2.gain.cancelScheduledValues(now);
+      gain2.gain.setTargetAtTime(0, now, 0.05);
+      lfoGain.gain.cancelScheduledValues(now);
+      lfoGain.gain.setTargetAtTime(0, now, 0.05);
+      setTimeout(() => { if (!isPlaying && audioCtx) audioCtx.suspend(); }, 300);
+
       scanLine.style.display = 'none';
       btnPlay.textContent = '▶\uFE0E play';
       btnPlay.classList.remove('active');
+      statusNote.classList.remove('visible');
+
     } else {
-      // Start
       initAudio();
       if (audioCtx.state === 'suspended') audioCtx.resume();
       isPlaying = true;
       startTime = audioCtx.currentTime;
+
       scanLine.style.display = 'block';
-      // Reset scan line position
-      if (isMobile()) {
-        scanLine.style.top  = '0';
-        scanLine.style.left = '0';
-        scanLine.style.width  = '100%';
-        scanLine.style.height = '2px';
-      } else {
-        scanLine.style.left   = '0';
-        scanLine.style.top    = '0';
-        scanLine.style.width  = '2px';
-        scanLine.style.height = '100%';
-      }
+      updateScanOrientation();
       btnPlay.textContent = '■\uFE0E stop';
       btnPlay.classList.add('active');
       audioLoop();
     }
   });
 
-  // Ensure scan line orientation is correct on resize
   window.addEventListener('resize', () => {
     resizeCanvas();
-    if (isPlaying) {
-      if (isMobile()) {
-        scanLine.style.width  = '100%';
-        scanLine.style.height = '2px';
-        scanLine.style.left   = '0';
-      } else {
-        scanLine.style.width  = '2px';
-        scanLine.style.height = '100%';
-        scanLine.style.top    = '0';
-      }
-    }
+    updateScanOrientation();
   });
 
 })();
