@@ -893,7 +893,7 @@
   function resizeCanvas() {
     const wrap = canvas.parentElement;
     const W = wrap.clientWidth;
-    const H = isMobile() ? 200 : 280;
+    const H = isMobile() ? 300 : 280;
     if (canvas.width === W && canvas.height === H) return;
     const saved = canvas.width > 0 ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
     canvas.width  = W;
