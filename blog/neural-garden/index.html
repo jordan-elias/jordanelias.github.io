@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neural Garden: a network that learns to listen to itself</title>
+  <meta name="description" content="An interactive neural network that grows, learns by itself, and generates an ambient soundscape — with a small creature that develops alongside it.">
+  <meta name="author" content="Jordan Elias">
+
+  <!-- SEARCH & AI DISCOVERY -->
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+
+  <!-- CANONICAL -->
+  <link rel="canonical" href="https://jordanelias.de/blog/neural-garden/">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Jordan Elias Music Therapy">
+  <meta property="og:locale" content="en_DE">
+  <meta property="og:url" content="https://jordanelias.de/blog/neural-garden/">
+  <meta property="og:title" content="Neural Garden: a network that learns to listen to itself">
+  <meta property="og:description" content="An interactive neural network that grows, learns by itself, and generates an ambient soundscape — with a small creature that develops alongside it.">
+  <meta property="og:image" content="https://jordanelias.de/images/hero.jpg">
+  <meta property="og:image:alt" content="Jordan Elias, music therapist">
+  <meta property="article:published_time" content="2026-06-30">
+  <meta property="article:author" content="https://jordanelias.de/about/">
+  <meta property="article:section" content="Electronic Music">
+  <meta property="article:tag" content="Neural Networks">
+  <meta property="article:tag" content="Generative Music">
+  <meta property="article:tag" content="Ambient Sound">
+  <meta property="article:tag" content="Machine Learning">
+  <meta property="article:tag" content="Hebbian Learning">
+
+  <!-- TWITTER/X CARD -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Neural Garden: a network that learns to listen to itself">
+  <meta name="twitter:description" content="An interactive neural network that grows, learns by itself, and generates an ambient soundscape — with a small creature that develops alongside it.">
+  <meta name="twitter:image" content="https://jordanelias.de/images/hero.jpg">
+
+  <!-- STRUCTURED DATA -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://jordanelias.de/#person",
+        "name": "Jordan Elias",
+        "honorificSuffix": "MT-BC",
+        "jobTitle": "Board-Certified Music Therapist",
+        "url": "https://jordanelias.de/",
+        "image": "https://jordanelias.de/images/headshot.jpg",
+        "email": "jordanelias@proton.me",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Berlin",
+          "postalCode": "12047",
+          "addressCountry": "DE"
+        },
+        "worksFor": { "@id": "https://jordanelias.de/#service" },
+        "alumniOf": [
+          { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+          { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+        ],
+        "hasCredential": {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Board Certified Music Therapist (MT-BC)",
+          "credentialCategory": "Professional Certification",
+          "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
+        },
+        "knowsAbout": [
+          "Music Therapy", "Neurodiversity", "Autism", "ADHD", "Anxiety", "Burnout",
+          "Emotional Regulation", "Neuroscience of Music", "Creative Therapy",
+          "Trauma-Informed Practice", "Music and Neuroplasticity", "Queer Affirming Therapy"
+        ],
+        "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://jordanelias.de/#service",
+        "name": "Jordan Elias Music Therapy",
+        "url": "https://jordanelias.de/",
+        "founder": { "@id": "https://jordanelias.de/#person" }
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": "https://jordanelias.de/blog/neural-garden/#post",
+        "headline": "Neural Garden: a network that learns to listen to itself",
+        "description": "An interactive neural network that grows, learns by itself, and generates an ambient soundscape — with a small creature that develops alongside it.",
+        "url": "https://jordanelias.de/blog/neural-garden/",
+        "datePublished": "2026-06-30",
+        "dateModified": "2026-06-30",
+        "inLanguage": "en",
+        "author": { "@id": "https://jordanelias.de/#person" },
+        "publisher": { "@id": "https://jordanelias.de/#service" },
+        "image": { "@type": "ImageObject", "url": "https://jordanelias.de/images/headshot.jpg" },
+        "isPartOf": { "@type": "Blog", "@id": "https://jordanelias.de/blog/#blog" },
+        "mainEntityOfPage": { "@id": "https://jordanelias.de/blog/neural-garden/#webpage" },
+        "about": [
+          { "@type": "Thing", "name": "Artificial neural network", "sameAs": "https://en.wikipedia.org/wiki/Neural_network_(machine_learning)" },
+          { "@type": "Thing", "name": "Hebbian theory", "sameAs": "https://en.wikipedia.org/wiki/Hebbian_theory" },
+          { "@type": "Thing", "name": "Generative music", "sameAs": "https://en.wikipedia.org/wiki/Generative_music" },
+          { "@type": "Thing", "name": "Ambient music", "sameAs": "https://en.wikipedia.org/wiki/Ambient_music" }
+        ],
+        "keywords": "neural networks, machine learning, Hebbian learning, generative music, ambient soundscape, synaptic pruning, music therapy, beginner AI education"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://jordanelias.de/blog/neural-garden/#webpage",
+        "url": "https://jordanelias.de/blog/neural-garden/",
+        "name": "Neural Garden: a network that learns to listen to itself | Jordan Elias",
+        "description": "An interactive neural network that grows, learns by itself, and generates an ambient soundscape — with a small creature that develops alongside it.",
+        "author": { "@id": "https://jordanelias.de/#person" },
+        "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/headshot.jpg" },
+        "isPartOf": { "@type": "WebSite", "@id": "https://jordanelias.de/#website" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://jordanelias.de/blog/neural-garden/#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" },
+          { "@type": "ListItem", "position": 3, "name": "Neural Garden", "item": "https://jordanelias.de/blog/neural-garden/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <!-- MAIN STYLESHEET -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+    /* ── Local palette — distinct from other lab pages, single creature hue ── */
+    :root {
+      --node-osc:   #2C5F8A;   /* steel blue — oscillator nodes */
+      --node-mod:   #8A5A2C;   /* warm bronze — timbre modulator nodes */
+      --node-lfo:   #4F7A4A;   /* moss green — lfo nodes */
+      --conn-line:  #777777;
+      --creature:   #C98A2E;   /* single hue, amber — the creature, never changes */
+    }
+
+    body { padding-top: 64px; }
+
+    .page-wrap {
+      display: flex;
+      align-items: flex-start;
+      min-height: calc(100vh - 64px);
+    }
+
+    .vertical-title {
+      width: 64px;
+      flex-shrink: 0;
+      position: fixed;
+      top: 64px;
+      height: calc(100vh - 64px);
+      border-right: 1px solid var(--text);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 2rem;
+      overflow: hidden;
+    }
+    .vertical-title span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--text);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .page-content {
+      flex: 1;
+      min-width: 0;
+      padding: 0.5em 2em 5em;
+      max-width: 960px;
+      margin-left: 72px;
+      width: calc(100% - 72px);
+    }
+
+    /* ── LAB SECTION ── */
+    .lab-section {
+      border: 1px solid var(--text);
+      padding: 0.85em;
+      margin: 0.5em 0 2em;
+    }
+    .lab-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin: 0 0 1em;
+    }
+
+    .lab-ephemeral-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      opacity: 0.65;
+      margin: 0 0 0.7em;
+      line-height: 1.5;
+    }
+
+    /* ── STAGE: graph canvas + creature panel side by side on desktop ── */
+    .ng-stage {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 0.7em;
+    }
+    .ng-graph-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      border: 1px solid var(--text);
+      background: #fff;
+      overflow: hidden;
+    }
+    #ng-graph {
+      display: block;
+      width: 100%;
+      height: 360px;
+      touch-action: none;
+      cursor: crosshair;
+    }
+    .ng-creature-wrap {
+      width: 160px;
+      flex-shrink: 0;
+      border: 1px solid var(--text);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    #ng-creature {
+      display: block;
+      width: 100%;
+      height: 280px;
+    }
+    .ng-creature-caption {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--text);
+      opacity: 0.5;
+      padding: 4px 0 6px;
+    }
+
+    /* ── STATUS ROW ── */
+    .ng-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.55em;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.66rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0.55;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .ng-status-row span b {
+      opacity: 1;
+      font-weight: 500;
+    }
+
+    /* ── TOOLBARS ── */
+    .oram-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 0.5em;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .oram-toolbar:last-child { margin-bottom: 0; }
+
+    .oram-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      background: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 0.32em 0.85em;
+      cursor: pointer;
+      border-radius: 0;
+      white-space: nowrap;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    .oram-btn:hover { background: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
+    .oram-btn.active { background: var(--text); color: var(--bg); }
+    .oram-btn.active:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .oram-btn.ghost { border-width: 1px; font-size: 0.72rem; padding: 0.28em 0.7em; }
+    .oram-btn:disabled { opacity: 0.35; cursor: default; }
+    .oram-btn:disabled:hover { background: transparent; color: var(--text); border-color: var(--text); }
+
+    .toolbar-sep { width: 1px; height: 22px; background: var(--text); opacity: 0.2; flex-shrink: 0; }
+
+    .slider-ctrl { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 120px; }
+    .slider-ctrl label {
+      font-family: 'Inter', sans-serif; font-size: 0.63rem; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--text); white-space: nowrap; flex-shrink: 0;
+    }
+    .slider-ctrl input[type=range] {
+      flex: 1; min-width: 0; -webkit-appearance: none; appearance: none;
+      height: 2px; background: var(--text); outline: none; cursor: pointer;
+    }
+    .slider-ctrl input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%;
+      background: var(--text); cursor: pointer;
+    }
+    .slider-ctrl input[type=range]::-moz-range-thumb {
+      width: 12px; height: 12px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
+    }
+    .slider-val { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--text); min-width: 28px; text-align: right; flex-shrink: 0; }
+
+    /* node-type / activation selects */
+    .ng-select-ctrl { display: flex; align-items: center; gap: 6px; }
+    .ng-select-ctrl label {
+      font-family: 'Inter', sans-serif; font-size: 0.63rem; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--text); white-space: nowrap;
+    }
+    .ng-select-ctrl select {
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.74rem; color: var(--text);
+      background: var(--bg); border: 1px solid var(--text); padding: 0.25em 0.4em; cursor: pointer;
+    }
+
+    /* ── LEGEND ── */
+    .channel-legend { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0.6em; align-items: center; }
+    .ch-swatch {
+      display: flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 0.66rem;
+      color: var(--text); padding: 3px 7px 3px 6px; border: 1px solid transparent; white-space: nowrap;
+      opacity: 0.85;
+    }
+    .ch-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── CURRICULUM (collapsible) ── */
+    .ng-curriculum {
+      border: 1px solid var(--text);
+      margin: 0 0 2em;
+    }
+    .ng-curriculum-toggle {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      border: none;
+      padding: 0.7em 0.9em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .ng-curriculum-toggle .chev { transition: transform 0.15s; font-size: 0.7em; opacity: 0.6; }
+    .ng-curriculum.open .ng-curriculum-toggle .chev { transform: rotate(90deg); }
+    .ng-curriculum-body {
+      display: none;
+      padding: 0 0.9em 1em;
+      border-top: 1px solid rgba(0,0,0,0.12);
+    }
+    .ng-curriculum.open .ng-curriculum-body { display: block; }
+    .ng-step {
+      display: flex;
+      gap: 0.7em;
+      padding: 0.8em 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .ng-step:last-child { border-bottom: none; }
+    .ng-step-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text);
+      opacity: 0.4;
+      flex-shrink: 0;
+      width: 1.4em;
+    }
+    .ng-step p { margin: 0; font-size: 0.92rem; line-height: 1.55; }
+    .ng-step p + p { margin-top: 0.35em; }
+
+    /* ── EXERCISES (article) ── */
+    .lab-exercise { border-left: 3px solid var(--text); padding: 1em 1.25em; margin: 1.5em 0; }
+    .lab-exercise h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 0.5em; }
+    .lab-exercise p { margin-bottom: 0.6em; }
+    .lab-exercise p:last-child { margin-bottom: 0; }
+
+    .term-box {
+      border: 1px solid var(--text);
+      padding: 0.9em 1.1em;
+      margin: 1.3em 0;
+      background: rgba(0,0,0,0.015);
+    }
+    .term-box .term { font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      .vertical-title { width: 36px; padding-top: 1rem; }
+      .vertical-title span { font-size: 0.8rem; letter-spacing: 0.18em; }
+      .page-content { margin-left: 44px; width: calc(100% - 44px); padding: 0.5em 0.75em 4em; }
+      footer { margin-left: 36px; }
+
+      .ng-stage { flex-direction: column; }
+      .ng-creature-wrap { width: 100%; }
+      #ng-creature { height: 200px; }
+      #ng-graph { height: 420px; }
+
+      .oram-btn { font-size: 0.72rem; padding: 0.3em 0.6em; }
+      .oram-btn.ghost { font-size: 0.68rem; padding: 0.25em 0.55em; }
+      .toolbar-sep { height: 18px; }
+      .ng-select-ctrl select { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+{% include header.html %}
+
+<div class="page-wrap">
+
+  <h1 class="vertical-title" aria-hidden="true">
+    <span>Neural&nbsp;Garden</span>
+  </h1>
+
+  <main class="page-content">
+    <article>
+
+      <!-- ══ THE LAB ══ -->
+      <section>
+        <div class="lab-section">
+
+          <p class="lab-ephemeral-note">
+            This network doesn't save itself. It only exists, learns, and grows while this tab is open — close it, and it's gone for good. The longer you leave it running, even in the background, the more it becomes its own thing.
+          </p>
+
+          <div class="ng-status-row">
+            <span>nodes <b id="stat-nodes">0</b> / 24</span>
+            <span>connections <b id="stat-conns">0</b></span>
+            <span>mood <b id="stat-mood">—</b></span>
+            <span>alive <b id="stat-age">0:00</b></span>
+          </div>
+
+          <div class="ng-stage">
+            <div class="ng-graph-wrap">
+              <canvas id="ng-graph"></canvas>
+            </div>
+            <div class="ng-creature-wrap">
+              <canvas id="ng-creature"></canvas>
+              <div class="ng-creature-caption" id="creature-caption">a single cell</div>
+            </div>
+          </div>
+
+          <div class="channel-legend">
+            <span class="ch-swatch"><span class="ch-dot" style="background:var(--node-osc)"></span>oscillator</span>
+            <span class="ch-swatch"><span class="ch-dot" style="background:var(--node-mod)"></span>timbre</span>
+            <span class="ch-swatch"><span class="ch-dot" style="background:var(--node-lfo)"></span>lfo</span>
+          </div>
+
+          <!-- Row 1: mode + node type + activation -->
+          <div class="oram-toolbar">
+            <button class="oram-btn active" id="btn-mode-place">place</button>
+            <button class="oram-btn" id="btn-mode-connect">connect</button>
+            <button class="oram-btn" id="btn-mode-remove">remove</button>
+            <div class="toolbar-sep"></div>
+            <div class="ng-select-ctrl">
+              <label for="sel-type">type</label>
+              <select id="sel-type">
+                <option value="osc">oscillator</option>
+                <option value="mod">timbre</option>
+                <option value="lfo">lfo</option>
+              </select>
+            </div>
+            <div class="ng-select-ctrl">
+              <label for="sel-act">reacts</label>
+              <select id="sel-act">
+                <option value="relu">sharply (relu)</option>
+                <option value="sigmoid">smoothly (sigmoid)</option>
+                <option value="tanh">both ways (tanh)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 2: transport + volume -->
+          <div class="oram-toolbar">
+            <button class="oram-btn" id="btn-play">play</button>
+            <button class="oram-btn ghost" id="btn-reset">reset</button>
+            <div class="toolbar-sep"></div>
+            <div class="slider-ctrl">
+              <label for="vol-slider">volume</label>
+              <input type="range" id="vol-slider" min="0" max="100" value="60" step="1">
+              <span class="slider-val" id="vol-val">60%</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ══ CURRICULUM ══ -->
+        <div class="ng-curriculum" id="curriculum">
+          <button class="ng-curriculum-toggle" id="curriculum-toggle">
+            <span>guided walkthrough</span>
+            <span class="chev">▸</span>
+          </button>
+          <div class="ng-curriculum-body">
+            <div class="ng-step"><span class="ng-step-num">01</span><div>
+              <p><b>Place one node.</b> Click "place" mode, leave type on oscillator, and click anywhere on the empty canvas. You've just created a single artificial neuron. Press play. It hums one tone, alone, because it isn't connected to anything yet.</p>
+            </div></div>
+            <div class="ng-step"><span class="ng-step-num">02</span><div>
+              <p><b>Add a second node and connect them.</b> Place another oscillator nearby. Switch to "connect" mode and click the first node, then the second. A line appears between them — that line is a <em>weight</em>, the strength of one node's influence on the other. Right now it's weak.</p>
+            </div></div>
+            <div class="ng-step"><span class="ng-step-num">03</span><div>
+              <p><b>Change how a node reacts.</b> Select a node's type and reaction style before placing it: "sharply" snaps a node fully on or off, "smoothly" fades it in and out, "both ways" lets it swing positive and negative. This is an activation function — the node's personality. Try the same two-node setup with each one and listen for the difference.</p>
+            </div></div>
+            <div class="ng-step"><span class="ng-step-num">04</span><div>
+              <p><b>Watch a connection learn.</b> Leave two connected nodes playing and don't touch anything. If they tend to sound at the same time, their connection will slowly thicken on its own — that's Hebbian learning, often summarized as "neurons that fire together, wire together." If they rarely overlap, the line will thin and eventually vanish.</p>
+            </div></div>
+            <div class="ng-step"><span class="ng-step-num">05</span><div>
+              <p><b>Step back.</b> Once you have five or six nodes of different types connected, stop placing anything and just listen for a few minutes. New connections will sometimes appear between nodes you never linked yourself — the network is noticing which of its own parts tend to agree, and wiring around that.</p>
+            </div></div>
+            <div class="ng-step"><span class="ng-step-num">06</span><div>
+              <p><b>Watch the mood indicator.</b> The "mood" reading reflects how consonant the current sound is. Pleasant states are sticky — the network tends to settle into them and elaborate on what's working. Rough patches are brief and self-correct, by design, so this stays listenable in the background.</p>
+            </div></div>
+            <div class="ng-step"><span class="ng-step-num">07</span><div>
+              <p><b>Leave it running.</b> The creature beside the graph grows in stages as the network accumulates nodes, connections, and time alive. Open a different tab, do something else for fifteen minutes, and come back — both the network and the creature will have kept changing without you.</p>
+            </div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ ARTICLE ══ -->
+      <section>
+        <h2>Neural Garden: a network that learns to listen to itself</h2>
+        <p class="post-meta"><time datetime="2026-06-30">June 30, 2026</time></p>
+        <p>Written by Jordan Elias, MT-BC</p>
+
+        <p class="post-intro">
+          Above is a small neural network. You build its first few connections by hand, and from there it keeps teaching itself — strengthening some of its own wiring, letting other parts fade, occasionally growing connections you never made. It expresses what it's doing as an ambient soundscape, and as a small creature that develops alongside it. Neither one is decoration; both are direct readouts of what the network is doing underneath.
+        </p>
+      </section>
+
+      <section>
+        <h2>What a neural network actually is</h2>
+        <p>Strip away the mystique and a neural network is a small number of simple ideas, repeated and connected. A <b>node</b> (sometimes called a neuron, after the biological original) is a tiny unit that takes some input, decides how strongly to respond to it, and passes a signal onward. A <b>connection</b> is a link between two nodes, and every connection has a <b>weight</b> — a number that says how much influence one node has over the next. A weight near zero means "I barely affect you." A strong weight means "when I light up, you light up too."</p>
+        <p>That's most of it. A network's "knowledge" isn't stored anywhere special — it <em>is</em> the pattern of weights between its nodes. Learning, in almost every kind of neural network, just means adjusting those weights over time based on some rule. Different kinds of networks use different rules. This one uses one of the oldest and most intuitive: it strengthens connections between nodes that tend to activate together, and lets unused ones fade.</p>
+      </section>
+
+      <div class="term-box">
+        <p><span class="term">Activation function</span> — the rule a node uses to turn its incoming signal into an outgoing one. In this lab, "sharply" (ReLU) means a node stays silent until input crosses a threshold, then switches fully on. "Smoothly" (sigmoid) fades gradually between off and on. "Both ways" (tanh) can swing in two directions, like a node that can either excite or suppress what it's connected to. These aren't arbitrary settings — they're some of the actual functions used in real neural networks, doing the same job here that they do in any other one: shaping how a node responds, rather than just passing its input straight through.</p>
+      </div>
+
+      <section>
+        <h2>Hebbian learning: the rule this network runs on</h2>
+        <p>In 1949, the psychologist Donald Hebb proposed a simple theory about how the brain might wire itself based on experience, often summarized as "neurons that fire together, wire together." When two connected neurons activate at the same time, the synapse between them strengthens slightly. When they don't, it weakens. Run that rule over and over, across millions of neurons, and you get a brain that's gradually shaped by its own activity.</p>
+        <p>That's the literal mechanism driving the network above. Every connection tracks how often the two nodes it links are active at the same moment. Frequent overlap strengthens the connection; rarity lets it decay, and a connection that decays far enough is removed outright — the network actually forgets it, not just visually but in its underlying structure. This is also, not coincidentally, a real and well-documented feature of biological brain development: <b>synaptic pruning</b>, the process by which a developing brain trims away connections it isn't using, keeping the ones that matter and discarding the rest.</p>
+        <p>This is worth distinguishing from the kind of learning you may have heard most about in AI news. Large language models and most modern deep learning systems learn through <em>backpropagation</em> — comparing their output against a correct answer and adjusting every weight in the network to reduce that error, repeated over enormous amounts of labeled data. That requires a target to aim for. There's no "correct" soundscape here, so this network doesn't use that method. Hebbian learning is older, simpler, needs no labeled examples, and produces a network that organizes itself around its own patterns of activity rather than around a goal handed to it from outside. Both are legitimate, real approaches to building systems that change based on experience — they just answer different questions.</p>
+      </section>
+
+      <section>
+        <h2>What "mood" is doing</h2>
+        <p>The mood reading you'll see near the graph is a running measure of how consonant the network's current sound is — roughly, how well the pitches sounding at once agree with each other. It isn't just a display. It quietly steers two things: how readily the network forms new spontaneous connections between nodes that keep activating together, and how much it experiments versus settles. Pleasant-sounding states are treated as worth holding onto and building further; rough patches are allowed to happen, because some unpredictability is part of what keeps this alive, but they're nudged to resolve quickly rather than linger. The intent isn't to force prettiness onto the network — it's closer to a soft preference, the same way a person idly humming tends to drift back toward notes that feel resolved.</p>
+      </section>
+
+      <section>
+        <h2>The creature</h2>
+        <p>The small shape beside the graph isn't simulating anything separate from the network — it's a direct visualization of the same underlying state, rendered as a single-colored, growing form rather than as a graph. Early on, with one or two nodes, it's barely more than a pulsing cell. As the network accumulates nodes, forms its own connections, and simply stays alive longer, the creature passes through visible stages: new segments, then limb buds, then more complex, responsive motion. Its constant breathing motion reflects the network's activity right now; its longer-arc growth reflects everything that's accumulated since you opened the page.</p>
+        <p>Because nothing here is saved, the creature you see is the only one that will ever exist in quite that configuration. That's deliberate. A network that's been left running and growing for twenty quiet minutes in a background tab will sound and look meaningfully different from one you've been actively shaping for the same amount of time — and once you close the tab, both are gone.</p>
+      </section>
+
+      <section>
+        <h2>Using it as background sound</h2>
+        <p>Once you've built a network you like — a handful of nodes whose connections have settled into something pleasant — you can collapse the walkthrough above, turn the volume to a level that sits comfortably under whatever else you're doing, and leave it running while you work, read, or rest. The system is deliberately tuned to avoid sudden loudness or jarring dissonance, since the point isn't to demand attention; it's closer to weather than to music in the foreground sense. Checking in occasionally to see how it's grown, or to nudge a new connection into existence, is entirely optional.</p>
+      </section>
+
+      <section>
+        <h2>Why build this as a music therapist</h2>
+        <p>Generative ambient sound and embodied, exploratory creative tools come up often in music therapy practice, usually for reasons that have nothing to do with the underlying technology: a sound environment that shifts gently and unpredictably over time can hold attention in a different way than something static or fully predictable, and the act of shaping a system through small, direct actions — placing a node, drawing a connection — can be a useful kind of low-stakes creative engagement on its own. Understanding roughly how a neural network works has also become a fairly ordinary kind of literacy worth having, the way understanding a synthesizer or a mixing desk used to be a specialized skill and is now something far more people pick up casually. This page was an attempt to let those two things — a genuine, working explanation of how a simple learning system behaves, and something pleasant to have on in the background of an afternoon — sit inside the same small object.</p>
+        <p>If you're interested in the use of generative or interactive sound tools in a music therapy context, please visit the <a href="/contact/">contact page</a>.</p>
+
+        <div class="cta-wrap">
+          <a href="/contact/" class="cta-btn">Book an intro call</a>
+        </div>
+
+        <p>Further reading:</p>
+        <ul>
+          <li><em>The Organization of Behavior</em> — Donald O. Hebb (1949)</li>
+          <li>Synaptic pruning — overview of developmental neuroscience research</li>
+          <li><em>Music for Airports</em> liner notes — Brian Eno, on generative and ambient music</li>
+        </ul>
+      </section>
+
+    </article>
+  </main>
+</div>
+
+<footer>
+  <p>© 2025–2026 Jordan Elias</p>
+</footer>
+
+<script src="/js/header.js"></script>
+<script src="/js/neural-garden.js" defer></script>
+
+</body>
+</html>
