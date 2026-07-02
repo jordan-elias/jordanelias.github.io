@@ -659,7 +659,7 @@
           <option value="harmonic_minor">Harmonic Minor</option>
         </select>
         <div class="t-sep"></div>
-        <button class="tbtn" id="btn-randomize">✦ randomize</button>
+        <button class="tbtn" id="btn-randomize">randomize</button>
         <button class="tbtn" id="btn-clear">clear</button>
         <button class="tbtn" id="btn-example">example</button>
       </div>
@@ -1247,11 +1247,11 @@ function togglePlay(){
   const btn=document.getElementById('btn-play');
   if(playing){
     currentStep=0;chainPos=0;chainReps=0;nextStepTime=AC.currentTime+.05;
-    btn.innerHTML='<svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor"><rect width="9" height="9"/></svg> stop';
+    btn.innerHTML='stop';
     btn.classList.add('playing');scheduler();
   }else{
     clearTimeout(schedTimer);
-    btn.innerHTML='<svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor"><path d="M0 0l9 5.5L0 11z"/></svg> play';
+    btn.innerHTML='play';
     btn.classList.remove('playing');
     document.querySelectorAll('.pad').forEach(el=>el.classList.remove('playing'));
     lastPH=-1;renderChain();
