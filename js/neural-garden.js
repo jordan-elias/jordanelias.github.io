@@ -920,9 +920,10 @@
       const r     = NODE_RADIUS + pulse;
 
       /* fill */
-      gctx.fillStyle   = TYPE_COLOR[n.type];
-      gctx.globalAlpha = 0.88 + Math.abs(n.activation) * 0.12;
-      gctx.beginPath(); gctx.arc(n.x, n.y, r, 0, Math.PI * 2); gctx.fill();
+      gctx.strokeStyle   = TYPE_COLOR[n.type];
+      gctx.lineWidth = 1.5;
+      gctx.globalAlpha = 1;
+      gctx.beginPath(); gctx.arc(n.x, n.y, r, 0, Math.PI * 2); gctx.stroke();
 
       /* selection ring — shown for any mode that uses two-click selection */
       if (n.id === selectedNodeId) {
@@ -935,7 +936,7 @@
 
       /* type label */
       gctx.globalAlpha = 0.85;
-      gctx.fillStyle   = '#fff';
+      gctx.fillStyle = TYPE_COLOR[n.type];
       gctx.font        = `bold ${Math.round(r * 0.75)}px Inter, sans-serif`;
       gctx.textAlign   = 'center';
       gctx.textBaseline = 'middle';
