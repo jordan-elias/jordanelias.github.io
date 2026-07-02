@@ -20,7 +20,7 @@
   const STAGES = [
 
     /* ── 0: nothing placed yet ─────────────────────────────────── */
-    { fontSize: 14, wander: true, caption: 'waiting',
+    { fontSize: 14, wander: false, caption: 'waiting',
       neutral: ['·'] },
 
     /* ── 1: first node ─────────────────────────────────────────── */
