@@ -21,14 +21,14 @@
 
     /* ── 0: nothing placed yet ─────────────────────────────────── */
     { fontSize: 14, wander: false, caption: 'waiting',
-      neutral: [' '] },
+      neutral: ['·'] },
 
     /* ── 1: first node ─────────────────────────────────────────── */
     { fontSize: 28, wander: true, speed: 80, caption: 'a single cell',
       left: ['o'], right: ['o'], still: ['o'] },
 
     /* ── 2: second node ────────────────────────────────────────── */
-    { fontSize: 24, wander: true, speed: 74, caption: 'nucleus',
+    { fontSize: 24, wander: true, speed: 74, caption: 'nucleus forming',
       left: ['(o)'], right: ['(o)'], still: ['(o)'] },
 
     /* ── 3: first connection ───────────────────────────────────── */
@@ -36,22 +36,22 @@
       left: ['(o)~~'], right: ['~~(o)'], still: ['(o)'] },
 
     /* ── 4: 3 connections ──────────────────────────────────────── */
-    { fontSize: 20, wander: true, speed: 55, caption: 'beginning to feel',
+    { fontSize: 20, wander: true, speed: 55, caption: 'sensing',
       left: ['(· ·)~~'], right: ['~~(· ·)'], still: ['(· ·)'] },
 
     /* ── 5: 5 connections ──────────────────────────────────────── */
-    { fontSize: 18, wander: true, speed: 42, caption: 'something like a face',
+    { fontSize: 18, wander: true, speed: 42, caption: 'mouth and eyes',
       left: ['(° ‿ °)~~~'], right: ['~~~(° ‿ °)'], still: ['(° ‿ °)'] },
 
     /* ── 6: 8+ connections or 3+ min ───────────────────────────── */
     { fontSize: 18, wander: false, caption: 'finding its limbs',
       neutral: [' >(• ‿ •)< ',  '> (• ‿ •) <'],
-      happy:   [' >(^ ‿ ^)< ',   '> (^ ‿ ^) <'],
+      happy:   [' >(^ ‿ ^)<' ,   '> (^ ‿ ^) <'],
       sad:     [' >(° ︵ °)< '],
       alert:   [' >(◉ ‿ ◉)< ',  '> (◉ ‿ ◉) <'] },
 
     /* ── 7: 11+ connections or 6+ min ──────────────────────────── */
-    { fontSize: 16, wander: false, caption: 'something like a horn',
+    { fontSize: 16, wander: false, caption: 'embodied',
       neutral: [
 `   .-^-.
   (• ‿ •)
@@ -205,7 +205,7 @@
    (_/  (_/   (_/ (_/`] },
 
     /* ── 11: 1+ spontaneous or 30+ min ─────────────────────────── */
-    { fontSize: 12, wander: false, caption: 'it has wings now',
+    { fontSize: 12, wander: false, caption: 'it has grown wings',
       neutral: [
 `    /\\___/\\   _  __
    | ◉ ◉ |  ◜ ◜  ◝          _
@@ -266,7 +266,7 @@
  (,,/   (,,/  (,,/ (,,/    \\ __ _/`] },
 
     /* ── 12: 3+ spontaneous or 40+ min ─────────────────────────── */
-    { fontSize: 12, wander: false, caption: 'grown',
+    { fontSize: 12, wander: false, caption: 'monster',
       neutral: [
 `               ,   ,     _   __
              _/\\__/\\   /  / vvv ◝
@@ -677,18 +677,18 @@
     const cc  = connections.length;
     const sc  = spontConnFormed;
     const min = nowSec() / 60;
-    if (cc >= 30)             return 12;
-    if (cc >= 26)             return 11;
-    if (cc >= 22)             return 10;
-    if (cc >= 17)             return 9;
-    if (cc >= 12)             return 8;
-    if (cc >= 9)              return 7;
-    if (cc >= 6)              return 6;
-    if (nc = 5)               return 5;
-    if (nc = 4)               return 4;
-    if (nc = 3)               return 3;
-    if (nc = 2)               return 2;
-    if (nc = 1)               return 1;
+    if (cc >= 36 || min >= 60)  return Math.min(12, STAGES.length - 1);
+    if (cc >= 28 || min >= 40)  return Math.min(11, STAGES.length - 1);
+    if (cc >= 22 || min >= 28) return Math.min(10, STAGES.length - 1);
+    if (cc >= 18 || min >= 20) return Math.min(9,  STAGES.length - 1);
+    if (cc >= 14 || min >= 14) return Math.min(8,  STAGES.length - 1);
+    if (cc >= 11 || min >= 9)  return Math.min(7,  STAGES.length - 1);
+    if (cc >= 8  || min >= 6)  return Math.min(6,  STAGES.length - 1);
+    if (cc >= 5)               return 5;
+    if (cc >= 3)               return 4;
+    if (cc >= 1)               return 3;
+    if (nc >= 2)               return 2;
+    if (nc >= 1)               return 1;
     return 0;
   }
 
