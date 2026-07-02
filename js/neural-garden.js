@@ -44,14 +44,14 @@
       left: ['(° ‿ °)~~~'], right: ['~~~(° ‿ °)'], still: ['(° ‿ °)'] },
 
     /* ── 6: 8+ connections or 3+ min ───────────────────────────── */
-    { fontSize: 18, wander: true, caption: 'finding its limbs',
+    { fontSize: 18, wander: false, caption: 'finding its limbs',
       neutral: [' >(• ‿ •)< ',  '> (• ‿ •) <'],
       happy:   [' >(^ ‿ ^)< ',   '> (^ ‿ ^) <'],
       sad:     [' >(° ︵ °)< '],
       alert:   [' >(◉ ‿ ◉)< ',  '> (◉ ‿ ◉) <'] },
 
     /* ── 7: 11+ connections or 6+ min ──────────────────────────── */
-    { fontSize: 16, wander: true, caption: 'something like a horn',
+    { fontSize: 16, wander: false, caption: 'something like a horn',
       neutral: [
 `   .-^-.
   (• ‿ •)
@@ -88,7 +88,7 @@
    >(~~~)<`] },
 
     /* ── 8: 14+ connections or 10+ min ─────────────────────────── */
-    { fontSize: 15, wander: true, caption: 'watching',
+    { fontSize: 15, wander: false, caption: 'watching',
       neutral: [
 `   >.-^-.<
   (◉ ‿ ◉)
