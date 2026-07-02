@@ -710,42 +710,54 @@
     creaturePre.style.top  = Math.max(6, (sh - ph) / 2) + 'px';
   }
 
-  function updateWander(sd) {
+  function updateWander(sd, dt) {
     const sw = creatureStage.offsetWidth;
     const sh = creatureStage.offsetHeight;
     const pw = creaturePre.scrollWidth  || 30;
     const ph = creaturePre.scrollHeight || 20;
-    W.timer -= TICK_MS / 1000;
+    /* decrement using real elapsed time so wander speed is frame-rate independent */
+    W.timer -= (dt || 0.016);
     if (W.timer <= 0) {
-      const mx = Math.max(6, sw - pw - 12);
-      const my = Math.max(6, sh - ph - 12);
-      const nx = 6 + Math.random() * mx;
-      const ny = 6 + Math.random() * my;
+      const mx  = Math.max(6, sw - pw - 12);
+      const my  = Math.max(6, sh - ph - 12);
+      const nx  = 6 + Math.random() * mx;
+      const ny  = 6 + Math.random() * my;
       W.dirLeft = nx < W.tx;
       W.tx = nx; W.ty = ny;
-      W.timer = 1.8 + Math.random() * (6 - sd.speed / 30);
+      /* speed 42-80 → interval ~2-4 s (faster stages get shorter intervals) */
+      W.timer = 1.6 + Math.random() * Math.max(0.5, (100 - sd.speed) / 20);
     }
     creaturePre.style.left = W.tx + 'px';
     creaturePre.style.top  = W.ty + 'px';
   }
 
-  function renderCreature() {
+  function renderCreature(dt) {
     const stage = milestoneLevel();
     const sd    = STAGES[stage];
     if (!sd) return;
 
-    /* select sprite */
-    const key    = getMoodKey(sd);
-    const frames = sd[key] || sd.neutral;
-
+    /* advance animation frame on a real-time clock */
     const now = nowSec();
     if (now - creatureFrameAt > CREATURE_FRAME_INT) {
       creatureFrame++;
       creatureFrameAt = now;
     }
-    const sprite = frames[creatureFrame % frames.length];
 
+    /* select sprite array — wander stages use directional keys, others use mood */
+    let frames;
+    if (sd.wander) {
+      /* pick direction-aware sprite; fall back through still → neutral → dot */
+      frames = (W.dirLeft ? sd.left : sd.right) || sd.still || sd.neutral || ['·'];
+    } else {
+      const key = getMoodKey(sd);
+      frames = sd[key] || sd.neutral || ['·'];
+    }
+    /* guard against empty / undefined arrays */
+    if (!frames || !frames.length) frames = ['·'];
+
+    const sprite  = frames[creatureFrame % frames.length];
     const changed = sprite !== lastDisplayedSprite || stage !== lastDisplayedStage;
+
     if (changed) {
       creaturePre.style.fontSize = sd.fontSize + 'px';
       creaturePre.textContent    = sprite;
@@ -755,9 +767,10 @@
 
     if (sd.wander) {
       creaturePre.style.transition = 'left 1.1s ease-in-out, top 1.1s ease-in-out';
-      updateWander(sd);
+      updateWander(sd, dt);
     } else {
       creaturePre.style.transition = '';
+      /* re-centre whenever content changes or on first render of this stage */
       if (changed) requestAnimationFrame(centerCreature);
     }
 
@@ -892,33 +905,70 @@
     /* connections */
     for (const c of connections) {
       const a = findNode(c.a), b = findNode(c.b); if (!a || !b) continue;
-      gctx.globalAlpha = 0.15 + c.weight * 0.65;
-      gctx.strokeStyle = '#6066C2';
-      gctx.lineWidth   = 0.8 + c.weight * 4;
+      /* spontaneous connections are drawn slightly warmer to distinguish them */
+      gctx.strokeStyle = c.spontaneous ? '#9E2E5E' : '#6066C2';
+      gctx.globalAlpha = 0.12 + c.weight * 0.7;
+      gctx.lineWidth   = 0.6 + c.weight * 4.5;
       gctx.beginPath(); gctx.moveTo(a.x, a.y); gctx.lineTo(b.x, b.y); gctx.stroke();
-
-      /* weight label on hover would go here */
     }
     gctx.globalAlpha = 1;
 
     /* nodes */
+    const TYPE_LABEL = { osc: 'O', mod: 'T', lfo: 'L' };
     for (const n of nodes) {
       const pulse = Math.abs(n.activation) * 5;
       const r     = NODE_RADIUS + pulse;
-      gctx.fillStyle    = TYPE_COLOR[n.type];
-      gctx.globalAlpha  = 0.9;
+
+      /* fill */
+      gctx.fillStyle   = TYPE_COLOR[n.type];
+      gctx.globalAlpha = 0.88 + Math.abs(n.activation) * 0.12;
       gctx.beginPath(); gctx.arc(n.x, n.y, r, 0, Math.PI * 2); gctx.fill();
+
+      /* selection ring — shown for any mode that uses two-click selection */
       if (n.id === selectedNodeId) {
-        gctx.globalAlpha = 1; gctx.strokeStyle = INK; gctx.lineWidth = 2;
-        gctx.beginPath(); gctx.arc(n.x, n.y, r + 5, 0, Math.PI * 2); gctx.stroke();
+        gctx.globalAlpha = 1;
+        gctx.strokeStyle = INK; gctx.lineWidth = 2.5;
+        gctx.setLineDash([4, 3]);
+        gctx.beginPath(); gctx.arc(n.x, n.y, r + 6, 0, Math.PI * 2); gctx.stroke();
+        gctx.setLineDash([]);
+      }
+
+      /* type label */
+      gctx.globalAlpha = 0.85;
+      gctx.fillStyle   = '#fff';
+      gctx.font        = `bold ${Math.round(r * 0.75)}px Inter, sans-serif`;
+      gctx.textAlign   = 'center';
+      gctx.textBaseline = 'middle';
+      gctx.fillText(TYPE_LABEL[n.type] || '?', n.x, n.y);
+    }
+    gctx.globalAlpha  = 1;
+    gctx.textAlign    = 'left';
+    gctx.textBaseline = 'alphabetic';
+
+    /* mode hint: show "click a second node" prompt when one is selected */
+    if (selectedNodeId !== null) {
+      const sel = findNode(selectedNodeId);
+      if (sel) {
+        const hint = uiMode === 'connect' ? 'click second node to connect'
+                   : uiMode === 'disconnect' ? 'click second node to disconnect' : '';
+        if (hint) {
+          gctx.font = '11px Inter, sans-serif';
+          gctx.fillStyle = INK;
+          gctx.globalAlpha = 0.55;
+          gctx.fillText(hint, 8, H - 8);
+          gctx.globalAlpha = 1;
+        }
       }
     }
-    gctx.globalAlpha = 1;
   }
 
+  let lastRenderMs = performance.now();
   function render() {
+    const now = performance.now();
+    const dt  = Math.min(0.1, (now - lastRenderMs) / 1000); // cap at 100ms for tab-switch recovery
+    lastRenderMs = now;
     drawGraph();
-    renderCreature();
+    renderCreature(dt);
     requestAnimationFrame(render);
   }
 
@@ -964,6 +1014,9 @@
   function handleClick(pos, hit) {
     if (uiMode === 'place') {
       if (hit || nodes.length >= MAX_NODES) return;
+      /* start the session clock on the very first node so reading time doesn't
+         count toward time-based milestones */
+      if (nodes.length === 0) sessionStartMs = performance.now();
       nodes.push(makeNode(pos.x, pos.y, selType.value, selAct.value));
       updateStatsUI();
     } else if (uiMode === 'connect') {
@@ -978,7 +1031,6 @@
       if (!hit) { selectedNodeId = null; return; }
       if (selectedNodeId === null) { selectedNodeId = hit.id; return; }
       if (selectedNodeId === hit.id) { selectedNodeId = null; return; }
-      const before = connections.length;
       connections = connections.filter(c =>
         !((c.a === selectedNodeId && c.b === hit.id) || (c.a === hit.id && c.b === selectedNodeId)));
       selectedNodeId = null; updateStatsUI();
@@ -997,8 +1049,16 @@
   }
   function onPointerMove(e) {
     e.preventDefault();
-    if (!P.down || !P.startNode) return;
-    const pos  = canvasPos(e);
+    const pos   = canvasPos(e);
+    const hover = nodeAt(pos.x, pos.y);
+
+    if (!P.down) {
+      /* hovering — update cursor so grab hint shows over nodes */
+      graphCanvas.style.cursor = hover ? 'grab' : 'crosshair';
+      return;
+    }
+    if (!P.startNode) return;
+
     const dist = Math.hypot(pos.x - P.startPos.x, pos.y - P.startPos.y);
     if (dist > DRAG_THRESH) {
       P.dragging = true;
@@ -1006,7 +1066,6 @@
       if (P.startNode.type === 'osc')
         P.startNode.freqBase = yToFreq(pos.y, graphCanvas.height);
     }
-    const hover = nodeAt(pos.x, pos.y);
     graphCanvas.style.cursor = P.dragging ? 'grabbing' : (hover ? 'grab' : 'crosshair');
   }
   function onPointerUp(e) {
