@@ -372,7 +372,7 @@
   const FIRE_DURATION       = 2.2;   // seconds fire animation plays
   const CONSONANT_CENTS     = [0, 200, 400, 500, 700, 900, 1100];
   const CONSONANCE_WIDTH    = 60;
-  const TYPE_COLOR = { osc: '#3A4FCC', mod: '#9E2E5E', lfo: '#2A7A6A' };
+  const TYPE_COLOR = { osc: '#20269D', mod: '#20269D', lfo: '#20269D' };
   const DRAG_THRESH         = 5;
 
   /* ═══════════════════════════════════════════════════════════════
@@ -906,7 +906,7 @@
     for (const c of connections) {
       const a = findNode(c.a), b = findNode(c.b); if (!a || !b) continue;
       /* spontaneous connections are drawn slightly warmer to distinguish them */
-      gctx.strokeStyle = c.spontaneous ? '#9E2E5E' : '#6066C2';
+      gctx.strokeStyle = c.spontaneous ? '#20269D' : '#20269D';
       gctx.globalAlpha = 0.12 + c.weight * 0.7;
       gctx.lineWidth   = 0.6 + c.weight * 4.5;
       gctx.beginPath(); gctx.moveTo(a.x, a.y); gctx.lineTo(b.x, b.y); gctx.stroke();
@@ -928,9 +928,9 @@
       if (n.id === selectedNodeId) {
         gctx.globalAlpha = 1;
         gctx.strokeStyle = INK; gctx.lineWidth = 2.5;
-        gctx.setLineDash([4, 3]);
+        
         gctx.beginPath(); gctx.arc(n.x, n.y, r + 6, 0, Math.PI * 2); gctx.stroke();
-        gctx.setLineDash([]);
+        
       }
 
       /* type label */
