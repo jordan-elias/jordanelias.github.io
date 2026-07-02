@@ -348,7 +348,7 @@
   function setPlayBtn(on) {
     var btn = document.getElementById('pm-play');
     if (!btn) return;
-    btn.innerHTML = on ? '&#9632;&#xFE0E; stop' : '&#9654;&#xFE0E; play';
+    btn.innerHTML = on ? 'stop' : 'play';
     btn.classList.toggle('on', on);
   }
 
@@ -586,18 +586,18 @@
     var nb = document.getElementById('pm-rec-new');
     if (!rb) return;
     if (s === 'idle') {
-      rb.innerHTML = '&#9679;&#xFE0E; record'; rb.classList.remove('on');
+      rb.innerHTML = 'record'; rb.classList.remove('on');
       rb.style.display = 'inline-block';
       if (sl) sl.style.display = 'none';
       if (nb) nb.style.display = 'none';
     } else if (s === 'recording') {
-      rb.innerHTML = '&#9632;&#xFE0E; stop'; rb.classList.add('on');
+      rb.innerHTML = 'stop'; rb.classList.add('on');
       rb.style.display = 'inline-block';
       if (sl) sl.style.display = 'none';
       if (nb) nb.style.display = 'none';
     } else if (s === 'has_rec') {
       rb.style.display = 'none';
-      if (sl) { sl.textContent = 'recorded ✓'; sl.style.display = 'inline'; }
+      if (sl) { sl.textContent = 'recorded!'; sl.style.display = 'inline'; }
       if (nb) nb.style.display = 'inline-block';
     }
   }
