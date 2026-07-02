@@ -205,7 +205,7 @@
    (_/  (_/   (_/ (_/`] },
 
     /* ── 11: 1+ spontaneous or 30+ min ─────────────────────────── */
-    { fontSize: 10, wander: false, caption: 'it has grown wings',
+    { fontSize: 12, wander: false, caption: 'it has grown wings',
       neutral: [
 `    /\\___/\\   _  __
    | ◉ ◉ |  ◜ ◜  ◝          _
@@ -266,7 +266,7 @@
  (,,/   (,,/  (,,/ (,,/    \\ __ _/`] },
 
     /* ── 12: 3+ spontaneous or 40+ min ─────────────────────────── */
-    { fontSize: 8, wander: false, caption: 'monster',
+    { fontSize: 12, wander: false, caption: 'monster',
       neutral: [
 `               ,   ,     _   __
              _/\\__/\\   /  / vvv ◝
