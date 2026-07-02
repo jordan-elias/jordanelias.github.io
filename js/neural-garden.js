@@ -684,11 +684,11 @@
     if (cc >= 14 || min >= 10) return Math.min(8,  STAGES.length - 1);
     if (cc >= 11 || min >= 6)  return Math.min(7,  STAGES.length - 1);
     if (cc >= 8  || min >= 3)  return Math.min(6,  STAGES.length - 1);
-    if (cc >= 5)               return 5;
-    if (cc >= 3)               return 4;
-    if (cc >= 1)               return 3;
-    if (nc >= 2)               return 2;
-    if (nc >= 1)               return 1;
+    if (nc = 5)               return 5;
+    if (nc = 4)               return 4;
+    if (nc = 3)               return 3;
+    if (nc = 2)               return 2;
+    if (nc = 1)               return 1;
     return 0;
   }
 
