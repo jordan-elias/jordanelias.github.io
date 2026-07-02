@@ -623,7 +623,7 @@
 
       <!-- ── Interactive activation function section ── -->
       <section class="act-fn-section">
-        <h2>Activation functions, interactively</h2>
+        <h2>Activation functions</h2>
 
         <p>Each graph below shows what an activation function actually does: it takes a number in (x axis) and produces a number out (y axis). Adjust the slider to change the function's key parameter and watch the curve update. The shape of the curve is the shape of the node's "personality" — how it decides to react to its input.</p>
 
@@ -636,7 +636,7 @@
               <input type="range" id="slider-relu" min="-0.8" max="0.8" step="0.05" value="0.2">
               <span class="fn-val" id="val-relu">0.2</span>
             </div>
-            <div class="act-fn-name">relu — sharply</div>
+            <div class="act-fn-name">relu: f(x) = max(0, x)</div>
           </div>
 
           <div class="act-fn-box">
@@ -646,7 +646,7 @@
               <input type="range" id="slider-sigmoid" min="0.5" max="12" step="0.25" value="4">
               <span class="fn-val" id="val-sigmoid">4</span>
             </div>
-            <div class="act-fn-name">sigmoid — smoothly</div>
+            <div class="act-fn-name">sigmoid: σ(x) = 1 / (1 + e<sup>-x</sup>)</div>
           </div>
 
           <div class="act-fn-box">
@@ -656,7 +656,7 @@
               <input type="range" id="slider-tanh" min="0.3" max="4" step="0.1" value="1.6">
               <span class="fn-val" id="val-tanh">1.6</span>
             </div>
-            <div class="act-fn-name">tanh — both ways</div>
+            <div class="act-fn-name">tanh: tanh(x) = (e<sup>x</sup> - e<sup>-x</sup>) / (e<sup>x</sup> + e<sup>-x</sup>)</div>
           </div>
 
         </div>
