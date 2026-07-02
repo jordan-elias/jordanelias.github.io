@@ -28,11 +28,11 @@
       left: ['o'], right: ['o'], still: ['o'] },
 
     /* ── 2: second node ────────────────────────────────────────── */
-    { fontSize: 24, wander: true, speed: 74, caption: 'dividing',
+    { fontSize: 24, wander: true, speed: 74, caption: 'nucleus',
       left: ['(o)'], right: ['(o)'], still: ['(o)'] },
 
     /* ── 3: first connection ───────────────────────────────────── */
-    { fontSize: 22, wander: true, speed: 66, caption: 'first connection',
+    { fontSize: 22, wander: true, speed: 66, caption: 'propulsion',
       left: ['(o)~~'], right: ['~~(o)'], still: ['(o)'] },
 
     /* ── 4: 3 connections ──────────────────────────────────────── */
@@ -45,10 +45,10 @@
 
     /* ── 6: 8+ connections or 3+ min ───────────────────────────── */
     { fontSize: 18, wander: false, caption: 'finding its limbs',
-      neutral: ['>(• ‿ •)<',  '> (• ‿ •) <'],
-      happy:   ['>(^ ‿ ^)<',   '> (^ ‿ ^) <'],
-      sad:     ['>(° ︵ °)<'],
-      alert:   ['>(◉ ‿ ◉)<',  '> (◉ ‿ ◉) <'] },
+      neutral: [' >(• ‿ •)< ',  '> (• ‿ •) <'],
+      happy:   [' >(^ ‿ ^)< ',   '> (^ ‿ ^) <'],
+      sad:     [' >(° ︵ °)< '],
+      alert:   [' >(◉ ‿ ◉)< ',  '> (◉ ‿ ◉) <'] },
 
     /* ── 7: 11+ connections or 6+ min ──────────────────────────── */
     { fontSize: 16, wander: false, caption: 'something like a horn',
@@ -88,7 +88,7 @@
    >(~~~)<`] },
 
     /* ── 8: 14+ connections or 10+ min ─────────────────────────── */
-    { fontSize: 15, wander: false, caption: 'winged and watching',
+    { fontSize: 15, wander: false, caption: 'watching',
       neutral: [
 `   >.-^-.<
   (◉ ‿ ◉)
@@ -205,7 +205,7 @@
    (_/  (_/   (_/ (_/`] },
 
     /* ── 11: 1+ spontaneous or 30+ min ─────────────────────────── */
-    { fontSize: 10, wander: false, caption: 'it has grown wings',
+    { fontSize: 12, wander: false, caption: 'it has wings now',
       neutral: [
 `    /\\___/\\   _  __
    | ◉ ◉ |  ◜ ◜  ◝          _
@@ -266,7 +266,7 @@
  (,,/   (,,/  (,,/ (,,/    \\ __ _/`] },
 
     /* ── 12: 3+ spontaneous or 40+ min ─────────────────────────── */
-    { fontSize: 8, wander: false, caption: 'a dragon',
+    { fontSize: 12, wander: false, caption: 'grown',
       neutral: [
 `               ,   ,     _   __
              _/\\__/\\   /  / vvv ◝
