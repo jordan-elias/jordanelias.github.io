@@ -21,37 +21,37 @@
 
     /* ── 0: nothing placed yet ─────────────────────────────────── */
     { fontSize: 14, wander: false, caption: 'waiting',
-      neutral: ['·'] },
+      neutral: [' '] },
 
     /* ── 1: first node ─────────────────────────────────────────── */
-    { fontSize: 24, wander: true, speed: 80, caption: 'a single cell',
+    { fontSize: 28, wander: true, speed: 80, caption: 'a single cell',
       left: ['o'], right: ['o'], still: ['o'] },
 
     /* ── 2: second node ────────────────────────────────────────── */
-    { fontSize: 24, wander: true, speed: 74, caption: 'nucleus forming',
+    { fontSize: 24, wander: true, speed: 74, caption: 'dividing',
       left: ['(o)'], right: ['(o)'], still: ['(o)'] },
 
     /* ── 3: first connection ───────────────────────────────────── */
-    { fontSize: 22, wander: true, speed: 66, caption: 'propulsion',
+    { fontSize: 22, wander: true, speed: 66, caption: 'first connection',
       left: ['(o)~~'], right: ['~~(o)'], still: ['(o)'] },
 
     /* ── 4: 3 connections ──────────────────────────────────────── */
-    { fontSize: 20, wander: true, speed: 55, caption: 'sensing',
+    { fontSize: 20, wander: true, speed: 55, caption: 'beginning to feel',
       left: ['(· ·)~~'], right: ['~~(· ·)'], still: ['(· ·)'] },
 
     /* ── 5: 5 connections ──────────────────────────────────────── */
-    { fontSize: 18, wander: true, speed: 42, caption: 'mouth and eyes',
+    { fontSize: 18, wander: true, speed: 42, caption: 'something like a face',
       left: ['(° ‿ °)~~~'], right: ['~~~(° ‿ °)'], still: ['(° ‿ °)'] },
 
     /* ── 6: 8+ connections or 3+ min ───────────────────────────── */
-    { fontSize: 18, wander: true, caption: 'finding its limbs',
+    { fontSize: 18, wander: false, caption: 'finding its limbs',
       neutral: ['>(• ‿ •)<',  '> (• ‿ •) <'],
       happy:   ['>(^ ‿ ^)<',   '> (^ ‿ ^) <'],
       sad:     ['>(° ︵ °)<'],
       alert:   ['>(◉ ‿ ◉)<',  '> (◉ ‿ ◉) <'] },
 
     /* ── 7: 11+ connections or 6+ min ──────────────────────────── */
-    { fontSize: 16, wander: false, caption: 'growing',
+    { fontSize: 16, wander: false, caption: 'something like a horn',
       neutral: [
 `   .-^-.
   (• ‿ •)
@@ -160,7 +160,7 @@
      (__ m◜  ◝m`] },
 
     /* ── 10: 22+ connections or 23+ min ────────────────────────── */
-    { fontSize: 12, wander: false, caption: 'growing',
+    { fontSize: 12, wander: false, caption: 'growing into its body',
       neutral: [
 `     /\\___/\\
     ( ◉  ◉ )_/_/_/_
@@ -205,7 +205,7 @@
    (_/  (_/   (_/ (_/`] },
 
     /* ── 11: 1+ spontaneous or 30+ min ─────────────────────────── */
-    { fontSize: 12, wander: false, caption: 'it has grown wings',
+    { fontSize: 10, wander: false, caption: 'it has grown wings',
       neutral: [
 `    /\\___/\\   _  __
    | ◉ ◉ |  ◜ ◜  ◝          _
@@ -266,7 +266,7 @@
  (,,/   (,,/  (,,/ (,,/    \\ __ _/`] },
 
     /* ── 12: 3+ spontaneous or 40+ min ─────────────────────────── */
-    { fontSize: 12, wander: false, caption: 'monster',
+    { fontSize: 8, wander: false, caption: 'a dragon',
       neutral: [
 `               ,   ,     _   __
              _/\\__/\\   /  / vvv ◝
