@@ -21,7 +21,7 @@
 
     /* ── 0: nothing placed yet ─────────────────────────────────── */
     { fontSize: 14, wander: false, caption: 'waiting',
-      neutral: ['·'] },
+      neutral: [' '] },
 
     /* ── 1: first node ─────────────────────────────────────────── */
     { fontSize: 28, wander: true, speed: 80, caption: 'a single cell',
