@@ -677,12 +677,12 @@
     const cc  = connections.length;
     const sc  = spontConnFormed;
     const min = nowSec() / 60;
-    if (cc >= 36 || min >= 60)  return Math.min(12, STAGES.length - 1);
-    if (cc >= 28 || min >= 40)  return Math.min(11, STAGES.length - 1);
-    if (cc >= 22 || min >= 28) return Math.min(10, STAGES.length - 1);
-    if (cc >= 18 || min >= 20) return Math.min(9,  STAGES.length - 1);
-    if (cc >= 14 || min >= 14) return Math.min(8,  STAGES.length - 1);
-    if (cc >= 11 || min >= 9)  return Math.min(7,  STAGES.length - 1);
+    if (cc >= 36 || min >= 90)  return Math.min(12, STAGES.length - 1);
+    if (cc >= 28 || min >= 65)  return Math.min(11, STAGES.length - 1);
+    if (cc >= 22 || min >= 45) return Math.min(10, STAGES.length - 1);
+    if (cc >= 18 || min >= 30) return Math.min(9,  STAGES.length - 1);
+    if (cc >= 14 || min >= 20) return Math.min(8,  STAGES.length - 1);
+    if (cc >= 11 || min >= 10)  return Math.min(7,  STAGES.length - 1);
     if (cc >= 8  || min >= 6)  return Math.min(6,  STAGES.length - 1);
     if (cc >= 5)               return 5;
     if (cc >= 3)               return 4;
