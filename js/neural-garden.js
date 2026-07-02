@@ -44,14 +44,14 @@
       left: ['(° ‿ °)~~~'], right: ['~~~(° ‿ °)'], still: ['(° ‿ °)'] },
 
     /* ── 6: 8+ connections or 3+ min ───────────────────────────── */
-    { fontSize: 18, wander: false, caption: 'finding its limbs',
+    { fontSize: 18, wander: true, caption: 'finding its limbs',
       neutral: [' >(• ‿ •)< ',  '> (• ‿ •) <'],
       happy:   [' >(^ ‿ ^)< ',   '> (^ ‿ ^) <'],
       sad:     [' >(° ︵ °)< '],
       alert:   [' >(◉ ‿ ◉)< ',  '> (◉ ‿ ◉) <'] },
 
     /* ── 7: 11+ connections or 6+ min ──────────────────────────── */
-    { fontSize: 16, wander: false, caption: 'something like a horn',
+    { fontSize: 16, wander: true, caption: 'something like a horn',
       neutral: [
 `   .-^-.
   (• ‿ •)
@@ -88,7 +88,7 @@
    >(~~~)<`] },
 
     /* ── 8: 14+ connections or 10+ min ─────────────────────────── */
-    { fontSize: 15, wander: false, caption: 'watching',
+    { fontSize: 15, wander: true, caption: 'watching',
       neutral: [
 `   >.-^-.<
   (◉ ‿ ◉)
@@ -677,13 +677,13 @@
     const cc  = connections.length;
     const sc  = spontConnFormed;
     const min = nowSec() / 60;
-    if (sc >= 3 || min >= 40)  return Math.min(12, STAGES.length - 1);
-    if (sc >= 1 || min >= 30)  return Math.min(11, STAGES.length - 1);
-    if (cc >= 22 || min >= 23) return Math.min(10, STAGES.length - 1);
-    if (cc >= 18 || min >= 16) return Math.min(9,  STAGES.length - 1);
-    if (cc >= 14 || min >= 10) return Math.min(8,  STAGES.length - 1);
-    if (cc >= 11 || min >= 6)  return Math.min(7,  STAGES.length - 1);
-    if (cc >= 8  || min >= 3)  return Math.min(6,  STAGES.length - 1);
+    if (cc >= 30)             return 12;
+    if (cc >= 26)             return 11;
+    if (cc >= 22)             return 10;
+    if (cc >= 17)             return 9;
+    if (cc >= 12)             return 8;
+    if (cc >= 9)              return 7;
+    if (cc >= 6)              return 6;
     if (nc = 5)               return 5;
     if (nc = 4)               return 4;
     if (nc = 3)               return 3;
