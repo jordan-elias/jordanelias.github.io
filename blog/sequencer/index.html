@@ -344,7 +344,7 @@
     .pad-step-num {
       position: absolute; top: 3px; left: 4px;
       font-family: 'DM Mono', monospace; font-size: .5rem;
-      color: var(--text); opacity: .3; pointer-events: none;
+      color: var(--text); opacity: 1; pointer-events: none;
       transition: color .1s, opacity 1s;
     }
     .pad.on .pad-step-num { color: var(--bg); opacity: 1; }
@@ -1156,8 +1156,8 @@ function updateInfo(){
   const key = document.getElementById('key-select');
   const scale = document.getElementById('scale-select');
 
-  if (key) key.style.opacity = m ? '1' : '.4';
-  if (scale) scale.style.opacity = m ? '1' : '.4';
+  if (key) key.style.opacity = m ? '1' : '1';
+  if (scale) scale.style.opacity = m ? '1' : '1';
 }
 
 /* ── NOTE PICKER ── */
