@@ -148,7 +148,7 @@
       startTones();
       startAmbient();
       if (state.timerMins > 0) startTimer();
-      btn.innerHTML = '&#9632;&#xFE0E; stop';
+      btn.innerHTML = 'stop';
       btn.classList.add('on');
     } else {
       stopAll();
@@ -161,7 +161,7 @@
     stopAmbient();
     clearTimer();
     var btn = document.getElementById('btn-play');
-    btn.innerHTML = '&#9654;&#xFE0E; play';
+    btn.innerHTML = 'play';
     btn.classList.remove('on');
     document.getElementById('timer-display').textContent = '';
   }
