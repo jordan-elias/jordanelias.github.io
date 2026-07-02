@@ -179,18 +179,18 @@
     lSrc.onended = function() {
       if (!lucier.isLooping) {
         lucier.isPlaying = false;
-        setLBtn('&#9654;&#xFE0E; play', false);
+        setLBtn('play', false);
       }
     };
     lSrc.start();
     lucier.isPlaying = true;
-    setLBtn('&#9632;&#xFE0E; stop', true);
+    setLBtn('stop', true);
   }
 
   function lucierStop() {
     if (lSrc) { try { lSrc.stop(); } catch(e){} lSrc = null; }
     lucier.isPlaying = false;
-    setLBtn('&#9654;&#xFE0E; play', false);
+    setLBtn('play', false);
   }
 
   function setLBtn(html, on) {
@@ -499,7 +499,7 @@
     }
 
     radigue.isPlaying = true;
-    document.getElementById('radigue-play').innerHTML = '&#9632;&#xFE0E; stop';
+    document.getElementById('radigue-play').innerHTML = 'stop';
     document.getElementById('radigue-play').classList.add('on');
     rDispTimer = setInterval(updateRadigueDisplay, 250);
     updateRadigueDisplay();
@@ -512,7 +512,7 @@
     rOscs=[]; rLFOs=[]; rMaster=null;
     if (rDispTimer) { clearInterval(rDispTimer); rDispTimer=null; }
     radigue.isPlaying = false;
-    document.getElementById('radigue-play').innerHTML = '&#9654;&#xFE0E; play';
+    document.getElementById('radigue-play').innerHTML = 'play';
     document.getElementById('radigue-play').classList.remove('on');
   }
 
