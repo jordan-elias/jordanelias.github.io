@@ -144,12 +144,12 @@
     if (!playing) {
       playing = true;
       startOscs();
-      btn.textContent = '■\uFE0E stop';
+      btn.textContent = 'stop';
       btn.classList.add('on');
     } else {
       playing = false;
       stopOscsWithRelease();
-      btn.textContent = '▶\uFE0E play';
+      btn.textContent = 'play';
       btn.classList.remove('on');
     }
   }
