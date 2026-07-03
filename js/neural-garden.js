@@ -357,9 +357,9 @@
      ═══════════════════════════════════════════════════════════════ */
   const MAX_NODES           = 24;
   const isMobile = window.matchMedia('(max-width: 700px)').matches;
-  const NODE_RADIUS = isMobile ? 8 : 13;
-  const HIT_RADIUS  = isMobile ? 12 : 18;
-  const HIT_RADIUS          = 18;
+  const NODE_RADIUS = isMobile ? 7 : 13;
+  const HIT_RADIUS  = isMobile ? 11 : 18;
+
   const HEBBIAN_RATE        = 0.045;
   const WEIGHT_DECAY        = 0.012;
   const WEIGHT_MAX          = 1.0;
