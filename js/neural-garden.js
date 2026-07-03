@@ -356,7 +356,9 @@
      2 · CONSTANTS
      ═══════════════════════════════════════════════════════════════ */
   const MAX_NODES           = 24;
-  const NODE_RADIUS         = 13;
+  const isMobile = window.matchMedia('(max-width: 700px)').matches;
+  const NODE_RADIUS = isMobile ? 8 : 13;
+  const HIT_RADIUS  = isMobile ? 12 : 18;
   const HIT_RADIUS          = 18;
   const HEBBIAN_RATE        = 0.045;
   const WEIGHT_DECAY        = 0.012;
