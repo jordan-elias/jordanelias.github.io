@@ -438,22 +438,122 @@
       .page-content { margin-left: 44px; width: calc(100% - 44px); padding: 0.5em 0.75em 4em; }
       footer { margin-left: 36px; }
 
-      /* Stack graph above creature on small screens */
-      .ng-stage { flex-direction: column; }
+      /* ── LAB SECTION: MOBILE ─────────────────────────────── */
 
-      /* On mobile the creature panel takes full width */
-      .ng-creature-wrap { width: 100%; }
-      #ng-creature-stage { height: 260px; }
-      #ng-graph { height: 340px; }
 
-      .oram-btn { font-size: 0.72rem; padding: 0.3em 0.6em; }
-      .oram-btn.ghost { font-size: 0.68rem; padding: 0.25em 0.55em; }
-      .toolbar-sep { height: 18px; }
-      .ng-select-ctrl select { font-size: 0.7rem; }
+  .lab-section {
+    padding: 0.45em;
+  }
 
-      .act-fn-row { flex-direction: column; gap: 32px;}
-      .nn-uses-grid { grid-template-columns: 1fr 1fr; }
-    }
+  .lab-ephemeral-note {
+    font-size: 0.58rem;
+    line-height: 1.35;
+    margin-bottom: 0.45em;
+  }
+
+  .ng-status-row {
+    font-size: 0.56rem;
+    gap: 3px 6px;
+    margin-bottom: 0.35em;
+  }
+
+  /* Stack graph above creature */
+  .ng-stage {
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 0.4em;
+  }
+
+  .ng-graph-wrap,
+  .ng-creature-wrap {
+    width: 100%;
+  }
+
+  /* Responsive canvas heights */
+  #ng-graph {
+    height: clamp(120px, 26vh, 220px);
+  }
+
+  #ng-creature-stage {
+    height: clamp(100px, 20vh, 180px);
+  }
+
+  .ng-creature-caption {
+    font-size: 0.52rem;
+    padding: 3px 0 4px;
+  }
+
+  .channel-legend {
+    gap: 2px;
+    margin-bottom: 0.35em;
+  }
+
+  .ch-swatch {
+    font-size: 0.56rem;
+    padding: 2px 5px;
+    gap: 4px;
+  }
+
+  .ch-dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .oram-toolbar {
+    gap: 4px;
+    margin-bottom: 0.35em;
+  }
+
+  .oram-btn {
+    font-size: 0.62rem;
+    padding: 0.22em 0.5em;
+    border-width: 1px;
+  }
+
+  .oram-btn.ghost {
+    font-size: 0.56rem;
+    padding: 0.18em 0.42em;
+  }
+
+  .toolbar-sep {
+    height: 14px;
+  }
+
+  .slider-ctrl {
+    min-width: 90px;
+    gap: 4px;
+  }
+
+  .slider-ctrl label,
+  .ng-select-ctrl label {
+    font-size: 0.5rem;
+  }
+
+  .slider-val {
+    font-size: 0.56rem;
+    min-width: 22px;
+  }
+
+  .ng-select-ctrl {
+    gap: 4px;
+  }
+
+  .ng-select-ctrl select {
+    font-size: 0.6rem;
+    padding: 0.15em 0.25em;
+  }
+
+  .slider-ctrl input[type=range]::-webkit-slider-thumb {
+    width: 10px;
+    height: 10px;
+  }
+
+  .slider-ctrl input[type=range]::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+  }
+
+}
   </style>
 </head>
 <body>
