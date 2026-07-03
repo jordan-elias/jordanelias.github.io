@@ -451,11 +451,13 @@
     margin-bottom: 0.45em;
   }
 
-  .ng-status-row {
-    font-size: 0.56rem;
-    gap: 3px 6px;
-    margin-bottom: 0.35em;
-  }
+.ng-status-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 6px;
+  font-size: 0.56rem;
+  margin-bottom: 0.35em;
+}
 
   /* Stack graph above creature */
   .ng-stage {
@@ -470,6 +472,8 @@
   }
 
   /* Responsive canvas heights */
+
+      
   #ng-graph {
     height: clamp(120px, 26vh, 220px);
   }
