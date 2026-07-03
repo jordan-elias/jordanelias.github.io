@@ -907,7 +907,7 @@
       const a = findNode(c.a), b = findNode(c.b); if (!a || !b) continue;
       /* spontaneous connections are drawn slightly warmer to distinguish them */
       gctx.strokeStyle = c.spontaneous ? '#20269D' : '#20269D';
-      gctx.globalAlpha = 0.12 + c.weight * 0.7;
+      gctx.globalAlpha = 1;
       gctx.lineWidth   = 0.6 + c.weight * 4.5;
       gctx.beginPath(); gctx.moveTo(a.x, a.y); gctx.lineTo(b.x, b.y); gctx.stroke();
     }
@@ -939,7 +939,7 @@ gctx.beginPath(); gctx.arc(n.x, n.y, r, 0, Math.PI * 2); gctx.stroke();
       }
 
       /* type label */
-      gctx.globalAlpha = 0.85;
+      gctx.globalAlpha = 1;
       gctx.fillStyle = TYPE_COLOR[n.type];
       gctx.font        = `bold ${Math.round(r * 0.75)}px Inter, sans-serif`;
       gctx.textAlign   = 'center';
