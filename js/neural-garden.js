@@ -920,15 +920,19 @@
       const r     = NODE_RADIUS + pulse;
 
       /* fill */
-      gctx.strokeStyle   = TYPE_COLOR[n.type];
-      gctx.lineWidth = 1.5;
-      gctx.globalAlpha = 1;
-      gctx.beginPath(); gctx.arc(n.x, n.y, r, 0, Math.PI * 2); gctx.stroke();
+      // 1. pink background fill (covers connection lines passing through)
+gctx.fillStyle = BG;
+gctx.beginPath(); gctx.arc(n.x, n.y, r, 0, Math.PI * 2); gctx.fill();
+
+// 2. colored ring
+gctx.strokeStyle = TYPE_COLOR[n.type];
+gctx.lineWidth = 1.5;
+gctx.beginPath(); gctx.arc(n.x, n.y, r, 0, Math.PI * 2); gctx.stroke();
 
       /* selection ring — shown for any mode that uses two-click selection */
       if (n.id === selectedNodeId) {
         gctx.globalAlpha = 1;
-        gctx.strokeStyle = INK; gctx.lineWidth = 2.5;
+        gctx.strokeStyle = INK; gctx.lineWidth = 1;
         
         gctx.beginPath(); gctx.arc(n.x, n.y, r + 6, 0, Math.PI * 2); gctx.stroke();
         
