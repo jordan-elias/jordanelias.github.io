@@ -81,63 +81,34 @@ content="
       "url": "https://jordanelias.de/",
       "image": "https://jordanelias.de/images/headshot.jpg",
       "email": "jordanelias@proton.me",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Berlin",
-        "postalCode": "12047",
-        "addressCountry": "DE"
-      },
-      "worksFor": {
-        "@id": "https://jordanelias.de/#service"
-      },
+      "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+      "worksFor": { "@id": "https://jordanelias.de/#service" },
       "alumniOf": [
-        {
-          "@type": "EducationalOrganization",
-          "name": "Freie Universität Berlin",
-          "sameAs": "https://www.fu-berlin.de/"
-        },
-        {
-          "@type": "EducationalOrganization",
-          "name": "Berklee College of Music",
-          "sameAs": "https://www.berklee.edu/"
-        }
+        { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+        { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
       ],
       "hasCredential": {
         "@type": "EducationalOccupationalCredential",
         "name": "Board Certified Music Therapist (MT-BC)",
         "credentialCategory": "Professional Certification",
-        "recognizedBy": {
-          "@type": "Organization",
-          "name": "Certification Board for Music Therapists",
-          "url": "https://www.cbmt.org/"
-        }
+        "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
       },
-      "knowsAbout": [
-        "Music Therapy",
-        "Neurodiversity",
-        "Autism",
-        "ADHD",
-        "Anxiety",
-        "Burnout",
-        "Emotional Regulation",
-        "Neuroscience of Music",
-        "Creative Therapy",
-        "Trauma-Informed Practice",
-        "Music and Neuroplasticity",
-        "Queer Affirming Therapy"
-      ],
-      "sameAs": [
-        "https://www.instagram.com/music_therapy_berlin/"
-      ]
+      "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+      "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
     },
     {
       "@type": "ProfessionalService",
       "@id": "https://jordanelias.de/#service",
       "name": "Jordan Elias Music Therapy",
       "url": "https://jordanelias.de/",
-      "founder": {
-        "@id": "https://jordanelias.de/#person"
-      }
+      "founder": { "@id": "https://jordanelias.de/#person" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "publisher": { "@id": "https://jordanelias.de/#service" }
     },
     {
       "@type": "Article",
@@ -145,29 +116,17 @@ content="
       "headline": "What Is Music Therapy? History, Practice, and Clinical Applications",
       "description": "An overview of music therapy as a clinical practice — its history, evidence base, and how it supports emotional wellbeing, neurodivergent individuals, and anyone navigating complex life experiences.",
       "url": "https://jordanelias.de/music-therapy/",
-      "author": {
-        "@id": "https://jordanelias.de/#person"
-      },
-      "publisher": {
-        "@id": "https://jordanelias.de/#service"
-      },
+      "datePublished": "2026-01-01",
+      "dateModified": "2026-01-01",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "publisher": { "@id": "https://jordanelias.de/#service" },
       "image": "https://jordanelias.de/images/hero.jpg",
       "inLanguage": "en",
       "about": [
-        {
-          "@type": "Thing",
-          "name": "Music Therapy",
-          "sameAs": "https://en.wikipedia.org/wiki/Music_therapy"
-        },
-        {
-          "@type": "Thing",
-          "name": "Neurologic Music Therapy",
-          "sameAs": "https://en.wikipedia.org/wiki/Neurologic_music_therapy"
-        }
+        { "@type": "Thing", "name": "Music Therapy", "sameAs": "https://en.wikipedia.org/wiki/Music_therapy" },
+        { "@type": "Thing", "name": "Neurologic Music Therapy", "sameAs": "https://en.wikipedia.org/wiki/Neurologic_music_therapy" }
       ],
-      "isPartOf": {
-        "@id": "https://jordanelias.de/#webpage"
-      }
+      "mainEntityOfPage": { "@id": "https://jordanelias.de/music-therapy/#webpage" }
     },
     {
       "@type": "WebPage",
@@ -175,41 +134,25 @@ content="
       "url": "https://jordanelias.de/music-therapy/",
       "name": "What Is Music Therapy? — Jordan Elias, Berlin",
       "description": "Learn about music therapy as a clinical practice — its history, methods, and how it supports emotional wellbeing.",
-      "about": {
-        "@type": "Thing",
-        "name": "Music Therapy",
-        "sameAs": "https://en.wikipedia.org/wiki/Music_therapy"
-      },
-      "author": {
-        "@id": "https://jordanelias.de/#person"
-      },
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "url": "https://jordanelias.de/images/hero.jpg"
-      },
-      "isPartOf": {
-        "@type": "WebSite",
-        "@id": "https://jordanelias.de/#website"
-      }
-    },
-  {
-  "@type": "BreadcrumbList",
-  "@id": "https://jordanelias.de/music-therapy/#breadcrumb",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://jordanelias.de/"
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/#website" },
+      "mainEntity": { "@id": "https://jordanelias.de/music-therapy/#article" },
+      "hasPart": [
+        { "@id": "https://jordanelias.de/music-therapy/adhd/#service-adhd" },
+        { "@id": "https://jordanelias.de/music-therapy/anxiety/#service-anxiety" },
+        { "@id": "https://jordanelias.de/music-therapy/autism/#service-autism" },
+        { "@id": "https://jordanelias.de/music-therapy/grief/#service-grief" }
+      ]
     },
     {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Music Therapy",
-      "item": "https://jordanelias.de/music-therapy/"
+      "@type": "BreadcrumbList",
+      "@id": "https://jordanelias.de/music-therapy/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Music Therapy", "item": "https://jordanelias.de/music-therapy/" }
+      ]
     }
-  ]
-}
   ]
 }
 </script>
