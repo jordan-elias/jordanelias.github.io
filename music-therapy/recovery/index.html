@@ -66,189 +66,117 @@
   <link rel="stylesheet" href="/css/styles.css">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "honorificSuffix": "MT-BC",
-        "jobTitle": "Board-Certified Music Therapist",
-        "url": "https://jordanelias.de/",
-        "image": "https://jordanelias.de/images/headshot.jpg",
-        "email": "jordanelias@proton.me",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Berlin",
-          "postalCode": "12047",
-          "addressCountry": "DE"
-        },
-        "worksFor": {
-          "@id": "https://jordanelias.de/#service"
-        },
-        "alumniOf": [
-          {
-            "@type": "EducationalOrganization",
-            "name": "Freie Universität Berlin",
-            "sameAs": "https://www.fu-berlin.de/"
-          },
-          {
-            "@type": "EducationalOrganization",
-            "name": "Berklee College of Music",
-            "sameAs": "https://www.berklee.edu/"
-          }
-        ],
-        "hasCredential": {
-          "@type": "EducationalOccupationalCredential",
-          "name": "Board Certified Music Therapist (MT-BC)",
-          "credentialCategory": "Professional Certification",
-          "recognizedBy": {
-            "@type": "Organization",
-            "name": "Certification Board for Music Therapists",
-            "url": "https://www.cbmt.org/"
-          }
-        },
-        "knowsAbout": [
-          "Music Therapy",
-          "Addiction Recovery",
-          "Substance Use Disorder",
-          "Alcohol Use Disorder",
-          "Craving Management",
-          "Trauma-Informed Practice",
-          "Emotional Regulation",
-          "Relapse Prevention",
-          "Harm Reduction",
-          "Queer Affirming Therapy"
-        ],
-        "sameAs": [
-          "https://www.instagram.com/music_therapy_berlin/"
-        ]
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://jordanelias.de/",
+      "image": "https://jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+      "worksFor": { "@id": "https://jordanelias.de/#service" },
+      "alumniOf": [
+        { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+        { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
       },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://jordanelias.de/#service",
-        "name": "Jordan Elias Music Therapy",
-        "url": "https://jordanelias.de/",
-        "founder": {
-          "@id": "https://jordanelias.de/#person"
-        }
-      },
-      {
-        "@type": "Service",
-        "@id": "https://jordanelias.de/music-therapy/recovery/#service-recovery",
-        "name": "Music Therapy for Addiction Recovery",
-        "description": "Individual music therapy for adults in recovery from alcohol and substance use. Supporting emotional regulation, craving management, trauma processing, identity, and building a sustainable sober life, in Berlin and online.",
-        "url": "https://jordanelias.de/music-therapy/recovery/",
-        "provider": {
-          "@id": "https://jordanelias.de/#person"
-        },
-        "isPartOf": {
-          "@id": "https://jordanelias.de/#service"
-        },
-        "serviceType": "Music Therapy",
-        "availableChannel": [
-          {
-            "@type": "ServiceChannel",
-            "name": "In-Person Sessions in Berlin",
-            "availableLanguage": ["English"],
-            "serviceLocation": {
-              "@type": "Place",
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Berlin",
-                "addressCountry": "DE"
-              }
-            }
-          },
-          {
-            "@type": "ServiceChannel",
-            "name": "Online via Video Call",
-            "availableLanguage": ["English"],
-            "serviceUrl": "https://jordanelias.de/online-sessions/",
-            "serviceLocation": {
-              "@type": "VirtualLocation",
-              "url": "https://jordanelias.de/online-sessions/"
-            }
+      "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+      "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://jordanelias.de/",
+      "founder": { "@id": "https://jordanelias.de/#person" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "publisher": { "@id": "https://jordanelias.de/#service" }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://jordanelias.de/music-therapy/recovery/#service-recovery",
+      "name": "Music Therapy for Addiction Recovery",
+      "description": "Individual music therapy for adults in recovery from alcohol and substance use. Supporting emotional regulation, craving management, trauma processing, identity, and building a sustainable sober life, in Berlin and online.",
+      "url": "https://jordanelias.de/music-therapy/recovery/",
+      "provider": { "@id": "https://jordanelias.de/#person" },
+      "isPartOf": { "@id": "https://jordanelias.de/#service" },
+      "serviceType": "Music Therapy",
+      "availableChannel": [
+        {
+          "@type": "ServiceChannel",
+          "name": "In-Person Sessions in Berlin",
+          "availableLanguage": ["English"],
+          "serviceLocation": {
+            "@type": "Place",
+            "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "addressCountry": "DE" }
           }
-        ],
-        "areaServed": [
-          {
-            "@type": "City",
-            "name": "Berlin"
-          },
-          {
-            "@type": "Country",
-            "name": "Germany"
-          },
-          "Worldwide"
-        ],
-        "audience": {
-          "@type": "Audience",
-          "audienceType": "Adults in recovery from alcohol or substance use, people navigating early sobriety, those with dual diagnosis, people who have experienced relapse, harm reduction oriented individuals"
         },
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "EUR",
-          "priceSpecification": {
-            "@type": "PriceSpecification",
-            "priceCurrency": "EUR",
-            "description": "Session pricing available on request. Sliding scale available."
-          },
-          "seller": {
-            "@id": "https://jordanelias.de/#person"
+        {
+          "@type": "ServiceChannel",
+          "name": "Online via Video Call",
+          "availableLanguage": ["English"],
+          "serviceUrl": "https://jordanelias.de/online-sessions/",
+          "serviceLocation": {
+            "@type": "VirtualLocation",
+            "url": "https://jordanelias.de/online-sessions/"
           }
         }
+      ],
+      "areaServed": [
+        { "@type": "City", "name": "Berlin" },
+        { "@type": "Country", "name": "Germany" },
+        { "@type": "Place", "name": "Global" }
+      ],
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Adults in recovery from alcohol or substance use, people navigating early sobriety, those with dual diagnosis, people who have experienced relapse, harm reduction oriented individuals"
       },
-      {
-        "@type": "WebPage",
-        "@id": "https://jordanelias.de/music-therapy/recovery/#webpage",
-        "url": "https://jordanelias.de/music-therapy/recovery/",
-        "name": "Music Therapy for Addiction Recovery — Jordan Elias",
-        "description": "Music therapy for recovery from alcohol and substance use in Berlin and online. For people in early sobriety, long-term recovery, harm reduction, or coming back after a relapse.",
-        "about": {
-          "@id": "https://jordanelias.de/music-therapy/recovery/#service-recovery"
-        },
-        "author": {
-          "@id": "https://jordanelias.de/#person"
-        },
-        "primaryImageOfPage": {
-          "@type": "ImageObject",
-          "url": "https://jordanelias.de/images/hero.jpg"
-        },
-        "isPartOf": {
-          "@type": "WebSite",
-          "@id": "https://jordanelias.de/#website"
-        }
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://jordanelias.de/music-therapy/recovery/#breadcrumb",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://jordanelias.de/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Music Therapy",
-            "item": "https://jordanelias.de/music-therapy/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Recovery",
-            "item": "https://jordanelias.de/music-therapy/recovery/"
-          }
-        ]
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "description": "Session pricing available on request. Sliding scale available.",
+        "seller": { "@id": "https://jordanelias.de/#service" }
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://jordanelias.de/music-therapy/recovery/#webpage",
+      "url": "https://jordanelias.de/music-therapy/recovery/",
+      "name": "Music Therapy for Addiction Recovery — Jordan Elias",
+      "description": "Music therapy for recovery from alcohol and substance use in Berlin and online. For people in early sobriety, long-term recovery, harm reduction, or coming back after a relapse.",
+      "about": { "@id": "https://jordanelias.de/music-therapy/recovery/#service-recovery" },
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/#website" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://jordanelias.de/music-therapy/recovery/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Music Therapy", "item": "https://jordanelias.de/music-therapy/" },
+        { "@type": "ListItem", "position": 3, "name": "Recovery", "item": "https://jordanelias.de/music-therapy/recovery/" }
+      ]
+    }
+  ]
+}
+</script>
 
   <!-- SCHEMA: FAQ -->
   <script type="application/ld+json">
