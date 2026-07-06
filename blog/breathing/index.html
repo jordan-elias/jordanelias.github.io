@@ -422,49 +422,111 @@
     }
   </style>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "honorificSuffix": "MT-BC",
-        "jobTitle": "Board-Certified Music Therapist",
-        "url": "https://jordanelias.de/"
+ <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://jordanelias.de/",
+      "image": "https://jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+      "worksFor": { "@id": "https://jordanelias.de/#service" },
+      "alumniOf": [
+        { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+        { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
       },
-      {
-        "@type": "BlogPosting",
-        "@id": "https://jordanelias.de/blog/breathing/#post",
-        "headline": "Breath Regulation: four guided patterns",
-        "description": "Four guided breathing patterns — 4-7-8, Box, Physiological Sigh, and Resonant — with visual animation and generative soundscape.",
-        "url": "https://jordanelias.de/blog/breathing/",
-        "datePublished": "2026-06-25",
-        "dateModified": "2026-06-25",
-        "inLanguage": "en",
-        "author": { "@id": "https://jordanelias.de/#person" },
-        "publisher": { "@id": "https://jordanelias.de/#service" },
-        "image": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
-        "isPartOf": { "@type": "Blog", "@id": "https://jordanelias.de/blog/#blog" },
-        "about": [
-          { "@type": "Thing", "name": "Breathwork", "sameAs": "https://en.wikipedia.org/wiki/Breathwork" },
-          { "@type": "Thing", "name": "Autonomic nervous system", "sameAs": "https://en.wikipedia.org/wiki/Autonomic_nervous_system" }
-        ],
-        "keywords": "breathing exercises, breath regulation, 4-7-8, box breathing, physiological sigh, resonant breathing, music therapy, nervous system"
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://jordanelias.de/blog/breathing/#breadcrumb",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
-          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" },
-          { "@type": "ListItem", "position": 3, "name": "Breath Regulation", "item": "https://jordanelias.de/blog/breathing/" }
-        ]
-      }
-    ]
-  }
-  </script>
+      "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+      "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://jordanelias.de/",
+      "founder": { "@id": "https://jordanelias.de/#person" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "publisher": { "@id": "https://jordanelias.de/#service" }
+    },
+    {
+      "@type": "Blog",
+      "@id": "https://jordanelias.de/blog/#blog",
+      "name": "Jordan Elias Music Therapy Blog",
+      "url": "https://jordanelias.de/blog/",
+      "publisher": { "@id": "https://jordanelias.de/#service" },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://jordanelias.de/blog/breathing/#post",
+      "headline": "Breath Regulation: four guided patterns",
+      "description": "Four guided breathing patterns — 4-7-8, Box, Physiological Sigh, and Resonant — with visual animation and generative soundscape.",
+      "url": "https://jordanelias.de/blog/breathing/",
+      "datePublished": "2026-06-25",
+      "dateModified": "2026-06-25",
+      "inLanguage": "en",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "publisher": { "@id": "https://jordanelias.de/#service" },
+      "image": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/blog/#blog" },
+      "mainEntityOfPage": { "@id": "https://jordanelias.de/blog/breathing/#webpage" },
+      "mentions": { "@id": "https://jordanelias.de/blog/breathing/#app" },
+      "about": [
+        { "@type": "Thing", "name": "Breathwork", "sameAs": "https://en.wikipedia.org/wiki/Breathwork" },
+        { "@type": "Thing", "name": "Autonomic nervous system", "sameAs": "https://en.wikipedia.org/wiki/Autonomic_nervous_system" }
+      ],
+      "keywords": "breathing exercises, breath regulation, 4-7-8, box breathing, physiological sigh, resonant breathing, music therapy, nervous system"
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://jordanelias.de/blog/breathing/#app",
+      "name": "Breath Regulation",
+      "url": "https://jordanelias.de/blog/breathing/",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Any (Web Browser)",
+      "isAccessibleForFree": true,
+      "description": "An interactive guided breathing tool offering four patterns — 4-7-8, Box, Physiological Sigh, and Resonant — with inhale/exhale prompts, a timer, visual animation, and a matching generative soundscape.",
+      "creator": { "@id": "https://jordanelias.de/#person" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://jordanelias.de/blog/breathing/#webpage",
+      "url": "https://jordanelias.de/blog/breathing/",
+      "name": "Breath Regulation: four guided patterns | Jordan Elias",
+      "description": "Four guided breathing patterns — 4-7-8, Box, Physiological Sigh, and Resonant — with visual animation and generative soundscape.",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/#website" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://jordanelias.de/blog/breathing/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" },
+        { "@type": "ListItem", "position": 3, "name": "Breath Regulation", "item": "https://jordanelias.de/blog/breathing/" }
+      ]
+    }
+  ]
+}
+</script>
+  
 </head>
 
 <body>
