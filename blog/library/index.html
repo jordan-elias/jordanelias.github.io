@@ -148,151 +148,84 @@
     </style>
 
   <!-- STRUCTURED DATA -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "honorificSuffix": "MT-BC",
-        "jobTitle": "Board-Certified Music Therapist",
-        "url": "https://jordanelias.de/",
-        "image": "https://jordanelias.de/images/headshot.jpg",
-        "email": "jordanelias@proton.me",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Berlin",
-          "postalCode": "12047",
-          "addressCountry": "DE"
-        },
-        "worksFor": {
-          "@id": "https://jordanelias.de/#service"
-        },
-        "alumniOf": [
-          {
-            "@type": "EducationalOrganization",
-            "name": "Freie Universität Berlin",
-            "sameAs": "https://www.fu-berlin.de/"
-          },
-          {
-            "@type": "EducationalOrganization",
-            "name": "Berklee College of Music",
-            "sameAs": "https://www.berklee.edu/"
-          }
-        ],
-        "hasCredential": {
-          "@type": "EducationalOccupationalCredential",
-          "name": "Board Certified Music Therapist (MT-BC)",
-          "credentialCategory": "Professional Certification",
-          "recognizedBy": {
-            "@type": "Organization",
-            "name": "Certification Board for Music Therapists",
-            "url": "https://www.cbmt.org/"
-          }
-        },
-        "knowsAbout": [
-          "Music Therapy",
-          "Neurodiversity",
-          "Autism",
-          "ADHD",
-          "Anxiety",
-          "Burnout",
-          "Emotional Regulation",
-          "Neuroscience of Music",
-          "Creative Therapy",
-          "Trauma-Informed Practice",
-          "Music and Neuroplasticity",
-          "Queer Affirming Therapy"
-        ],
-        "sameAs": [
-          "https://www.instagram.com/music_therapy_berlin/"
-        ]
-      },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://jordanelias.de/#service",
-        "name": "Jordan Elias Music Therapy",
-        "url": "https://jordanelias.de/",
-        "founder": {
-          "@id": "https://jordanelias.de/#person"
-        }
-      },
-      {
-        "@type": "BlogPosting",
-        "@id": "https://jordanelias.de/blog/library/#post",
-        "headline": "Resource Library",
-        "description": "A curated collection of freely accessible resources for exploring sound, listening, creativity, regulation, and wellbeing. Updated regularly.",
-        "url": "https://jordanelias.de/blog/library/",
-        "datePublished": "2026-06-23",
-        "dateModified": "2026-06-23",
-        "inLanguage": "en",
-        "author": {
-          "@id": "https://jordanelias.de/#person"
-        },
-        "publisher": {
-          "@id": "https://jordanelias.de/#service"
-        },
-        "image": {
-          "@type": "ImageObject",
-          "url": "https://jordanelias.de/images/hero.jpg"
-        },
-        "isPartOf": {
-          "@type": "Blog",
-          "@id": "https://jordanelias.de/blog/#blog"
-        },
-        "mainEntityOfPage": {
-          "@id": "https://jordanelias.de/blog/library/#webpage"
-        },
-      
-        "keywords": "music, composition, mental health, therapy"
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://jordanelias.de/blog/librars/#webpage",
-        "url": "https://jordanelias.de/blog/librars/",
-        "name": "Resource Library | Jordan Elias",
-        "description":"A curated collection of freely accessible resources for exploring sound, listening, creativity, regulation, and wellbeing. Updated regularly.",
-        "author": {
-          "@id": "https://jordanelias.de/#person"
-        },
-        "primaryImageOfPage": {
-          "@type": "ImageObject",
-          "url": "https://jordanelias.de/images/hero.jpg"
-        },
-        "isPartOf": {
-          "@type": "WebSite",
-          "@id": "https://jordanelias.de/#website"
-        }
-      },
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-  "@type": "BreadcrumbList",
-  "@id": "https://jordanelias.de/blog/[POST-SLUG]/#breadcrumb",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://jordanelias.de/"
+      "@type": "Person",
+      "@id": "https://jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://jordanelias.de/",
+      "image": "https://jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+      "worksFor": { "@id": "https://jordanelias.de/#service" },
+      "alumniOf": [
+        { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+        { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
+      },
+      "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+      "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
     },
     {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Blog",
-      "item": "https://jordanelias.de/blog/"
+      "@type": "ProfessionalService",
+      "@id": "https://jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://jordanelias.de/",
+      "founder": { "@id": "https://jordanelias.de/#person" }
     },
     {
-      "@type": "ListItem",
-      "position": 3,
-      "name": "Resource Library",
-      "item": "https://jordanelias.de/blog/library/"
+      "@type": "WebSite",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "publisher": { "@id": "https://jordanelias.de/#service" }
+    },
+    {
+      "@type": "Blog",
+      "@id": "https://jordanelias.de/blog/#blog",
+      "name": "Jordan Elias Music Therapy Blog",
+      "url": "https://jordanelias.de/blog/",
+      "publisher": { "@id": "https://jordanelias.de/#service" },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://jordanelias.de/blog/library/#webpage",
+      "url": "https://jordanelias.de/blog/library/",
+      "name": "Resource Library | Jordan Elias",
+      "description": "A curated collection of freely accessible resources for exploring sound, listening, creativity, regulation, and wellbeing. Updated regularly.",
+      "inLanguage": "en",
+      "datePublished": "2026-06-23",
+      "dateModified": "2026-06-23",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "publisher": { "@id": "https://jordanelias.de/#service" },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/#website" },
+      "keywords": "music resources, sound and listening, creativity, emotional regulation, wellbeing, music therapy resources, mental health tools"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://jordanelias.de/blog/library/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" },
+        { "@type": "ListItem", "position": 3, "name": "Resource Library", "item": "https://jordanelias.de/blog/library/" }
+      ]
     }
   ]
 }
-    ]
-  }
-  </script>
+</script>
+  
 </head>
 
 <body>
