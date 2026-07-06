@@ -17,14 +17,14 @@
 <meta property="og:title" content="The Cocktail Party Problem: Auditory Scene Analysis">
 <meta property="og:description" content="Interactive exploration of how the brain separates sound sources in noise and why AI still struggles with auditory scene analysis.">
 <meta property="og:url" content="https://jordanelias.de/blog/cocktail-party-problem/">
-<meta property="og:image" content="https://jordanelias.de/images/cocktail-party-problem-og.jpg">
+<meta property="og:image" content="https://jordanelias.de/images/hero.jpg">
 <meta property="og:site_name" content="Jordan Elias">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Cocktail Party Problem: Auditory Scene Analysis">
 <meta name="twitter:description" content="How the brain separates sound in noise — and why machines still can't.">
-<meta name="twitter:image" content="https://jordanelias.de/images/cocktail-party-problem-og.jpg">
+<meta name="twitter:image" content="https://jordanelias.de/images/hero.jpg">
 
   <link rel="canonical" href="https://jordanelias.de/blog/cocktail-party-problem/">
   <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
@@ -34,64 +34,108 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 
-  <script type="application/ld+json">
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "WebPage",
-      "@id": "https://jordanelias.de/blog/cocktail-party-problem/",
-      "url": "https://jordanelias.de/blog/cocktail-party-problem/",
-      "name": "The Cocktail Party Problem: Auditory Scene Analysis",
-      "description": "Interactive exploration of how the brain separates sound sources in noise and why auditory scene analysis remains a challenge for AI systems.",
-      "inLanguage": "en",
-      "isPartOf": {
-        "@type": "WebSite",
-        "name": "Jordan Elias"
+      "@type": "Person",
+      "@id": "https://jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://jordanelias.de/",
+      "image": "https://jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+      "worksFor": { "@id": "https://jordanelias.de/#service" },
+      "alumniOf": [
+        { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+        { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
       },
-      "primaryImageOfPage": {
-        "@type": "ImageObject",
-        "url": "https://jordanelias.de/images/cocktail-party-problem-og.jpg"
-      },
-      "mainEntity": {
-        "@id": "https://jordanelias.de/blog/cocktail-party-problem/#article"
-      }
+      "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+      "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
     },
     {
-      "@type": "Article",
-      "@id": "https://jordanelias.de/blog/cocktail-party-problem/#article",
+      "@type": "ProfessionalService",
+      "@id": "https://jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://jordanelias.de/",
+      "founder": { "@id": "https://jordanelias.de/#person" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "publisher": { "@id": "https://jordanelias.de/#service" }
+    },
+    {
+      "@type": "Blog",
+      "@id": "https://jordanelias.de/blog/#blog",
+      "name": "Jordan Elias Music Therapy Blog",
+      "url": "https://jordanelias.de/blog/",
+      "publisher": { "@id": "https://jordanelias.de/#service" },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://jordanelias.de/blog/cocktail-party-problem/#post",
       "headline": "The Cocktail Party Problem: Auditory Scene Analysis",
       "description": "Interactive exploration of how the brain separates sound sources in noisy environments and why auditory scene analysis remains a challenge for AI systems.",
-      "author": {
-        "@type": "Person",
-        "name": "Jordan Elias"
-      },
-      "publisher": {
-        "@type": "Person",
-        "name": "Jordan Elias"
-      },
+      "url": "https://jordanelias.de/blog/cocktail-party-problem/",
       "datePublished": "2026-06-24",
       "dateModified": "2026-06-29",
-      "image": [
-        "https://jordanelias.de/images/cocktail-party-problem-og.jpg"
+      "inLanguage": "en",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "publisher": { "@id": "https://jordanelias.de/#service" },
+      "image": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/blog/#blog" },
+      "mainEntityOfPage": { "@id": "https://jordanelias.de/blog/cocktail-party-problem/#webpage" },
+      "mentions": { "@id": "https://jordanelias.de/blog/cocktail-party-problem/#app" },
+      "articleSection": ["Auditory Neuroscience", "Cognitive Science", "Machine Learning", "Music Therapy"],
+      "about": [
+        { "@type": "Thing", "name": "Cocktail party effect", "sameAs": "https://en.wikipedia.org/wiki/Cocktail_party_effect" },
+        { "@type": "Thing", "name": "Auditory scene analysis", "sameAs": "https://en.wikipedia.org/wiki/Auditory_scene_analysis" },
+        { "@type": "Thing", "name": "Speech perception in noise", "sameAs": "https://en.wikipedia.org/wiki/Speech_perception" }
       ],
-      "articleSection": [
-        "Auditory Neuroscience",
-        "Cognitive Science",
-        "Machine Learning",
-        "Music Therapy"
-      ],
-      "keywords": [
-        "cocktail party problem",
-        "auditory scene analysis",
-        "speech in noise",
-        "sound source separation",
-        "hearing and attention",
-        "AI audio processing"
-      ],
-      "mainEntityOfPage": {
-        "@id": "https://jordanelias.de/blog/cocktail-party-problem/"
-      }
+      "keywords": "cocktail party problem, auditory scene analysis, speech in noise, sound source separation, hearing and attention, AI audio processing"
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://jordanelias.de/blog/cocktail-party-problem/#app",
+      "name": "Cocktail Party Problem: Listening Game",
+      "url": "https://jordanelias.de/blog/cocktail-party-problem/",
+      "applicationCategory": "MusicApplication",
+      "operatingSystem": "Any (Web Browser)",
+      "isAccessibleForFree": true,
+      "description": "An interactive listening game where players identify a target word amid distracting audio and select the correct answer from four choices, demonstrating auditory scene analysis in practice.",
+      "creator": { "@id": "https://jordanelias.de/#person" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://jordanelias.de/blog/cocktail-party-problem/#webpage",
+      "url": "https://jordanelias.de/blog/cocktail-party-problem/",
+      "name": "The Cocktail Party Problem: Auditory Scene Analysis | Jordan Elias",
+      "description": "Interactive exploration of how the brain separates sound sources in noise and why auditory scene analysis remains a challenge for AI systems.",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/#website" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://jordanelias.de/blog/cocktail-party-problem/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" },
+        { "@type": "ListItem", "position": 3, "name": "Cocktail Party Problem", "item": "https://jordanelias.de/blog/cocktail-party-problem/" }
+      ]
     }
   ]
 }
