@@ -68,157 +68,113 @@
   <link rel="stylesheet" href="/css/styles.css">
 
   <!-- STRUCTURED DATA -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "honorificSuffix": "MT-BC",
-        "jobTitle": "Board-Certified Music Therapist",
-        "url": "https://jordanelias.de/",
-        "image": "https://jordanelias.de/images/headshot.jpg",
-        "email": "jordanelias@proton.me",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Berlin",
-          "postalCode": "12047",
-          "addressCountry": "DE"
-        },
-        "worksFor": {
-          "@id": "https://jordanelias.de/#service"
-        },
-        "alumniOf": [
-          {
-            "@type": "EducationalOrganization",
-            "name": "Freie Universität Berlin",
-            "sameAs": "https://www.fu-berlin.de/"
-          },
-          {
-            "@type": "EducationalOrganization",
-            "name": "Berklee College of Music",
-            "sameAs": "https://www.berklee.edu/"
-          }
-        ],
-        "hasCredential": {
-          "@type": "EducationalOccupationalCredential",
-          "name": "Board Certified Music Therapist (MT-BC)",
-          "credentialCategory": "Professional Certification",
-          "recognizedBy": {
-            "@type": "Organization",
-            "name": "Certification Board for Music Therapists",
-            "url": "https://www.cbmt.org/"
-          }
-        },
-        "knowsAbout": [
-          "Music Therapy",
-          "Neurodiversity",
-          "Autism",
-          "ADHD",
-          "Anxiety",
-          "Burnout",
-          "Emotional Regulation",
-          "Neuroscience of Music",
-          "Creative Therapy",
-          "Trauma-Informed Practice",
-          "Music and Neuroplasticity",
-          "Queer Affirming Therapy"
-        ],
-        "sameAs": [
-          "https://www.instagram.com/music_therapy_berlin/"
-        ]
-      },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://jordanelias.de/#service",
-        "name": "Jordan Elias Music Therapy",
-        "url": "https://jordanelias.de/",
-        "founder": {
-          "@id": "https://jordanelias.de/#person"
-        }
-      },
-      {
-        "@type": "BlogPosting",
-        "@id": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/#post",
-        "headline": "Indeterminacy in music and life",
-        "description": "An exploration of uncertainty, taking inspiration from the works of Cage, Oliveros, and Reich. Thoughts on therapeutic applications. Instructions for a sound experiment you can try at home.",
-        "url": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/",
-        "datePublished": "2026-02-18",
-        "dateModified": "2026-02-18",
-        "inLanguage": "en",
-        "author": {
-          "@id": "https://jordanelias.de/#person"
-        },
-        "publisher": {
-          "@id": "https://jordanelias.de/#service"
-        },
-        "image": {
-          "@type": "ImageObject",
-          "url": "https://jordanelias.de/images/hero.jpg"
-        },
-        "isPartOf": {
-          "@type": "Blog",
-          "@id": "https://jordanelias.de/blog/#blog"
-        },
-        "mainEntityOfPage": {
-          "@id": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/#webpage"
-        },
-        "about": [
-          {
-            "@type": "Thing",
-            "name": "Indeterminacy",
-            "sameAs": "https://en.wikipedia.org/wiki/Indeterminacy_(music)"
-          }
-        ],
-        "keywords": "Chance, uncertainty, therapy"
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/#webpage",
-        "url": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/",
-        "name": "Indeterminacy | Jordan Elias",
-        "description":"An exploration of uncertainty, taking inspiration from the works of Cage, Oliveros, and Reich. Thoughts on therapeutic applications. Instructions for a sound experiment you can try at home.",
-        "author": {
-          "@id": "https://jordanelias.de/#person"
-        },
-        "primaryImageOfPage": {
-          "@type": "ImageObject",
-          "url": "https://jordanelias.de/images/hero.jpg"
-        },
-        "isPartOf": {
-          "@type": "WebSite",
-          "@id": "https://jordanelias.de/#website"
-        }
-      },
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-  "@type": "BreadcrumbList",
-  "@id": "https://jordanelias.de/blog/[POST-SLUG]/#breadcrumb",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://jordanelias.de/"
+      "@type": "Person",
+      "@id": "https://jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://jordanelias.de/",
+      "image": "https://jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+      "worksFor": { "@id": "https://jordanelias.de/#service" },
+      "alumniOf": [
+        { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+        { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
+      },
+      "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+      "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
     },
     {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Blog",
-      "item": "https://jordanelias.de/blog/"
+      "@type": "ProfessionalService",
+      "@id": "https://jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://jordanelias.de/",
+      "founder": { "@id": "https://jordanelias.de/#person" }
     },
     {
-      "@type": "ListItem",
-      "position": 3,
-      "name": "Indeterminacy",
-      "item": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/"
+      "@type": "WebSite",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "publisher": { "@id": "https://jordanelias.de/#service" }
+    },
+    {
+      "@type": "Blog",
+      "@id": "https://jordanelias.de/blog/#blog",
+      "name": "Music Therapy and Mental Health — Jordan Elias",
+      "description": "A blog exploring music therapy, mental health, neurodiversity, and creative wellbeing. Written by a board-certified music therapist based in Berlin.",
+      "url": "https://jordanelias.de/blog/",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "publisher": { "@id": "https://jordanelias.de/#service" },
+      "inLanguage": "en",
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Neurodivergent individuals, LGBTQIA+ community, musicians, creatives seeking mental health support"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Music Therapy", "sameAs": "https://en.wikipedia.org/wiki/Music_therapy" },
+        { "@type": "Thing", "name": "Neurodiversity", "sameAs": "https://en.wikipedia.org/wiki/Neurodiversity" },
+        { "@type": "Thing", "name": "Mental Health", "sameAs": "https://en.wikipedia.org/wiki/Mental_health" }
+      ],
+      "isPartOf": { "@id": "https://jordanelias.de/#website" }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/#post",
+      "headline": "Indeterminacy in music and life",
+      "description": "An exploration of uncertainty, taking inspiration from the works of Cage, Oliveros, and Reich. Thoughts on therapeutic applications. Instructions for a sound experiment you can try at home.",
+      "url": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/",
+      "datePublished": "2026-02-18",
+      "dateModified": "2026-02-18",
+      "inLanguage": "en",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "publisher": { "@id": "https://jordanelias.de/#service" },
+      "image": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/blog/#blog" },
+      "mainEntityOfPage": { "@id": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/#webpage" },
+      "about": [
+        { "@type": "Thing", "name": "Indeterminacy", "sameAs": "https://en.wikipedia.org/wiki/Indeterminacy_(music)" },
+        { "@type": "Person", "name": "John Cage", "sameAs": "https://en.wikipedia.org/wiki/John_Cage" },
+        { "@type": "Person", "name": "Pauline Oliveros", "sameAs": "https://en.wikipedia.org/wiki/Pauline_Oliveros" },
+        { "@type": "Person", "name": "Steve Reich", "sameAs": "https://en.wikipedia.org/wiki/Steve_Reich" }
+      ],
+      "keywords": "indeterminacy, chance operations, John Cage, Pauline Oliveros, Steve Reich, uncertainty, deep listening, process music, music therapy"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/#webpage",
+      "url": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/",
+      "name": "Indeterminacy | Jordan Elias",
+      "description": "An exploration of uncertainty, taking inspiration from the works of Cage, Oliveros, and Reich. Thoughts on therapeutic applications. Instructions for a sound experiment you can try at home.",
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/#website" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://jordanelias.de/blog/" },
+        { "@type": "ListItem", "position": 3, "name": "Indeterminacy", "item": "https://jordanelias.de/blog/indeterminacy-in-music-and-life/" }
+      ]
     }
   ]
 }
-    ]
-  }
-  </script>
+</script>
+  
 </head>
 
 <body>
