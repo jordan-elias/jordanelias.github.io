@@ -78,46 +78,20 @@
       "url": "https://jordanelias.de/",
       "image": "https://jordanelias.de/images/headshot.jpg",
       "email": "jordanelias@proton.me",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Berlin",
-        "postalCode": "12047",
-        "addressCountry": "DE"
-      },
-      "worksFor": {
-        "@id": "https://jordanelias.de/#service"
-      },
+      "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+      "worksFor": { "@id": "https://jordanelias.de/#service" },
       "alumniOf": [
-        {
-          "@type": "EducationalOrganization",
-          "name": "Freie Universität Berlin",
-          "sameAs": "https://www.fu-berlin.de/"
-        },
-        {
-          "@type": "EducationalOrganization",
-          "name": "Berklee College of Music",
-          "sameAs": "https://www.berklee.edu/"
-        }
+        { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+        { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
       ],
       "hasCredential": {
         "@type": "EducationalOccupationalCredential",
         "name": "Board Certified Music Therapist (MT-BC)",
         "credentialCategory": "Professional Certification",
-        "recognizedBy": {
-          "@type": "Organization",
-          "name": "Certification Board for Music Therapists",
-          "url": "https://www.cbmt.org/"
-        }
+        "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
       },
-      "knowsAbout": [
-        "Music Therapy", "Neurodiversity", "Autism", "ADHD", "Anxiety",
-        "Burnout", "Emotional Regulation", "Neuroscience of Music",
-        "Creative Therapy", "Trauma-Informed Practice",
-        "Music and Neuroplasticity", "Queer Affirming Therapy"
-      ],
-      "sameAs": [
-        "https://www.instagram.com/music_therapy_berlin/"
-      ]
+      "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+      "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
     },
     {
       "@type": "ProfessionalService",
@@ -125,6 +99,13 @@
       "name": "Jordan Elias Music Therapy",
       "url": "https://jordanelias.de/",
       "founder": { "@id": "https://jordanelias.de/#person" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "publisher": { "@id": "https://jordanelias.de/#service" }
     },
     {
       "@type": "Blog",
@@ -144,7 +125,7 @@
         { "@type": "Thing", "name": "Neurodiversity", "sameAs": "https://en.wikipedia.org/wiki/Neurodiversity" },
         { "@type": "Thing", "name": "Mental Health", "sameAs": "https://en.wikipedia.org/wiki/Mental_health" }
       ],
-      "isPartOf": { "@type": "WebSite", "@id": "https://jordanelias.de/#website" }
+      "isPartOf": { "@id": "https://jordanelias.de/#website" }
     },
     {
       "@type": "CollectionPage",
@@ -153,8 +134,8 @@
       "name": "Blog — Music Therapy, Neurodiversity & Creative Wellbeing",
       "description": "Browse all articles by Jordan Elias on music therapy, mental health, neurodiversity, and creative approaches to emotional wellbeing.",
       "author": { "@id": "https://jordanelias.de/#person" },
-      "about": { "@id": "https://jordanelias.de/blog/#blog" },
-      "isPartOf": { "@type": "WebSite", "@id": "https://jordanelias.de/#website" }
+      "mainEntity": { "@id": "https://jordanelias.de/blog/#blog" },
+      "isPartOf": { "@id": "https://jordanelias.de/#website" }
     },
     {
       "@type": "BreadcrumbList",
