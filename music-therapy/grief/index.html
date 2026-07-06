@@ -66,190 +66,117 @@
   <link rel="stylesheet" href="/css/styles.css">
 
   <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://jordanelias.de/#person",
-        "name": "Jordan Elias",
-        "honorificSuffix": "MT-BC",
-        "jobTitle": "Board-Certified Music Therapist",
-        "url": "https://jordanelias.de/",
-        "image": "https://jordanelias.de/images/headshot.jpg",
-        "email": "jordanelias@proton.me",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Berlin",
-          "postalCode": "12047",
-          "addressCountry": "DE"
-        },
-        "worksFor": {
-          "@id": "https://jordanelias.de/#service"
-        },
-        "alumniOf": [
-          {
-            "@type": "EducationalOrganization",
-            "name": "Freie Universität Berlin",
-            "sameAs": "https://www.fu-berlin.de/"
-          },
-          {
-            "@type": "EducationalOrganization",
-            "name": "Berklee College of Music",
-            "sameAs": "https://www.berklee.edu/"
-          }
-        ],
-        "hasCredential": {
-          "@type": "EducationalOccupationalCredential",
-          "name": "Board Certified Music Therapist (MT-BC)",
-          "credentialCategory": "Professional Certification",
-          "recognizedBy": {
-            "@type": "Organization",
-            "name": "Certification Board for Music Therapists",
-            "url": "https://www.cbmt.org/"
-          }
-        },
-        "knowsAbout": [
-          "Music Therapy",
-          "Grief",
-          "Bereavement",
-          "Loss",
-          "Mourning",
-          "Complicated Grief",
-          "Disenfranchised Grief",
-          "Anticipatory Grief",
-          "Trauma-Informed Practice",
-          "Meaning-Making",
-          "Continuing Bonds"
-        ],
-        "sameAs": [
-          "https://www.instagram.com/music_therapy_berlin/"
-        ]
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://jordanelias.de/#person",
+      "name": "Jordan Elias",
+      "honorificSuffix": "MT-BC",
+      "jobTitle": "Board-Certified Music Therapist",
+      "url": "https://jordanelias.de/",
+      "image": "https://jordanelias.de/images/headshot.jpg",
+      "email": "jordanelias@proton.me",
+      "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "postalCode": "12047", "addressCountry": "DE" },
+      "worksFor": { "@id": "https://jordanelias.de/#service" },
+      "alumniOf": [
+        { "@type": "EducationalOrganization", "name": "Freie Universität Berlin", "sameAs": "https://www.fu-berlin.de/" },
+        { "@type": "EducationalOrganization", "name": "Berklee College of Music", "sameAs": "https://www.berklee.edu/" }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Board Certified Music Therapist (MT-BC)",
+        "credentialCategory": "Professional Certification",
+        "recognizedBy": { "@type": "Organization", "name": "Certification Board for Music Therapists", "url": "https://www.cbmt.org/" }
       },
-      {
-        "@type": "ProfessionalService",
-        "@id": "https://jordanelias.de/#service",
-        "name": "Jordan Elias Music Therapy",
-        "url": "https://jordanelias.de/",
-        "founder": {
-          "@id": "https://jordanelias.de/#person"
-        }
-      },
-      {
-        "@type": "Service",
-        "@id": "https://jordanelias.de/music-therapy/grief/#service-grief",
-        "name": "Music Therapy for Grief and Bereavement",
-        "description": "Individual music therapy for people navigating grief, loss, and bereavement. Supporting mourning, meaning-making, and continuing bonds through music and creative work in Berlin and online.",
-        "url": "https://jordanelias.de/music-therapy/grief/",
-        "provider": {
-          "@id": "https://jordanelias.de/#person"
-        },
-        "isPartOf": {
-          "@id": "https://jordanelias.de/#service"
-        },
-        "serviceType": "Music Therapy",
-        "availableChannel": [
-          {
-            "@type": "ServiceChannel",
-            "name": "In-Person Sessions in Berlin",
-            "availableLanguage": ["English"],
-            "serviceLocation": {
-              "@type": "Place",
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Berlin",
-                "addressCountry": "DE"
-              }
-            }
-          },
-          {
-            "@type": "ServiceChannel",
-            "name": "Online via Video Call",
-            "availableLanguage": ["English"],
-            "serviceUrl": "https://jordanelias.de/online-sessions/",
-            "serviceLocation": {
-              "@type": "VirtualLocation",
-              "url": "https://jordanelias.de/online-sessions/"
-            }
+      "knowsAbout": ["Music Therapy","Neurodiversity","Autism","ADHD","Anxiety","Burnout","Emotional Regulation","Neuroscience of Music","Creative Therapy","Trauma-Informed Practice","Music and Neuroplasticity","Queer Affirming Therapy"],
+      "sameAs": ["https://www.instagram.com/music_therapy_berlin/"]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://jordanelias.de/#service",
+      "name": "Jordan Elias Music Therapy",
+      "url": "https://jordanelias.de/",
+      "founder": { "@id": "https://jordanelias.de/#person" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://jordanelias.de/#website",
+      "url": "https://jordanelias.de/",
+      "name": "Jordan Elias Music Therapy",
+      "publisher": { "@id": "https://jordanelias.de/#service" }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://jordanelias.de/music-therapy/grief/#service-grief",
+      "name": "Music Therapy for Grief and Bereavement",
+      "description": "Individual music therapy for people navigating grief, loss, and bereavement. Supporting mourning, meaning-making, and continuing bonds through music and creative work in Berlin and online.",
+      "url": "https://jordanelias.de/music-therapy/grief/",
+      "provider": { "@id": "https://jordanelias.de/#person" },
+      "isPartOf": { "@id": "https://jordanelias.de/#service" },
+      "serviceType": "Music Therapy",
+      "availableChannel": [
+        {
+          "@type": "ServiceChannel",
+          "name": "In-Person Sessions in Berlin",
+          "availableLanguage": ["English"],
+          "serviceLocation": {
+            "@type": "Place",
+            "address": { "@type": "PostalAddress", "addressLocality": "Berlin", "addressCountry": "DE" }
           }
-        ],
-        "areaServed": [
-          {
-            "@type": "City",
-            "name": "Berlin"
-          },
-          {
-            "@type": "Country",
-            "name": "Germany"
-          },
-            { "@type": "Place", "name": "Global" }
-        ],
-        "audience": {
-          "@type": "Audience",
-          "audienceType": "Adults and teenagers experiencing grief and bereavement, people navigating complicated or disenfranchised grief, those supporting a dying person, people processing anticipatory loss"
         },
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "EUR",
-          "priceSpecification": {
-            "@type": "PriceSpecification",
-            "priceCurrency": "EUR",
-            "description": "Session pricing available on request. Sliding scale available."
-          },
-          "seller": {
-            "@id": "https://jordanelias.de/#person"
+        {
+          "@type": "ServiceChannel",
+          "name": "Online via Video Call",
+          "availableLanguage": ["English"],
+          "serviceUrl": "https://jordanelias.de/online-sessions/",
+          "serviceLocation": {
+            "@type": "VirtualLocation",
+            "url": "https://jordanelias.de/online-sessions/"
           }
         }
+      ],
+      "areaServed": [
+        { "@type": "City", "name": "Berlin" },
+        { "@type": "Country", "name": "Germany" },
+        { "@type": "Place", "name": "Global" }
+      ],
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Adults and teenagers experiencing grief and bereavement, people navigating complicated or disenfranchised grief, those supporting a dying person, people processing anticipatory loss"
       },
-      {
-        "@type": "WebPage",
-        "@id": "https://jordanelias.de/music-therapy/grief/#webpage",
-        "url": "https://jordanelias.de/music-therapy/grief/",
-        "name": "Music Therapy for Grief and Bereavement — Jordan Elias",
-        "description": "Music therapy for grief and bereavement in Berlin and online. Supporting loss, mourning, and the search for meaning through music, creative work, and compassionate individual care.",
-        "about": {
-          "@id": "https://jordanelias.de/music-therapy/grief/#service-grief"
-        },
-        "author": {
-          "@id": "https://jordanelias.de/#person"
-        },
-        "primaryImageOfPage": {
-          "@type": "ImageObject",
-          "url": "https://jordanelias.de/images/hero.jpg"
-        },
-        "isPartOf": {
-          "@type": "WebSite",
-          "@id": "https://jordanelias.de/#website"
-        }
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://jordanelias.de/music-therapy/grief/#breadcrumb",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://jordanelias.de/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Music Therapy",
-            "item": "https://jordanelias.de/music-therapy/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Grief and Bereavement",
-            "item": "https://jordanelias.de/music-therapy/grief/"
-          }
-        ]
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "description": "Session pricing available on request. Sliding scale available.",
+        "seller": { "@id": "https://jordanelias.de/#service" }
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://jordanelias.de/music-therapy/grief/#webpage",
+      "url": "https://jordanelias.de/music-therapy/grief/",
+      "name": "Music Therapy for Grief and Bereavement — Jordan Elias",
+      "description": "Music therapy for grief and bereavement in Berlin and online. Supporting loss, mourning, and the search for meaning through music, creative work, and compassionate individual care.",
+      "about": { "@id": "https://jordanelias.de/music-therapy/grief/#service-grief" },
+      "author": { "@id": "https://jordanelias.de/#person" },
+      "primaryImageOfPage": { "@type": "ImageObject", "url": "https://jordanelias.de/images/hero.jpg" },
+      "isPartOf": { "@id": "https://jordanelias.de/#website" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://jordanelias.de/music-therapy/grief/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jordanelias.de/" },
+        { "@type": "ListItem", "position": 2, "name": "Music Therapy", "item": "https://jordanelias.de/music-therapy/" },
+        { "@type": "ListItem", "position": 3, "name": "Grief and Bereavement", "item": "https://jordanelias.de/music-therapy/grief/" }
+      ]
+    }
+  ]
+}
+</script>
 
   <!-- SCHEMA: FAQ -->
   <script type="application/ld+json">
