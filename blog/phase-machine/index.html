@@ -37,7 +37,7 @@
   <meta name="twitter:description" content="An interactive phase machine inspired by Steve Reich. Load any audio, set a drift rate, hold K to re-sync.">
   <meta name="twitter:image" content="https://jordanelias.de/images/hero.jpg">
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cloud.umami.is; connect-src 'self' https://api-gateway.umami.dev; frame-src https://complicated.life; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cloud.umami.is; connect-src 'self' https://api-gateway.umami.dev; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
@@ -903,6 +903,15 @@
   <main class="page-content">
 
 <div id="melodic-editor">
+  <noscript>
+  <div class="js-fallback-note">
+    <p>This section normally contains an interactive audio tool built with JavaScript. 
+    It lets you load an audio clip, set a drift rate, and hear two copies of the same 
+    loop slowly fall out of phase — a browser recreation of Steve Reich's tape phasing 
+    technique from pieces like <em>It's Gonna Rain</em> and <em>Piano Phase</em>. 
+    Enable JavaScript to use the tool.</p>
+  </div>
+</noscript>
   <h3>Sequencer</h3>
  
   <div class="mel-controls-row">
@@ -972,6 +981,16 @@
   <!-- TOOL FIRST -->
   <div class="lab-section">
 
+    <noscript>
+  <div class="js-fallback-note">
+    <p>This section normally contains an interactive audio tool built with JavaScript. 
+    It lets you load an audio clip, set a drift rate, and hear two copies of the same 
+    loop slowly fall out of phase — a browser recreation of Steve Reich's tape phasing 
+    technique from pieces like <em>It's Gonna Rain</em> and <em>Piano Phase</em>. 
+    Enable JavaScript to use the tool.</p>
+  </div>
+</noscript>
+    
    <div class="gen-row">
   <span class="gen-row-label">source</span>
   <button class="lab-preset-btn on" id="src-default">default loop</button>
