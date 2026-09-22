@@ -47,7 +47,7 @@
 
   <style>
 
-    /* ── PAGE LAYOUT (identical convention to the phase-machine post) ── */
+    /* ── PAGE LAYOUT ── */
     body { padding-top: 64px; }
 
     .page-wrap {
@@ -83,19 +83,25 @@
       user-select: none;
     }
 
+    /* Tool sections (transport / tracks / ratio panel) use the full available
+       width; the essay below is capped narrower for comfortable reading. */
     .page-content {
       flex: 1;
       min-width: 0;
       padding: 1em 2em 5em;
-      max-width: 960px;
+      max-width: 1320px;
       margin-left: 72px;
       width: calc(100% - 72px);
+    }
+    .page-content > article {
+      max-width: 760px;
+      margin: 0 auto;
     }
 
     .lab-section {
       border: 1px solid var(--text);
-      padding: 1.5em;
-      margin: 0 0 2em;
+      padding: 1.1em 1.4em;
+      margin: 0 0 1.1em;
     }
 
     .lab-section > h3 {
@@ -109,7 +115,31 @@
       margin: 0 0 1.25em;
     }
 
-    /* ── Buttons (shared vocabulary with phase machine) ── */
+    /* ── Uniform monochrome sliders (fixes browser-default blue) ── */
+    input[type=range] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 2px; background: var(--text); outline: none; cursor: pointer; opacity: 0.5;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--text); cursor: pointer;
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 13px; height: 13px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
+    }
+    input[type=range]:disabled { opacity: 0.2; cursor: not-allowed; }
+
+    /* Number input — no native colored spin buttons, plain monochrome field */
+    input[type=number] { -moz-appearance: textfield; }
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    select {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text);
+      border: 1px solid var(--text); border-radius: 0; cursor: pointer;
+    }
+
+    /* ── Buttons ── */
     .lab-btn {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.85rem;
@@ -144,7 +174,6 @@
     }
     .lab-preset-btn:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
     .lab-preset-btn.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
-    .lab-preset-btn.on:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
     .lab-preset-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
     .mini-btn {
@@ -174,45 +203,22 @@
       transition: background-color 0.15s, color 0.15s, border-color 0.15s;
     }
     .upload-label:hover { background-color: var(--accent-hover); color: var(--bg); border-color: var(--accent-hover); }
-    .upload-label.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
 
     /* ── Rows / labels ── */
-    .gen-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1em; flex-wrap: wrap; }
+    .gen-row { display: flex; align-items: center; gap: 8px; margin-bottom: 0.6em; flex-wrap: wrap; }
     .gen-row-label {
       font-family: 'Inter', sans-serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--text); opacity: 0.5; margin-right: 4px; white-space: nowrap;
     }
-    .rec-state-label { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--text); opacity: 0.7; padding: 3px 0; }
-
-    .lab-ctrl { display: flex; flex-direction: column; gap: 6px; }
-    .lab-ctrl input[type=range] {
-      width: 100%; -webkit-appearance: none; appearance: none;
-      height: 2px; background: var(--text); outline: none; cursor: pointer; opacity: 0.5;
-    }
-    .lab-ctrl input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--text); cursor: pointer;
-    }
-    .lab-ctrl input[type=range]::-moz-range-thumb {
-      width: 14px; height: 14px; border-radius: 50%; background: var(--text); border: none; cursor: pointer;
-    }
-    .lab-ctrl-bottom { display: flex; justify-content: space-between; align-items: baseline; }
-    .lab-ctrl-label { font-family: 'Inter', sans-serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); opacity: 0.5; }
-    .lab-ctrl-val { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text); opacity: 0.7; }
-
-    .lab-hint { font-family: 'Inter', sans-serif; font-size: 0.8rem; color: var(--text); opacity: 0.5; margin-top: 1em; text-align: center; }
+    .source-note { font-family: 'Inter', sans-serif; font-size: 0.72rem; color: var(--text); opacity: 0.45; margin: -0.2em 0 0.9em; }
 
     .tape-status-row {
       font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--text); opacity: 0;
-      margin-bottom: 0.75em; min-height: 1.1em; transition: opacity 0.3s ease; letter-spacing: 0.02em;
-    }
-
-    .kbd-hint { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--text); opacity: 0.45; margin-top: 0.75em; letter-spacing: 0.01em; }
-    .kbd-hint kbd {
-      font-family: 'Space Grotesk', sans-serif; font-size: 0.66rem; border: 1px solid var(--text); padding: 0.05em 0.4em;
+      margin-bottom: 0.5em; min-height: 1.1em; transition: opacity 0.3s ease; letter-spacing: 0.02em;
     }
 
     /* ── Master transport ── */
-    .transport-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .transport-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 0.6em; border-top: 1px solid var(--text); }
     .transport-time {
       font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text);
       font-variant-numeric: tabular-nums; letter-spacing: 0.03em;
@@ -220,60 +226,66 @@
     .master-vol-ctrl { display: flex; align-items: center; gap: 8px; margin-left: auto; }
     .master-vol-ctrl input[type=range] { width: 90px; }
 
-    .download-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 1em; padding-top: 1em; border-top: 1px solid var(--text); }
-    select.dur-select {
-      font-family: 'Inter', sans-serif; font-size: 0.78rem; padding: 0.3em 0.6em; border: 1px solid var(--text);
-      background: var(--bg); color: var(--text); cursor: pointer; border-radius: 0;
-    }
+    .download-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 0.7em; padding-top: 0.7em; border-top: 1px solid var(--text); }
+    select.dur-select { font-size: 0.78rem; padding: 0.3em 0.6em; }
 
-    /* ── Track grid ── */
-    .track-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 1.5em; }
-    @media (max-width: 760px) { .track-grid { grid-template-columns: 1fr; } }
+    /* ── Track grid: 4 columns on desktop ── */
+    .track-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.1em; }
+
+    .swipe-hint { display: none; }
+
+    @media (max-width: 900px) {
+      .track-grid {
+        grid-template-columns: none;
+        grid-auto-flow: column;
+        grid-auto-columns: 84%;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .track-card { scroll-snap-align: start; }
+      .swipe-hint { display: block; font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--text); opacity: 0.45; margin: 0 0 0.6em; text-align: center; }
+    }
 
     .track-card { border: 1px solid var(--text); }
     .track-card.is-muted { opacity: 0.5; }
     .track-card.is-soloed { box-shadow: inset 0 0 0 1px var(--text); }
 
-    .track-head { display: flex; align-items: center; gap: 8px; padding: 0.65em 0.85em; border-bottom: 1px solid var(--text); flex-wrap: wrap; }
-    .track-num { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; color: var(--text); opacity: 0.6; width: 18px; flex-shrink: 0; }
+    .track-head { display: flex; align-items: center; gap: 6px; padding: 0.5em 0.65em; border-bottom: 1px solid var(--text); }
+    .track-num { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; color: var(--text); opacity: 0.6; flex-shrink: 0; }
     .track-ms { display: flex; gap: 4px; flex-shrink: 0; }
-    .track-src-btns { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
-    .track-name {
-      font-family: 'Inter', sans-serif; font-size: 0.72rem; color: var(--text); opacity: 0.55;
-      flex-basis: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px;
-    }
 
-    .track-wave { height: 42px; background: rgba(128,128,128,0.06); border-bottom: 1px solid var(--text); }
+    .track-wave { height: 26px; background: rgba(128,128,128,0.06); border-bottom: 1px solid var(--text); }
     .track-wave canvas { width: 100%; height: 100%; display: block; }
 
-    .track-controls { display: grid; grid-template-columns: repeat(2, 1fr); }
-    .ctrl-block { padding: 0.6em 0.8em; border-right: 1px solid var(--text); border-bottom: 1px solid var(--text); }
-    .ctrl-block:nth-child(2n) { border-right: none; }
-    .ctrl-block:last-child, .ctrl-block:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+    .track-controls { display: flex; flex-direction: column; }
+    .ctrl-block { padding: 0.5em 0.65em; border-bottom: 1px solid var(--text); }
+    .ctrl-block:last-child { border-bottom: none; }
     .ctrl-block-label {
-      font-family: 'Inter', sans-serif; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--text); opacity: 0.5; margin-bottom: 0.4em; display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;
+      font-family: 'Inter', sans-serif; font-size: 0.6rem; letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--text); opacity: 0.55; margin-bottom: 0.3em; display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
     }
-    .ctrl-block-val { font-size: 0.68rem; font-weight: 600; opacity: 0.85; font-variant-numeric: tabular-nums; }
-    .ctrl-block input[type=range] { width: 100%; }
-    .ctrl-block select {
-      font-family: 'Inter', sans-serif; font-size: 0.7rem; padding: 0.2em 0.4em; border: 1px solid var(--text);
-      background: var(--bg); color: var(--text); cursor: pointer; border-radius: 0; width: 100%;
-    }
-    .speed-exact-row { display: flex; align-items: center; gap: 6px; margin-top: 0.35em; }
+    .ctrl-block-val { font-size: 0.66rem; font-weight: 600; opacity: 0.9; font-variant-numeric: tabular-nums; }
+    .ctrl-block select { font-size: 0.7rem; padding: 0.15em 0.3em; width: 100%; }
+
+    .speed-exact-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 0.3em; }
     .speed-exact {
-      font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 600; width: 48px; padding: 0.15em 0.3em;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.68rem; font-weight: 600; width: 44px; padding: 0.1em 0.25em;
       border: 1px solid var(--text); background: var(--bg); color: var(--text); text-align: center; outline: none;
     }
-    .pitch-label { font-size: 0.62rem; color: var(--text); opacity: 0.55; margin-top: 0.2em; }
-    .ring-freq-line { font-size: 0.62rem; color: var(--text); opacity: 0.55; margin-top: 0.35em; font-variant-numeric: tabular-nums; }
-    .mini-row { display: flex; gap: 4px; margin-top: 0.35em; flex-wrap: wrap; }
+    .pitch-label { font-size: 0.62rem; color: var(--text); opacity: 0.55; }
+    .ring-freq-line { font-size: 0.6rem; color: var(--text); opacity: 0.5; margin-top: 0.3em; font-variant-numeric: tabular-nums; }
 
-    .toggle { position: relative; width: 30px; height: 17px; flex-shrink: 0; display: inline-block; }
+    .dual-mini { display: flex; gap: 10px; }
+    .dual-mini > div { flex: 1; min-width: 0; }
+    .dual-mini > div + div { padding-left: 10px; border-left: 1px solid var(--text); }
+
+    .toggle { position: relative; width: 28px; height: 16px; flex-shrink: 0; display: inline-block; margin-left: auto; }
     .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
     .toggle-slider { position: absolute; inset: 0; border: 1px solid var(--text); cursor: pointer; transition: background 0.15s; }
     .toggle-slider::before {
-      content: ''; position: absolute; width: 11px; height: 11px; left: 2px; top: 2px; background: var(--text);
+      content: ''; position: absolute; width: 10px; height: 10px; left: 2px; top: 2px; background: var(--text);
       transition: transform 0.15s;
     }
     .toggle input:checked + .toggle-slider::before { transform: translateX(12px); }
@@ -281,7 +293,7 @@
     /* ── Ratio panel ── */
     .ratio-panel { border: 1px solid var(--text); margin-bottom: 1.5em; }
     .ratio-panel summary {
-      display: flex; align-items: center; justify-content: space-between; padding: 0.75em 1em; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; padding: 0.7em 1em; cursor: pointer;
       list-style: none; gap: 0.75em; flex-wrap: wrap;
     }
     .ratio-panel summary::-webkit-details-marker { display: none; }
@@ -295,7 +307,6 @@
     .ratio-lock-row { display: flex; align-items: center; gap: 0.65em; flex-wrap: wrap; margin-bottom: 1em; }
     .ratio-lock-label { font-size: 0.75rem; color: var(--text); opacity: 0.65; }
     .ratio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6em; }
-    @media (max-width: 600px) { .ratio-grid { grid-template-columns: repeat(2, 1fr); } }
     .ratio-cell { border: 1px solid var(--text); padding: 0.6em 0.75em; }
     .ratio-cell-label { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); opacity: 0.5; margin-bottom: 0.4em; }
     .ratio-cell-main { display: flex; align-items: center; gap: 0.4em; margin-bottom: 0.3em; }
@@ -326,12 +337,32 @@
     @media (max-width: 600px) {
       .vertical-title { width: 36px; top: 64px; height: calc(100vh - 64px); padding-top: 1rem; }
       .vertical-title span { font-size: 0.8rem; letter-spacing: 0.18em; }
-      .page-content { margin-left: 44px; width: calc(100% - 44px); padding: .5em 1em 4em; }
-      .lab-section { padding: 1em 0.85em; }
-      .track-controls { grid-template-columns: 1fr 1fr; }
+      .page-content { margin-left: 44px; width: calc(100% - 44px); padding: .5em .6em 3.5em; }
+      .lab-section { padding: 0.8em 0.7em; }
+
+      .gen-row-label { font-size: 0.6rem; }
+      .lab-preset-btn, .upload-label { font-size: 0.7rem; padding: 2px 8px; }
+      .lab-btn { font-size: 0.78rem; padding: 0.4em 0.85em; min-width: 68px; }
+      .transport-time { font-size: 0.78rem; }
+      .master-vol-ctrl input[type=range] { width: 56px; }
+
+      .track-wave { height: 22px; }
+      .track-head { padding: 0.4em 0.55em; }
+      .ctrl-block { padding: 0.4em 0.55em; }
+      .ctrl-block-label { font-size: 0.56rem; }
+      .ctrl-block-val { font-size: 0.62rem; }
+      .speed-exact { width: 38px; font-size: 0.62rem; }
+      .pitch-label { font-size: 0.58rem; }
+      .ring-freq-line { font-size: 0.56rem; }
+      .toggle { width: 24px; height: 14px; }
+      .toggle-slider::before { width: 8px; height: 8px; }
+      .toggle input:checked + .toggle-slider::before { transform: translateX(10px); }
+      .mini-btn { font-size: 0.58rem; padding: 0.15rem 0.32rem; }
+
       .ratio-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
+
 
   <script type="application/ld+json">
 {
@@ -460,14 +491,21 @@
       <noscript>
         <div class="js-fallback-note">
           <p>This section normally contains an interactive four-track tape machine built with JavaScript.
-          It lets you record or upload short audio clips onto four independent tracks, then shape each one
-          with speed (varispeed), filtering, ring modulation, and a low-frequency oscillator — a browser
-          recreation of the tape techniques Delia Derbyshire used at the BBC Radiophonic Workshop. Enable
-          JavaScript to use the tool.</p>
+          It lets you record or upload one short audio clip, which loads onto four independent tracks at
+          once — each can then be shaped separately with speed (varispeed), filtering, ring modulation,
+          and a low-frequency oscillator, a browser recreation of the tape techniques Delia Derbyshire used
+          at the BBC Radiophonic Workshop. Enable JavaScript to use the tool.</p>
         </div>
       </noscript>
 
-      <h3>Transport</h3>
+      <div class="gen-row">
+        <span class="gen-row-label">source</span>
+        <label class="upload-label" for="ss-upload">upload file</label>
+        <input type="file" id="ss-upload" accept="audio/*" style="display:none">
+        <button class="lab-preset-btn" id="ss-record">&#9679;&#xFE0E; record</button>
+      </div>
+      <p class="source-note">One clip loads onto all four tracks at once — shape each independently below.</p>
+      <div class="tape-status-row" id="ss-source-status"></div>
 
       <div class="transport-row">
         <button class="lab-btn" id="ss-play" style="min-width:80px" disabled>&#9654;&#xFE0E; play</button>
@@ -480,10 +518,6 @@
         </div>
       </div>
 
-      <div class="kbd-hint">
-        <kbd>Space</kbd> play/stop &nbsp; <kbd>1</kbd>–<kbd>4</kbd> mute track &nbsp; <kbd>⇧1</kbd>–<kbd>⇧4</kbd> solo track &nbsp; <kbd>Esc</kbd> stop
-      </div>
-
       <div class="download-row">
         <span class="gen-row-label">download mix</span>
         <select class="dur-select" id="ss-download-dur">
@@ -493,9 +527,11 @@
           <option value="120">2 min</option>
         </select>
         <button class="lab-preset-btn" id="ss-download-btn" disabled>render &amp; download .wav</button>
-        <span class="rec-state-label" id="ss-download-status"></span>
+        <span class="gen-row-label" id="ss-download-status"></span>
       </div>
     </div>
+
+    <p class="swipe-hint">&larr; swipe to see all 4 tracks &rarr;</p>
 
     <div class="track-grid" id="ss-tracks"></div>
 
@@ -507,7 +543,7 @@
       <div class="ratio-panel-body">
         <div class="ratio-lock-row">
           <span class="ratio-lock-label">lock ratios to track 1</span>
-          <label class="toggle">
+          <label class="toggle" style="margin-left:0;">
             <input type="checkbox" id="ss-ratio-lock">
             <span class="toggle-slider"></span>
           </label>
