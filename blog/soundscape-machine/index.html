@@ -217,6 +217,25 @@
       margin-bottom: 0.5em; min-height: 1.1em; transition: opacity 0.3s ease; letter-spacing: 0.02em;
     }
 
+    /* ── Source clip trim/select editor ── */
+    .source-editor { margin: 0 0 0.9em; }
+    .src-wave-wrap {
+      position: relative; height: 50px; border: 1px solid var(--text);
+      background: rgba(128,128,128,0.06); overflow: hidden; touch-action: none;
+    }
+    .src-wave-wrap canvas { width: 100%; height: 100%; display: block; }
+    .src-select-mask { position: absolute; top: 0; bottom: 0; background: var(--bg); opacity: 0.62; pointer-events: none; width: 0; }
+    .src-handle {
+      position: absolute; top: 0; bottom: 0; width: 16px; margin-left: -8px;
+      cursor: ew-resize; touch-action: none; left: 0;
+    }
+    .src-handle::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--text); }
+    .src-handle::after { content: ''; position: absolute; left: 3px; top: -1px; width: 10px; height: 10px; background: var(--text); }
+    .src-range-label {
+      font-family: 'Inter', sans-serif; font-size: 0.68rem; color: var(--text); opacity: 0.55;
+      margin-top: 0.35em; font-variant-numeric: tabular-nums;
+    }
+
     /* ── Master transport ── */
     .transport-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 0.6em; border-top: 1px solid var(--text); }
     .transport-time {
@@ -241,10 +260,15 @@
         grid-auto-columns: 84%;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        padding-bottom: 6px;
+        padding-bottom: 10px;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--text) transparent;
       }
       .track-card { scroll-snap-align: start; }
+      .track-grid::-webkit-scrollbar { height: 4px; }
+      .track-grid::-webkit-scrollbar-track { background: transparent; }
+      .track-grid::-webkit-scrollbar-thumb { background: var(--text); border-radius: 0; }
       .swipe-hint { display: block; font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--text); opacity: 0.45; margin: 0 0 0.6em; text-align: center; }
     }
 
@@ -507,6 +531,17 @@
       <p class="source-note">One clip loads onto all four tracks at once — shape each independently below.</p>
       <div class="tape-status-row" id="ss-source-status"></div>
 
+      <div class="source-editor" id="ss-source-editor" style="display:none;">
+        <div class="src-wave-wrap" id="ss-src-wave-wrap">
+          <canvas id="ss-src-wave"></canvas>
+          <div class="src-select-mask" id="ss-select-mask-left" style="left:0;"></div>
+          <div class="src-select-mask" id="ss-select-mask-right" style="right:0;"></div>
+          <div class="src-handle" id="ss-handle-start" title="Drag to set start"></div>
+          <div class="src-handle" id="ss-handle-end" title="Drag to set end"></div>
+        </div>
+        <div class="src-range-label" id="ss-src-range-label">0:00.0 – 0:00.0</div>
+      </div>
+
       <div class="transport-row">
         <button class="lab-btn" id="ss-play" style="min-width:80px" disabled>&#9654;&#xFE0E; play</button>
         <button class="lab-btn" id="ss-stop" style="min-width:80px" disabled>stop</button>
@@ -588,8 +623,7 @@
         <h2>Splice, splice, splice</h2>
         <p>
           Before synthesisers were commercially available, the primary tool of electronic composition was
-          a razor blade and a roll of splicing tape. A sound — a single note, a snippet of noise, a fragment of
-          speech — was recorded onto magnetic tape, then physically cut apart and reassembled: a note extended by
+          a razor blade and a roll of splicing tape. Sounds were recorded onto magnetic tape, then physically cut apart and reassembled: a note extended by
           repeating a section, a rhythm built by cutting silence out between hits, a phrase reversed by turning the
           spliced segment around before taping it back in. Derbyshire worked this way for entire pieces, sometimes
           spending a full day of cutting to produce a few seconds of finished material.
@@ -660,7 +694,54 @@
       </section>
 
       <section>
-        <h2>The notebooks: number as structure</h2>
+        <h2>LFO: the wobble Derbyshire did by hand</h2>
+        <p>
+          An LFO — a low-frequency oscillator — is a signal moving too slowly to hear as a pitch in its own
+          right, typically well under 20 cycles per second, used instead to gently push some other parameter up and
+          down on a repeating cycle. Route it to volume and you get tremolo; to pitch, vibrato; to a filter's cutoff,
+          a slow wah; to stereo position, a drifting pan. Almost every synthesiser built since the 1970s has one.
+          Derbyshire had no such circuit for most of her time at the Workshop.
+        </p>
+        <p>
+          What she had instead was wow and flutter — the tape machine's own small, uncontrolled speed instability —
+          and, where she wanted something more deliberate, her own hand: nudging a speed control very slightly while
+          a tape played, recording a physical vibrato performance directly, or riding a fader up and down by feel.
+          It amounts to the same shape an LFO produces electronically — a slow, repeating push on some parameter —
+          just applied one careful movement at a time rather than by circuit.
+        </p>
+        <p>
+          Each track above has one LFO, routable to four destinations: <strong>Filter</strong>, for a slow sweep in
+          tone colour; <strong>Volume</strong>, for tremolo; <strong>Pan</strong>, for a drifting stereo position; or
+          <strong>Ring</strong>, which wobbles the ring modulator's carrier frequency for an unstable, wavering
+          metallic vibrato. A slow rate — under 1&nbsp;Hz — routed to the filter gets closest to the feel of a hand
+          easing a control back and forth.
+        </p>
+      </section>
+
+      <section>
+        <h2>Filtering, reverb, and the loop</h2>
+        <p>
+          The Workshop's other essential tool was a bank of filters — circuits that remove or emphasise
+          particular frequency ranges, the way a wah pedal or a bass EQ knob does. A lowpass filter lets the low end
+          through and rolls the high end off, giving a muffled, distant character; a highpass does the opposite,
+          thinning a sound down to its top edge; a bandpass keeps a narrow slice in the middle and removes both
+          extremes, producing the telephone-like quality that runs through much of the Workshop's percussive noise.
+          Each track above carries one of these three filter types, with a cutoff frequency and a resonance control
+          that emphasises the frequencies right at the cutoff point — turn resonance up and a plain filter sweep
+          starts to whistle.
+        </p>
+        <p>
+          Reverb is included for a more practical reason: once a fragment has been transformed past recognition, a
+          little sense of space helps it sit inside a mix rather than floating disconnected from everything else.
+          The loop and crossfade controls solve a more mundane, very real tape problem — looping a recording that
+          wasn't recorded to loop seamlessly produces an audible click where the end meets the beginning again.
+          Crossfading blends the last few milliseconds of the loop into the first few, the same fix a tape editor
+          would once have reached for with a diagonal splice across the loop join.
+        </p>
+      </section>
+
+      <section>
+        <h2>Number as structure</h2>
         <p>
           Among the papers found after Derbyshire's death in 2001 were notebooks of grids and integer
           sequences — frequency ratios mapped to pitch, duration, and dynamics. She worked with serial methods, but
@@ -678,7 +759,7 @@
       </section>
 
       <section>
-        <h2>Tape as material, not medium</h2>
+        <h2>Tape as material</h2>
         <p>
           It's worth noticing what made this way of working different from simply pressing "play": every
           transformation Derbyshire applied to a sound — slowing it, cutting it, multiplying it against another
