@@ -371,20 +371,127 @@
     if (fade) el._fadeTimer = setTimeout(function () { el.style.opacity = '0'; }, 2600);
   }
 
-  function masterLoadBuffer(buffer, label) {
-    normalizeBuffer(buffer);
-    if (isPlaying) transportStop();
-    tracks.forEach(function (t) { t.buffer = buffer; t.fileName = label; drawWaveform(t); updateRingFreqDisplay(t.id); });
-    setSourceStatus(label, true);
-    updatePlayBtnAvailability();
-  }
-
   function updatePlayBtnAvailability() {
     var playBtn = document.getElementById('ss-play');
     var dlBtn = document.getElementById('ss-download-btn');
     var hasAny = tracks.some(function (t) { return t.buffer; });
     if (playBtn) playBtn.disabled = !hasAny || isPlaying;
     if (dlBtn) dlBtn.disabled = !hasAny;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     SOURCE CLIP + TRIM SELECTION
+     masterFullBuffer holds the whole recorded/uploaded clip (up to the
+     hard cap). masterSelStart/End (0..1 fractions) mark the selected
+     region; that sliced-out region is what actually gets assigned to
+     all four tracks whenever the selection changes.
+  ════════════════════════════════════════════════════════════ */
+  var masterFullBuffer = null, masterLabel = '';
+  var masterSelStart = 0, masterSelEnd = 1;
+  var sourceDragTarget = null;
+
+  function sliceBuffer(ctx, buffer, startFrac, endFrac) {
+    var startSamp = Math.floor(startFrac * buffer.length);
+    var endSamp = Math.max(startSamp + 1, Math.floor(endFrac * buffer.length));
+    var frames = endSamp - startSamp;
+    var out = ctx.createBuffer(buffer.numberOfChannels, frames, buffer.sampleRate);
+    for (var c = 0; c < buffer.numberOfChannels; c++) {
+      out.getChannelData(c).set(buffer.getChannelData(c).subarray(startSamp, endSamp));
+    }
+    return out;
+  }
+
+  function assignBufferToTracks(buffer, label) {
+    if (isPlaying) transportStop();
+    tracks.forEach(function (t) { t.buffer = buffer; t.fileName = label; drawWaveform(t); updateRingFreqDisplay(t.id); });
+    setSourceStatus(label, true);
+    updatePlayBtnAvailability();
+  }
+
+  function commitSelection() {
+    if (!masterFullBuffer) return;
+    var sliced = sliceBuffer(getCtx(), masterFullBuffer, masterSelStart, masterSelEnd);
+    assignBufferToTracks(sliced, masterLabel);
+  }
+
+  function setMasterSource(buffer, label) {
+    normalizeBuffer(buffer);
+    masterFullBuffer = buffer; masterLabel = label;
+    masterSelStart = 0; masterSelEnd = 1;
+    var editorEl = document.getElementById('ss-source-editor');
+    if (editorEl) editorEl.style.display = 'block';
+    drawSourceWaveform();
+    updateSelectionUI();
+    commitSelection();
+  }
+
+  function drawSourceWaveform() {
+    var canvas = document.getElementById('ss-src-wave'); if (!canvas || !masterFullBuffer) return;
+    var ctx = canvas.getContext('2d'), dpr = window.devicePixelRatio || 1;
+    var cssH = canvas.offsetHeight || 50;
+    canvas.width = canvas.offsetWidth * dpr; canvas.height = cssH * dpr;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var data = masterFullBuffer.getChannelData(0), W = canvas.width, H = canvas.height;
+    var step = Math.ceil(data.length / W);
+    var textColor = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#1a1a1a';
+    ctx.fillStyle = textColor;
+    for (var x = 0; x < W; x++) {
+      var max = 0, min = 0;
+      for (var j = 0; j < step; j++) { var v = data[x * step + j] || 0; if (v > max) max = v; if (v < min) min = v; }
+      var y1 = (1 - max) * H / 2, y2 = (1 - min) * H / 2;
+      ctx.globalAlpha = 0.3; ctx.fillRect(x, y1, 1, Math.max(1, y2 - y1));
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function fmtClock(s) {
+    var m = Math.floor(s / 60), ss = (s % 60).toFixed(1);
+    return m + ':' + ss.padStart(4, '0');
+  }
+
+  function updateSelectionUI() {
+    var sH = document.getElementById('ss-handle-start'), eH = document.getElementById('ss-handle-end');
+    var mL = document.getElementById('ss-select-mask-left'), mR = document.getElementById('ss-select-mask-right');
+    if (sH) sH.style.left = (masterSelStart * 100) + '%';
+    if (eH) eH.style.left = (masterSelEnd * 100) + '%';
+    if (mL) mL.style.width = (masterSelStart * 100) + '%';
+    if (mR) mR.style.width = ((1 - masterSelEnd) * 100) + '%';
+    var dur = masterFullBuffer ? masterFullBuffer.duration : 0;
+    var startSec = masterSelStart * dur, endSec = masterSelEnd * dur;
+    var lbl = document.getElementById('ss-src-range-label');
+    if (lbl) lbl.textContent = fmtClock(startSec) + ' \u2013 ' + fmtClock(endSec) + '  (' + (endSec - startSec).toFixed(1) + 's selected)';
+  }
+
+  function initSourceEditorDrag() {
+    var wrap = document.getElementById('ss-src-wave-wrap');
+    var sH = document.getElementById('ss-handle-start'), eH = document.getElementById('ss-handle-end');
+    if (!wrap || !sH || !eH) return;
+
+    function fracFromEvent(e) {
+      var rect = wrap.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      return Math.max(0, Math.min(1, x / rect.width));
+    }
+    function beginDrag(target) {
+      return function (e) {
+        e.preventDefault();
+        sourceDragTarget = target;
+        try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
+      };
+    }
+    sH.addEventListener('pointerdown', beginDrag('start'));
+    eH.addEventListener('pointerdown', beginDrag('end'));
+    document.addEventListener('pointermove', function (e) {
+      if (!sourceDragTarget || !masterFullBuffer) return;
+      var f = fracFromEvent(e);
+      var minGap = 0.01;
+      if (sourceDragTarget === 'start') masterSelStart = Math.min(f, masterSelEnd - minGap);
+      else masterSelEnd = Math.max(f, masterSelStart + minGap);
+      updateSelectionUI();
+    });
+    document.addEventListener('pointerup', function () {
+      if (sourceDragTarget) { sourceDragTarget = null; commitSelection(); }
+    });
   }
 
   /* ════════════════════════════════════════════════════════════
@@ -396,7 +503,7 @@
     reader.onload = function (e) {
       resumeCtx().decodeAudioData(e.target.result, function (decoded) {
         var trimmed = trimBuffer(getCtx(), decoded, MAX_UPLOAD_SEC);
-        masterLoadBuffer(trimmed, 'loaded: ' + file.name.substring(0, 30));
+        setMasterSource(trimmed, 'loaded: ' + file.name.substring(0, 30));
       }, function () { setSourceStatus('could not decode file', true); });
     };
     reader.readAsArrayBuffer(file);
@@ -418,7 +525,7 @@
           fr.onload = function (ev) {
             resumeCtx().decodeAudioData(ev.target.result, function (decoded) {
               masterRec.isRecording = false; setMasterRecordBtnUI(false);
-              masterLoadBuffer(decoded, 'microphone recording');
+              setMasterSource(decoded, 'microphone recording');
             }, function () { setSourceStatus('decode failed', true); });
           };
           fr.readAsArrayBuffer(blob);
@@ -976,6 +1083,7 @@
     });
 
     initDownload();
+    initSourceEditorDrag();
 
     // Generate reverb impulse once, non-fatally
     try { ensureMaster(); reverbIR = makeReverbImpulse(getCtx()); } catch (e) {}
@@ -991,7 +1099,7 @@
       if (idx >= 0) { e.preventDefault(); if (e.shiftKey) setSolo(idx); else setMute(idx); }
     });
 
-    window.addEventListener('resize', function () { tracks.forEach(drawWaveform); });
+    window.addEventListener('resize', function () { tracks.forEach(drawWaveform); drawSourceWaveform(); });
   }
 
   if (document.readyState === 'loading') {
