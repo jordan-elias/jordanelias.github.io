@@ -1,8 +1,10 @@
 /* soundscape-machine.js
    Four-track tape manipulation lab, inspired by Delia Derbyshire.
-   Lite / stateless build: no accounts, no persistence. Record or upload
-   per track, shape with speed / filter / ring modulator / LFO / reverb,
-   then render an offline WAV bounce for download.
+   Lite / stateless build: no accounts, no persistence. One shared clip
+   (recorded or uploaded once, in the transport section) loads onto all
+   four tracks; each track then shapes it independently with speed,
+   filter, ring modulator, LFO, reverb, volume and pan. Offline WAV
+   render for download.
 */
 (function () {
   'use strict';
@@ -11,7 +13,6 @@
      CONSTANTS
   ════════════════════════════════════════════════════════════ */
   var N_TRACKS       = 4;
-  var TRACK_NAMES    = ['Track 1', 'Track 2', 'Track 3', 'Track 4'];
   var BASE_FREQ      = 220;       // abstract reference frequency for ratio/interval math
   var MAX_REC_SEC    = 30;        // microphone recording cap
   var MAX_UPLOAD_SEC = 120;       // uploaded file cap (auto-trimmed to first N seconds)
@@ -55,39 +56,43 @@
   }
 
   /* ════════════════════════════════════════════════════════════
-     STATE
+     DEFAULT TRACK PARAMS (shared by init + per-track reset)
   ════════════════════════════════════════════════════════════ */
-  var isPlaying = false, wallStart = 0, timerRaf = null;
-  var ratioLocked = false;
-  var isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
-
-  var tracks = Array.from({ length: N_TRACKS }, function (_, i) {
+  function defaultTrackParams(id) {
     return {
-      id: i, name: TRACK_NAMES[i],
-      buffer: null, fileName: null,
+      id: id, name: 'Track ' + (id + 1),
       speed: 1.0, loop: true, crossfade: 0,
       filterType: 'lowpass', filterFreq: 8000, filterQ: 0.7,
       ringEnabled: false, ringCarrier: 150,
       reverbEnabled: false, reverbAmount: 0.3,
       lfoEnabled: false, lfoRate: 0.5, lfoShape: 'sine', lfoTarget: 'filter',
       volume: 0.75, pan: 0, muted: false, soloed: false,
-      ratioNum: (i === 0 ? 1 : i + 1), ratioDen: 1,
+      ratioNum: (id === 0 ? 1 : id + 1), ratioDen: 1,
       playheadPct: 0,
-      // nodes
-      sourceNode: null, filterNode: null, gainNode: null, panNode: null,
-      dryGain: null, reverbGain: null, reverbNode: null,
-      lfoOsc: null, lfoGain: null,
-      ringOsc: null, ringWet: null, ringDry: null,
-      _ringSum: null, _ringDiff: null, _ringSqSum: null, _ringSqDiff: null, _ringInv: null, _ringOut: null,
-      // recording
-      mediaRec: null, recChunks: [], isRecording: false, recTimeout: null,
     };
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     STATE
+  ════════════════════════════════════════════════════════════ */
+  var isPlaying = false, wallStart = 0, timerRaf = null;
+  var ratioLocked = false;
+
+  var tracks = Array.from({ length: N_TRACKS }, function (_, i) {
+    var t = defaultTrackParams(i);
+    t.buffer = null; t.fileName = null;
+    t.sourceNode = null; t.filterNode = null; t.gainNode = null; t.panNode = null;
+    t.dryGain = null; t.reverbGain = null; t.reverbNode = null;
+    t.lfoOsc = null; t.lfoGain = null;
+    t.ringOsc = null; t.ringWet = null; t.ringDry = null;
+    t._ringSum = null; t._ringDiff = null; t._ringSqSum = null; t._ringSqDiff = null; t._ringInv = null; t._ringOut = null;
+    return t;
   });
 
   /* ════════════════════════════════════════════════════════════
      RING MODULATOR   A*B = ((A+B)^2 - (A-B)^2) / 4
   ════════════════════════════════════════════════════════════ */
-  function makeSquaringCurve(ctx, n) {
+  function makeSquaringCurve(n) {
     n = n || 4096;
     var curve = new Float32Array(n);
     for (var i = 0; i < n; i++) { var x = (i * 2) / n - 1; curve[i] = x * x; }
@@ -106,8 +111,8 @@
     var diffGain = ctx.createGain(); diffGain.gain.value = 1;
     sourceNode.connect(diffGain); invGain.connect(diffGain);
 
-    var sqSum  = ctx.createWaveShaper(); sqSum.curve  = makeSquaringCurve(ctx); sqSum.oversample  = '4x';
-    var sqDiff = ctx.createWaveShaper(); sqDiff.curve = makeSquaringCurve(ctx); sqDiff.oversample = '4x';
+    var sqSum  = ctx.createWaveShaper(); sqSum.curve  = makeSquaringCurve(); sqSum.oversample  = '4x';
+    var sqDiff = ctx.createWaveShaper(); sqDiff.curve = makeSquaringCurve(); sqDiff.oversample = '4x';
     sumGain.connect(sqSum); diffGain.connect(sqDiff);
 
     var negDiff = ctx.createGain(); negDiff.gain.value = -1; sqDiff.connect(negDiff);
@@ -308,7 +313,8 @@
   function drawWaveform(t) {
     var canvas = document.getElementById('wave-' + t.id); if (!canvas) return;
     var ctx = canvas.getContext('2d'), dpr = window.devicePixelRatio || 1;
-    canvas.width = canvas.offsetWidth * dpr; canvas.height = 42 * dpr;
+    var cssH = canvas.offsetHeight || 26;
+    canvas.width = canvas.offsetWidth * dpr; canvas.height = cssH * dpr;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (!t.buffer) {
       ctx.fillStyle = 'rgba(128,128,128,0.35)';
@@ -318,8 +324,7 @@
     var data = t.buffer.getChannelData(0), W = canvas.width, H = canvas.height;
     var step = Math.ceil(data.length / W);
     var textColor = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#1a1a1a';
-    ctx.fillStyle = textColor; ctx.globalAlpha = 0.18;
-    ctx.strokeStyle = textColor; ctx.lineWidth = 1; ctx.globalAlpha = 1;
+    ctx.fillStyle = textColor; ctx.strokeStyle = textColor; ctx.lineWidth = 1;
     for (var x = 0; x < W; x++) {
       var max = 0, min = 0;
       for (var j = 0; j < step; j++) { var sIdx = x * step + j; var v = data[sIdx] || 0; if (v > max) max = v; if (v < min) min = v; }
@@ -334,7 +339,7 @@
   }
 
   /* ════════════════════════════════════════════════════════════
-     BUFFER LOADING (record / upload, shared final step)
+     BUFFER LOADING (shared master source → all four tracks)
   ════════════════════════════════════════════════════════════ */
   function trimBuffer(ctx, buffer, maxSec) {
     if (buffer.duration <= maxSec) return buffer;
@@ -359,24 +364,19 @@
     return buffer;
   }
 
-  function loadBufferIntoTrack(id, buffer, label) {
-    var t = tracks[id];
-    normalizeBuffer(buffer);
-    if (isPlaying) { teardownTrackGraph(t); }
-    t.buffer = buffer; t.fileName = label;
-    setTrackStatus(id, label, true);
-    drawWaveform(t);
-    var fileInfo = document.getElementById('tfile-' + id);
-    if (fileInfo) fileInfo.textContent = label;
-    updatePlayBtnAvailability();
-    updateRingFreqDisplay(id);
-  }
-
-  function setTrackStatus(id, msg, fade) {
-    var el = document.getElementById('tstatus-' + id); if (!el) return;
+  function setSourceStatus(msg, fade) {
+    var el = document.getElementById('ss-source-status'); if (!el) return;
     el.textContent = msg; el.style.opacity = '1';
     clearTimeout(el._fadeTimer);
-    if (fade) el._fadeTimer = setTimeout(function () { el.style.opacity = '0'; }, 2400);
+    if (fade) el._fadeTimer = setTimeout(function () { el.style.opacity = '0'; }, 2600);
+  }
+
+  function masterLoadBuffer(buffer, label) {
+    normalizeBuffer(buffer);
+    if (isPlaying) transportStop();
+    tracks.forEach(function (t) { t.buffer = buffer; t.fileName = label; drawWaveform(t); updateRingFreqDisplay(t.id); });
+    setSourceStatus(label, true);
+    updatePlayBtnAvailability();
   }
 
   function updatePlayBtnAvailability() {
@@ -388,59 +388,54 @@
   }
 
   /* ════════════════════════════════════════════════════════════
-     UPLOAD
+     MASTER UPLOAD / RECORD
   ════════════════════════════════════════════════════════════ */
-  function handleUpload(id, file) {
-    setTrackStatus(id, 'loading…', false);
+  function masterHandleUpload(file) {
+    setSourceStatus('loading\u2026', false);
     var reader = new FileReader();
     reader.onload = function (e) {
       resumeCtx().decodeAudioData(e.target.result, function (decoded) {
         var trimmed = trimBuffer(getCtx(), decoded, MAX_UPLOAD_SEC);
-        loadBufferIntoTrack(id, trimmed, 'loaded: ' + file.name.substring(0, 26));
-      }, function () {
-        setTrackStatus(id, 'could not decode file', true);
-      });
+        masterLoadBuffer(trimmed, 'loaded: ' + file.name.substring(0, 30));
+      }, function () { setSourceStatus('could not decode file', true); });
     };
     reader.readAsArrayBuffer(file);
   }
 
-  /* ════════════════════════════════════════════════════════════
-     RECORD
-  ════════════════════════════════════════════════════════════ */
-  function toggleRecord(id) {
-    var t = tracks[id];
-    if (t.isRecording) { stopRecord(id); return; }
+  var masterRec = { mediaRec: null, chunks: [], isRecording: false, timeout: null };
+
+  function masterToggleRecord() {
+    if (masterRec.isRecording) { masterStopRecord(); return; }
     navigator.mediaDevices.getUserMedia({ audio: true, video: false })
       .then(function (stream) {
-        t.recChunks = [];
-        t.mediaRec = new MediaRecorder(stream);
-        t.mediaRec.ondataavailable = function (e) { if (e.data.size > 0) t.recChunks.push(e.data); };
-        t.mediaRec.onstop = function () {
+        masterRec.chunks = [];
+        masterRec.mediaRec = new MediaRecorder(stream);
+        masterRec.mediaRec.ondataavailable = function (e) { if (e.data.size > 0) masterRec.chunks.push(e.data); };
+        masterRec.mediaRec.onstop = function () {
           stream.getTracks().forEach(function (tr) { tr.stop(); });
-          var blob = new Blob(t.recChunks, { type: 'audio/webm' });
+          var blob = new Blob(masterRec.chunks, { type: 'audio/webm' });
           var fr = new FileReader();
           fr.onload = function (ev) {
             resumeCtx().decodeAudioData(ev.target.result, function (decoded) {
-              t.isRecording = false; setRecordBtnUI(id, false);
-              loadBufferIntoTrack(id, decoded, 'microphone recording');
-            }, function () { setTrackStatus(id, 'decode failed', true); });
+              masterRec.isRecording = false; setMasterRecordBtnUI(false);
+              masterLoadBuffer(decoded, 'microphone recording');
+            }, function () { setSourceStatus('decode failed', true); });
           };
           fr.readAsArrayBuffer(blob);
         };
-        t.mediaRec.start();
-        t.isRecording = true; setRecordBtnUI(id, true);
-        setTrackStatus(id, 'recording… (max ' + MAX_REC_SEC + 's)', false);
-        t.recTimeout = setTimeout(function () { if (t.isRecording) stopRecord(id); }, MAX_REC_SEC * 1000);
+        masterRec.mediaRec.start();
+        masterRec.isRecording = true; setMasterRecordBtnUI(true);
+        setSourceStatus('recording\u2026 (max ' + MAX_REC_SEC + 's)', false);
+        masterRec.timeout = setTimeout(function () { if (masterRec.isRecording) masterStopRecord(); }, MAX_REC_SEC * 1000);
       })
-      .catch(function () { setTrackStatus(id, 'microphone access denied', true); });
+      .catch(function () { setSourceStatus('microphone access denied', true); });
   }
-  function stopRecord(id) {
-    var t = tracks[id];
-    if (t.recTimeout) { clearTimeout(t.recTimeout); t.recTimeout = null; }
-    if (t.mediaRec && t.isRecording) t.mediaRec.stop();
+  function masterStopRecord() {
+    if (masterRec.timeout) { clearTimeout(masterRec.timeout); masterRec.timeout = null; }
+    if (masterRec.mediaRec && masterRec.isRecording) masterRec.mediaRec.stop();
   }
-  function setRecordBtnUI(id, recording) {
-    var btn = document.getElementById('rec-' + id); if (!btn) return;
+  function setMasterRecordBtnUI(recording) {
+    var btn = document.getElementById('ss-record'); if (!btn) return;
     btn.innerHTML = recording ? '&#9679;&#xFE0E; stop' : '&#9679;&#xFE0E; record';
     btn.classList.toggle('on', recording);
   }
@@ -493,7 +488,7 @@
       var carrierSl = document.getElementById('ring-carrier-' + id); if (carrierSl) carrierSl.disabled = !enabled;
       if (t.ringWet) t.ringWet.gain.setTargetAtTime(enabled ? 1 : 0, getCtx().currentTime, 0.05);
       if (t.ringDry) t.ringDry.gain.setTargetAtTime(enabled ? 0 : 1, getCtx().currentTime, 0.05);
-      var freqEl = document.getElementById('ring-freqs-' + id); if (freqEl) freqEl.style.opacity = enabled ? '0.7' : '0.4';
+      var freqEl = document.getElementById('ring-freqs-' + id); if (freqEl) freqEl.style.opacity = enabled ? '0.75' : '0.5';
     }
   }
 
@@ -561,11 +556,15 @@
     return dir + oct + 'oct' + (rem ? '+' + rem + 'st' : '');
   }
 
+  function formatHz(v) {
+    v = Math.round(v);
+    return v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + 'k' : String(v);
+  }
+
   function updateRingFreqDisplay(id) {
     var t = tracks[id], d = document.getElementById('ring-freqs-' + id); if (!d) return;
     var sf = BASE_FREQ * t.speed;
-    d.textContent = 'carrier: ' + t.ringCarrier + ' Hz \u00b7 sum: ' + Math.round(sf + t.ringCarrier) +
-      ' Hz \u00b7 diff: ' + Math.round(Math.abs(sf - t.ringCarrier)) + ' Hz';
+    d.textContent = '\u03a3' + Math.round(sf + t.ringCarrier) + ' \u0394' + Math.round(Math.abs(sf - t.ringCarrier)) + ' Hz';
   }
 
   /* ════════════════════════════════════════════════════════════
@@ -597,7 +596,7 @@
         '</div>' +
         '<div class="ratio-cell-freq" id="ratio-freq-' + t.id + '">' + fHz + ' Hz</div>' +
         '<div class="ratio-cell-interval" id="ratio-interval-' + t.id + '">' + intv + '</div>' +
-        (t.id > 0 ? '<div class="mini-row"><button class="mini-btn" data-revert="' + t.id + '">revert</button></div>' : '') +
+        (t.id > 0 ? '<div style="margin-top:0.3em;"><button class="mini-btn" data-revert="' + t.id + '">revert</button></div>' : '') +
         '</div>';
     }).join('');
     grid.querySelectorAll('input.ratio-input').forEach(function (inp) {
@@ -679,57 +678,57 @@
           '<button class="mini-btn" id="mute-' + id + '" title="Mute (' + (id + 1) + ')">M</button>' +
           '<button class="mini-btn" id="solo-' + id + '" title="Solo (Shift+' + (id + 1) + ')">S</button>' +
         '</div>' +
-        '<div class="track-src-btns">' +
-          '<label class="upload-label" for="upload-' + id + '">upload</label>' +
-          '<input type="file" id="upload-' + id + '" accept="audio/*" style="display:none">' +
-          '<button class="lab-preset-btn" id="rec-' + id + '">&#9679;&#xFE0E; record</button>' +
-        '</div>' +
-        '<span class="track-name" id="tfile-' + id + '">No file loaded</span>' +
+        '<button class="mini-btn" id="reset-' + id + '" style="margin-left:auto;" title="Reset this track">reset</button>' +
       '</div>' +
-      '<div class="tape-status-row" id="tstatus-' + id + '" style="padding:0 0.85em;"></div>' +
       '<div class="track-wave"><canvas id="wave-' + id + '"></canvas></div>' +
       '<div class="track-controls">' +
         // Speed
         '<div class="ctrl-block"><div class="ctrl-block-label">Speed <span class="ctrl-block-val" id="spd-label-' + id + '">' + t.speed.toFixed(2) + '\u00d7</span></div>' +
           '<input type="range" min="-3" max="2" step="0.001" value="' + spdSl + '" id="spd-slider-' + id + '">' +
-          '<div class="speed-exact-row"><input type="number" class="speed-exact" id="spd-exact-' + id + '" min="0.125" max="4" step="0.001" value="' + t.speed.toFixed(3) + '"><span style="font-size:0.6rem;opacity:0.5;">\u00d7</span></div>' +
-          '<div class="pitch-label" id="spd-pitch-' + id + '">' + speedToPitch(t.speed) + '</div></div>' +
+          '<div class="speed-exact-row"><input type="number" class="speed-exact" id="spd-exact-' + id + '" min="0.125" max="4" step="0.001" value="' + t.speed.toFixed(3) + '"><span class="pitch-label" id="spd-pitch-' + id + '">' + speedToPitch(t.speed) + '</span></div></div>' +
         // Loop + crossfade
         '<div class="ctrl-block"><div class="ctrl-block-label">Loop <label class="toggle"><input type="checkbox" id="loop-' + id + '" checked><span class="toggle-slider"></span></label></div>' +
-          '<div class="ctrl-block-label" style="margin-top:0.5em;">Crossfade <span class="ctrl-block-val" id="xf-label-' + id + '">' + t.crossfade + 'ms</span></div>' +
+          '<div class="ctrl-block-label" style="margin-top:0.35em;">Crossfade <span class="ctrl-block-val" id="xf-label-' + id + '">' + t.crossfade + 'ms</span></div>' +
           '<input type="range" min="0" max="400" step="5" value="' + t.crossfade + '" id="xf-slider-' + id + '"></div>' +
         // Filter
         '<div class="ctrl-block"><div class="ctrl-block-label">Filter</div>' +
           '<select id="filter-type-' + id + '"><option value="lowpass">Lowpass</option><option value="highpass">Highpass</option><option value="bandpass">Bandpass</option></select>' +
-          '<div style="margin-top:0.4em;"><div class="ctrl-block-label">Cutoff <span class="ctrl-block-val" id="filter-freq-label-' + id + '">' + t.filterFreq + ' Hz</span></div>' +
-          '<input type="range" min="100" max="10000" step="10" value="' + t.filterFreq + '" id="filter-freq-' + id + '"></div>' +
-          '<div style="margin-top:0.4em;"><div class="ctrl-block-label">Resonance <span class="ctrl-block-val" id="filter-q-label-' + id + '">' + t.filterQ.toFixed(1) + '</span></div>' +
-          '<input type="range" min="0.1" max="18" step="0.1" value="' + t.filterQ + '" id="filter-q-' + id + '"></div></div>' +
-        // Volume + Pan
-        '<div class="ctrl-block"><div class="ctrl-block-label">Volume <span class="ctrl-block-val" id="vol-label-' + id + '">' + Math.round(t.volume * 100) + '%</span></div>' +
-          '<input type="range" min="0" max="1" step="0.01" value="' + t.volume + '" id="vol-' + id + '">' +
-          '<div style="margin-top:0.5em;"><div class="ctrl-block-label">Pan <span class="ctrl-block-val" id="pan-label-' + id + '">C</span></div>' +
-          '<input type="range" min="-1" max="1" step="0.01" value="' + t.pan + '" id="pan-' + id + '"></div></div>' +
-        // Ring mod
-        '<div class="ctrl-block"><div class="ctrl-block-label">Ring mod <label class="toggle"><input type="checkbox" id="ring-en-' + id + '"><span class="toggle-slider"></span></label></div>' +
-          '<input type="range" min="10" max="2000" step="1" value="' + t.ringCarrier + '" id="ring-carrier-' + id + '" disabled>' +
-          '<div class="ring-freq-line" id="ring-freqs-' + id + '" style="opacity:0.4;">carrier: ' + t.ringCarrier + ' Hz \u00b7 sum: \u2014 \u00b7 diff: \u2014</div></div>' +
-        // Reverb
-        '<div class="ctrl-block"><div class="ctrl-block-label">Reverb <label class="toggle"><input type="checkbox" id="reverb-en-' + id + '"><span class="toggle-slider"></span></label></div>' +
-          '<input type="range" min="0" max="1" step="0.01" value="' + t.reverbAmount + '" id="reverb-slider-' + id + '" disabled></div>' +
-        // LFO
-        '<div class="ctrl-block" style="grid-column: 1 / -1;"><div class="ctrl-block-label">LFO <label class="toggle"><input type="checkbox" id="lfo-en-' + id + '"><span class="toggle-slider"></span></label></div>' +
-          '<div class="mini-row" id="lfo-target-' + id + '">' +
-            [['filter','F'],['volume','V'],['pan','P'],['ring','R']].map(function (pair) {
-              return '<button class="mini-btn' + (t.lfoTarget === pair[0] ? ' on' : '') + '" data-target="' + pair[0] + '" disabled title="' + pair[0] + '">' + pair[1] + '</button>';
-            }).join('') +
-          '</div>' +
-          '<input type="range" min="0.05" max="8" step="0.05" value="' + t.lfoRate + '" id="lfo-rate-' + id + '" disabled style="margin-top:0.4em;">' +
-          '<div class="mini-row" id="lfo-shapes-' + id + '">' +
-            ['sine','triangle','sawtooth','square'].map(function (s) {
-              return '<button class="mini-btn' + (t.lfoShape === s ? ' on' : '') + '" data-shape="' + s + '" disabled>' + s[0].toUpperCase() + '</button>';
-            }).join('') +
+          '<div class="dual-mini" style="margin-top:0.4em;">' +
+            '<div><div class="ctrl-block-label">Cutoff <span class="ctrl-block-val" id="filter-freq-label-' + id + '">' + formatHz(t.filterFreq) + '</span></div>' +
+            '<input type="range" min="100" max="10000" step="10" value="' + t.filterFreq + '" id="filter-freq-' + id + '"></div>' +
+            '<div><div class="ctrl-block-label">Res <span class="ctrl-block-val" id="filter-q-label-' + id + '">' + t.filterQ.toFixed(1) + '</span></div>' +
+            '<input type="range" min="0.1" max="18" step="0.1" value="' + t.filterQ + '" id="filter-q-' + id + '"></div>' +
           '</div></div>' +
+        // Volume + Pan
+        '<div class="ctrl-block"><div class="dual-mini">' +
+          '<div><div class="ctrl-block-label">Vol <span class="ctrl-block-val" id="vol-label-' + id + '">' + Math.round(t.volume * 100) + '%</span></div>' +
+          '<input type="range" min="0" max="1" step="0.01" value="' + t.volume + '" id="vol-' + id + '"></div>' +
+          '<div><div class="ctrl-block-label">Pan <span class="ctrl-block-val" id="pan-label-' + id + '">C</span></div>' +
+          '<input type="range" min="-1" max="1" step="0.01" value="' + t.pan + '" id="pan-' + id + '"></div>' +
+        '</div></div>' +
+        // Ring + Reverb combined
+        '<div class="ctrl-block"><div class="dual-mini">' +
+          '<div><div class="ctrl-block-label">Ring <span class="ctrl-block-val" id="ring-carrier-label-' + id + '">' + t.ringCarrier + 'Hz</span><label class="toggle"><input type="checkbox" id="ring-en-' + id + '"><span class="toggle-slider"></span></label></div>' +
+          '<input type="range" min="10" max="2000" step="1" value="' + t.ringCarrier + '" id="ring-carrier-' + id + '" disabled>' +
+          '<div class="ring-freq-line" id="ring-freqs-' + id + '" style="opacity:0.5;">\u03a3\u2014 \u0394\u2014</div></div>' +
+          '<div><div class="ctrl-block-label">Reverb <span class="ctrl-block-val" id="reverb-amt-label-' + id + '">' + Math.round(t.reverbAmount * 100) + '%</span><label class="toggle"><input type="checkbox" id="reverb-en-' + id + '"><span class="toggle-slider"></span></label></div>' +
+          '<input type="range" min="0" max="1" step="0.01" value="' + t.reverbAmount + '" id="reverb-slider-' + id + '" disabled></div>' +
+        '</div></div>' +
+        // LFO
+        '<div class="ctrl-block"><div class="ctrl-block-label">LFO <span class="ctrl-block-val" id="lfo-rate-label-' + id + '">' + t.lfoRate.toFixed(2) + 'Hz</span><label class="toggle"><input type="checkbox" id="lfo-en-' + id + '"><span class="toggle-slider"></span></label></div>' +
+          '<div class="dual-mini">' +
+            '<div id="lfo-target-' + id + '">' +
+              [['filter','F'],['volume','V'],['pan','P'],['ring','R']].map(function (pair) {
+                return '<button class="mini-btn' + (t.lfoTarget === pair[0] ? ' on' : '') + '" data-target="' + pair[0] + '" disabled title="' + pair[0] + '" style="width:22%;margin-right:2%;">' + pair[1] + '</button>';
+              }).join('') +
+            '</div>' +
+            '<div id="lfo-shapes-' + id + '">' +
+              ['sine','triangle','sawtooth','square'].map(function (s) {
+                return '<button class="mini-btn' + (t.lfoShape === s ? ' on' : '') + '" data-shape="' + s + '" disabled style="width:22%;margin-right:2%;">' + s[0].toUpperCase() + '</button>';
+              }).join('') +
+            '</div>' +
+          '</div>' +
+          '<input type="range" min="0.05" max="8" step="0.05" value="' + t.lfoRate + '" id="lfo-rate-' + id + '" disabled style="margin-top:0.4em;"></div>' +
       '</div>';
     return div;
   }
@@ -750,12 +749,7 @@
 
     document.getElementById('mute-' + id).addEventListener('click', function () { setMute(id); });
     document.getElementById('solo-' + id).addEventListener('click', function () { setSolo(id); });
-
-    document.getElementById('upload-' + id).addEventListener('change', function (e) {
-      if (e.target.files && e.target.files[0]) handleUpload(id, e.target.files[0]);
-      e.target.value = '';
-    });
-    document.getElementById('rec-' + id).addEventListener('click', function () { toggleRecord(id); });
+    document.getElementById('reset-' + id).addEventListener('click', function () { resetTrack(id); });
 
     document.getElementById('spd-slider-' + id).addEventListener('input', function (e) { onSpeedSlider(id, e.target.value); });
     document.getElementById('spd-exact-' + id).addEventListener('change', function (e) { onSpeedExact(id, e.target.value); });
@@ -770,7 +764,7 @@
     document.getElementById('filter-type-' + id).addEventListener('change', function (e) { setTrackParam(id, 'filterType', e.target.value); });
     document.getElementById('filter-freq-' + id).addEventListener('input', function (e) {
       setTrackParam(id, 'filterFreq', +e.target.value);
-      document.getElementById('filter-freq-label-' + id).textContent = e.target.value + ' Hz';
+      document.getElementById('filter-freq-label-' + id).textContent = formatHz(+e.target.value);
     });
     document.getElementById('filter-q-' + id).addEventListener('input', function (e) {
       setTrackParam(id, 'filterQ', +e.target.value);
@@ -788,19 +782,54 @@
     });
 
     document.getElementById('ring-en-' + id).addEventListener('change', function (e) { setTrackEffect(id, 'ringEnabled', e.target.checked); });
-    document.getElementById('ring-carrier-' + id).addEventListener('input', function (e) { setTrackParam(id, 'ringCarrier', +e.target.value); });
+    document.getElementById('ring-carrier-' + id).addEventListener('input', function (e) {
+      setTrackParam(id, 'ringCarrier', +e.target.value);
+      document.getElementById('ring-carrier-label-' + id).textContent = e.target.value + 'Hz';
+    });
 
     document.getElementById('reverb-en-' + id).addEventListener('change', function (e) { setTrackEffect(id, 'reverbEnabled', e.target.checked); });
-    document.getElementById('reverb-slider-' + id).addEventListener('input', function (e) { setTrackParam(id, 'reverbAmount', +e.target.value); });
+    document.getElementById('reverb-slider-' + id).addEventListener('input', function (e) {
+      setTrackParam(id, 'reverbAmount', +e.target.value);
+      document.getElementById('reverb-amt-label-' + id).textContent = Math.round(e.target.value * 100) + '%';
+    });
 
     document.getElementById('lfo-en-' + id).addEventListener('change', function (e) { setTrackEffect(id, 'lfoEnabled', e.target.checked); });
-    document.getElementById('lfo-rate-' + id).addEventListener('input', function (e) { setTrackParam(id, 'lfoRate', +e.target.value); });
+    document.getElementById('lfo-rate-' + id).addEventListener('input', function (e) {
+      setTrackParam(id, 'lfoRate', +e.target.value);
+      document.getElementById('lfo-rate-label-' + id).textContent = parseFloat(e.target.value).toFixed(2) + 'Hz';
+    });
     document.querySelectorAll('#lfo-target-' + id + ' .mini-btn').forEach(function (b) {
       b.addEventListener('click', function () { setLfoTarget(id, this.dataset.target); });
     });
     document.querySelectorAll('#lfo-shapes-' + id + ' .mini-btn').forEach(function (b) {
       b.addEventListener('click', function () { setLfoShape(id, this.dataset.shape); });
     });
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     PER-TRACK RESET
+  ════════════════════════════════════════════════════════════ */
+  function resetTrack(id) {
+    var t = tracks[id];
+    var buffer = t.buffer, fileName = t.fileName;
+    var wasPlaying = isPlaying;
+    teardownTrackGraph(t);
+    var fresh = defaultTrackParams(id);
+    Object.keys(fresh).forEach(function (k) { t[k] = fresh[k]; });
+    t.buffer = buffer; t.fileName = fileName;
+
+    var oldEl = document.getElementById('track-' + id);
+    var newEl = buildTrackEl(t);
+    if (oldEl && oldEl.parentNode) oldEl.parentNode.replaceChild(newEl, oldEl);
+    wireTrackEvents(id);
+    drawWaveform(t);
+    updateRingFreqDisplay(id);
+    renderMuteSoloUI();
+
+    if (wasPlaying && t.buffer) {
+      buildTrackGraph(t);
+      if (t.sourceNode) t.sourceNode.start(0);
+    }
   }
 
   /* ════════════════════════════════════════════════════════════
@@ -826,24 +855,6 @@
     return new Blob([ab], { type: 'audio/wav' });
   }
 
-  function renderOfflineMix(durationSec) {
-    var ctx = getCtx();
-    var sr = ctx.sampleRate;
-    var offlineCtx = new OfflineAudioContext(2, Math.ceil(sr * durationSec), sr);
-    var offlineIR = makeReverbImpulse(offlineCtx);
-    var masterOut = offlineCtx.createGain();
-    masterOut.gain.value = masterGain ? masterGain.gain.value : 0.8;
-    masterOut.connect(offlineCtx.destination);
-
-    tracks.forEach(function (t) {
-      if (!t.buffer) return;
-      buildOfflineTrackGraphFull(offlineCtx, t, offlineIR, masterOut);
-    });
-
-    return offlineCtx.startRendering();
-  }
-
-  /* Full offline graph builder, including ring-mod LFO targeting */
   function buildOfflineTrackGraphFull(offlineCtx, t, offlineIR, masterOut) {
     var buf = (t.loop && t.crossfade > 0) ? applyCrossfadeToBuffer(offlineCtx, t.buffer, t.crossfade) : t.buffer;
     var src = offlineCtx.createBufferSource();
@@ -884,6 +895,23 @@
     src.start(0);
   }
 
+  function renderOfflineMix(durationSec) {
+    var ctx = getCtx();
+    var sr = ctx.sampleRate;
+    var offlineCtx = new OfflineAudioContext(2, Math.ceil(sr * durationSec), sr);
+    var offlineIR = makeReverbImpulse(offlineCtx);
+    var masterOut = offlineCtx.createGain();
+    masterOut.gain.value = masterGain ? masterGain.gain.value : 0.8;
+    masterOut.connect(offlineCtx.destination);
+
+    tracks.forEach(function (t) {
+      if (!t.buffer) return;
+      buildOfflineTrackGraphFull(offlineCtx, t, offlineIR, masterOut);
+    });
+
+    return offlineCtx.startRendering();
+  }
+
   function initDownload() {
     var btn = document.getElementById('ss-download-btn');
     var durSel = document.getElementById('ss-download-dur');
@@ -899,7 +927,7 @@
         a.href = url; a.download = 'soundscape-machine-' + Date.now() + '.wav';
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
         setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-        status.textContent = 'done \u2014 check your downloads';
+        status.textContent = 'done';
         btn.disabled = false;
         setTimeout(function () { status.textContent = ''; }, 3000);
       }).catch(function (err) {
@@ -917,6 +945,14 @@
     renderTracks();
     renderRatioGrid();
     updatePlayBtnAvailability();
+
+    var uploadInput = document.getElementById('ss-upload');
+    if (uploadInput) uploadInput.addEventListener('change', function (e) {
+      if (e.target.files && e.target.files[0]) masterHandleUpload(e.target.files[0]);
+      e.target.value = '';
+    });
+    var recordBtn = document.getElementById('ss-record');
+    if (recordBtn) recordBtn.addEventListener('click', masterToggleRecord);
 
     var playBtn = document.getElementById('ss-play');
     var stopBtn = document.getElementById('ss-stop');
@@ -944,6 +980,8 @@
     // Generate reverb impulse once, non-fatally
     try { ensureMaster(); reverbIR = makeReverbImpulse(getCtx()); } catch (e) {}
 
+    // Keyboard shortcuts remain active even though the on-page hint was removed to save space:
+    // Space = play/stop, 1-4 = mute, Shift+1-4 = solo, Esc = stop
     document.addEventListener('keydown', function (e) {
       var tag = document.activeElement && document.activeElement.tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
