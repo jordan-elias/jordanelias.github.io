@@ -68,7 +68,7 @@ async function loadEvents() {
             <p><strong>Time:</strong> ${eventTimeText}</p>
             <p><strong>Location:</strong> ${event.location || 'TBA'}</p>
             <p>${descriptionHTML}</p>
-            ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">Register Here</a></p>` : ''}
+            ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">More info/registration here</a></p>` : ''}
           </div>
         `;
       });
