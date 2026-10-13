@@ -215,6 +215,7 @@
     .tape-status-row {
       font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--text); opacity: 0;
       margin-bottom: 0.5em; min-height: 1.1em; transition: opacity 0.3s ease; letter-spacing: 0.02em;
+      overflow-wrap: anywhere;
     }
 
     /* ── Source clip trim/select editor ── */
@@ -524,9 +525,9 @@
 
       <div class="gen-row">
         <span class="gen-row-label">source</span>
-        <label class="upload-label" for="ss-upload">upload file</label>
-        <input type="file" id="ss-upload" accept="audio/*" style="display:none">
-        <button class="lab-preset-btn" id="ss-record">&#9679;&#xFE0E; record</button>
+        <label class="upload-label" id="ss-upload-label" for="ss-upload">upload file</label>
+        <input type="file" id="ss-upload" accept="audio/*,audio/wav,audio/x-wav,audio/wave,audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,audio/aiff,audio/x-aiff,audio/x-caf,audio/ogg,audio/flac,audio/webm,.wav,.wave,.m4a,.mp3,.aif,.aiff,.caf,.aac,.mp4,.ogg,.oga,.opus,.flac,.webm" style="display:none">
+        <button class="lab-preset-btn" id="ss-record">record</button>
       </div>
       <p class="source-note">One clip loads onto all four tracks at once. Shape each independently below.</p>
       <div class="tape-status-row" id="ss-source-status"></div>
