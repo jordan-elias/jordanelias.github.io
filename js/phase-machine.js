@@ -1,9 +1,20 @@
-/* phase-machine.js — phase machine with melodic sequencer
+/* phase-machine.js — phase machine with melodic sequencer and crop editor
    Core playback engine based on original implementation.
    Melodic sequencer mode added.
+   Crop editor (upload + microphone only) added: pick or record a clip,
+   drag the handles to choose a region, set an optional loop crossfade,
+   then press "load tape" to send the selection to the phase machine.
 */
 (function () {
   'use strict';
+
+  /* ════════════════════════════════════════════════════════════
+     CONSTANTS
+  ════════════════════════════════════════════════════════════ */
+  var MAX_REC_SEC    = 60;     /* microphone recording cap (with countdown) */
+  var MAX_UPLOAD_SEC = 120;    /* uploads are trimmed to their first N seconds */
+  var MIN_CROP_SEC   = 0.25;   /* shortest selectable crop */
+  var MAX_XFADE_FRAC = 0.4;    /* crossfade never exceeds 40% of the crop length */
 
   /* ════════════════════════════════════════════════════════════
      MUSIC THEORY
@@ -240,8 +251,15 @@
   var mediaRec    = null;
   var recChunks   = [];
   var isRecording = false;
-  var hasRec      = false;
-  var micBuffer   = null;
+  var recTimer    = null;
+  var recStartMs  = 0;
+
+  /* Crop editor (upload + mic only).
+     pending holds the full uploaded/recorded clip plus the selected region
+     (start/end as 0..1 fractions). Nothing reaches the phase machine until
+     the user presses "load tape". */
+  var pending        = null;   /* { full: AudioBuffer, label: string, start: 0..1, end: 0..1 } */
+  var cropDragTarget = null;
 
   /* ════════════════════════════════════════════════════════════
      PLAYBACK ENGINE (mirrors original approach exactly)
@@ -352,6 +370,24 @@
     btn.classList.toggle('on', on);
   }
 
+  /* Stop playback and clear the loaded tape (play button disabled until the
+     next "load tape"). Used when a new upload/recording is pending. */
+  function unloadTape() {
+    state.playing = false;
+    stopNodes();
+    stopDisplayTimer();
+    state.buffer  = null;
+    state.offsetA = 0;
+    state.offsetB = 0;
+    melActiveA    = -1;
+    melActiveB    = -1;
+    renderStepIndicators(-1, -1);
+    var pb = document.getElementById('pm-play');
+    if (pb) pb.disabled = true;
+    setPlayBtn(false);
+    updateDisplay(0, 0);
+  }
+
   /* ════════════════════════════════════════════════════════════
      SYNC HOLD (K) — mirrors original: stop & restart at position
   ════════════════════════════════════════════════════════════ */
@@ -440,21 +476,83 @@
   }
 
   /* ════════════════════════════════════════════════════════════
-     BUFFER LOADING (shared final step for all sources)
+     BUFFER HELPERS
   ════════════════════════════════════════════════════════════ */
 
-  function loadBuffer(buf, label) {
-    /* Normalise peak to 0.78 */
+  /* Scale the whole buffer (all channels) so channel-0 peak equals target. */
+  function normalizeBuffer(buf, target) {
     var ch   = buf.getChannelData(0);
     var peak = 0;
     for (var i = 0; i < ch.length; i++) { var a = Math.abs(ch[i]); if (a > peak) peak = a; }
     if (peak > 0.001) {
-      var sc = 0.78 / peak;
+      var sc = target / peak;
       for (var c = 0; c < buf.numberOfChannels; c++) {
         var data = buf.getChannelData(c);
         for (var j = 0; j < data.length; j++) data[j] *= sc;
       }
     }
+    return buf;
+  }
+
+  /* Keep only the first maxSec seconds. Returns the same buffer if already short enough. */
+  function trimBuffer(ctx, buffer, maxSec) {
+    if (buffer.duration <= maxSec) return buffer;
+    var frames = Math.floor(maxSec * buffer.sampleRate);
+    var out = ctx.createBuffer(buffer.numberOfChannels, frames, buffer.sampleRate);
+    for (var c = 0; c < buffer.numberOfChannels; c++) {
+      out.getChannelData(c).set(buffer.getChannelData(c).subarray(0, frames));
+    }
+    return out;
+  }
+
+  /* Copy out the region between two 0..1 fractions as a new buffer. */
+  function sliceBuffer(ctx, buffer, startFrac, endFrac) {
+    var startSamp = Math.floor(startFrac * buffer.length);
+    var endSamp   = Math.max(startSamp + 1, Math.floor(endFrac * buffer.length));
+    var frames    = endSamp - startSamp;
+    var out = ctx.createBuffer(buffer.numberOfChannels, frames, buffer.sampleRate);
+    for (var c = 0; c < buffer.numberOfChannels; c++) {
+      out.getChannelData(c).set(buffer.getChannelData(c).subarray(startSamp, endSamp));
+    }
+    return out;
+  }
+
+  /* Seamless-loop crossfade.
+     The last F samples are blended into the first F samples (equal-power) and
+     the loop starts F samples in, so the wrap point runs from in[F-1] straight
+     into in[F] — continuous, no click. The loop is F samples shorter than the
+     crop. F is capped at MAX_XFADE_FRAC of the crop length. */
+  function applyLoopCrossfade(ctx, buf, fadeMs) {
+    var L = buf.length;
+    var F = Math.floor((fadeMs / 1000) * buf.sampleRate);
+    F = Math.min(F, Math.floor(L * MAX_XFADE_FRAC));
+    if (F < 2) return buf;
+
+    var N    = L - F;
+    var body = N - F;
+    var out  = ctx.createBuffer(buf.numberOfChannels, N, buf.sampleRate);
+
+    for (var c = 0; c < buf.numberOfChannels; c++) {
+      var inp = buf.getChannelData(c);
+      var o   = out.getChannelData(c);
+      var i, j;
+      for (i = 0; i < body; i++) o[i] = inp[F + i];
+      for (j = 0; j < F; j++) {
+        var t    = j / F;
+        var gOut = Math.cos(t * Math.PI / 2);
+        var gIn  = Math.sin(t * Math.PI / 2);
+        o[body + j] = inp[L - F + j] * gOut + inp[j] * gIn;
+      }
+    }
+    return out;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     BUFFER LOADING (shared final step for all sources)
+  ════════════════════════════════════════════════════════════ */
+
+  function loadBuffer(buf, label) {
+    normalizeBuffer(buf, 0.78);
 
     state.playing = false;
     stopNodes();
@@ -485,9 +583,62 @@
   }
 
   /* ════════════════════════════════════════════════════════════
+     FILE / BLOB READING + DECODING (iOS-safe)
+     - file.arrayBuffer() with a FileReader fallback
+     - decodeAudioData in both promise and callback form (older Safari
+       only supports the callback form)
+  ════════════════════════════════════════════════════════════ */
+  function readBlobBuffer(blob) {
+    if (blob.arrayBuffer) return blob.arrayBuffer();
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload  = function () { resolve(r.result); };
+      r.onerror = function () { reject(r.error || new Error('could not read file')); };
+      r.readAsArrayBuffer(blob);
+    });
+  }
+
+  function decodeAudio(arrayBuffer) {
+    var ctx = resumeCtx();
+    return new Promise(function (resolve, reject) {
+      var settled = false;
+      function ok(b)   { if (!settled) { settled = true; resolve(b); } }
+      function fail(e) { if (!settled) { settled = true; reject(e || new Error('decode failed')); } }
+      try {
+        var p = ctx.decodeAudioData(arrayBuffer, ok, fail);
+        if (p && typeof p.then === 'function') p.then(ok, fail);
+      } catch (e) { fail(e); }
+    });
+  }
+
+  function fmtSize(bytes) {
+    if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + ' MB';
+    return Math.max(1, Math.round(bytes / 1024)) + ' KB';
+  }
+
+  /* Short, readable description of a file — shown in error messages so a
+     failure can be diagnosed on a phone without a console. */
+  function describeFile(name, type, size) {
+    var nm  = name || 'recording';
+    var dot = nm.lastIndexOf('.');
+    var ext = dot > -1 ? nm.slice(dot).toLowerCase() : 'no extension';
+    return nm.substring(0, 28) + ' (' + ext + ', ' + (type || 'unknown type') + ', ' + fmtSize(size || 0) + ')';
+  }
+
+  function errText(err) {
+    if (!err) return '';
+    var n = (err.name && err.name !== 'Error') ? err.name : '';
+    var m = err.message || '';
+    var s = n + (n && m ? ': ' : '') + m;
+    return s ? ' — ' + s.substring(0, 80) : '';
+  }
+
+  /* ════════════════════════════════════════════════════════════
      SOURCE: DEFAULT
   ════════════════════════════════════════════════════════════ */
   function loadDefault() {
+    abortRecording();
+    clearPending();
     currentMode = MODE.DEFAULT;
     setSrcUI('default');
     hideMelEditor();
@@ -497,87 +648,184 @@
 
   /* ════════════════════════════════════════════════════════════
      SOURCE: FILE UPLOAD
+     Decode → trim to MAX_UPLOAD_SEC → show crop editor → wait for "load tape".
   ════════════════════════════════════════════════════════════ */
   function loadFile(file) {
-    currentMode = MODE.UPLOAD;
-    setSrcUI('file');
     setTapeStatus('loading…', false);
-    var r = new FileReader();
-    r.onload = function (e) {
-      resumeCtx().decodeAudioData(e.target.result, function (decoded) {
+
+    readBlobBuffer(file)
+      .then(function (ab) {
+        if (!ab || ab.byteLength === 0) {
+          var e = new Error('file is empty (if it is in iCloud, download it first)');
+          e.name = 'EmptyFile';
+          throw e;
+        }
+        return decodeAudio(ab);
+      })
+      .then(function (decoded) {
+        var trimmed    = trimBuffer(getCtx(), decoded, MAX_UPLOAD_SEC);
+        var wasTrimmed = trimmed !== decoded;
+        var label      = 'loaded: ' + file.name.substring(0, 28);
+
+        abortRecording();
+        currentMode = MODE.UPLOAD;
+        setSrcUI('file');
         hideMelEditor();
         hideMicPanel();
-        loadBuffer(decoded, 'loaded: ' + file.name.substring(0, 28));
-      }, function () {
-        setTapeStatus('could not decode file', true);
+
+        setPending(
+          trimmed,
+          label,
+          label + (wasTrimmed ? ' (first ' + MAX_UPLOAD_SEC + ' s)' : '') + ' — crop, then load tape →'
+        );
+      })
+      .catch(function (err) {
+        setTapeStatus('could not load ' + describeFile(file.name, file.type, file.size) + errText(err), false);
       });
-    };
-    r.readAsArrayBuffer(file);
   }
 
   /* ════════════════════════════════════════════════════════════
      SOURCE: MICROPHONE
+     Record (with countdown) → decode → crop editor → "load tape".
   ════════════════════════════════════════════════════════════ */
   function activateMicMode() {
+    abortRecording();
     currentMode = MODE.MIC;
-    hasRec      = false;
-    micBuffer   = null;
     setSrcUI('mic');
     hideMelEditor();
     showMicPanel();
-    state.playing = false;
-    stopNodes();
-    stopDisplayTimer();
-    state.buffer = null;
-    var playBtn = document.getElementById('pm-play');
-    if (playBtn) playBtn.disabled = true;
-    setPlayBtn(false);
-    setTapeStatus('press record, then load tape →', false);
+    clearPending();
+    unloadTape();
     setRecUI('idle');
+    setTapeStatus('press record (max ' + MAX_REC_SEC + ' s), then crop and load tape →', false);
+  }
+
+  /* Pick a recorder MIME type this browser actually supports.
+     iOS Safari records audio/mp4; Chrome/Firefox record webm/ogg. */
+  function pickRecMime() {
+    if (!window.MediaRecorder || typeof MediaRecorder.isTypeSupported !== 'function') return '';
+    var candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+    for (var i = 0; i < candidates.length; i++) {
+      if (MediaRecorder.isTypeSupported(candidates[i])) return candidates[i];
+    }
+    return '';
+  }
+
+  function fmtCountdown(sec) {
+    var s = Math.max(0, Math.ceil(sec));
+    return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+  }
+
+  function startRecCountdown() {
+    stopRecCountdown();
+    recStartMs = Date.now();
+    var tick = function () {
+      var left = MAX_REC_SEC - (Date.now() - recStartMs) / 1000;
+      if (left <= 0) { stopRec(); return; }
+      setTapeStatus('recording… ' + fmtCountdown(left) + ' left — press stop when done', false);
+    };
+    tick();
+    recTimer = setInterval(tick, 100);
+  }
+
+  function stopRecCountdown() {
+    if (recTimer) { clearInterval(recTimer); recTimer = null; }
   }
 
   function startRec() {
     if (isRecording) { stopRec(); return; }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+      setTapeStatus('recording is not supported in this browser (a secure https page is required)', false);
+      return;
+    }
+
+    resumeCtx(); /* inside the tap, so iOS allows playback later */
+
     navigator.mediaDevices.getUserMedia({ audio: true, video: false })
       .then(function (stream) {
-        recChunks = [];
-        mediaRec  = new MediaRecorder(stream);
-        mediaRec.ondataavailable = function (e) { if (e.data.size > 0) recChunks.push(e.data); };
-        mediaRec.onstop = function () {
+        var mime = pickRecMime();
+        var recorder;
+        try {
+          recorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+        } catch (e) {
           stream.getTracks().forEach(function (t) { t.stop(); });
-          var blob = new Blob(recChunks, { type: 'audio/webm' });
-          var fr   = new FileReader();
-          fr.onload = function (ev) {
-            resumeCtx().decodeAudioData(ev.target.result, function (decoded) {
-              isRecording = false;
-              hasRec      = true;
-              micBuffer   = decoded;
-              setRecUI('has_rec');
-              setTapeStatus('recording ready — load tape →', false);
-              var lt = document.getElementById('load-tape-btn');
-              if (lt) { lt.style.display = 'inline-block'; lt.disabled = false; }
-            }, function () { setTapeStatus('decode failed', true); });
-          };
-          fr.readAsArrayBuffer(blob);
+          setTapeStatus('could not start recorder' + errText(e), false);
+          return;
+        }
+
+        mediaRec  = recorder;
+        recChunks = [];
+        recorder._discard = false;
+
+        recorder.ondataavailable = function (e) { if (e.data && e.data.size > 0) recChunks.push(e.data); };
+
+        recorder.onerror = function (e) {
+          stream.getTracks().forEach(function (t) { t.stop(); });
+          stopRecCountdown();
+          isRecording = false;
+          setRecUI('idle');
+          setTapeStatus('recording error' + errText(e && e.error), false);
         };
-        mediaRec.start();
+
+        recorder.onstop = function () {
+          stream.getTracks().forEach(function (t) { t.stop(); });
+          stopRecCountdown();
+          if (recorder._discard) return;
+
+          isRecording = false;
+          var type = recorder.mimeType || mime || 'audio/mp4';
+          var blob = new Blob(recChunks, { type: type });
+
+          if (blob.size === 0) {
+            setRecUI('idle');
+            setTapeStatus('nothing was recorded — try again', false);
+            return;
+          }
+
+          setTapeStatus('processing recording…', false);
+          readBlobBuffer(blob)
+            .then(decodeAudio)
+            .then(function (decoded) {
+              setRecUI('has_rec');
+              setPending(decoded, 'microphone recording', 'recording ready — crop, then load tape →');
+            })
+            .catch(function (err) {
+              setRecUI('idle');
+              setTapeStatus('could not decode ' + describeFile('recording', type, blob.size) + errText(err), false);
+            });
+        };
+
+        recorder.start();
         isRecording = true;
         setRecUI('recording');
-        setTapeStatus('recording… (max 6s)', false);
-        /* Auto-stop after 6 seconds — preserved from original */
-        setTimeout(function () { if (isRecording) stopRec(); }, 6000);
+        startRecCountdown();
       })
-      .catch(function () { setTapeStatus('mic access denied', true); });
+      .catch(function (err) {
+        if (err && (err.name === 'NotAllowedError' || err.name === 'SecurityError')) {
+          setTapeStatus('mic access denied — allow the microphone for this site and try again', false);
+        } else {
+          setTapeStatus('mic error' + errText(err), false);
+        }
+      });
   }
 
   function stopRec() {
-    if (mediaRec && isRecording) mediaRec.stop();
+    stopRecCountdown();
+    if (mediaRec && isRecording && mediaRec.state !== 'inactive') {
+      try { mediaRec.stop(); } catch (e) {}
+    }
   }
 
-  function commitMicTape() {
-    if (!micBuffer) { setTapeStatus('nothing recorded yet', true); return; }
-    hideMicPanel();
-    loadBuffer(micBuffer, 'microphone recording');
+  /* Stop and throw away an in-progress recording (used when switching source). */
+  function abortRecording() {
+    if (!isRecording) return;
+    stopRecCountdown();
+    isRecording = false;
+    if (mediaRec) {
+      mediaRec._discard = true;
+      try { if (mediaRec.state !== 'inactive') mediaRec.stop(); } catch (e) {}
+    }
   }
 
   function setRecUI(s) {
@@ -605,27 +853,151 @@
   function showMicPanel() {
     var rb = document.getElementById('pm-record');
     var rs = document.getElementById('pm-rec-state');
-    var lt = document.getElementById('load-tape-btn');
     if (rb) rb.style.display = 'inline-block';
     if (rs) rs.style.display = 'none';
-    if (lt) { lt.style.display = 'inline-block'; lt.disabled = true; }
   }
 
   function hideMicPanel() {
     var rb = document.getElementById('pm-record');
     var rs = document.getElementById('pm-rec-state');
     var rn = document.getElementById('pm-rec-new');
-    var lt = document.getElementById('load-tape-btn');
     if (rb) rb.style.display = 'none';
     if (rs) rs.style.display = 'none';
     if (rn) rn.style.display = 'none';
-    if (lt) lt.style.display = 'none';
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     CROP EDITOR (upload + microphone only)
+  ════════════════════════════════════════════════════════════ */
+  function cropEl(id) { return document.getElementById(id); }
+
+  function setPending(buf, label, statusMsg) {
+    normalizeBuffer(buf, 0.85);   /* so quiet clips draw a readable waveform */
+    pending = { full: buf, label: label, start: 0, end: 1 };
+
+    unloadTape();                 /* new clip pending: old tape stops, play disabled */
+
+    var ed = cropEl('pm-source-editor');
+    if (ed) ed.style.display = 'block';
+    drawSourceWaveform();         /* canvas must be visible to have a width */
+    updateSelectionUI();
+
+    var lt = cropEl('load-tape-btn');
+    if (lt) lt.disabled = false;
+
+    setTapeStatus(statusMsg, false);
+  }
+
+  function clearPending() {
+    pending = null;
+    cropDragTarget = null;
+    var ed = cropEl('pm-source-editor');
+    if (ed) ed.style.display = 'none';
+    var lt = cropEl('load-tape-btn');
+    if (lt) lt.disabled = true;
+  }
+
+  function fmtClock(s) {
+    var m = Math.floor(s / 60), ss = (s % 60).toFixed(1);
+    return m + ':' + ss.padStart(4, '0');
+  }
+
+  function drawSourceWaveform() {
+    var canvas = cropEl('pm-src-wave');
+    if (!canvas || !pending) return;
+    var ctx = canvas.getContext('2d'), dpr = window.devicePixelRatio || 1;
+    var cssH = canvas.offsetHeight || 50;
+    canvas.width = canvas.offsetWidth * dpr; canvas.height = cssH * dpr;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var data = pending.full.getChannelData(0), W = canvas.width, H = canvas.height;
+    if (!W) return;
+    var step = Math.ceil(data.length / W);
+    var textColor = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#1a1a1a';
+    ctx.fillStyle = textColor;
+    for (var x = 0; x < W; x++) {
+      var max = 0, min = 0;
+      for (var j = 0; j < step; j++) { var v = data[x * step + j] || 0; if (v > max) max = v; if (v < min) min = v; }
+      var y1 = (1 - max) * H / 2, y2 = (1 - min) * H / 2;
+      ctx.globalAlpha = 0.3; ctx.fillRect(x, y1, 1, Math.max(1, y2 - y1));
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function updateSelectionUI() {
+    if (!pending) return;
+    var sH = cropEl('pm-handle-start'), eH = cropEl('pm-handle-end');
+    var mL = cropEl('pm-select-mask-left'), mR = cropEl('pm-select-mask-right');
+    if (sH) sH.style.left = (pending.start * 100) + '%';
+    if (eH) eH.style.left = (pending.end * 100) + '%';
+    if (mL) mL.style.width = (pending.start * 100) + '%';
+    if (mR) mR.style.width = ((1 - pending.end) * 100) + '%';
+    var dur = pending.full.duration;
+    var startSec = pending.start * dur, endSec = pending.end * dur;
+    var lbl = cropEl('pm-src-range-label');
+    if (lbl) lbl.textContent = fmtClock(startSec) + ' \u2013 ' + fmtClock(endSec) + '  (' + (endSec - startSec).toFixed(1) + 's selected)';
+  }
+
+  function initCropEditor() {
+    var wrap = cropEl('pm-src-wave-wrap');
+    var sH = cropEl('pm-handle-start'), eH = cropEl('pm-handle-end');
+    if (!wrap || !sH || !eH) return;
+
+    function fracFromEvent(e) {
+      var rect = wrap.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      return Math.max(0, Math.min(1, x / rect.width));
+    }
+    function beginDrag(target) {
+      return function (e) {
+        e.preventDefault();
+        cropDragTarget = target;
+        try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
+      };
+    }
+    sH.addEventListener('pointerdown', beginDrag('start'));
+    eH.addEventListener('pointerdown', beginDrag('end'));
+
+    document.addEventListener('pointermove', function (e) {
+      if (!cropDragTarget || !pending) return;
+      var f = fracFromEvent(e);
+      var minGap = Math.min(1, MIN_CROP_SEC / pending.full.duration);
+      if (cropDragTarget === 'start') pending.start = Math.max(0, Math.min(f, pending.end - minGap));
+      else                            pending.end   = Math.min(1, Math.max(f, pending.start + minGap));
+      updateSelectionUI();
+    });
+    function endDrag() { cropDragTarget = null; }
+    document.addEventListener('pointerup', endDrag);
+    document.addEventListener('pointercancel', endDrag);
+
+    var xf = cropEl('pm-crossfade');
+    var xfVal = cropEl('pm-crossfade-val');
+    if (xf) xf.addEventListener('input', function (e) {
+      if (xfVal) xfVal.textContent = e.target.value + ' ms';
+    });
+
+    window.addEventListener('resize', function () {
+      if (pending) drawSourceWaveform();
+    });
+  }
+
+  /* "load tape" for upload + mic: slice the selection, apply the loop
+     crossfade, hand it to the phase machine (which resets both tapes to 0). */
+  function commitTape() {
+    if (!pending) { setTapeStatus('nothing to load yet', true); return; }
+    var ctx    = getCtx();
+    var sliced = sliceBuffer(ctx, pending.full, pending.start, pending.end);
+    var xf     = cropEl('pm-crossfade');
+    var fadeMs = xf ? (parseInt(xf.value, 10) || 0) : 0;
+    var looped = applyLoopCrossfade(ctx, sliced, fadeMs);
+    loadBuffer(looped, pending.label + ' · ' + looped.duration.toFixed(2) + ' s loop');
   }
 
   /* ════════════════════════════════════════════════════════════
      SOURCE: MELODIC
   ════════════════════════════════════════════════════════════ */
   function activateMelodicMode() {
+    abortRecording();
+    clearPending();
     currentMode = MODE.MELODIC;
     setSrcUI('melodic');
     hideMicPanel();
@@ -638,6 +1010,7 @@
     var bpmEl = document.getElementById('mel-bpm');
     if (bpmEl) melBpm = parseInt(bpmEl.value, 10) || 120;
     var result = renderMelodicBuffer(melPads, melBpm);
+    clearPending();
     currentMode = MODE.MELODIC;
     setSrcUI('melodic');
     hideMicPanel();
@@ -840,10 +1213,15 @@
     var srcMic     = document.getElementById('src-mic');
     var srcMelodic = document.getElementById('src-melodic');
     var fileInput  = document.getElementById('pm-file-input');
+    var uploadLbl  = document.getElementById('pm-upload-label');
 
     if (srcDefault)  srcDefault.addEventListener('click', loadDefault);
     if (srcMic)      srcMic.addEventListener('click', activateMicMode);
     if (srcMelodic)  srcMelodic.addEventListener('click', activateMelodicMode);
+
+    /* Unlock audio on the tap itself — iOS only allows this inside a gesture */
+    if (uploadLbl)   uploadLbl.addEventListener('click', resumeCtx);
+    if (fileInput)   fileInput.addEventListener('click', resumeCtx);
     if (fileInput)   fileInput.addEventListener('change', function (e) {
       if (e.target.files && e.target.files[0]) loadFile(e.target.files[0]);
       e.target.value = '';
@@ -855,19 +1233,16 @@
     var loadBtn = document.getElementById('load-tape-btn');
     if (recBtn)  recBtn.addEventListener('click', startRec);
     if (recNew)  recNew.addEventListener('click', function () {
-      hasRec      = false;
-      micBuffer   = null;
-      isRecording = false;
-      state.buffer = null;
-      var pb = document.getElementById('pm-play');
-      if (pb) pb.disabled = true;
-      setPlayBtn(false);
+      abortRecording();
+      clearPending();
+      unloadTape();
       setRecUI('idle');
-      var lt = document.getElementById('load-tape-btn');
-      if (lt) lt.disabled = true;
-      setTapeStatus('press record, then load tape →', false);
+      setTapeStatus('press record (max ' + MAX_REC_SEC + ' s), then crop and load tape →', false);
     });
-    if (loadBtn) loadBtn.addEventListener('click', commitMicTape);
+    if (loadBtn) loadBtn.addEventListener('click', commitTape);
+
+    /* Crop editor */
+    initCropEditor();
 
     /* Transport */
     var playBtn  = document.getElementById('pm-play');
@@ -957,13 +1332,16 @@
     var dv = document.getElementById('pm-drift-val');
     var va = document.getElementById('pm-vol-a-val');
     var vb = document.getElementById('pm-vol-b-val');
+    var xv = document.getElementById('pm-crossfade-val');
     if (dd) dd.textContent = '+1.0%';
     if (dv) dv.textContent = '+1.0%';
     if (va) va.textContent = '75%';
     if (vb) vb.textContent = '75%';
+    if (xv) xv.textContent = '0 ms';
 
     hideMelEditor();
     hideMicPanel();
+    clearPending();
 
     /* Load default */
     loadDefault();
