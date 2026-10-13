@@ -497,19 +497,80 @@
   /* ════════════════════════════════════════════════════════════
      MASTER UPLOAD / RECORD
   ════════════════════════════════════════════════════════════ */
-  function masterHandleUpload(file) {
-    setSourceStatus('loading\u2026', false);
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      resumeCtx().decodeAudioData(e.target.result, function (decoded) {
-        var trimmed = trimBuffer(getCtx(), decoded, MAX_UPLOAD_SEC);
-        setMasterSource(trimmed, 'loaded: ' + file.name.substring(0, 30));
-      }, function () { setSourceStatus('could not decode file', true); });
-    };
-    reader.readAsArrayBuffer(file);
+  /* File reading + decoding (iOS-safe): file.arrayBuffer() with a FileReader
+     fallback; decodeAudioData in both promise and callback form (older Safari
+     only supports the callback form). */
+  function readBlobBuffer(blob) {
+    if (blob.arrayBuffer) return blob.arrayBuffer();
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload  = function () { resolve(r.result); };
+      r.onerror = function () { reject(r.error || new Error('could not read file')); };
+      r.readAsArrayBuffer(blob);
+    });
   }
 
-  var masterRec = { mediaRec: null, chunks: [], isRecording: false, timeout: null };
+  function decodeAudio(arrayBuffer) {
+    var ctx = resumeCtx();
+    return new Promise(function (resolve, reject) {
+      var settled = false;
+      function ok(b)   { if (!settled) { settled = true; resolve(b); } }
+      function fail(e) { if (!settled) { settled = true; reject(e || new Error('decode failed')); } }
+      try {
+        var p = ctx.decodeAudioData(arrayBuffer, ok, fail);
+        if (p && typeof p.then === 'function') p.then(ok, fail);
+      } catch (e) { fail(e); }
+    });
+  }
+
+  function fmtSize(bytes) {
+    if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + ' MB';
+    return Math.max(1, Math.round(bytes / 1024)) + ' KB';
+  }
+
+  /* Readable file description for error messages, so a failure can be
+     diagnosed on a phone without a console. */
+  function describeFile(name, type, size) {
+    var nm  = name || 'recording';
+    var dot = nm.lastIndexOf('.');
+    var ext = dot > -1 ? nm.slice(dot).toLowerCase() : 'no extension';
+    return nm.substring(0, 28) + ' (' + ext + ', ' + (type || 'unknown type') + ', ' + fmtSize(size || 0) + ')';
+  }
+
+  function errText(err) {
+    if (!err) return '';
+    var n = (err.name && err.name !== 'Error') ? err.name : '';
+    var m = err.message || '';
+    var s = n + (n && m ? ': ' : '') + m;
+    return s ? ' \u2014 ' + s.substring(0, 80) : '';
+  }
+
+  function masterHandleUpload(file) {
+    setSourceStatus('loading\u2026', false);
+    readBlobBuffer(file)
+      .then(function (ab) {
+        if (!ab || ab.byteLength === 0) {
+          var e = new Error('file is empty (if it is in iCloud, download it first)');
+          e.name = 'EmptyFile';
+          throw e;
+        }
+        return decodeAudio(ab);
+      })
+      .then(function (decoded) {
+        var trimmed = trimBuffer(getCtx(), decoded, MAX_UPLOAD_SEC);
+        setMasterSource(trimmed, 'loaded: ' + file.name.substring(0, 30));
+      })
+      .catch(function (err) {
+        setSourceStatus('could not load ' + describeFile(file.name, file.type, file.size) + errText(err), false);
+      });
+  }
+
+  var masterRec = { mediaRec: null, chunks: [], isRecording: false, timeout: null, startMs: 0 };
+
+  function fmtCountdown(sec) {
+    var s = Math.max(0, Math.ceil(sec));
+    return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+  }
 
   function masterToggleRecord() {
     if (masterRec.isRecording) { masterStopRecord(); return; }
@@ -532,18 +593,24 @@
         };
         masterRec.mediaRec.start();
         masterRec.isRecording = true; setMasterRecordBtnUI(true);
-        setSourceStatus('recording\u2026 (max ' + MAX_REC_SEC + 's)', false);
-        masterRec.timeout = setTimeout(function () { if (masterRec.isRecording) masterStopRecord(); }, MAX_REC_SEC * 1000);
+        masterRec.startMs = Date.now();
+        var tick = function () {
+          var left = MAX_REC_SEC - (Date.now() - masterRec.startMs) / 1000;
+          if (left <= 0) { masterStopRecord(); return; }
+          setSourceStatus('recording\u2026 ' + fmtCountdown(left) + ' left \u2014 press stop when done', false);
+        };
+        tick();
+        masterRec.timeout = setInterval(tick, 100);
       })
       .catch(function () { setSourceStatus('microphone access denied', true); });
   }
   function masterStopRecord() {
-    if (masterRec.timeout) { clearTimeout(masterRec.timeout); masterRec.timeout = null; }
+    if (masterRec.timeout) { clearInterval(masterRec.timeout); masterRec.timeout = null; }
     if (masterRec.mediaRec && masterRec.isRecording) masterRec.mediaRec.stop();
   }
   function setMasterRecordBtnUI(recording) {
     var btn = document.getElementById('ss-record'); if (!btn) return;
-    btn.innerHTML = recording ? '&#9679;&#xFE0E; stop' : '&#9679;&#xFE0E; record';
+    btn.innerHTML = recording ? 'stop' : 'record';
     btn.classList.toggle('on', recording);
   }
 
@@ -1054,6 +1121,10 @@
     updatePlayBtnAvailability();
 
     var uploadInput = document.getElementById('ss-upload');
+    /* Unlock audio on the tap itself — iOS only allows this inside a gesture */
+    var uploadLbl = document.getElementById('ss-upload-label');
+    if (uploadLbl) uploadLbl.addEventListener('click', resumeCtx);
+    if (uploadInput) uploadInput.addEventListener('click', resumeCtx);
     if (uploadInput) uploadInput.addEventListener('change', function (e) {
       if (e.target.files && e.target.files[0]) masterHandleUpload(e.target.files[0]);
       e.target.value = '';
