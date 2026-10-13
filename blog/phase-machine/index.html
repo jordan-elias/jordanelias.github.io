@@ -9,7 +9,7 @@
   <script defer src="https://cloud.umami.is/script.js" data-website-id="b465c3e2-0fb1-4c36-b5db-6eaf0fe05cb7"></script>
 
   <title>Phase machine: Steve Reich and the music of process</title>
-  <meta name="description" content="An interactive phase machine inspired by Steve Reich's tape and process compositions. Load any audio, set a drift rate, and listen as two identical loops slowly pull apart. Hold K to re-sync. An exploration of rhythm perception, emergent pattern, and process music as therapeutic frame.">
+  <meta name="description" content="An interactive phase machine inspired by Steve Reich's tape and process compositions. Load or record any audio, crop it to a loop, set a drift rate, and listen as two identical loops slowly pull apart. Hold K to re-sync. An exploration of rhythm perception, emergent pattern, and process music as therapeutic frame.">
   <meta name="author" content="Jordan Elias">
 
   <meta name="robots" content="index, follow">
@@ -24,7 +24,7 @@
   <meta property="og:locale" content="en_DE">
   <meta property="og:url" content="https://jordanelias.de/blog/phase-machine/">
   <meta property="og:title" content="Phase machine: Steve Reich and the music of process">
-  <meta property="og:description" content="An interactive phase machine inspired by Steve Reich's tape and process compositions. Load any audio, set a drift rate, and listen as two identical loops slowly pull apart.">
+  <meta property="og:description" content="An interactive phase machine inspired by Steve Reich's tape and process compositions. Load or record any audio, crop it to a loop, set a drift rate, and listen as two identical loops slowly pull apart.">
   <meta property="og:image" content="https://jordanelias.de/images/hero.jpg">
   <meta property="og:image:alt" content="Jordan Elias, music therapist">
   <meta property="article:published_time" content="2026-06-01">
@@ -34,13 +34,13 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Phase machine: Steve Reich and the music of process">
-  <meta name="twitter:description" content="An interactive phase machine inspired by Steve Reich. Load any audio, set a drift rate, hold K to re-sync.">
+  <meta name="twitter:description" content="An interactive phase machine inspired by Steve Reich. Load or record any audio, crop it, set a drift rate, hold K to re-sync.">
   <meta name="twitter:image" content="https://jordanelias.de/images/hero.jpg">
 
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cloud.umami.is; connect-src 'self' https://api-gateway.umami.dev; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(self), geolocation=()">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
@@ -368,11 +368,42 @@
     min-height: 1.1em;
     transition: opacity 0.3s ease;
     letter-spacing: 0.02em;
+    overflow-wrap: anywhere;
   }
- 
-  /* ── Load tape button (mic mode only; melodic has its own inside the editor) ── */
+
+  /* ── Crop editor (upload + microphone) ──
+     Same waveform / handle / mask design as the Soundscape Machine.
+     Hidden until a clip is uploaded or recorded. */
+  .source-editor { margin: 0 0 1.25em; }
+  .src-wave-wrap {
+    position: relative; height: 50px; border: 1px solid var(--text);
+    background: rgba(128,128,128,0.06); overflow: hidden; touch-action: none;
+  }
+  .src-wave-wrap canvas { width: 100%; height: 100%; display: block; }
+  .src-select-mask { position: absolute; top: 0; bottom: 0; background: var(--bg); opacity: 0.62; pointer-events: none; width: 0; }
+  .src-handle {
+    position: absolute; top: 0; bottom: 0; width: 16px; margin-left: -8px;
+    cursor: ew-resize; touch-action: none; left: 0;
+  }
+  .src-handle::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--text); }
+  .src-handle::after { content: ''; position: absolute; left: 3px; top: -1px; width: 10px; height: 10px; background: var(--text); }
+  .src-range-label {
+    font-family: 'Inter', sans-serif; font-size: 0.68rem; color: var(--text); opacity: 0.55;
+    margin-top: 0.35em; font-variant-numeric: tabular-nums;
+  }
+
+  /* Crossfade slider + load tape button, under the waveform */
+  .crop-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 0.9em;
+  }
+  .crop-xf { flex: 1; min-width: 160px; max-width: 320px; }
+
+  /* ── Load tape button (inside the crop editor) ── */
   #load-tape-btn {
-    display: none;
     font-family: 'Space Grotesk', sans-serif;
     font-size: 0.85rem;
     font-weight: 500;
@@ -671,6 +702,20 @@
       font-size: 0.78rem;
       padding: 0.35em 0.85em;
     }
+
+    /* Crop editor: compact on mobile */
+    .source-editor {
+      margin-bottom: 0.9em;
+    }
+    .crop-actions {
+      gap: 12px;
+    }
+    .crop-xf {
+      min-width: 130px;
+    }
+    .src-range-label {
+      font-size: 0.62rem;
+    }
  
     /* Phase display: tighter, allow tighter wrapping */
     .phase-display {
@@ -836,10 +881,10 @@
       "@type": "BlogPosting",
       "@id": "https://jordanelias.de/blog/phase-machine/#post",
       "headline": "Phase machine: Steve Reich and the music of process",
-      "description": "An interactive phase machine inspired by Steve Reich's tape and process compositions. Load any audio, set a drift rate, and listen as two identical loops slowly pull apart. Hold K to re-sync.",
+      "description": "An interactive phase machine inspired by Steve Reich's tape and process compositions. Load or record any audio, crop it to a loop, set a drift rate, and listen as two identical loops slowly pull apart. Hold K to re-sync.",
       "url": "https://jordanelias.de/blog/phase-machine/",
       "datePublished": "2026-06-01",
-      "dateModified": "2026-06-01",
+      "dateModified": "2026-10-13",
       "inLanguage": "en",
       "author": { "@id": "https://jordanelias.de/#person" },
       "publisher": { "@id": "https://jordanelias.de/#service" },
@@ -862,7 +907,7 @@
       "applicationCategory": "MusicApplication",
       "operatingSystem": "Any (Web Browser)",
       "isAccessibleForFree": true,
-      "description": "An interactive phase machine that lets you load audio, set a drift rate, and hear two identical loops slowly fall out of phase, inspired by Steve Reich's tape compositions.",
+      "description": "An interactive phase machine that lets you load or record audio, crop it to a loop, set a drift rate, and hear two identical loops slowly fall out of phase, inspired by Steve Reich's tape compositions.",
       "creator": { "@id": "https://jordanelias.de/#person" }
     },
     {
@@ -995,17 +1040,39 @@
   <span class="gen-row-label">source</span>
   <button class="lab-preset-btn on" id="src-default">default loop</button>
   <label  class="upload-label" id="pm-upload-label" for="pm-file-input">upload file</label>
-  <input  type="file" id="pm-file-input" accept="audio/*">
+  <input  type="file" id="pm-file-input" accept="audio/*,audio/wav,audio/x-wav,audio/wave,audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,audio/aiff,audio/x-aiff,audio/x-caf,audio/ogg,audio/flac,audio/webm,.wav,.wave,.m4a,.mp3,.aif,.aiff,.caf,.aac,.mp4,.ogg,.oga,.opus,.flac,.webm">
   <button class="lab-preset-btn" id="src-mic">microphone</button>
   <button class="lab-preset-btn" id="src-melodic">melodic</button>
   <button class="lab-btn" id="pm-record" style="display:none;min-width:80px">&#9679;&#xFE0E; record</button>
   <span   class="rec-state-label" id="pm-rec-state" style="display:none"></span>
   <button class="lab-preset-btn" id="pm-rec-new" style="display:none">record new</button>
-  <button id="load-tape-btn" disabled>load tape:</button>
 </div>
 
-  <!-- ═══ 3. ADD THIS IMMEDIATELY AFTER THE SOURCE .gen-row ═════════════ -->
+  <!-- ═══ Status line (errors stay visible; confirmations fade) ═════════════ -->
 <div class="tape-status-row" id="tape-status"></div>
+
+  <!-- ═══ Crop editor — upload + microphone only ═══════════════════════════ -->
+  <div class="source-editor" id="pm-source-editor" style="display:none;">
+    <div class="src-wave-wrap" id="pm-src-wave-wrap">
+      <canvas id="pm-src-wave"></canvas>
+      <div class="src-select-mask" id="pm-select-mask-left" style="left:0;"></div>
+      <div class="src-select-mask" id="pm-select-mask-right" style="right:0;"></div>
+      <div class="src-handle" id="pm-handle-start" title="Drag to set start"></div>
+      <div class="src-handle" id="pm-handle-end" title="Drag to set end"></div>
+    </div>
+    <div class="src-range-label" id="pm-src-range-label">0:00.0 – 0:00.0</div>
+
+    <div class="crop-actions">
+      <div class="lab-ctrl crop-xf">
+        <input type="range" id="pm-crossfade" min="0" max="400" value="0" step="5">
+        <div class="lab-ctrl-bottom">
+          <span class="lab-ctrl-label">loop crossfade</span>
+          <span class="lab-ctrl-val" id="pm-crossfade-val">0 ms</span>
+        </div>
+      </div>
+      <button id="load-tape-btn" disabled>load tape:</button>
+    </div>
+  </div>
 
     <!-- Phase display -->
     <div class="phase-display">
@@ -1096,7 +1163,7 @@
       <h2>Steve Reich and process music</h2>
       <p class="post-meta"><time datetime="2026-06-01">June 1, 2026</time></p>
       <p>Written by Jordan Elias, MT-BC</p>
-      <p class="post-intro">In 1965, Steve Reich placed two identical tape loops on two separate machines and played them at the same time. Because the machines ran at slightly different speeds, the loops began to drift. What unintentionally emerged was phasing. This is a browser version of those tape machines to experiment with yourself. Load any audio, set a drift rate, and listen.</p>
+      <p class="post-intro">In 1965, Steve Reich placed two identical tape loops on two separate machines and played them at the same time. Because the machines ran at slightly different speeds, the loops began to drift. What unintentionally emerged was phasing. This is a browser version of those tape machines to experiment with yourself. Load or record any audio, crop it to the loop you want, set a drift rate, and listen.</p>
     </section>
 
     <section>
@@ -1156,7 +1223,8 @@
 
       <div class="lab-exercise">
         <h3>Your own material</h3>
-        <p>Record a short phrase, a word, or a sustained note into your microphone. Start the phase machine and listen as your own voice multiplies and drifts. At different phase positions, the phrase becomes a different phrase. The meaning of the words, if there are words, shifts. Notice which phase positions you prefer and which feel uncomfortable. The material is unchanged. Your relationship to it is not.</p>
+        <p>Record a short phrase, a word, or a sustained note into your microphone (up to a minute), or upload a recording of your own. Drag the handles to crop it to the part you want to loop, add a little loop crossfade if the join clicks, and press load tape. Start the phase machine and listen as your own voice multiplies and drifts. At different phase positions, the phrase becomes a different phrase. The meaning of the words, if there are words, shifts. Notice which phase positions you prefer and which feel uncomfortable. The material is unchanged. Your relationship to it is not.</p>
+        <p>Then try cropping the same recording differently: a single syllable, a breath, a whole sentence. The length of the loop decides how the drift sounds, so a small change in the crop can give you an entirely different piece.</p>
       </div>
 
     </section>
