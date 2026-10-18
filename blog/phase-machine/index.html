@@ -282,6 +282,30 @@
     .upload-label.on { background-color: var(--text); color: var(--bg); border-color: var(--text); }
     #pm-file-input { display: none; }
 
+    .lab-preset-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+
+    /* Render + download row */
+    .download-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 0.25em;
+      padding-top: 0.9em;
+      border-top: 1px solid var(--text);
+    }
+    select.dur-select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--text);
+      border-radius: 0;
+      padding: 0.3em 0.6em;
+      cursor: pointer;
+    }
+    #pm-download-status { overflow-wrap: anywhere; text-transform: none; letter-spacing: 0.02em; }
+
     /* Rows */
     .gen-row {
       display: flex;
@@ -1135,6 +1159,19 @@
       <span class="sync-key-desc">hold K to run both tapes at the same speed · release to resume drift</span>
     </div>
 
+    <!-- Render + download -->
+    <div class="download-row">
+      <span class="gen-row-label">download mix</span>
+      <select class="dur-select" id="pm-download-dur" aria-label="Render length">
+        <option value="15">15 s</option>
+        <option value="30">30 s</option>
+        <option value="60" selected>60 s</option>
+        <option value="120">2 min</option>
+      </select>
+      <button class="lab-preset-btn" id="pm-download-btn" disabled>render &amp; download .wav</button>
+      <span class="gen-row-label" id="pm-download-status"></span>
+    </div>
+
   </div>
 
   <article>
@@ -1163,7 +1200,7 @@
       <h2>Steve Reich and process music</h2>
       <p class="post-meta"><time datetime="2026-06-01">June 1, 2026</time></p>
       <p>Written by Jordan Elias, MT-BC</p>
-      <p class="post-intro">In 1965, Steve Reich placed two identical tape loops on two separate machines and played them at the same time. Because the machines ran at slightly different speeds, the loops began to drift. What unintentionally emerged was phasing. This is a browser version of those tape machines to experiment with yourself. Load or record any audio, crop it to the loop you want, set a drift rate, and listen.</p>
+      <p class="post-intro">In 1965, Steve Reich placed two identical tape loops on two separate machines and played them at the same time. Because the machines ran at slightly different speeds, the loops began to drift. What unintentionally emerged was phasing. This is a browser version of those tape machines to experiment with yourself. Load or record any audio, crop it to the loop you want, set a drift rate, and listen. When a pattern appeals to you, render the mix and download it.</p>
     </section>
 
     <section>
@@ -1224,6 +1261,7 @@
       <div class="lab-exercise">
         <h3>Your own material</h3>
         <p>Record a short phrase, a word, or a sustained note into your microphone (up to a minute), or upload a recording of your own. Drag the handles to crop it to the part you want to loop, add a little loop crossfade if the join clicks, and press load tape. Start the phase machine and listen as your own voice multiplies and drifts. At different phase positions, the phrase becomes a different phrase. The meaning of the words, if there are words, shifts. Notice which phase positions you prefer and which feel uncomfortable. The material is unchanged. Your relationship to it is not.</p>
+        <p>To keep what you hear, choose a length under "download mix" and render it as a .wav. The file contains both tapes drifting from the start with your current drift rate and volumes. The K sync hold is a live gesture, so it is not captured.</p>
         <p>Then try cropping the same recording differently: a single syllable, a breath, a whole sentence. The length of the loop decides how the drift sounds, so a small change in the crop can give you an entirely different piece.</p>
       </div>
 
