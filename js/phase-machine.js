@@ -386,6 +386,7 @@
     if (pb) pb.disabled = true;
     setPlayBtn(false);
     updateDisplay(0, 0);
+    updateRenderBtn();
   }
 
   /* ════════════════════════════════════════════════════════════
@@ -569,6 +570,7 @@
     setPlayBtn(false);
     setTapeStatus(label, true);
     updateDisplay(0, 0);
+    updateRenderBtn();
   }
 
   function setTapeStatus(msg, fade) {
@@ -993,6 +995,122 @@
   }
 
   /* ════════════════════════════════════════════════════════════
+     OFFLINE RENDER → WAV DOWNLOAD
+     Renders the loaded tape as two looping players (A at normal speed, B at
+     1 + drift%) with the current volumes, both starting from 0:00 — the same
+     result as pressing reset, then play. Sync hold (K) is a live gesture and
+     is not part of the render.
+  ════════════════════════════════════════════════════════════ */
+  function audioBufferToWav(buffer) {
+    var numCh = buffer.numberOfChannels, sr = buffer.sampleRate, len = buffer.length;
+    var dataLen = len * numCh * 2;
+    var ab = new ArrayBuffer(44 + dataLen), view = new DataView(ab);
+    var ws = function (off, str) { for (var i = 0; i < str.length; i++) view.setUint8(off + i, str.charCodeAt(i)); };
+    ws(0, 'RIFF'); view.setUint32(4, 36 + dataLen, true); ws(8, 'WAVE');
+    ws(12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true);
+    view.setUint16(22, numCh, true); view.setUint32(24, sr, true);
+    view.setUint32(28, sr * numCh * 2, true); view.setUint16(32, numCh * 2, true); view.setUint16(34, 16, true);
+    ws(36, 'data'); view.setUint32(40, dataLen, true);
+    var chans = [];
+    for (var c = 0; c < numCh; c++) chans.push(buffer.getChannelData(c));
+    var off = 44;
+    for (var i = 0; i < len; i++) {
+      for (var ch = 0; ch < numCh; ch++) {
+        var s = Math.max(-1, Math.min(1, chans[ch][i]));
+        view.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7FFF, true); off += 2;
+      }
+    }
+    return new Blob([ab], { type: 'audio/wav' });
+  }
+
+  function renderMix(durationSec) {
+    var ctx = getCtx();
+    var sr  = ctx.sampleRate;
+    var OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    var off = new OAC(2, Math.ceil(sr * durationSec), sr);
+
+    var out = off.createGain();
+    out.gain.value = 1.0;
+    out.connect(off.destination);
+
+    function addTape(rate, vol) {
+      var src = off.createBufferSource();
+      src.buffer             = state.buffer;
+      src.loop               = true;
+      src.playbackRate.value = rate;
+      var g = off.createGain();
+      g.gain.value = vol;
+      src.connect(g);
+      g.connect(out);
+      src.start(0, 0);
+    }
+    addTape(1.0, state.volA);
+    addTape(1.0 + state.driftPct / 100, state.volB);
+
+    return new Promise(function (resolve, reject) {
+      try {
+        off.oncomplete = function (e) { resolve(e.renderedBuffer); };
+        var p = off.startRendering();
+        if (p && typeof p.then === 'function') p.then(resolve, reject);
+      } catch (e) { reject(e); }
+    });
+  }
+
+  /* Two overlapping tapes can sum past full scale; scale down only if needed
+     so the WAV never hard-clips. */
+  function guardPeak(buf) {
+    var peak = 0;
+    for (var c = 0; c < buf.numberOfChannels; c++) {
+      var d = buf.getChannelData(c);
+      for (var i = 0; i < d.length; i++) { var a = Math.abs(d[i]); if (a > peak) peak = a; }
+    }
+    if (peak > 0.98) {
+      var sc = 0.98 / peak;
+      for (var c2 = 0; c2 < buf.numberOfChannels; c2++) {
+        var data = buf.getChannelData(c2);
+        for (var j = 0; j < data.length; j++) data[j] *= sc;
+      }
+    }
+    return buf;
+  }
+
+  function updateRenderBtn() {
+    var btn = document.getElementById('pm-download-btn');
+    if (btn) btn.disabled = !state.buffer || rendering;
+  }
+  var rendering = false;
+
+  function initDownload() {
+    var btn    = document.getElementById('pm-download-btn');
+    var durSel = document.getElementById('pm-download-dur');
+    var status = document.getElementById('pm-download-status');
+    if (!btn) return;
+
+    btn.addEventListener('click', function () {
+      if (!state.buffer || rendering) return;
+      var dur = parseInt(durSel ? durSel.value : '60', 10) || 60;
+      rendering = true; updateRenderBtn();
+      if (status) status.textContent = 'rendering…';
+
+      renderMix(dur)
+        .then(function (rendered) {
+          var blob = audioBufferToWav(guardPeak(rendered));
+          var url  = URL.createObjectURL(blob);
+          var a    = document.createElement('a');
+          a.href = url; a.download = 'phase-machine-' + Date.now() + '.wav';
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+          if (status) status.textContent = 'done';
+          setTimeout(function () { if (status) status.textContent = ''; }, 3000);
+        })
+        .catch(function (err) {
+          if (status) status.textContent = 'render failed' + errText(err);
+        })
+        .then(function () { rendering = false; updateRenderBtn(); });
+    });
+  }
+
+  /* ════════════════════════════════════════════════════════════
      SOURCE: MELODIC
   ════════════════════════════════════════════════════════════ */
   function activateMelodicMode() {
@@ -1243,6 +1361,9 @@
 
     /* Crop editor */
     initCropEditor();
+
+    /* Render + download */
+    initDownload();
 
     /* Transport */
     var playBtn  = document.getElementById('pm-play');
