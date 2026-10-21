@@ -19,6 +19,21 @@
     statusEl.setAttribute("data-state", state || "");
   }
 
+  var params = new URLSearchParams(window.location.search);
+
+  // Pre-fill the email field from a link like https://jordanelias.de/?email=name%40example.com#newsletter
+  // The consent box is never ticked automatically: the visitor still has to agree and press Subscribe.
+  var prefill = (params.get("email") || "").trim();
+  if (prefill && prefill.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(prefill)) {
+    emailEl.value = prefill;
+    var formSection = document.getElementById("newsletter");
+    if (formSection) formSection.scrollIntoView({ behavior: "smooth" });
+    // Remove the address from the visible URL.
+    params.delete("email");
+    var rest = params.toString();
+    history.replaceState(null, "", window.location.pathname + (rest ? "?" + rest : "") + window.location.hash);
+  }
+
   // Messages after redirects from the confirm function (/?newsletter=...)
   var messages = {
     confirmed: ["You're subscribed. Thanks for confirming!", "ok"],
