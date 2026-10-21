@@ -412,7 +412,153 @@ frame-ancestors 'none';
   </section>
 
 
-  
+  <!-- Newsletter section: paste where you want it on the page.
+     Replace SUPABASE_PROJECT_REF with your project reference (Supabase > Settings > General). -->
+
+<section id="newsletter" class="newsletter" aria-labelledby="newsletter-title">
+  <div class="newsletter__inner">
+    <h2 id="newsletter-title">Join the newsletter</h2>
+    <p class="newsletter__lead">Occasional updates, straight to your inbox. Unsubscribe any time.</p>
+
+    <form id="newsletter-form" class="newsletter__form" novalidate>
+      <label for="newsletter-email" class="newsletter__sr">Email address</label>
+      <input
+        id="newsletter-email"
+        name="email"
+        type="email"
+        inputmode="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+        maxlength="254"
+        required
+      />
+
+      <!-- Honeypot: hidden from real visitors, bots tend to fill it in. -->
+      <div class="newsletter__hp" aria-hidden="true">
+        <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <label class="newsletter__consent">
+        <input id="newsletter-consent" name="consent" type="checkbox" required />
+        <span>
+          I agree to receive occasional email updates from Jordan Elias and understand
+          I can unsubscribe at any time.
+        </span>
+      </label>
+
+      <button id="newsletter-submit" type="submit">Subscribe</button>
+      <p id="newsletter-status" class="newsletter__status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .newsletter { padding: 4rem 1.25rem; }
+  .newsletter__inner { max-width: 32rem; margin: 0 auto; }
+  .newsletter__lead { margin: 0.5rem 0 1.5rem; opacity: 0.8; }
+  .newsletter__form { display: grid; gap: 0.9rem; }
+  .newsletter__form input[type="email"] {
+    width: 100%; box-sizing: border-box; padding: 0.75rem 0.9rem;
+    font: inherit; border: 1px solid currentColor; border-radius: 6px;
+    background: transparent; color: inherit;
+  }
+  .newsletter__consent { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.9rem; }
+  .newsletter__consent input { margin-top: 0.25rem; }
+  .newsletter__form button {
+    padding: 0.75rem 1.25rem; font: inherit; font-weight: 600; cursor: pointer;
+    border: 0; border-radius: 6px; background: currentColor;
+  }
+  .newsletter__form button span { color: Canvas; }
+  .newsletter__form button:disabled { opacity: 0.6; cursor: progress; }
+  .newsletter__status { min-height: 1.5em; margin: 0; font-size: 0.95rem; }
+  .newsletter__status[data-state="error"] { color: #c0392b; }
+  .newsletter__status[data-state="ok"] { color: #1e8449; }
+  .newsletter__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .newsletter__sr {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+</style>
+
+<script>
+  (function () {
+    var ENDPOINT = "https://SUPABASE_PROJECT_REF.supabase.co/functions/v1/newsletter-signup";
+
+    var form = document.getElementById("newsletter-form");
+    var emailEl = document.getElementById("newsletter-email");
+    var consentEl = document.getElementById("newsletter-consent");
+    var submitEl = document.getElementById("newsletter-submit");
+    var statusEl = document.getElementById("newsletter-status");
+
+    // The submit button label needs a span so the text colour stays readable.
+    submitEl.innerHTML = "<span>Subscribe</span>";
+
+    function setStatus(text, state) {
+      statusEl.textContent = text;
+      statusEl.setAttribute("data-state", state || "");
+    }
+
+    // Messages after redirects from the confirm function (/?newsletter=...)
+    var messages = {
+      confirmed: ["You're subscribed. Thanks for confirming!", "ok"],
+      invalid: ["That confirmation link is invalid or has expired. Please sign up again.", "error"],
+      error: ["Something went wrong confirming your subscription. Please try again later.", "error"]
+    };
+    var result = new URLSearchParams(window.location.search).get("newsletter");
+    if (result && messages[result]) {
+      setStatus(messages[result][0], messages[result][1]);
+      document.getElementById("newsletter").scrollIntoView({ behavior: "smooth" });
+      history.replaceState(null, "", window.location.pathname + window.location.hash);
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var email = emailEl.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setStatus("Please enter a valid email address.", "error");
+        emailEl.focus();
+        return;
+      }
+      if (!consentEl.checked) {
+        setStatus("Please tick the box to agree to receive updates.", "error");
+        return;
+      }
+
+      submitEl.disabled = true;
+      setStatus("Sending…", "");
+
+      fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          consent: true,
+          website: form.elements["website"].value
+        })
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (data) {
+            return { ok: res.ok, data: data };
+          });
+        })
+        .then(function (r) {
+          if (r.ok) {
+            form.reset();
+            setStatus("Almost done! Check your inbox for a confirmation email.", "ok");
+          } else {
+            setStatus(r.data.error || "Something went wrong. Please try again.", "error");
+          }
+        })
+        .catch(function () {
+          setStatus("Network error. Please try again.", "error");
+        })
+        .then(function () {
+          submitEl.disabled = false;
+        });
+    });
+  })();
+</script>
 
   
   <h2>Services</h2>
