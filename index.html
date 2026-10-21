@@ -413,7 +413,7 @@ frame-ancestors 'none';
 
 
 <!-- Newsletter section: replace the previous block with this one.
-     Also upload newsletter.js to the root of your site (next to index.html). -->
+     Also upload newsletter.js to your site's js folder (jordanelias.de/js/newsletter.js). -->
 
 <section id="newsletter" class="newsletter" aria-labelledby="newsletter-title">
   <h2 id="newsletter-title">Join the newsletter</h2>
@@ -445,26 +445,71 @@ frame-ancestors 'none';
       </span>
     </label>
 
-    <!-- Once you tell me your button's class, add it here, e.g. class="btn" -->
-    <button id="newsletter-submit" type="submit">Subscribe</button>
+    <button id="newsletter-submit" class="cta-btn" type="submit">Subscribe</button>
     <p id="newsletter-status" class="newsletter__status" role="status" aria-live="polite"></p>
   </form>
 </section>
 
 <style>
-  /* Deliberately minimal: fonts, colours and button styling come from your site. */
-  .newsletter__form { display: grid; gap: 0.9rem; max-width: 32rem; }
+  /* Uses the site's own variables (--bg, --text, --accent-hover) from your stylesheet. */
+  .newsletter__form { display: grid; gap: 1rem; max-width: 32rem; }
+
+  /* Email field: page background, text-coloured border, square corners */
   .newsletter__form input[type="email"] {
-    width: 100%; box-sizing: border-box; padding: 0.7rem 0.9rem;
-    font: inherit; color: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6em 0.8em;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--text);
+    background-color: var(--bg);
+    border: 2px solid var(--text);
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
   }
-  .newsletter__consent { display: flex; gap: 0.6rem; align-items: flex-start; }
-  .newsletter__consent input { margin-top: 0.3rem; }
-  .newsletter__form button { justify-self: start; font: inherit; cursor: pointer; }
+  .newsletter__form input[type="email"]::placeholder { color: var(--text); opacity: 0.6; }
+  .newsletter__form input[type="email"]:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+    -webkit-text-fill-color: var(--text);
+    caret-color: var(--text);
+  }
+
+  /* Checkbox: square, page background, text-coloured border and check mark */
+  .newsletter__consent { display: flex; gap: 0.7rem; align-items: flex-start; cursor: pointer; }
+  .newsletter__consent input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex-shrink: 0;
+    display: grid;
+    place-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin: 0.2rem 0 0;
+    background-color: var(--bg);
+    border: 2px solid var(--text);
+    border-radius: 0;
+    cursor: pointer;
+  }
+  .newsletter__consent input[type="checkbox"]::after {
+    content: "";
+    width: 0.7rem;
+    height: 0.7rem;
+    background-color: var(--text);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+  }
+  .newsletter__consent input[type="checkbox"]:checked::after { transform: scale(1); }
+
+  .newsletter__form input:focus-visible { outline: 2px solid var(--accent-hover); outline-offset: 2px; }
+
+  /* Button: styled by the site's .cta-btn class, so only layout and disabled state here */
+  .newsletter__form button { justify-self: start; }
   .newsletter__form button:disabled { opacity: 0.6; cursor: progress; }
-  .newsletter__status { min-height: 1.5em; margin: 0; }
-  .newsletter__status[data-state="error"] { color: #c0392b; }
-  .newsletter__status[data-state="ok"] { color: #1e8449; }
+
+  /* Status text: same colour as the rest of the text */
+  .newsletter__status { min-height: 1.6em; margin: 0; color: var(--text); }
+
   .newsletter__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   .newsletter__sr {
     position: absolute; width: 1px; height: 1px; overflow: hidden;
@@ -472,7 +517,7 @@ frame-ancestors 'none';
   }
 </style>
 
-<script src="/newsletter.js" defer></script>
+<script src="/js/newsletter.js" defer></script>
 
 
   
