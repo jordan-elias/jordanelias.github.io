@@ -699,3 +699,28 @@ section[aria-label="Frequently Asked Questions"] {
     margin-bottom: 1.2em;
   }
 }
+
+
+/* Where sessions take place: text left, photo right */
+.location-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  align-items: start;
+}
+
+.location-text p {
+  margin-top: 0;
+}
+
+.location-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 800px) {
+  .location-content {
+    grid-template-columns: 1fr;
+  }
+}
