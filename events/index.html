@@ -229,6 +229,117 @@ content="
   
   <h2>Upcoming Events</h2>
   <div id="upcoming-events"></div>
+
+<!-- Newsletter section: replace the previous block with this one.
+     Also upload newsletter.js to your site's js folder (jordanelias.de/js/newsletter.js). -->
+
+<section id="newsletter" class="newsletter" aria-labelledby="newsletter-title">
+  
+  <p>Get updates about upcoming events, straight to your inbox.</p>
+
+  <form id="newsletter-form" class="newsletter__form" method="post" novalidate>
+    <label for="newsletter-email" class="newsletter__sr">Email address</label>
+    <input
+      id="newsletter-email"
+      name="email"
+      type="email"
+      inputmode="email"
+      autocomplete="email"
+      placeholder="you@example.com"
+      maxlength="254"
+      required
+    />
+
+    <!-- Honeypot: hidden from real visitors, bots tend to fill it in. -->
+    <div class="newsletter__hp" aria-hidden="true">
+      <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <label class="newsletter__consent">
+      <input id="newsletter-consent" name="consent" type="checkbox" required />
+      <span>
+        I agree to receive occasional email updates from Jordan Elias and understand
+        I can unsubscribe at any time.
+      </span>
+    </label>
+
+    <button id="newsletter-submit" class="cta-btn" type="submit">Subscribe</button>
+    <p id="newsletter-status" class="newsletter__status" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<style>
+
+  /* Keeps the heading visible below the fixed 64px header when linking to #newsletter */
+  .newsletter { scroll-margin-top: 88px; }
+  /* Uses the site's own variables (--bg, --text, --accent-hover) from your stylesheet. */
+  .newsletter__form { display: grid; gap: 1rem; max-width: 32rem; }
+
+  /* Email field: page background, text-coloured border, square corners */
+  .newsletter__form input[type="email"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6em 0.8em;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--text);
+    background-color: var(--bg);
+    border: 2px solid var(--text);
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .newsletter__form input[type="email"]::placeholder { color: var(--text); opacity: 0.6; }
+  .newsletter__form input[type="email"]:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+    -webkit-text-fill-color: var(--text);
+    caret-color: var(--text);
+  }
+
+  /* Checkbox: square, page background, text-coloured border and check mark */
+  .newsletter__consent { display: flex; gap: 0.7rem; align-items: flex-start; cursor: pointer; }
+  .newsletter__consent input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex-shrink: 0;
+    display: grid;
+    place-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin: 0.2rem 0 0;
+    background-color: var(--bg);
+    border: 2px solid var(--text);
+    border-radius: 0;
+    cursor: pointer;
+  }
+  .newsletter__consent input[type="checkbox"]::after {
+    content: "";
+    width: 0.7rem;
+    height: 0.7rem;
+    background-color: var(--text);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+  }
+  .newsletter__consent input[type="checkbox"]:checked::after { transform: scale(1); }
+
+  .newsletter__form input:focus-visible { outline: 2px solid var(--accent-hover); outline-offset: 2px; }
+
+  /* Button: styled by the site's .cta-btn class, so only layout and disabled state here */
+  .newsletter__form button { justify-self: start; }
+  .newsletter__form button:disabled { opacity: 0.6; cursor: progress; }
+
+  /* Status text: same colour as the rest of the text */
+  .newsletter__status { min-height: 1.6em; margin: 0; color: var(--text); }
+
+  .newsletter__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .newsletter__sr {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+</style>
+
+<script src="/js/newsletter.js" defer></script>
+  
   <div class="toggle-past">
     <button id="toggle-past-btn">See Past Events</button>
   </div>
