@@ -1,0 +1,36 @@
+{%- comment -%}
+  One event card, used by events/index.html (it passes one event as "event").
+  Dated events are marked up with schema.org Event microdata so search engines and AI tools
+  can read them. Events without a date are shown but not marked up (an Event needs a start date).
+{%- endcomment -%}
+{%- assign ev = include.event -%}
+{%- assign ev_has_dt = false -%}
+{%- if ev.date and ev.time and ev.time != "" -%}{%- assign ev_has_dt = true -%}{%- endif -%}
+{%- assign ev_date = ev.date | date: "%Y-%m-%d" -%}
+{%- assign ev_times = ev.time | default: "" | replace: "–", "-" | split: "-" -%}
+{%- assign ev_start = ev_times | first | strip -%}
+{%- assign ev_end = ev_times | last | strip -%}
+{%- assign ev_link = ev.link | strip -%}
+{%- assign ev_loc = ev.location | strip -%}
+{%- assign ev_loc_parts = ev_loc | split: " - " -%}
+{%- assign ev_venue = ev_loc_parts | first -%}
+{%- assign ev_address = ev_loc | remove_first: ev_venue | remove_first: " - " -%}
+<div class="event"{% if ev.date %} itemscope itemtype="https://schema.org/Event"{% endif %} data-date="{{ ev_date }}" data-has-datetime="{{ ev_has_dt }}">
+  <div class="event-date">{% if ev.date %}<time itemprop="startDate" datetime="{{ ev_date }}{% if ev_start contains ':' %}T{{ ev_start }}{% endif %}">{{ ev.date | date: "%-d %B %Y" }}</time>{% else %}Date TBA{% endif %}</div>
+  <h3 itemprop="name">{{ ev.title | escape }}</h3>
+  <p><strong>Time:</strong> {{ ev.time | default: "TBA" }}</p>
+  <p><strong>Location:</strong> {% if ev_loc == "" %}TBA{% elsif ev_loc == "Online" %}<span itemprop="location" itemscope itemtype="https://schema.org/VirtualLocation">Online<meta itemprop="url" content="https://jordanelias.de/events/"></span>{% elsif ev_address != "" %}<span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">{{ ev_venue | escape }}</span> - <span itemprop="address">{{ ev_address | escape }}</span></span>{% else %}<span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">{{ ev_loc | escape }}</span></span>{% endif %}</p>
+  <div itemprop="description">{{ ev.description | markdownify }}</div>
+  {%- if ev_link != "" %}
+  <p><a href="{{ ev_link }}" target="_blank" rel="noopener noreferrer" itemprop="url">More info/registration here</a></p>
+  {%- else %}
+  <link itemprop="url" href="https://jordanelias.de/events/">
+  {%- endif %}
+  {%- if ev_times.size > 1 and ev_start contains ':' and ev_end contains ':' %}
+  <meta itemprop="endDate" content="{{ ev_date }}T{{ ev_end }}">
+  {%- endif %}
+  <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
+  <link itemprop="eventAttendanceMode" href="{% if ev_loc == 'Online' %}https://schema.org/OnlineEventAttendanceMode{% else %}https://schema.org/OfflineEventAttendanceMode{% endif %}">
+  <link itemprop="image" href="https://jordanelias.de/images/hero.jpg">
+  <span itemprop="organizer" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Jordan Elias"><link itemprop="url" href="https://jordanelias.de/"></span>
+</div>
