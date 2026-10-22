@@ -1,98 +1,84 @@
-async function loadEvents() {
-  try {
-    const response = await fetch('/events/events.json');
-    const data = await response.json();
+// The events themselves are written into the page by Jekyll (from _data/events.yml),
+// so search engines and AI tools can read them. This script only keeps the page current
+// for visitors: on every load it compares each event's date with today's date and moves
+// the event into "Upcoming" or "Past", then sorts both lists.
 
-    const upcomingContainer = document.getElementById('upcoming-events');
-    const pastContainer = document.getElementById('past-events');
-    const today = new Date();
+(function () {
+  'use strict';
 
-    const upcomingEvents = [];
-    const pastEvents = [];
+  function startOfToday() {
+    var now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
 
-    data.events.forEach(event => {
-      const hasDateTime = event.date && event.time;
-      if (hasDateTime) {
-        const eventDate = new Date(event.date);
-        if (eventDate >= today) {
-          upcomingEvents.push({ ...event, _hasDateTime: true });
-        } else {
-          pastEvents.push(event);
-        }
+  // Reads "YYYY-MM-DD" as a local date (avoids time-zone shifts).
+  function parseDate(text) {
+    var p = String(text).split('-');
+    return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  }
+
+  function titleOf(card) {
+    var h = card.querySelector('h3');
+    return h ? h.textContent.trim() : '';
+  }
+
+  function sortEvents() {
+    var upcomingEl = document.getElementById('upcoming-events');
+    var pastEl = document.getElementById('past-events');
+    if (!upcomingEl || !pastEl) return;
+
+    var today = startOfToday();
+    var cards = Array.prototype.slice.call(
+      document.querySelectorAll('#upcoming-events .event, #past-events .event')
+    );
+
+    var dated = [];
+    var undated = [];
+    var past = [];
+
+    cards.forEach(function (card) {
+      var date = parseDate(card.getAttribute('data-date'));
+      var hasDateTime = card.getAttribute('data-has-datetime') === 'true' && !isNaN(date);
+
+      if (!hasDateTime) {
+        // Missing date or time: treated as upcoming.
+        undated.push(card);
+      } else if (date >= today) {
+        dated.push({ card: card, date: date });
       } else {
-        // Missing date or time → treat as upcoming
-        upcomingEvents.push({ ...event, _hasDateTime: false });
+        past.push({ card: card, date: date });
       }
     });
 
-    // Upcoming: dated events chronologically, then undated alphabetically
-    const eventsWithDateTime = upcomingEvents
-      .filter(e => e._hasDateTime)
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
+    // Upcoming: dated events chronologically, then undated ones alphabetically.
+    dated.sort(function (a, b) { return a.date - b.date; });
+    undated.sort(function (a, b) { return titleOf(a).localeCompare(titleOf(b)); });
+    // Past: most recent first.
+    past.sort(function (a, b) { return b.date - a.date; });
 
-    const eventsWithoutDateTime = upcomingEvents
-      .filter(e => !e._hasDateTime)
-      .sort((a, b) => a.title.localeCompare(b.title));
+    var emptyMsg = upcomingEl.querySelector('.no-upcoming');
+    if (emptyMsg) emptyMsg.parentNode.removeChild(emptyMsg);
 
-    const sortedUpcoming = [...eventsWithDateTime, ...eventsWithoutDateTime];
+    dated.forEach(function (x) { upcomingEl.appendChild(x.card); });
+    undated.forEach(function (card) { upcomingEl.appendChild(card); });
+    past.forEach(function (x) { pastEl.appendChild(x.card); });
 
-    // Past: reverse chronological
-    pastEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    function renderEvents(container, eventsArray) {
-      container.innerHTML = '';
-      eventsArray.forEach(event => {
-        const eventDateText = event.date
-          ? new Date(event.date).toLocaleDateString('en-GB', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })
-          : 'Date TBA';
-        const eventTimeText = event.time || 'TBA';
-
-        let descriptionHTML = event.description
-          .split('\n')
-          .map(line => line.trim())
-          .map(line => line.startsWith('- ') ? `<li>${line.slice(2)}</li>` : line)
-          .join('\n');
-
-        if (descriptionHTML.includes('<li>')) {
-          descriptionHTML = `<ul>${descriptionHTML}</ul>`;
-        }
-
-        container.innerHTML += `
-          <div class="event">
-            <div class="event-date">${eventDateText}</div>
-            <h3>${event.title}</h3>
-            <p><strong>Time:</strong> ${eventTimeText}</p>
-            <p><strong>Location:</strong> ${event.location || 'TBA'}</p>
-            <p>${descriptionHTML}</p>
-            ${event.link ? `<p><a href="${event.link}" target="_blank" rel="noopener noreferrer">More info/registration here</a></p>` : ''}
-          </div>
-        `;
-      });
+    if (!upcomingEl.querySelector('.event')) {
+      var p = document.createElement('p');
+      p.className = 'no-upcoming';
+      p.textContent = 'No upcoming events at the moment. Please check back soon.';
+      upcomingEl.appendChild(p);
     }
-
-    renderEvents(upcomingContainer, sortedUpcoming);
-    renderEvents(pastContainer, pastEvents);
-
-    if (!sortedUpcoming.length) {
-      upcomingContainer.innerHTML = '<p>No upcoming events at the moment. Please check back soon.</p>';
-    }
-
-  } catch (error) {
-    console.error('Error loading events:', error);
   }
-}
 
-function togglePastEvents() {
-  document.getElementById('past-events').classList.toggle('hidden');
-}
+  function togglePastEvents() {
+    document.getElementById('past-events').classList.toggle('hidden');
+  }
 
-document.addEventListener('DOMContentLoaded', function () {
-  loadEvents();
+  document.addEventListener('DOMContentLoaded', function () {
+    sortEvents();
 
-  document.getElementById('toggle-past-btn')
-    .addEventListener('click', togglePastEvents);
-});
+    var btn = document.getElementById('toggle-past-btn');
+    if (btn) btn.addEventListener('click', togglePastEvents);
+  });
+})();
