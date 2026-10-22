@@ -1,6 +1,30 @@
 ---
 ---
-
+{%- comment -%}
+  Events come from _data/events.yml. Jekyll writes them into this page when the site is built.
+  events.js then re-sorts them into Upcoming / Past on every page load, so the split is always
+  current for visitors.
+{%- endcomment -%}
+{%- assign today = site.time | date: "%Y-%m-%d" -%}
+{%- assign all_events = site.data.events -%}
+{%- assign dated = all_events | where_exp: "e", "e.date != nil and e.time != nil and e.time != ''" | sort: "date" -%}
+{%- assign undated = all_events | where_exp: "e", "e.date == nil or e.time == nil or e.time == ''" | sort: "title" -%}
+{%- assign upcoming = "" | split: "," -%}
+{%- assign past = "" | split: "," -%}
+{%- for e in dated -%}
+  {%- assign e_date = e.date | date: "%Y-%m-%d" -%}
+  {%- if e_date >= today -%}
+    {%- assign upcoming = upcoming | push: e -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign dated_newest_first = dated | reverse -%}
+{%- for e in dated_newest_first -%}
+  {%- assign e_date = e.date | date: "%Y-%m-%d" -%}
+  {%- if e_date < today -%}
+    {%- assign past = past | push: e -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign upcoming = upcoming | concat: undated -%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -228,7 +252,14 @@ content="
 
   
   <h2>Upcoming Events</h2>
-  <div id="upcoming-events"></div>
+  <div id="upcoming-events">
+{%- for event in upcoming %}
+{% include event-card.html event=event %}
+{%- endfor %}
+{%- if upcoming.size == 0 %}
+<p class="no-upcoming">No upcoming events at the moment. Please check back soon.</p>
+{%- endif %}
+</div>
 
 <!-- Newsletter section: replace the previous block with this one.
      Also upload newsletter.js to your site's js folder (jordanelias.de/js/newsletter.js). -->
@@ -344,7 +375,9 @@ content="
     <button id="toggle-past-btn">See Past Events</button>
   </div>
   <div id="past-events" class="hidden">
-    <h2>Past Events</h2>
+{%- for event in past %}
+{% include event-card.html event=event %}
+{%- endfor %}
   </div>
 </main>
 
