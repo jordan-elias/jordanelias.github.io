@@ -1,0 +1,107 @@
+# EVENTS
+# Add a new event by copying one block below and editing it. Order does not matter:
+# the page sorts events automatically and moves them to "past" once their date has passed.
+#
+# Rules:
+#  - Keep the text fields in "double quotes" (title, time, location, description, link).
+#  - date is written as YYYY-MM-DD, without quotes.
+#  - If you do not know the date or time yet, leave those lines out. The event is then listed
+#    as upcoming with "TBA".
+#  - link is optional: leave the line out if there is none.
+#  - Location: write "Venue name - Street, Postcode Berlin" (note the " - " between venue and
+#    address) or "Online".
+
+- title: "Neurodivergent Music Therapy: Song Sharing and Discussion"
+  date: 2026-11-16
+  time: "18:00-20:00"
+  location: "Osmos Studio - Okerstrasse 38, 12049 Berlin"
+  description: "Join an open discussion for music lovers. Listen to music and talk about what it means to you. Share a song that’s been on repeat this week and tell us what you love about it."
+
+- title: "What is Music Therapy?"
+  date: 2026-11-02
+  time: "19:30-20:30"
+  location: "Osmos Studio - Okerstrasse 38, 12049 Berlin"
+  description: "A talk about the neuroscience, evidence base, and clinical practice of music therapy. If you've ever heard of music therapy and wondered what exactly it is, you're in the right place. Among healthcare and mental health providers, music therapy can be a misunderstood profession in integrative care. Music therapy is a credentialed clinical discipline with its own assessment tools, treatment protocols, and a growing evidence base."
+  link: "https://www.eventbrite.de/e/what-is-music-therapy-tickets-2000416957971"
+
+- title: "Field Recording & Sound Collage"
+  date: 2026-10-19
+  time: "18:00-20:00"
+  location: "Osmos Studio - Okerstrasse 38, 12049 Berlin"
+  description: "A workshop for anyone curious about listening and about what happens when you turn the sounds around you into something composed."
+  link: "https://www.eventbrite.de/e/field-recording-sound-collage-tickets-2000423022109"
+
+- title: "Listening Session: The Music of John Cage"
+  date: 2026-10-11
+  time: "20:00-21:30"
+  location: "migas listening bar - Lindower Str. 19, 13347 Berlin"
+  description: "This listening session enters on the concept and experience of uncertainty within fixed structure. We will listen closely to four selected works by composer John Cage spanning his career to reflect on the role of chance in the compositional process. This event is open for anyone to drop by. Click the link for more info"
+  link: "https://migas.berlin/event/jordan-elias/"
+
+- title: "Neurodivergent Music Therapy: Song Sharing and Discussion"
+  date: 2026-07-29
+  time: "18:00-20:00"
+  location: "With the rubbles of old palaces - Großbeerenstraße 14 Souterrain, 10963 Berlin"
+  description: "Join an open discussion for music lovers. Listen to music and talk about what it means to you. Share a song that’s been on repeat this week and tell us what you love about it."
+
+- title: "Neurodivergent Music Therapy: Song Sharing and Discussion"
+  date: 2026-06-03
+  time: "18:00-20:00"
+  location: "With the rubbles of old palaces - Großbeerenstraße 14 Souterrain, 10963 Berlin"
+  description: "Join an open discussion for music lovers. Listen to music and talk about what it means to you. Share a song that’s been on repeat this week and tell us what you love about it."
+  link: "https://www.meetup.com/berlin-neurodivergent-community/events/314828916/?eventOrigin=group_events_list"
+
+- title: "Visualising Music: A Creative Listening Workshop"
+  date: 2026-04-28
+  time: "19:00-21:00"
+  location: "Backhaus Projects - Weserstrasse 168, 12045 Berlin"
+  description: "What do you see when you listen? This workshop brings together expressive arts and music therapy for an evening of creative close listening. In collaboration with Zoé from the sozo space, we'll use sound, mark-making, drawing and reflective writing to tune into our own frequency. No skills needed, just curiosity."
+  link: "https://luma.com/v8oqlyiz"
+
+- title: "Neurodivergent Music Therapy: Song Sharing and Discussion"
+  date: 2026-03-24
+  time: "18:00-20:00"
+  location: "RuDi-Das Stralauer Kultur- und Nachbarschaftszentrum"
+  description: "Join an open discussion for music lovers. Listen to music and talk about what it means to you. Share a song that’s been on repeat this week and tell us what you love about it."
+  link: "https://www.meetup.com/de-de/berlin-neurodivergent-community/events/313631909/?eventOrigin=group_events_list"
+
+- title: "Uncharted: music therapy and support workshop for navigating uncertainty."
+  date: 2026-03-11
+  time: "18:00-19:00"
+  location: "Online"
+  description: "For anyone navigating grief, illness, identity, isolation, or change. A space to create, reflect, and learn. No music experience needed. Uncharted is a monthly online workshop series for anyone moving through an uncertain season of life. This workshop is particularly suited for processing grief, illness, a diagnosis, unmasking, a relationship ending, a career shifting, or just not knowing what comes next in life. Each session brings together music, conversation, and reflection to help you process what can't always be put into words. We learn about and take inspiration from composers like John Cage, Pauline Oliveros, Morton Feldman, Steve Reich, and Cornelius Cardew. Artists who each and in their own ways explored change and indeterminacy. We bring that same spirit into how we approach life."
+  link: "https://www.eventbrite.de/e/uncharted-music-therapy-and-support-workshop-for-navigating-uncertainty-tickets-1983757586342?aff=oddtdtcreator"
+
+- title: "Neurodivergent Music Therapy: Song Sharing and Discussion - Holiday Season"
+  date: 2025-12-09
+  time: "18:00–20:00"
+  location: "Rudi Nachbarschaftszentrum"
+  description: "'Tis the season for sharing and connection! Join our festive open discussion for music lovers. We'll listen to holiday tunes and heartwarming songs, and talk about the memories and feelings they evoke. Share a song that defines your holiday season—whether it's classic carols, festive pop, or a wintery ballad—and tell us the story behind it."
+  link: "https://meetu.ps/e/PFYLQ/19mCw3/i"
+
+- title: "Neurodivergent Music Therapy: Song Sharing and Discussion"
+  date: 2025-11-07
+  time: "18:00–20:00"
+  location: "Potsdamer Str. 134"
+  description: "Join an open discussion for music lovers. Listen to music and talk about what it means to you. Share a song that’s been on repeat this week and tell us what you love about it."
+  link: "https://www.meetup.com/berlin-neurodivergent-community/events/310855764/?eventOrigin=group_events_list"
+
+- title: "Open Music School: Song sharing and discussion"
+  date: 2025-08-28
+  time: "19:00–21:00"
+  location: "Give Something Back to Berlin, The Blue House on Donaustr. 15"
+  description: "A community-based event centered on song sharing and discussion about personal meaning and connection through music."
+  link: "https://tickets.gsbtb.org/events/givesomethingbacktoberlin/1827182"
+
+- title: "Community Song Circle"
+  date: 2025-06-10
+  time: "18:30–20:30"
+  location: "Give Something Back to Berlin, The Blue House on Donau"
+  description: "A community-based event centered on song sharing and discussion about personal meaning and connection through music."
+
+- title: "OMS: Song Sharing & Discussion"
+  date: 2025-05-15
+  time: "19:00–21:00"
+  location: "Give Something Back to Berlin"
+  description: "Join an evening of song sharing, reflection, and community conversation around the meanings we find in music."
+  link: "https://www.tickettailor.com/events/givesomethingbacktoberlin/1692047"
