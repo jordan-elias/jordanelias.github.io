@@ -6,25 +6,31 @@
   current for visitors.
 {%- endcomment -%}
 {%- assign today = site.time | date: "%Y-%m-%d" -%}
-{%- assign all_events = site.data.events -%}
-{%- assign dated = all_events | where_exp: "e", "e.date != nil and e.time != nil and e.time != ''" | sort: "date" -%}
-{%- assign undated = all_events | where_exp: "e", "e.date == nil or e.time == nil or e.time == ''" | sort: "title" -%}
-{%- assign upcoming = "" | split: "," -%}
+{%- assign events_by_date = site.data.events | sort: "date" -%}
+{%- assign upcoming_dated = "" | split: "," -%}
+{%- assign undated_list = "" | split: "," -%}
 {%- assign past = "" | split: "," -%}
-{%- for e in dated -%}
-  {%- assign e_date = e.date | date: "%Y-%m-%d" -%}
-  {%- if e_date >= today -%}
-    {%- assign upcoming = upcoming | push: e -%}
+{%- for e in events_by_date -%}
+  {%- if e.date and e.time and e.time != "" -%}
+    {%- assign e_date = e.date | date: "%Y-%m-%d" -%}
+    {%- if e_date >= today -%}
+      {%- assign upcoming_dated = upcoming_dated | push: e -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- assign undated_list = undated_list | push: e -%}
   {%- endif -%}
 {%- endfor -%}
-{%- assign dated_newest_first = dated | reverse -%}
-{%- for e in dated_newest_first -%}
-  {%- assign e_date = e.date | date: "%Y-%m-%d" -%}
-  {%- if e_date < today -%}
-    {%- assign past = past | push: e -%}
+{%- assign newest_first = events_by_date | reverse -%}
+{%- for e in newest_first -%}
+  {%- if e.date and e.time and e.time != "" -%}
+    {%- assign e_date = e.date | date: "%Y-%m-%d" -%}
+    {%- if e_date < today -%}
+      {%- assign past = past | push: e -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
-{%- assign upcoming = upcoming | concat: undated -%}
+{%- assign undated_list = undated_list | sort: "title" -%}
+{%- assign upcoming = upcoming_dated | concat: undated_list -%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,8 +111,9 @@ content="
       "email": "jordanelias@proton.me",
       "address": {
         "@type": "PostalAddress",
+        "streetAddress": "Okerstraße 38",
         "addressLocality": "Berlin",
-        "postalCode": "12047",
+        "postalCode": "12049",
         "addressCountry": "DE"
       },
       "worksFor": {
