@@ -15,11 +15,18 @@
 {%- assign ev_loc_parts = ev_loc | split: " - " -%}
 {%- assign ev_venue = ev_loc_parts | first -%}
 {%- assign ev_address = ev_loc | remove_first: ev_venue | remove_first: " - " -%}
+{%- assign ev_addr_parts = ev_address | split: ", " -%}
+{%- assign ev_street = ev_addr_parts | first -%}
+{%- assign ev_zip_city = ev_addr_parts | last -%}
+{%- assign ev_zip = ev_zip_city | truncate: 5, "" -%}
+{%- assign ev_city = ev_zip_city | remove_first: ev_zip | strip -%}
+{%- assign ev_structured = false -%}
+{%- if ev_addr_parts.size == 2 and ev_zip.size == 5 and ev_city != "" -%}{%- assign ev_structured = true -%}{%- endif -%}
 <div class="event"{% if ev.date %} itemscope itemtype="https://schema.org/Event"{% endif %} data-date="{{ ev_date }}" data-has-datetime="{{ ev_has_dt }}">
   <div class="event-date">{% if ev.date %}<time itemprop="startDate" datetime="{{ ev_date }}{% if ev_start contains ':' %}T{{ ev_start }}{% endif %}">{{ ev.date | date: "%-d %B %Y" }}</time>{% else %}Date TBA{% endif %}</div>
   <h3 itemprop="name">{{ ev.title | escape }}</h3>
   <p><strong>Time:</strong> {{ ev.time | default: "TBA" }}</p>
-  <p><strong>Location:</strong> {% if ev_loc == "" %}TBA{% elsif ev_loc == "Online" %}<span itemprop="location" itemscope itemtype="https://schema.org/VirtualLocation">Online<meta itemprop="url" content="https://jordanelias.de/events/"></span>{% elsif ev_address != "" %}<span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">{{ ev_venue | escape }}</span> - <span itemprop="address">{{ ev_address | escape }}</span></span>{% else %}<span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">{{ ev_loc | escape }}</span></span>{% endif %}</p>
+  <p><strong>Location:</strong> {% if ev_loc == "" %}TBA{% elsif ev_loc == "Online" %}<span itemprop="location" itemscope itemtype="https://schema.org/VirtualLocation">Online<meta itemprop="url" content="https://jordanelias.de/events/"></span>{% elsif ev_address != "" %}<span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">{{ ev_venue | escape }}</span> - {% if ev_structured %}<span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress"><span itemprop="streetAddress">{{ ev_street | escape }}</span>, <span itemprop="postalCode">{{ ev_zip }}</span> <span itemprop="addressLocality">{{ ev_city | escape }}</span><meta itemprop="addressCountry" content="DE"></span>{% else %}<span itemprop="address">{{ ev_address | escape }}</span>{% endif %}</span>{% else %}<span itemprop="location" itemscope itemtype="https://schema.org/Place"><span itemprop="name">{{ ev_loc | escape }}</span></span>{% endif %}</p>
   <div itemprop="description">{{ ev.description | markdownify }}</div>
   {%- if ev_link != "" %}
   <p><a href="{{ ev_link }}" target="_blank" rel="noopener noreferrer" itemprop="url">More info/registration here</a></p>
@@ -32,5 +39,5 @@
   <meta itemprop="eventStatus" content="https://schema.org/EventScheduled">
   <link itemprop="eventAttendanceMode" href="{% if ev_loc == 'Online' %}https://schema.org/OnlineEventAttendanceMode{% else %}https://schema.org/OfflineEventAttendanceMode{% endif %}">
   <link itemprop="image" href="https://jordanelias.de/images/hero.jpg">
-  <span itemprop="organizer" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="Jordan Elias"><link itemprop="url" href="https://jordanelias.de/"></span>
+  <span itemprop="organizer" itemscope itemtype="https://schema.org/Person" itemid="https://jordanelias.de/#person"><meta itemprop="name" content="Jordan Elias"><link itemprop="url" href="https://jordanelias.de/"></span>
 </div>
