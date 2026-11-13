@@ -723,4 +723,12 @@ section[aria-label="Frequently Asked Questions"] {
   .location-content {
     grid-template-columns: 1fr;
   }
+     /* About page: stack image above text on mobile */
+  .inline-img {
+    float: none;
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 0 1.5em 0;
+  }
 }
